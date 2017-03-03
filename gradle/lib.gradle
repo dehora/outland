@@ -1,0 +1,67 @@
+ext {
+  versions = [:]
+  libs = [:]
+}
+
+/*
+ Uses dependency-lock syntax. The syntax doesn't seem to work atm for
+ forced resolution, so some of the versions below are pinned
+  */
+versions += [
+  assertj: "3.4.1",
+  aws_dynamodb: "1.11.93",
+  dropwizard: "1.0.6",
+  dropwizard_java8: "0.9.0-1",
+  guava: "19.+",
+  guice: "4.0",
+  guice_servlet: "4.0",
+  gson: "2.8.0",
+  hystrix_core: "1.5.9",
+  jedis: "2.9.+",
+  junit: "4.+",
+  logback: "1.1.10",
+  metrics: "3.1.2",
+  mockito: "2.0.111-beta",
+  objenesis: "2.4",
+  okhttp3: "3.+",
+  protobuf3: "3.2.+",
+  reflections: "0.9.10",
+  rocksdb: "4.4.1",
+  rxjava: "1.+",
+  slf4j: "1.7.23",
+  squarespace_jersey2: "1.0.6"
+]
+
+libs += [
+  assertj: "org.assertj:assertj-core:$versions.assertj",
+  aws_dynamodb: "com.amazonaws:aws-java-sdk-dynamodb:$versions.aws_dynamodb",
+  guava: "com.google.guava:guava:$versions.guava",
+  gson: "com.google.code.gson:gson:$versions.gson",
+  junit: "junit:junit:$versions.junit",
+  dropwizard_auth: "io.dropwizard:dropwizard-auth:$versions.dropwizard",
+  dropwizard_configuration: "io.dropwizard:dropwizard-configuration:$versions.dropwizard",
+  dropwizard_core: "io.dropwizard:dropwizard-core:$versions.dropwizard",
+  dropwizard_java8: "io.dropwizard.modules:dropwizard-java8:$versions.dropwizard_java8",
+  dropwizard_testing: "io.dropwizard:dropwizard-testing:$versions.dropwizard",
+  guice: "com.google.inject:guice:$versions.guice",
+  guice_servlet: "com.google.inject.extensions:guice-servlet:$versions.guice_servlet",
+  hystrix_core: "com.netflix.hystrix:hystrix-core:$versions.hystrix_core",
+  jedis: "redis.clients:jedis:$versions.jedis",
+  logback_access: "ch.qos.logback:logback-access:$versions.logback",
+  logback_classic: "ch.qos.logback:logback-classic:$versions.logback",
+  logback_core: "ch.qos.logback:logback-core:$versions.logback",
+  metrics_core: "io.dropwizard.metrics:metrics-core:$versions.metrics",
+  mockito_core: "org.mockito:mockito-core:$versions.mockito",
+  objenesis: "org.objenesis:objenesis:$versions.objenesis",
+  okhttp3: "com.squareup.okhttp3:okhttp:$versions.okhttp3",
+  okhttp3log: "com.squareup.okhttp3:logging-interceptor:$versions.okhttp3",
+  okhttp3mockwebserver: "com.squareup.okhttp3:mockwebserver:$versions.okhttp3",
+  protobuf3: "com.google.protobuf:protobuf-java:$versions.protobuf3",
+  protobuf3_util: "com.google.protobuf:protobuf-java-util:$versions.protobuf3",
+  reflections: "org.reflections:reflections:$versions.reflections",
+  rocksdb_jni: "org.rocksdb:rocksdbjni:$versions.rocksdb",
+  rxjava: "io.reactivex:rxjava:$versions.rxjava",
+  slf4j: "org.slf4j:slf4j-api:$versions.slf4j",
+  slf4jsimple: "org.slf4j:slf4j-simple:$versions.slf4j",
+  squarespace_jersey2: "com.squarespace.jersey2-guice:jersey2-guice-impl:$versions.squarespace_jersey2"
+]
