@@ -1,0 +1,129 @@
+buildscript {
+  repositories {
+    mavenCentral()
+    mavenLocal()
+    jcenter()
+    maven { url "http://download.java.net/maven/2/" }
+  }
+  dependencies {
+    classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.0'
+  }
+}
+
+apply plugin: "application"
+apply plugin: "com.github.johnrengelman.shadow"
+apply plugin: 'com.google.protobuf'
+
+
+//noinspection GroovyUnusedAssignment
+mainClassName = "outland.feature.server.ServiceMain"
+
+
+dependencies {
+  compile project.libs.aws_dynamodb
+  compile project.libs.dropwizard_auth
+  compile project.libs.dropwizard_configuration
+  compile project.libs.dropwizard_core
+  compile project.libs.dropwizard_java8
+  compile project.libs.guice
+  compile project.libs.guice_servlet
+  compile project.libs.hystrix_core
+  compile project.libs.jedis
+  compile project.libs.protobuf3
+  compile project.libs.protobuf3_util
+  compile project.libs.reflections
+  compile project.libs.squarespace_jersey2
+
+  testCompile project.libs.junit
+  testCompile project.libs.dropwizard_testing
+}
+
+
+protobuf {
+  generatedFilesBaseDir = "$projectDir/src"
+  protoc {
+    artifact = project.libs.protoc
+  }
+}
+
+javadoc {
+  exclude "**/spike/**"
+}
+
+sourceJar {
+  exclude "**/spike/**"
+}
+
+
+shadowJar {
+  exclude 'META-INF/*.DSA'
+  exclude 'META-INF/*.RSA'
+  mergeServiceFiles()
+}
+
+/*
+* Give the bintray task our shadow jar via `shadowedJar`. This has all its
+* dependencies embedded and shaded.
+*/
+publishing {
+  publications {
+    shadowedJar(MavenPublication) {
+      from components.shadow
+      groupId project.group
+      artifactId = project.name
+      version = project.version
+
+      artifact(sourceJar) {
+      }
+      artifact(javadocJar) {
+      }
+    }
+  }
+}
+
+/*
+ *
+*/
+bintray {
+  user = project.hasProperty('bintray_user') ? project.property('bintray_user') :
+    System.getenv('BINTRAY_USER')
+  key = project.hasProperty('bintray_key') ? project.property('bintray_key') :
+    System.getenv('BINTRAY_KEY')
+
+  publications = ['shadowedJar']
+  dryRun = false
+  publish = true
+
+  pkg {
+    repo = 'maven'
+    userOrg = 'dehora'
+    name = 'outland-feature-server'
+    desc = 'Dropwizard server for  Outland'
+    websiteUrl = 'https://dehora.github.io/outland/'
+    issueTrackerUrl = 'https://github.com/dehora/outland/issues'
+    vcsUrl = 'https://github.com/dehora/outland.git'
+    licenses = ['ASF2']
+    labels = ['outland', 'java', 'api']
+    publicDownloadNumbers = true
+
+    //noinspection GroovyAssignabilityCheck
+    version {
+      name = project.version
+      vcsTag = project.version
+      attributes = [:]
+      gpg {
+        //noinspection GroovyAssignabilityCheck
+        sign = true
+        passphrase = project.hasProperty('bintray_gpg_passphrase') ?
+          project.property('bintray_gpg_passphrase') : System.getenv('BINTRAY_GPG_PASSPHRASE')
+      }
+    }
+  }
+}
+
+idea {
+  module {
+    // no generatedSourceDirs: https://discuss.gradle.org/t/support-for-intellij-2016/15294/8
+    sourceDirs += file("${projectDir}/build/generated/source/proto/main/java");
+  }
+}

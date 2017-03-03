@@ -1,0 +1,159 @@
+buildscript {
+  repositories {
+    mavenCentral()
+    mavenLocal()
+    jcenter()
+  }
+  dependencies {
+    classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.0'
+  }
+}
+
+apply plugin: "application"
+apply plugin: "com.github.johnrengelman.shadow"
+apply plugin: 'com.google.protobuf'
+
+dependencies {
+  compile project.libs.guava
+  compile project.libs.gson
+  compile project.libs.metrics_core
+  compile project.libs.okhttp3
+  compile project.libs.okhttp3log
+  compile project.libs.rocksdb_jni
+  compile project.libs.rxjava
+  compile project.libs.protobuf3
+  compile project.libs.protobuf3_util
+  compile project.libs.slf4j
+
+  testCompile project.libs.junit
+  testCompile project.libs.logback_core
+  testCompile project.libs.logback_classic
+  testCompile project.libs.mockito_core
+  testCompile project.libs.okhttp3mockwebserver
+}
+
+sourceSets {
+  main {
+    java {
+      srcDir 'src/main/resources'
+    }
+    proto {
+      srcDir 'src/main/proto'
+    }
+  }
+
+  test {
+    java {
+      srcDir 'src/test/resources'
+    }
+  }
+}
+
+protobuf {
+  generatedFilesBaseDir = "$projectDir/src"
+  protoc {
+    artifact = project.libs.protoc
+  }
+}
+
+
+idea {
+  module {
+    // no generatedSourceDirs: https://discuss.gradle.org/t/support-for-intellij-2016/15294/8
+    sourceDirs += file("${projectDir}/build/generated/source/proto/main/java");
+  }
+}
+
+// shadowJar needs `mainClassName` to complete
+//noinspection GroovyUnusedAssignment
+mainClassName = "outland.feature.ClientMain"
+
+
+javadoc {
+  exclude "**/spike/**"
+}
+
+sourceJar {
+  exclude "**/spike/**"
+}
+
+/*
+* Shade our dependencies; rx, gson, guava and okhttp3 have no transitive
+* dependencies to cascade into
+*/
+shadowJar {
+  baseName = 'outland-feature-java'
+  classifier = '' // remove the default all suffix to name it like a regular lib jar
+
+  relocate "rx", "outland.feature.shadow.rx"
+  relocate "okhttp3", "outland.shadow.okhttp3"
+  relocate "okio", "outland.shadow.okio"
+
+  exclude 'net/dehora/outland/feature/spike/**'
+  exclude 'META-INF/maven/com.squareup.okhttp3/**'
+  exclude 'META-INF/maven/com.squareup.okio/**'
+  exclude 'META-INF/*.SF'
+  exclude 'META-INF/*.DSA'
+  exclude 'META-INF/*.RSA'
+  exclude 'rxjava.properties'
+}
+
+/*
+* Give the bintray task our shadow jar via `shadowedJar`. This has all its
+* dependencies embedded and shaded.
+*/
+publishing {
+  publications {
+    shadowedJar(MavenPublication) {
+      from components.shadow
+      groupId project.group
+      artifactId = project.name
+      version = project.version
+
+      artifact(sourceJar) {
+      }
+      artifact(javadocJar) {
+      }
+    }
+  }
+}
+
+/*
+ *
+*/
+bintray {
+  user = project.hasProperty('bintray_user') ? project.property('bintray_user') :
+    System.getenv('BINTRAY_USER')
+  key = project.hasProperty('bintray_key') ? project.property('bintray_key') :
+    System.getenv('BINTRAY_KEY')
+
+  publications = ['shadowedJar']
+  dryRun = false
+  publish = true
+
+  pkg {
+    repo = 'maven'
+    userOrg = 'dehora'
+    name = 'outland-feature-java'
+    desc = 'Java client for  Outland'
+    websiteUrl = 'https://dehora.github.io/outland/'
+    issueTrackerUrl = 'https://github.com/dehora/outland/issues'
+    vcsUrl = 'https://github.com/dehora/outland.git'
+    licenses = ['ASF2']
+    labels = ['outland', 'java', 'api']
+    publicDownloadNumbers = true
+
+    //noinspection GroovyAssignabilityCheck
+    version {
+      name = project.version
+      vcsTag = project.version
+      attributes = [:]
+      gpg {
+        //noinspection GroovyAssignabilityCheck
+        sign = true
+        passphrase = project.hasProperty('bintray_gpg_passphrase') ?
+          project.property('bintray_gpg_passphrase') : System.getenv('BINTRAY_GPG_PASSPHRASE')
+      }
+    }
+  }
+}
