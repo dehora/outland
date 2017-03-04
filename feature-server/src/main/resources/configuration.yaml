@@ -1,8 +1,6 @@
 serviceName: Outland Feature Service
 environment: development
 
-baseURI: http://localhost:8180
-
 server:
   registerDefaultExceptionMappers: false
   applicationConnectors:
