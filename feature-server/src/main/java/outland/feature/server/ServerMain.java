@@ -1,18 +1,40 @@
 package outland.feature.server;
 
 import com.google.common.annotations.VisibleForTesting;
+import com.google.common.cache.CacheBuilder;
 import com.google.common.collect.Lists;
 import com.google.inject.Injector;
+import com.google.inject.Key;
 import com.google.inject.Module;
+import com.google.inject.TypeLiteral;
+import com.google.inject.name.Names;
+import io.dropwizard.auth.AuthDynamicFeature;
+import io.dropwizard.auth.AuthFilter;
+import io.dropwizard.auth.AuthValueFactoryProvider;
+import io.dropwizard.auth.Authenticator;
+import io.dropwizard.auth.Authorizer;
+import io.dropwizard.auth.CachingAuthenticator;
+import io.dropwizard.auth.UnauthorizedHandler;
+import io.dropwizard.auth.basic.BasicCredentialAuthFilter;
+import io.dropwizard.auth.basic.BasicCredentials;
+import io.dropwizard.auth.chained.ChainedAuthFilter;
+import io.dropwizard.auth.oauth.OAuthCredentialAuthFilter;
 import io.dropwizard.configuration.EnvironmentVariableSubstitutor;
 import io.dropwizard.configuration.SubstitutingSourceProvider;
 import io.dropwizard.java8.Java8Bundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import org.glassfish.jersey.message.GZipEncoder;
 import org.glassfish.jersey.server.filter.EncodingFilter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import outland.feature.server.app.GuiceApplication;
+import outland.feature.server.auth.App;
+import outland.feature.server.auth.AuthConfiguration;
+import outland.feature.server.auth.AuthModule;
 import outland.feature.server.aws.DynamoDbModule;
 import outland.feature.server.hystrix.HystrixModule;
 import outland.feature.server.protobuf.Protobuf3Bundle;
@@ -50,7 +72,8 @@ public class ServerMain extends GuiceApplication<ServerConfiguration> {
         new ServerModule(configuration),
         new HystrixModule(),
         new RedisModule(configuration.redis),
-        new DynamoDbModule(configuration.aws)
+        new DynamoDbModule(configuration.aws),
+        new AuthModule(configuration.auth)
     );
   }
 
@@ -59,9 +82,82 @@ public class ServerMain extends GuiceApplication<ServerConfiguration> {
       Injector injector) {
 
     enableContentEncodingGzip(environment);
+    configureAuth(configuration.auth, environment, injector);
   }
 
   private void enableContentEncodingGzip(Environment environment) {
     EncodingFilter.enableFor(environment.jersey().getResourceConfig(), GZipEncoder.class);
+  }
+
+
+  private void configureAuth(AuthConfiguration configuration, Environment environment,
+      Injector injector) {
+
+    Logger logger = LoggerFactory.getLogger(ServerMain.class);
+
+    final UnauthorizedHandler unauthorizedHandler = injector.getInstance(UnauthorizedHandler.class);
+    final ArrayList<AuthFilter> filters = Lists.newArrayList();
+
+    if (configuration.oauthEnabled) {
+      logger.info("op=auth_configuration,mechanism=oauth");
+
+      final Authenticator<String, App> oauthAppAuthenticator =
+          injector.getInstance(Key.get(new TypeLiteral<Authenticator<String, App>>() {
+          }, Names.named("oauthAppAuthenticator")));
+
+      final Authorizer<App> oauthAppAuthorizer =
+          injector.getInstance(Key.get(new TypeLiteral<Authorizer<App>>() {
+          }, Names.named("oauthAppAuthorizer")));
+
+      final CachingAuthenticator<String, App> cached = new CachingAuthenticator<>(
+          environment.metrics(),
+          oauthAppAuthenticator,
+          CacheBuilder.newBuilder().maximumSize(1024).expireAfterWrite(30, TimeUnit.SECONDS));
+
+      final AuthFilter oauthFilter = new OAuthCredentialAuthFilter.Builder<App>()
+          .setPrefix("Bearer")
+          .setRealm("outland_feature")
+          .setAuthenticator(cached)
+          .setAuthorizer(oauthAppAuthorizer)
+          .setUnauthorizedHandler(unauthorizedHandler)
+          .buildAuthFilter();
+
+      filters.add(oauthFilter);
+    }
+
+    if (configuration.basicEnabled) {
+      logger.info("op=auth_configuration,mechanism=basic");
+
+      final Authorizer<App> basicAppAuthorizer =
+          injector.getInstance(Key.get(new TypeLiteral<Authorizer<App>>() {
+          }, Names.named("basicAppAuthorizer")));
+
+      final Authenticator<BasicCredentials, App> basicAppAuthenticator =
+          injector.getInstance(Key.get(new TypeLiteral<Authenticator<BasicCredentials, App>>() {
+          }, Names.named("basicAppAuthenticator")));
+
+      final CachingAuthenticator<BasicCredentials, App> cached = new CachingAuthenticator<>(
+          environment.metrics(),
+          basicAppAuthenticator,
+          CacheBuilder.newBuilder().maximumSize(1024).expireAfterWrite(60, TimeUnit.SECONDS));
+
+      final AuthFilter basicAuthFilter = new BasicCredentialAuthFilter.Builder<App>()
+          .setPrefix("Basic")
+          .setRealm("outland_feature")
+          .setAuthenticator(basicAppAuthenticator)
+          .setAuthorizer(basicAppAuthorizer)
+          .setUnauthorizedHandler(unauthorizedHandler)
+          .buildAuthFilter();
+
+      filters.add(basicAuthFilter);
+    }
+
+    if(filters.size() == 0) {
+      logger.warn("op=auth_configuration,mechanism=no_auth_configured");
+    }
+
+    final ChainedAuthFilter chainedAuthFilter = new ChainedAuthFilter(filters);
+    environment.jersey().register(new AuthDynamicFeature(chainedAuthFilter));
+    environment.jersey().register(new AuthValueFactoryProvider.Binder<>(App.class));
   }
 }
