@@ -18,6 +18,7 @@ import outland.feature.server.ServerConfiguration;
 import outland.feature.server.ServerMain;
 import outland.feature.server.ServerModule;
 import outland.feature.server.hystrix.HystrixModule;
+import outland.feature.server.redis.RedisModule;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({HelloResourceTest.class})
@@ -39,7 +40,8 @@ public class ServerSuite {
                     ServerConfiguration configuration, Environment environment) {
                   return Lists.newArrayList(
                       new ServerModule(configuration),
-                      new HystrixModule()
+                      new HystrixModule(),
+                      new RedisModule(configuration.redis)
                   );
                 }
               };
