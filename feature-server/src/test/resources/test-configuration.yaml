@@ -33,3 +33,10 @@ redis:
       host: localhost
       port: 6379
       maxConnections: 8
+
+aws:
+  environment: test
+  accessKey: AWS_KEY
+  secretKey: AWS_SECRET
+  dynamoDbUrl: http://localhost:8001
+  signingRegion: eu-central-1
