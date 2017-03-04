@@ -2,6 +2,7 @@ package outland.feature.server;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.dropwizard.Configuration;
+import java.net.URI;
 import javax.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.NotEmpty;
 import outland.feature.server.auth.AuthConfiguration;
@@ -17,6 +18,10 @@ public class ServerConfiguration extends Configuration {
   @NotEmpty
   @JsonProperty
   public String environment;
+
+  @NotNull
+  @JsonProperty
+  public URI baseURI;
 
   @NotNull
   @JsonProperty
