@@ -13,6 +13,7 @@ import java.util.List;
 import org.glassfish.jersey.message.GZipEncoder;
 import org.glassfish.jersey.server.filter.EncodingFilter;
 import outland.feature.server.app.GuiceApplication;
+import outland.feature.server.hystrix.HystrixModule;
 
 public class ServerMain extends GuiceApplication<ServerConfiguration> {
 
@@ -42,7 +43,8 @@ public class ServerMain extends GuiceApplication<ServerConfiguration> {
   @Override
   protected List<Module> addModules(ServerConfiguration configuration, Environment environment) {
     return Lists.newArrayList(
-        new ServerModule(configuration)
+        new ServerModule(configuration),
+        new HystrixModule()
     );
   }
 
