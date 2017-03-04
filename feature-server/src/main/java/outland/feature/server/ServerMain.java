@@ -36,6 +36,7 @@ import outland.feature.server.auth.App;
 import outland.feature.server.auth.AuthConfiguration;
 import outland.feature.server.auth.AuthModule;
 import outland.feature.server.aws.DynamoDbModule;
+import outland.feature.server.features.FeatureModule;
 import outland.feature.server.hystrix.HystrixModule;
 import outland.feature.server.protobuf.Protobuf3Bundle;
 import outland.feature.server.redis.RedisModule;
@@ -73,7 +74,8 @@ public class ServerMain extends GuiceApplication<ServerConfiguration> {
         new HystrixModule(),
         new RedisModule(configuration.redis),
         new DynamoDbModule(configuration.aws),
-        new AuthModule(configuration.auth)
+        new AuthModule(configuration.auth),
+        new FeatureModule()
     );
   }
 
