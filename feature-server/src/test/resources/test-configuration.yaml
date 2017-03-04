@@ -40,3 +40,13 @@ aws:
   secretKey: AWS_SECRET
   dynamoDbUrl: http://localhost:8001
   signingRegion: eu-central-1
+
+auth:
+  basicEnabled: true
+  basicAuthenticationPolicy: basic_app_username_password_keys
+  basicAuthenticationKeys: topsecret
+  basicScopePolicy: basic_disable_scope_check
+
+  oauthEnabled: false
+  oauthAuthenticationPolicy: oauth_bearer_reflect
+  oauthScopePolicy: oauth_disable_scope_check

@@ -17,7 +17,9 @@ import org.junit.runners.Suite;
 import outland.feature.server.ServerConfiguration;
 import outland.feature.server.ServerMain;
 import outland.feature.server.ServerModule;
+import outland.feature.server.auth.AuthModule;
 import outland.feature.server.aws.DynamoDbModule;
+import outland.feature.server.features.TestFeatureServiceModule;
 import outland.feature.server.hystrix.HystrixModule;
 import outland.feature.server.redis.RedisModule;
 
@@ -43,7 +45,8 @@ public class ServerSuite {
                       new ServerModule(configuration),
                       new HystrixModule(),
                       new RedisModule(configuration.redis),
-                      new DynamoDbModule(configuration.aws)
+                      new DynamoDbModule(configuration.aws),
+                      new AuthModule(configuration.auth)
                   );
                 }
               };
