@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+option optimize_for = SPEED;
+option java_multiple_files = true;
+option java_package = "outland.feature.proto";
+option java_outer_classname = "FeatureMessage";
+
+package outland;
+
+message FeatureOwner {
+    string name = 2;
+    string email = 3;
+}
+
+message Feature {
+    string id = 1;
+    string key = 2;
+    string appId = 3;
+    enum State {
+        none = 0;
+        off = 1;
+        on = 2;
+    }
+    State state = 4;
+    string description = 5;
+    string created = 6;
+    string updated = 7;
+    FeatureOwner owner = 8;
+    map<string, string> properties = 9;
+}
+
+message FeatureCollection {
+    string type = 1;
+    string appId = 2;
+    repeated Feature items = 3;
+}

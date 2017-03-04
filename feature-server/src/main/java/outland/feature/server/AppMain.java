@@ -1,0 +1,59 @@
+package outland.feature.server;
+
+import com.google.common.annotations.VisibleForTesting;
+import com.google.common.collect.Lists;
+import com.google.inject.Injector;
+import com.google.inject.Module;
+import io.dropwizard.configuration.EnvironmentVariableSubstitutor;
+import io.dropwizard.configuration.SubstitutingSourceProvider;
+import io.dropwizard.java8.Java8Bundle;
+import io.dropwizard.setup.Bootstrap;
+import io.dropwizard.setup.Environment;
+import java.util.List;
+import org.glassfish.jersey.message.GZipEncoder;
+import org.glassfish.jersey.server.filter.EncodingFilter;
+import outland.feature.server.app.GuiceApplication;
+
+public class AppMain extends GuiceApplication<ServerConfiguration> {
+
+  @VisibleForTesting
+  public AppMain() {
+    this("outland.feature");
+  }
+
+  @SuppressWarnings("WeakerAccess") public AppMain(String... packages) {
+    super(packages);
+  }
+
+  public static void main(String[] args) throws Exception {
+    DnsCache.setup();
+    new AppMain("outland.feature").run(args);
+  }
+
+  @Override
+  public void initialize(Bootstrap<ServerConfiguration> bootstrap) {
+    bootstrap.setConfigurationSourceProvider(
+        new SubstitutingSourceProvider(
+            bootstrap.getConfigurationSourceProvider(), new EnvironmentVariableSubstitutor()));
+    bootstrap.addBundle(new Java8Bundle());
+    super.initialize(bootstrap);
+  }
+
+  @Override
+  protected List<Module> addModules(ServerConfiguration configuration, Environment environment) {
+    return Lists.newArrayList(
+        new ServerModule(configuration)
+    );
+  }
+
+  @Override
+  protected void applicationOnRun(ServerConfiguration configuration, Environment environment,
+      Injector injector) {
+
+    enableContentEncodingGzip(environment);
+  }
+
+  private void enableContentEncodingGzip(Environment environment) {
+    EncodingFilter.enableFor(environment.jersey().getResourceConfig(), GZipEncoder.class);
+  }
+}

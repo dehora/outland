@@ -1,0 +1,24 @@
+serviceName: Outland Feature Service
+environment: development
+
+server:
+  registerDefaultExceptionMappers: false
+  applicationConnectors:
+    - type: http
+      port: 8280
+      idleTimeout: 8 seconds
+  adminConnectors:
+    - type: http
+      port: 8281
+
+logging:
+  level: INFO
+  appenders:
+    - type: console
+      timeZone: UTC
+      threshold: INFO
+      target: stderr
+    - type: file
+      currentLogFilename: /tmp/application.log
+      archive: false
+      timeZone: UTC
