@@ -14,20 +14,20 @@ import org.glassfish.jersey.message.GZipEncoder;
 import org.glassfish.jersey.server.filter.EncodingFilter;
 import outland.feature.server.app.GuiceApplication;
 
-public class AppMain extends GuiceApplication<ServerConfiguration> {
+public class ServerMain extends GuiceApplication<ServerConfiguration> {
 
   @VisibleForTesting
-  public AppMain() {
+  public ServerMain() {
     this("outland.feature");
   }
 
-  @SuppressWarnings("WeakerAccess") public AppMain(String... packages) {
+  @SuppressWarnings("WeakerAccess") public ServerMain(String... packages) {
     super(packages);
   }
 
   public static void main(String[] args) throws Exception {
     DnsCache.setup();
-    new AppMain("outland.feature").run(args);
+    new ServerMain("outland.feature").run(args);
   }
 
   @Override
