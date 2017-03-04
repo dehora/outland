@@ -13,6 +13,7 @@ import java.util.List;
 import org.glassfish.jersey.message.GZipEncoder;
 import org.glassfish.jersey.server.filter.EncodingFilter;
 import outland.feature.server.app.GuiceApplication;
+import outland.feature.server.aws.DynamoDbModule;
 import outland.feature.server.hystrix.HystrixModule;
 import outland.feature.server.redis.RedisModule;
 
@@ -46,7 +47,8 @@ public class ServerMain extends GuiceApplication<ServerConfiguration> {
     return Lists.newArrayList(
         new ServerModule(configuration),
         new HystrixModule(),
-        new RedisModule(configuration.redis)
+        new RedisModule(configuration.redis),
+        new DynamoDbModule(configuration.aws)
     );
   }
 

@@ -33,3 +33,10 @@ logging:
       currentLogFilename: /tmp/application.log
       archive: false
       timeZone: UTC
+
+aws:
+  environment: test
+  accessKey: AWS_KEY
+  secretKey: AWS_SECRET
+  dynamoDbUrl: http://localhost:8001
+  signingRegion: eu-central-1
