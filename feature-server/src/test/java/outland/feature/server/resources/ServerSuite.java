@@ -17,6 +17,7 @@ import org.junit.runners.Suite;
 import outland.feature.server.ServerConfiguration;
 import outland.feature.server.ServerMain;
 import outland.feature.server.ServerModule;
+import outland.feature.server.hystrix.HystrixModule;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({HelloResourceTest.class})
@@ -37,7 +38,8 @@ public class ServerSuite {
                 protected List<Module> addModules(
                     ServerConfiguration configuration, Environment environment) {
                   return Lists.newArrayList(
-                      new ServerModule(configuration)
+                      new ServerModule(configuration),
+                      new HystrixModule()
                   );
                 }
               };
