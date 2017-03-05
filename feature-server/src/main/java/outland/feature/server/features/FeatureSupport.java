@@ -10,7 +10,7 @@ public class FeatureSupport {
 
     try {
       Feature.Builder builder = Feature.newBuilder();
-      JsonFormat.parser().merge(json, builder);
+      JsonFormat.parser().ignoringUnknownFields().merge(json, builder);
       return builder.build();
     } catch (InvalidProtocolBufferException e) {
       throw new RuntimeException(e);
