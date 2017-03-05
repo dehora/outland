@@ -29,7 +29,6 @@ public class FeatureStoreRocksDbTest {
     assertEquals("app1", featureCollection.getItems(0).getAppId());
 
     db.close();
-
     dbPath.deleteOnExit();
   }
 
@@ -65,6 +64,9 @@ public class FeatureStoreRocksDbTest {
     final FeatureCollection collection = db.findAll("app1");
 
     assertTrue(collection.getItemsCount() == 2);
+
+    db.close();
+    dbPath.deleteOnExit();
   }
 
   @Test
@@ -113,6 +115,8 @@ public class FeatureStoreRocksDbTest {
 
     final FeatureCollection featureCollection3 = db2.loadAll();
     assertTrue(featureCollection3.getItemsCount() == 2);
+
+    db2.close();
 
     dbPath.deleteOnExit();
   }
