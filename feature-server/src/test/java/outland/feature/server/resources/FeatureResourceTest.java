@@ -14,7 +14,6 @@ import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
 import org.glassfish.jersey.logging.LoggingFeature;
 import org.junit.Before;
 import org.junit.ClassRule;
-import org.junit.Ignore;
 import org.junit.Test;
 import outland.feature.proto.Feature;
 import outland.feature.server.Problem;
@@ -53,8 +52,7 @@ public class FeatureResourceTest {
 
     String url = "http://localhost:" + APP.getLocalPort() + "/features";
     JerseyClient clientNoAuth = ServerSuite.client();
-
-
+    
     // no auth header returns 401
 
     Response response = clientNoAuth.target(url + "/" + appId)
@@ -100,8 +98,6 @@ public class FeatureResourceTest {
 
 
     final String fk = Ulid.random();
-
-    final String auth = new String(Base64.getEncoder().encode("foo:topsecret".getBytes()));
 
     Response response = client.target(url + "/" + "foo" + "/" + fk)
         .request()
