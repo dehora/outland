@@ -98,7 +98,7 @@ bintray {
     repo = 'maven'
     userOrg = 'dehora'
     name = 'feature-server'
-    desc = 'Dropwizard server for  Outland'
+    desc = 'Dropwizard server for Outland'
     websiteUrl = 'https://dehora.github.io/outland/'
     issueTrackerUrl = 'https://github.com/dehora/outland/issues'
     vcsUrl = 'https://github.com/dehora/outland.git'

@@ -135,7 +135,7 @@ bintray {
     repo = 'maven'
     userOrg = 'dehora'
     name = 'feature-java'
-    desc = 'Java client for  Outland'
+    desc = 'Java client for Outland Features'
     websiteUrl = 'https://dehora.github.io/outland/'
     issueTrackerUrl = 'https://github.com/dehora/outland/issues'
     vcsUrl = 'https://github.com/dehora/outland.git'
