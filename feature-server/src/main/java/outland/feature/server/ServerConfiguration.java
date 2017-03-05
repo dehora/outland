@@ -7,6 +7,7 @@ import javax.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.NotEmpty;
 import outland.feature.server.auth.AuthConfiguration;
 import outland.feature.server.aws.AwsConfiguration;
+import outland.feature.server.hystrix.HystrixConfiguration;
 import outland.feature.server.redis.RedisServersConfiguration;
 
 public class ServerConfiguration extends Configuration {
@@ -35,4 +36,7 @@ public class ServerConfiguration extends Configuration {
   @JsonProperty
   public AuthConfiguration auth = new AuthConfiguration();
 
+  @NotNull
+  @JsonProperty
+  public HystrixConfiguration redisFeatureCacheHystrix = new HystrixConfiguration();
 }

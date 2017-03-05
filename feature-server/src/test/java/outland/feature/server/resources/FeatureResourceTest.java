@@ -262,7 +262,6 @@ public class FeatureResourceTest {
     assertTrue(featJson.getId().startsWith("feat_"));
   }
 
-  @Ignore
   @Test
   public void testUpdate() throws Exception {
 
@@ -308,7 +307,7 @@ public class FeatureResourceTest {
 
     Thread.sleep(1001);
 
-    Response responseUpdate = client.target(url + "/" + id)
+    Response responseUpdate = client.target(url + "/" + "own" + "/" + key)
         .request()
         .property(HTTP_AUTHENTICATION_BASIC_USERNAME, "own")
         .property(HTTP_AUTHENTICATION_BASIC_PASSWORD, basicPassword)
@@ -329,7 +328,7 @@ public class FeatureResourceTest {
     // updated to enabled
     assertEquals(Feature.State.on, builderUpdated.getState());
 
-    Response responseGet = client.target(url + "/" + id)
+    Response responseGet = client.target(url + "/" + "own" + "/" + key)
         .request()
         .property(HTTP_AUTHENTICATION_BASIC_USERNAME, "own")
         .property(HTTP_AUTHENTICATION_BASIC_PASSWORD, basicPassword)
