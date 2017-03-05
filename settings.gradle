@@ -1,8 +1,1 @@
 modules.split(',').each { include it }
-
-prefixProjectName(rootProject, "outland-")
-
-def prefixProjectName(project, prefix) {
-  project.name = prefix + project.name
-  project.children.each { prefixProjectName(it, prefix) }
-}
