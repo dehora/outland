@@ -115,7 +115,7 @@ public class DefaultFeatureStorage implements FeatureStorage {
     Table table = dynamoDB.getTable(featureTableName);
 
     DynamoDbCommand<Item> cmd = new DynamoDbCommand<>("loadFeatureByKey",
-        () -> table.getItem(appId, key),
+        () -> getItem(appId, key, table),
         () -> {
           throw new RuntimeException("loadFeatureById");
         },
@@ -127,6 +127,10 @@ public class DefaultFeatureStorage implements FeatureStorage {
       return Optional.empty();
     }
     return Optional.of(FeatureSupport.toFeature(item.getString("json")));
+  }
+
+  private Item getItem(String appId, String key, Table table) {
+    return table.getItem("app_id", appId, "feature_key",key);
   }
 
   @Override public List<Feature> loadFeatures(String appId) {
