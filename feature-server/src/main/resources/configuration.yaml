@@ -43,6 +43,9 @@ aws:
   dynamoDbUrl: http://localhost:8001
   signingRegion: eu-central-1
 
+featureTable:
+  outlandFeaturesTable: dev_outland_features
+
 auth:
   # basic exists mostly for dev, test and local docker. Always enable oauth for production. The main
   # scenario for enabling basic in prod is to allow a management ui to make requests for all apps via
@@ -66,3 +69,15 @@ redisFeatureCacheHystrix:
   executionTimeoutInMilliseconds: 150
   threadpool:
     coreSize: 8
+
+dynamodbFeatureWriteHystrix:
+  hystrixCommandGroupKey: dynamodbFeatureWriteHystrix
+  executionTimeoutInMilliseconds: 3000
+  threadpool:
+    coreSize: 8
+
+dynamodbFeatureReadHystrix:
+   hystrixCommandGroupKey: dynamodbFeatureReadHystrix
+   executionTimeoutInMilliseconds: 1000
+   threadpool:
+     coreSize: 16

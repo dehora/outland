@@ -43,6 +43,9 @@ aws:
   dynamoDbUrl: http://localhost:8001
   signingRegion: eu-central-1
 
+featureTable:
+  outlandFeaturesTable: dev_outland_features
+
 auth:
   basicEnabled: true
   basicAuthenticationPolicy: basic_app_username_password_keys
@@ -58,3 +61,15 @@ redisFeatureCacheHystrix:
   executionTimeoutInMilliseconds: 500
   threadpool:
     coreSize: 8
+
+dynamodbFeatureWriteHystrix:
+  hystrixCommandGroupKey: dynamodbFeatureWriteHystrix
+  executionTimeoutInMilliseconds: 3000
+  threadpool:
+    coreSize: 8
+
+dynamodbFeatureReadHystrix:
+   hystrixCommandGroupKey: dynamodbFeatureReadHystrix
+   executionTimeoutInMilliseconds: 1000
+   threadpool:
+     coreSize: 16

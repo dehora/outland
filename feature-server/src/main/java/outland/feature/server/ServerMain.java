@@ -75,7 +75,7 @@ public class ServerMain extends GuiceApplication<ServerConfiguration> {
         new RedisModule(configuration.redis),
         new DynamoDbModule(configuration.aws),
         new AuthModule(configuration.auth),
-        new FeatureModule()
+        new FeatureModule(configuration.featureTable)
     );
   }
 
