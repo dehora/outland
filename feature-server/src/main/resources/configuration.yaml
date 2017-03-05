@@ -40,7 +40,7 @@ aws:
   environment: test
   accessKey: AWS_KEY
   secretKey: AWS_SECRET
-  dynamoDbUrl: http://localhost:8001
+  dynamoDbUrl: http://localhost:8000
   signingRegion: eu-central-1
 
 featureTable:
