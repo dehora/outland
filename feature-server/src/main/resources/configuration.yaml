@@ -60,3 +60,9 @@ auth:
   oauthAuthenticationPolicy: oauth_bearer_reflect
   # oauth_disable_scope_check: don't check scopes
   oauthScopePolicy: oauth_disable_scope_check
+
+redisFeatureCacheHystrix:
+  hystrixCommandGroupKey: redisFeatureCacheHystrix
+  executionTimeoutInMilliseconds: 150
+  threadpool:
+    coreSize: 8

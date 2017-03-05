@@ -52,3 +52,9 @@ auth:
   oauthEnabled: false
   oauthAuthenticationPolicy: oauth_bearer_reflect
   oauthScopePolicy: oauth_disable_scope_check
+
+redisFeatureCacheHystrix:
+  hystrixCommandGroupKey: redisFeatureCacheHystrix
+  executionTimeoutInMilliseconds: 500
+  threadpool:
+    coreSize: 8
