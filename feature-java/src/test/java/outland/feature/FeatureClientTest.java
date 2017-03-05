@@ -68,7 +68,7 @@ public class FeatureClientTest {
           .build();
       fail();
     } catch (FeatureException e) {
-      assertEquals("Please supply at least one feature or outland configuration",
+      assertEquals("Please supply a configuration",
           e.problem().title());
     }
 

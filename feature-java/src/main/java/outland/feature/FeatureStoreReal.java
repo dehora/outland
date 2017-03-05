@@ -20,9 +20,9 @@ class FeatureStoreReal implements FeatureStore {
 
   private static final Logger logger = LoggerFactory.getLogger(FeatureClient.class.getSimpleName());
 
-  static final long MAX_CACHE_SIZE = 2048L;
-  static final int INITIAL_CAPACITY = 50;
-  static final int REFRESH_AFTER_WRITE_S = 8;
+  private static final long MAX_CACHE_SIZE = ServerConfiguration.MAX_CACHE_SIZE;
+  private static final int INITIAL_CAPACITY = ServerConfiguration.INITIAL_CAPACITY;
+  private static final int REFRESH_AFTER_WRITE_S = ServerConfiguration.REFRESH_AFTER_WRITE_S;
 
   private final FeatureClient client;
   private final FeatureStoreLocal backingFeatureStore;
@@ -128,7 +128,7 @@ class FeatureStoreReal implements FeatureStore {
         .maximumSize(maxCacheSize)
         .refreshAfterWrite(refreshCacheAfterWriteSeconds, TimeUnit.SECONDS)
         .initialCapacity(initialCacheSize)
-        .build(new HttpCacheLoader(client, backingFeatureStore));
+        .build(new HttpCacheLoader(client.resources(), backingFeatureStore));
   }
 
   private void loadFeaturesIntoCache() {

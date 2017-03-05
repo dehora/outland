@@ -15,14 +15,24 @@ class FeatureResourceReal implements FeatureResource {
   private static final String PATH_FEATURES = "features";
   private static final String PARAM_SINCE = "since";
 
-  private FeatureClient client;
-  private URI baseUri;
-  private String appId;
+  private final ResourceProvider resourceProvider;
+  private final AuthorizationProvider authorizationProvider;
+  private final String appId;
+  private final URI baseUri;
+  private final boolean multiAppEnabled;
 
-  FeatureResourceReal(FeatureClient client) {
-    this.client = client;
-    this.appId = client.appId();
-    this.baseUri = client.baseURI();
+  FeatureResourceReal(
+      ResourceProvider resourceProvider,
+      AuthorizationProvider authorizationProvider,
+      String appId,
+      URI baseUri,
+      boolean multiAppEnabled
+  ) {
+    this.resourceProvider = resourceProvider;
+    this.authorizationProvider = authorizationProvider;
+    this.appId = appId;
+    this.baseUri = baseUri;
+    this.multiAppEnabled = multiAppEnabled;
   }
 
   @Override public Feature register(Feature feature) {
@@ -60,7 +70,7 @@ class FeatureResourceReal implements FeatureResource {
   }
 
   @Override public Feature findByKey(String featureKey) {
-    if(client.multiAppEnabled()) {
+    if(multiAppEnabled) {
       throw new FeatureException(Problem.configProblem("find_by_key_multi_with_no_app_id",
           "Find by key cannot be called with only a feature key when multi app is configured. "
               + "Please supply an app id as well as a feature for multi app configuration."));
@@ -72,7 +82,7 @@ class FeatureResourceReal implements FeatureResource {
   }
 
   @Override public FeatureCollection listFeatures() {
-    if(client.multiAppEnabled()) {
+    if(multiAppEnabled) {
       throw new FeatureException(Problem.configProblem("list_features_multi_with_no_app_id",
           "List features cannot be called without an app id key when multi app is configured. "
               + "Please supply an app id for multi app configuration."));
@@ -82,7 +92,7 @@ class FeatureResourceReal implements FeatureResource {
   }
 
   @Override public FeatureCollection listFeaturesSince(long timestamp, TimeUnit timeUnit) {
-    if(client.multiAppEnabled()) {
+    if(multiAppEnabled) {
       throw new FeatureException(Problem.configProblem("list_features_since_multi_with_no_app_id",
           "List features since cannot be called without an app id key when multi app is configured. "
               + "Please supply an app id for multi app configuration."));
@@ -175,13 +185,13 @@ class FeatureResourceReal implements FeatureResource {
   }
 
   private Response getRequest(String appId, String url) {
-    return client.resourceProvider()
+    return resourceProvider
         .newResource()
         .requestThrowing(Resource.GET, url, prepareOptions(appId));
   }
 
   private Response postRequest(String url, Feature feature) {
-    return client.resourceProvider()
+    return resourceProvider
         .newResource()
         .requestThrowing(Resource.POST, url, prepareOptions(feature.getAppId()), feature);
   }
@@ -189,6 +199,6 @@ class FeatureResourceReal implements FeatureResource {
   private ResourceOptions prepareOptions(String appId) {
     return ResourceSupport.options(APPLICATION_JSON)
         .appId(appId)
-        .securityTokenProvider(client.authorizationProvider());
+        .securityTokenProvider(authorizationProvider);
   }
 }
