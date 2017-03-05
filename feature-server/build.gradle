@@ -102,7 +102,7 @@ bintray {
     websiteUrl = 'https://dehora.github.io/outland/'
     issueTrackerUrl = 'https://github.com/dehora/outland/issues'
     vcsUrl = 'https://github.com/dehora/outland.git'
-    licenses = ['ASF2']
+    licenses = ['Apache-2.0']
     labels = ['outland', 'java', 'api']
     publicDownloadNumbers = true
 
