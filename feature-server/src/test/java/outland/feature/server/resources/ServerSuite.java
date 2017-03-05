@@ -20,6 +20,7 @@ import outland.feature.server.ServerModule;
 import outland.feature.server.auth.AuthModule;
 import outland.feature.server.aws.DynamoDbModule;
 import outland.feature.server.features.FeatureModule;
+import outland.feature.server.features.TestFeatureServiceModule;
 import outland.feature.server.hystrix.HystrixModule;
 import outland.feature.server.redis.RedisModule;
 
@@ -47,7 +48,7 @@ public class ServerSuite {
                       new RedisModule(configuration.redis),
                       new DynamoDbModule(configuration.aws),
                       new AuthModule(configuration.auth),
-                      new FeatureModule()
+                      new TestFeatureServiceModule()
                   );
                 }
               };

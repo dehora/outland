@@ -25,5 +25,14 @@ public class ServerModule extends AbstractModule {
     bind(HystrixConfiguration.class)
         .annotatedWith(named("redisFeatureCacheHystrix"))
         .toInstance(configuration.redisFeatureCacheHystrix);
+
+    bind(HystrixConfiguration.class)
+        .annotatedWith(named("dynamodbFeatureWriteHystrix"))
+        .toInstance(configuration.dynamodbFeatureWriteHystrix);
+
+    bind(HystrixConfiguration.class)
+        .annotatedWith(named("dynamodbFeatureReadHystrix"))
+        .toInstance(configuration.dynamodbFeatureReadHystrix);
+
   }
 }
