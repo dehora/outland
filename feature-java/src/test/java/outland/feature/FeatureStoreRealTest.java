@@ -22,7 +22,7 @@ public class FeatureStoreRealTest {
     final FeatureClient client = FeatureClient.newBuilder()
         // set useless store and backing
         .featureStore(new FeatureStoreFailing())
-        .localFeatureStore(new FeatureStoreLocalNone())
+        .localFeatureStore(new FeatureStoreLocalNull())
         .serverConfiguration(serverConfiguration)
         .build();
 

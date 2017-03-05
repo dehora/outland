@@ -39,7 +39,13 @@ public class FeatureClient {
     this.resourceProvider = builder.resourceProvider;
     this.contentSupport = builder.contentSupport;
     this.metricRegistry = builder.metricRegistry;
-    this.resources = new Resources(this);
+    this.resources = new Resources(
+        this.resourceProvider,
+        this.authorizationProvider,
+        this.appId,
+        this.baseURI,
+        this.multiAppEnabled
+    );
     FeatureStoreLocal localFeatureStore = builder.localFeatureStore;
 
     /*

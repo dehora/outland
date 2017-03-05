@@ -16,9 +16,8 @@ class HttpCacheLoader extends CacheLoader<String, Feature> {
 
   private static final int RELOAD_THREADS = 2;
 
-  private final FeatureClient client;
   private final FeatureStoreLocal backingFeatureStore;
-
+  private final Resources resources;
   private final ExecutorService
       reloadExecutor = Executors.newFixedThreadPool(RELOAD_THREADS,
       new ThreadFactoryBuilder()
@@ -26,8 +25,8 @@ class HttpCacheLoader extends CacheLoader<String, Feature> {
               (t, e) -> logger.error("feature_store_err {}, {}", t, e.getMessage(), e))
           .setNameFormat("outland-feature-%d").build());
 
-  HttpCacheLoader(FeatureClient client, FeatureStoreLocal backingFeatureStore) {
-    this.client = client;
+  HttpCacheLoader(Resources resources, FeatureStoreLocal backingFeatureStore) {
+    this.resources = resources;
     this.backingFeatureStore = backingFeatureStore;
   }
 
@@ -59,13 +58,13 @@ class HttpCacheLoader extends CacheLoader<String, Feature> {
 
   private Feature httpLoad(String appId, String featureKey) {
     logger.info("op=cache_load_from_api, app_id={}, feature_key={}", appId, featureKey);
-    return client.resources().features().findByKey(appId, featureKey);
+    return resources.features().findByKey(appId, featureKey);
   }
 
   private Feature httpLoad(String appId, String featureKey, Feature oldValue) {
     try {
       logger.info("op=background_cache_load_from_api, app_id={}, feature_key={}", appId, featureKey);
-      return client.resources().features().findByKey(appId, featureKey);
+      return resources.features().findByKey(appId, featureKey);
     } catch (FeatureException e) {
       logger.error(
           String.format(
