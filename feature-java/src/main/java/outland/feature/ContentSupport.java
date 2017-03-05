@@ -20,7 +20,7 @@ class ContentSupport {
     return GsonHolder.INSTANCE;
   }
 
-  static byte[] toJsonBytes(Message message) {
+  byte[] toJsonBytes(Message message) {
     try {
       String json = JsonFormat.printer().preservingProtoFieldNames().print(message);
       return json.getBytes(StandardCharsets.UTF_8);
@@ -29,7 +29,7 @@ class ContentSupport {
     }
   }
 
-  static <T> T fromJson(String raw, Class<T> c) {
+  <T> T fromJson(String raw, Class<T> c) {
     if (String.class.isAssignableFrom(c)) {
       //noinspection unchecked
       return (T) raw;
