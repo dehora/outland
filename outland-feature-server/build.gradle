@@ -16,7 +16,7 @@ apply plugin: 'com.google.protobuf'
 
 
 //noinspection GroovyUnusedAssignment
-mainClassName = "outland.feature.server.ServiceMain"
+mainClassName = "outland.feature.server.ServerMain"
 
 
 dependencies {
