@@ -122,4 +122,17 @@ public interface FeatureOrBuilder extends
 
   java.lang.String getPropertiesOrThrow(
       java.lang.String key);
+
+  /**
+   * <code>optional .outland.FeatureVersion version = 12;</code>
+   */
+  boolean hasVersion();
+  /**
+   * <code>optional .outland.FeatureVersion version = 12;</code>
+   */
+  outland.feature.proto.FeatureVersion getVersion();
+  /**
+   * <code>optional .outland.FeatureVersion version = 12;</code>
+   */
+  outland.feature.proto.FeatureVersionOrBuilder getVersionOrBuilder();
 }
