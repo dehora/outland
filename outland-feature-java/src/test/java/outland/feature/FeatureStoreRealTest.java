@@ -1,6 +1,8 @@
 package outland.feature;
 
 import com.codahale.metrics.MetricRegistry;
+import java.io.File;
+import java.nio.file.Files;
 import java.util.Optional;
 import org.junit.Test;
 import outland.feature.proto.Feature;
@@ -13,7 +15,7 @@ import static junit.framework.TestCase.fail;
 public class FeatureStoreRealTest {
 
   @Test
-  public void multiAppConfiguredOnlyCallsLocalStore() {
+  public void multiAppConfiguredOnlyCallsLocalStore() throws Exception {
     ServerConfiguration serverConfiguration =
         new ServerConfiguration()
             .baseURI("http://localhost")
@@ -29,8 +31,10 @@ public class FeatureStoreRealTest {
     assertTrue(client.appId() == null);
     assertTrue(client.localStoreEnabled());
 
+    final File dbPath = Files.createTempDirectory("unittest_outland_feature_store_").toFile();
+
     FeatureStoreLocal rocks =
-        new FeatureStoreRocksDb(new MetricsContext("foo", new MetricRegistry()));
+        new FeatureStoreRocksDb(new MetricsContext("foo", new MetricRegistry()), dbPath);
 
     FeatureStoreReal fs = new FeatureStoreReal(client, rocks);
     try {
@@ -48,6 +52,7 @@ public class FeatureStoreRealTest {
       fail();
     } finally {
       fs.close();
+      dbPath.deleteOnExit();
     }
   }
 
