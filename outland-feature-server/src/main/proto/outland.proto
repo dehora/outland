@@ -12,6 +12,11 @@ message FeatureOwner {
     string email = 3;
 }
 
+message FeatureVersion {
+    string ulid = 1;
+    int64 logical = 2;
+}
+
 message Feature {
     string id = 1;
     string key = 2;
@@ -27,6 +32,8 @@ message Feature {
     string updated = 7;
     FeatureOwner owner = 8;
     map<string, string> properties = 9;
+
+    FeatureVersion version = 12;
 }
 
 message FeatureCollection {
