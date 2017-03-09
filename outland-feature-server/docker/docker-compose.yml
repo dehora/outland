@@ -1,0 +1,25 @@
+version: '2'
+services:
+
+  outland_server:
+    build: .
+    environment:
+      - FEATURE_API_KEYS
+    ports:
+     - "8180:8180"
+     - "8181:8181"
+    links:
+     - dynamodb
+     - redis
+    volumes:
+      - ../src/main/resources:/outland/conf
+
+  redis:
+    image: redis
+    ports:
+      - "6379:6379"
+
+  dynamodb:
+    image: deangiberson/aws-dynamodb-local
+    ports:
+      - "8000:8000"
