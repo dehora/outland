@@ -17,6 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import outland.feature.proto.Feature;
 import outland.feature.proto.FeatureCollection;
+import outland.feature.proto.FeatureVersion;
 
 import static outland.feature.server.StructLog.kvp;
 
@@ -34,6 +35,7 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
 
   private final FeatureStorage featureStorage;
   private final FeatureCache featureCache;
+  private final VersionService versionService;
 
   private Timer saveFeatureTimer;
   private Timer updateFeatureTimer;
@@ -51,10 +53,12 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
   public DefaultFeatureService(
       FeatureStorage featureStorage,
       FeatureCache featureCache,
+      VersionService versionService,
       MetricRegistry metrics
   ) {
     this.featureStorage = featureStorage;
     this.featureCache = featureCache;
+    this.versionService = versionService;
     configureMetrics(metrics);
   }
 
@@ -72,6 +76,8 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
     builder.setCreated(created);
     builder.setUpdated(builder.getCreated());
     builder.setState(Feature.State.off); // always disabled on registerFeature
+
+    applyVersion(registering, builder);
 
     Feature feature = builder.build();
 
@@ -110,6 +116,8 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
         .mergeFrom(updates)
         .setUpdated(now);
 
+    applyVersion(updates, builder);
+
     // a value other than none indicates the client sent something
     if (!updates.getState().equals(Feature.State.none)) {
       builder.setState(updates.getState());
@@ -126,7 +134,6 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
     addToCache(updated);
     return Optional.of(updated);
   }
-
 
   @Override public Optional<Feature> loadFeatureByKey(String appId, String featureKey) {
 
@@ -178,6 +185,7 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
     // todo: signal 404 if empty
     return feature;
   }
+
 
   @Override public FeatureCollection loadFeatures(String appId) {
 
@@ -260,6 +268,23 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
         TextFormat.shortDebugString(featureCollection));
 
     return featureCollection;
+  }
+
+  private void applyVersion(Feature registering, Feature.Builder builder) {
+
+    VersionService.HybridLogicalTimestamp next;
+    if (registering.hasVersion()) {
+      next = versionService.nextVersionUpdate(new VersionService.HybridLogicalTimestamp(
+          registering.getVersion().getTimestamp(),
+          registering.getVersion().getCounter()));
+    } else {
+      next = versionService.nextVersion();
+    }
+
+    builder.setVersion(FeatureVersion.newBuilder()
+        .setCounter(next.counter())
+        .setTimestamp(next.logicalTime())
+        .setId(next.id()));
   }
 
   private void addAllToCache(String appId, List<Feature> features) {
