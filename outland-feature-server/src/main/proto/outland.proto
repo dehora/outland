@@ -18,6 +18,21 @@ message FeatureVersion {
     int64 counter = 3;
 }
 
+enum OptionType {
+    /*
+    A basic feature flag, or toggle. The result for this is always the value of Feature.State
+    */
+    flag = 0;
+}
+
+message FeatureOption {
+    string id = 1;
+    OptionType optionType = 2;
+    string name = 3;
+    string value = 4;
+    int32 weight = 5;
+}
+
 message Feature {
     string id = 1;
     string key = 2;
@@ -34,6 +49,8 @@ message Feature {
     FeatureOwner owner = 8;
     map<string, string> properties = 9;
 
+    OptionType optionType = 10;
+    repeated FeatureOption options = 11;
     FeatureVersion version = 12;
 }
 
