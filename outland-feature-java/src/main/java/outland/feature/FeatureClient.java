@@ -2,12 +2,14 @@ package outland.feature;
 
 import com.codahale.metrics.MetricRegistry;
 import java.net.URI;
+import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import okhttp3.OkHttpClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import outland.feature.proto.Feature;
+import outland.feature.proto.FeatureOption;
 
 /**
  * A client which can be used to check feature state and access the feature management APIs.
@@ -217,8 +219,16 @@ public class FeatureClient {
 
   private boolean enabledInner(String appId, String featureKey) {
     final Optional<Feature> maybe = featureStore.find(appId, featureKey);
-    return maybe.map(feature -> feature.getState().equals(Feature.State.on)).orElse(false);
+
+    if(! maybe.isPresent()) {
+      return false;
+    }
+
+    final Feature feature = maybe.get();
+    return new OptionEvaluator().evaluateFlagOptions(feature);
   }
+
+
 
   private boolean enabledThrowingInner(String appId, String featureKey) {
     final Optional<Feature> maybe = featureStore.find(appId, featureKey);
