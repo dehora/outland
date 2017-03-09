@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+./build_service
+SERVICE="outland-feature-server"
+docker build -t $SERVICE:latest .
