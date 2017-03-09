@@ -2,6 +2,11 @@
 
 ### 0.0.1
 
+**Server**:
+
+- Version features with a hybrid logical clock-alike
+- Fix server shadow jar's main class so that it starts up.
+
 
 #### 0.0.0
 
