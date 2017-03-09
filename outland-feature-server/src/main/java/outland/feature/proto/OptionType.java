@@ -16,6 +16,14 @@ public enum OptionType
    * <code>flag = 0;</code>
    */
   flag(0),
+  /**
+   * <pre>
+   *a boolean option. unlike a flag, the true and false values can be weighted
+   * </pre>
+   *
+   * <code>bool = 1;</code>
+   */
+  bool(1),
   UNRECOGNIZED(-1),
   ;
 
@@ -27,6 +35,14 @@ public enum OptionType
    * <code>flag = 0;</code>
    */
   public static final int flag_VALUE = 0;
+  /**
+   * <pre>
+   *a boolean option. unlike a flag, the true and false values can be weighted
+   * </pre>
+   *
+   * <code>bool = 1;</code>
+   */
+  public static final int bool_VALUE = 1;
 
 
   public final int getNumber() {
@@ -48,6 +64,7 @@ public enum OptionType
   public static OptionType forNumber(int value) {
     switch (value) {
       case 0: return flag;
+      case 1: return bool;
       default: return null;
     }
   }
