@@ -72,9 +72,9 @@ public final class FeatureMessage {
       " \001(\t\022\r\n\005value\030\002 \001(\t:\0028\001\"\"\n\005State\022\010\n\004none" +
       "\020\000\022\007\n\003off\020\001\022\006\n\002on\020\002\"Q\n\021FeatureCollection" +
       "\022\014\n\004type\030\001 \001(\t\022\r\n\005appId\030\002 \001(\t\022\037\n\005items\030\003" +
-      " \003(\0132\020.outland.Feature*\026\n\nOptionType\022\010\n\004",
-      "flag\020\000B+\n\025outland.feature.protoB\016Feature" +
-      "MessageH\001P\001b\006proto3"
+      " \003(\0132\020.outland.Feature* \n\nOptionType\022\010\n\004",
+      "flag\020\000\022\010\n\004bool\020\001B+\n\025outland.feature.prot" +
+      "oB\016FeatureMessageH\001P\001b\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
