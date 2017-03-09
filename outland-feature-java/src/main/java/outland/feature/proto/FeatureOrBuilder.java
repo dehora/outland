@@ -124,6 +124,39 @@ public interface FeatureOrBuilder extends
       java.lang.String key);
 
   /**
+   * <code>optional .outland.OptionType optionType = 10;</code>
+   */
+  int getOptionTypeValue();
+  /**
+   * <code>optional .outland.OptionType optionType = 10;</code>
+   */
+  outland.feature.proto.OptionType getOptionType();
+
+  /**
+   * <code>repeated .outland.FeatureOption options = 11;</code>
+   */
+  java.util.List<outland.feature.proto.FeatureOption> 
+      getOptionsList();
+  /**
+   * <code>repeated .outland.FeatureOption options = 11;</code>
+   */
+  outland.feature.proto.FeatureOption getOptions(int index);
+  /**
+   * <code>repeated .outland.FeatureOption options = 11;</code>
+   */
+  int getOptionsCount();
+  /**
+   * <code>repeated .outland.FeatureOption options = 11;</code>
+   */
+  java.util.List<? extends outland.feature.proto.FeatureOptionOrBuilder> 
+      getOptionsOrBuilderList();
+  /**
+   * <code>repeated .outland.FeatureOption options = 11;</code>
+   */
+  outland.feature.proto.FeatureOptionOrBuilder getOptionsOrBuilder(
+      int index);
+
+  /**
    * <code>optional .outland.FeatureVersion version = 12;</code>
    */
   boolean hasVersion();
