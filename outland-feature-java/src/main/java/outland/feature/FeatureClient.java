@@ -224,8 +224,7 @@ public class FeatureClient {
       return false;
     }
 
-    final Feature feature = maybe.get();
-    return new OptionEvaluator().evaluateFlagOptions(feature);
+    return new OptionEvaluator().evaluateFlagOptions(maybe.get());
   }
 
 
@@ -233,15 +232,15 @@ public class FeatureClient {
   private boolean enabledThrowingInner(String appId, String featureKey) {
     final Optional<Feature> maybe = featureStore.find(appId, featureKey);
 
-    if (maybe.isPresent()) {
-      return maybe.get().getState().equals(Feature.State.on);
+    if(! maybe.isPresent()) {
+      throw new FeatureException(
+          Problem.noSuchFeature("feature_not_found",
+              String.format(
+                  "feature %s for app %s was not found and raising an error was requested",
+                  featureKey, appId)));
     }
 
-    throw new FeatureException(
-        Problem.noSuchFeature("feature_not_found",
-            String.format(
-                "feature %s for app %s was not found and raising an error was requested",
-                featureKey, appId)));
+    return new OptionEvaluator().evaluateFlagOptions(maybe.get());
   }
 
   public static class Builder {
