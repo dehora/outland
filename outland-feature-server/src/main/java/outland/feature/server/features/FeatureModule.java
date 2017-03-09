@@ -17,6 +17,7 @@ public class FeatureModule extends AbstractModule {
     bind(FeatureService.class).to(DefaultFeatureService.class).asEagerSingleton();
     bind(FeatureStorage.class).to(DefaultFeatureStorage.class).asEagerSingleton();
     bind(FeatureCache.class).to(DefaultFeatureCache.class).asEagerSingleton();
+    bind(VersionService.class).to(Versions.class).asEagerSingleton();
     bind(RedisCache.class).asEagerSingleton();
   }
 }
