@@ -13,8 +13,9 @@ message FeatureOwner {
 }
 
 message FeatureVersion {
-    string ulid = 1;
-    int64 logical = 2;
+    string id = 1;
+    int64 timestamp = 2;
+    int64 counter = 3;
 }
 
 message Feature {
