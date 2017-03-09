@@ -7,7 +7,10 @@ public class Protobuf3Support {
 
   public static String toJsonString(Message message) {
     try {
-      return JsonFormat.printer().preservingProtoFieldNames().print(message);
+      return JsonFormat.printer()
+          .includingDefaultValueFields()
+          .preservingProtoFieldNames()
+          .print(message);
     } catch (Exception e) {
       throw new RuntimeException(e.getMessage(), e);
     }
