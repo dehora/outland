@@ -15,8 +15,9 @@ public  final class FeatureVersion extends
     super(builder);
   }
   private FeatureVersion() {
-    ulid_ = "";
-    logical_ = 0L;
+    id_ = "";
+    timestamp_ = 0L;
+    counter_ = 0L;
   }
 
   @java.lang.Override
@@ -47,12 +48,17 @@ public  final class FeatureVersion extends
           case 10: {
             java.lang.String s = input.readStringRequireUtf8();
 
-            ulid_ = s;
+            id_ = s;
             break;
           }
           case 16: {
 
-            logical_ = input.readInt64();
+            timestamp_ = input.readInt64();
+            break;
+          }
+          case 24: {
+
+            counter_ = input.readInt64();
             break;
           }
         }
@@ -78,47 +84,56 @@ public  final class FeatureVersion extends
             outland.feature.proto.FeatureVersion.class, outland.feature.proto.FeatureVersion.Builder.class);
   }
 
-  public static final int ULID_FIELD_NUMBER = 1;
-  private volatile java.lang.Object ulid_;
+  public static final int ID_FIELD_NUMBER = 1;
+  private volatile java.lang.Object id_;
   /**
-   * <code>optional string ulid = 1;</code>
+   * <code>optional string id = 1;</code>
    */
-  public java.lang.String getUlid() {
-    java.lang.Object ref = ulid_;
+  public java.lang.String getId() {
+    java.lang.Object ref = id_;
     if (ref instanceof java.lang.String) {
       return (java.lang.String) ref;
     } else {
       com.google.protobuf.ByteString bs = 
           (com.google.protobuf.ByteString) ref;
       java.lang.String s = bs.toStringUtf8();
-      ulid_ = s;
+      id_ = s;
       return s;
     }
   }
   /**
-   * <code>optional string ulid = 1;</code>
+   * <code>optional string id = 1;</code>
    */
   public com.google.protobuf.ByteString
-      getUlidBytes() {
-    java.lang.Object ref = ulid_;
+      getIdBytes() {
+    java.lang.Object ref = id_;
     if (ref instanceof java.lang.String) {
       com.google.protobuf.ByteString b = 
           com.google.protobuf.ByteString.copyFromUtf8(
               (java.lang.String) ref);
-      ulid_ = b;
+      id_ = b;
       return b;
     } else {
       return (com.google.protobuf.ByteString) ref;
     }
   }
 
-  public static final int LOGICAL_FIELD_NUMBER = 2;
-  private long logical_;
+  public static final int TIMESTAMP_FIELD_NUMBER = 2;
+  private long timestamp_;
   /**
-   * <code>optional int64 logical = 2;</code>
+   * <code>optional int64 timestamp = 2;</code>
    */
-  public long getLogical() {
-    return logical_;
+  public long getTimestamp() {
+    return timestamp_;
+  }
+
+  public static final int COUNTER_FIELD_NUMBER = 3;
+  private long counter_;
+  /**
+   * <code>optional int64 counter = 3;</code>
+   */
+  public long getCounter() {
+    return counter_;
   }
 
   private byte memoizedIsInitialized = -1;
@@ -133,11 +148,14 @@ public  final class FeatureVersion extends
 
   public void writeTo(com.google.protobuf.CodedOutputStream output)
                       throws java.io.IOException {
-    if (!getUlidBytes().isEmpty()) {
-      com.google.protobuf.GeneratedMessageV3.writeString(output, 1, ulid_);
+    if (!getIdBytes().isEmpty()) {
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 1, id_);
     }
-    if (logical_ != 0L) {
-      output.writeInt64(2, logical_);
+    if (timestamp_ != 0L) {
+      output.writeInt64(2, timestamp_);
+    }
+    if (counter_ != 0L) {
+      output.writeInt64(3, counter_);
     }
   }
 
@@ -146,12 +164,16 @@ public  final class FeatureVersion extends
     if (size != -1) return size;
 
     size = 0;
-    if (!getUlidBytes().isEmpty()) {
-      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, ulid_);
+    if (!getIdBytes().isEmpty()) {
+      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, id_);
     }
-    if (logical_ != 0L) {
+    if (timestamp_ != 0L) {
       size += com.google.protobuf.CodedOutputStream
-        .computeInt64Size(2, logical_);
+        .computeInt64Size(2, timestamp_);
+    }
+    if (counter_ != 0L) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeInt64Size(3, counter_);
     }
     memoizedSize = size;
     return size;
@@ -169,10 +191,12 @@ public  final class FeatureVersion extends
     outland.feature.proto.FeatureVersion other = (outland.feature.proto.FeatureVersion) obj;
 
     boolean result = true;
-    result = result && getUlid()
-        .equals(other.getUlid());
-    result = result && (getLogical()
-        == other.getLogical());
+    result = result && getId()
+        .equals(other.getId());
+    result = result && (getTimestamp()
+        == other.getTimestamp());
+    result = result && (getCounter()
+        == other.getCounter());
     return result;
   }
 
@@ -183,11 +207,14 @@ public  final class FeatureVersion extends
     }
     int hash = 41;
     hash = (19 * hash) + getDescriptorForType().hashCode();
-    hash = (37 * hash) + ULID_FIELD_NUMBER;
-    hash = (53 * hash) + getUlid().hashCode();
-    hash = (37 * hash) + LOGICAL_FIELD_NUMBER;
+    hash = (37 * hash) + ID_FIELD_NUMBER;
+    hash = (53 * hash) + getId().hashCode();
+    hash = (37 * hash) + TIMESTAMP_FIELD_NUMBER;
     hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
-        getLogical());
+        getTimestamp());
+    hash = (37 * hash) + COUNTER_FIELD_NUMBER;
+    hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+        getCounter());
     hash = (29 * hash) + unknownFields.hashCode();
     memoizedHashCode = hash;
     return hash;
@@ -306,9 +333,11 @@ public  final class FeatureVersion extends
     }
     public Builder clear() {
       super.clear();
-      ulid_ = "";
+      id_ = "";
 
-      logical_ = 0L;
+      timestamp_ = 0L;
+
+      counter_ = 0L;
 
       return this;
     }
@@ -332,8 +361,9 @@ public  final class FeatureVersion extends
 
     public outland.feature.proto.FeatureVersion buildPartial() {
       outland.feature.proto.FeatureVersion result = new outland.feature.proto.FeatureVersion(this);
-      result.ulid_ = ulid_;
-      result.logical_ = logical_;
+      result.id_ = id_;
+      result.timestamp_ = timestamp_;
+      result.counter_ = counter_;
       onBuilt();
       return result;
     }
@@ -375,12 +405,15 @@ public  final class FeatureVersion extends
 
     public Builder mergeFrom(outland.feature.proto.FeatureVersion other) {
       if (other == outland.feature.proto.FeatureVersion.getDefaultInstance()) return this;
-      if (!other.getUlid().isEmpty()) {
-        ulid_ = other.ulid_;
+      if (!other.getId().isEmpty()) {
+        id_ = other.id_;
         onChanged();
       }
-      if (other.getLogical() != 0L) {
-        setLogical(other.getLogical());
+      if (other.getTimestamp() != 0L) {
+        setTimestamp(other.getTimestamp());
+      }
+      if (other.getCounter() != 0L) {
+        setCounter(other.getCounter());
       }
       onChanged();
       return this;
@@ -408,97 +441,123 @@ public  final class FeatureVersion extends
       return this;
     }
 
-    private java.lang.Object ulid_ = "";
+    private java.lang.Object id_ = "";
     /**
-     * <code>optional string ulid = 1;</code>
+     * <code>optional string id = 1;</code>
      */
-    public java.lang.String getUlid() {
-      java.lang.Object ref = ulid_;
+    public java.lang.String getId() {
+      java.lang.Object ref = id_;
       if (!(ref instanceof java.lang.String)) {
         com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
-        ulid_ = s;
+        id_ = s;
         return s;
       } else {
         return (java.lang.String) ref;
       }
     }
     /**
-     * <code>optional string ulid = 1;</code>
+     * <code>optional string id = 1;</code>
      */
     public com.google.protobuf.ByteString
-        getUlidBytes() {
-      java.lang.Object ref = ulid_;
+        getIdBytes() {
+      java.lang.Object ref = id_;
       if (ref instanceof String) {
         com.google.protobuf.ByteString b = 
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
-        ulid_ = b;
+        id_ = b;
         return b;
       } else {
         return (com.google.protobuf.ByteString) ref;
       }
     }
     /**
-     * <code>optional string ulid = 1;</code>
+     * <code>optional string id = 1;</code>
      */
-    public Builder setUlid(
+    public Builder setId(
         java.lang.String value) {
       if (value == null) {
     throw new NullPointerException();
   }
   
-      ulid_ = value;
+      id_ = value;
       onChanged();
       return this;
     }
     /**
-     * <code>optional string ulid = 1;</code>
+     * <code>optional string id = 1;</code>
      */
-    public Builder clearUlid() {
+    public Builder clearId() {
       
-      ulid_ = getDefaultInstance().getUlid();
+      id_ = getDefaultInstance().getId();
       onChanged();
       return this;
     }
     /**
-     * <code>optional string ulid = 1;</code>
+     * <code>optional string id = 1;</code>
      */
-    public Builder setUlidBytes(
+    public Builder setIdBytes(
         com.google.protobuf.ByteString value) {
       if (value == null) {
     throw new NullPointerException();
   }
   checkByteStringIsUtf8(value);
       
-      ulid_ = value;
+      id_ = value;
       onChanged();
       return this;
     }
 
-    private long logical_ ;
+    private long timestamp_ ;
     /**
-     * <code>optional int64 logical = 2;</code>
+     * <code>optional int64 timestamp = 2;</code>
      */
-    public long getLogical() {
-      return logical_;
+    public long getTimestamp() {
+      return timestamp_;
     }
     /**
-     * <code>optional int64 logical = 2;</code>
+     * <code>optional int64 timestamp = 2;</code>
      */
-    public Builder setLogical(long value) {
+    public Builder setTimestamp(long value) {
       
-      logical_ = value;
+      timestamp_ = value;
       onChanged();
       return this;
     }
     /**
-     * <code>optional int64 logical = 2;</code>
+     * <code>optional int64 timestamp = 2;</code>
      */
-    public Builder clearLogical() {
+    public Builder clearTimestamp() {
       
-      logical_ = 0L;
+      timestamp_ = 0L;
+      onChanged();
+      return this;
+    }
+
+    private long counter_ ;
+    /**
+     * <code>optional int64 counter = 3;</code>
+     */
+    public long getCounter() {
+      return counter_;
+    }
+    /**
+     * <code>optional int64 counter = 3;</code>
+     */
+    public Builder setCounter(long value) {
+      
+      counter_ = value;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>optional int64 counter = 3;</code>
+     */
+    public Builder clearCounter() {
+      
+      counter_ = 0L;
       onChanged();
       return this;
     }

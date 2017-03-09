@@ -116,6 +116,19 @@ public  final class Feature extends
             properties_.getMutableMap().put(properties.getKey(), properties.getValue());
             break;
           }
+          case 98: {
+            outland.feature.proto.FeatureVersion.Builder subBuilder = null;
+            if (version_ != null) {
+              subBuilder = version_.toBuilder();
+            }
+            version_ = input.readMessage(outland.feature.proto.FeatureVersion.parser(), extensionRegistry);
+            if (subBuilder != null) {
+              subBuilder.mergeFrom(version_);
+              version_ = subBuilder.buildPartial();
+            }
+
+            break;
+          }
         }
       }
     } catch (com.google.protobuf.InvalidProtocolBufferException e) {
@@ -575,6 +588,27 @@ public  final class Feature extends
     return map.get(key);
   }
 
+  public static final int VERSION_FIELD_NUMBER = 12;
+  private outland.feature.proto.FeatureVersion version_;
+  /**
+   * <code>optional .outland.FeatureVersion version = 12;</code>
+   */
+  public boolean hasVersion() {
+    return version_ != null;
+  }
+  /**
+   * <code>optional .outland.FeatureVersion version = 12;</code>
+   */
+  public outland.feature.proto.FeatureVersion getVersion() {
+    return version_ == null ? outland.feature.proto.FeatureVersion.getDefaultInstance() : version_;
+  }
+  /**
+   * <code>optional .outland.FeatureVersion version = 12;</code>
+   */
+  public outland.feature.proto.FeatureVersionOrBuilder getVersionOrBuilder() {
+    return getVersion();
+  }
+
   private byte memoizedIsInitialized = -1;
   public final boolean isInitialized() {
     byte isInitialized = memoizedIsInitialized;
@@ -620,6 +654,9 @@ public  final class Feature extends
           .build();
       output.writeMessage(9, properties);
     }
+    if (version_ != null) {
+      output.writeMessage(12, getVersion());
+    }
   }
 
   public int getSerializedSize() {
@@ -663,6 +700,10 @@ public  final class Feature extends
       size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(9, properties);
     }
+    if (version_ != null) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeMessageSize(12, getVersion());
+    }
     memoizedSize = size;
     return size;
   }
@@ -699,6 +740,11 @@ public  final class Feature extends
     }
     result = result && internalGetProperties().equals(
         other.internalGetProperties());
+    result = result && (hasVersion() == other.hasVersion());
+    if (hasVersion()) {
+      result = result && getVersion()
+          .equals(other.getVersion());
+    }
     return result;
   }
 
@@ -730,6 +776,10 @@ public  final class Feature extends
     if (!internalGetProperties().getMap().isEmpty()) {
       hash = (37 * hash) + PROPERTIES_FIELD_NUMBER;
       hash = (53 * hash) + internalGetProperties().hashCode();
+    }
+    if (hasVersion()) {
+      hash = (37 * hash) + VERSION_FIELD_NUMBER;
+      hash = (53 * hash) + getVersion().hashCode();
     }
     hash = (29 * hash) + unknownFields.hashCode();
     memoizedHashCode = hash;
@@ -892,6 +942,12 @@ public  final class Feature extends
         ownerBuilder_ = null;
       }
       internalGetMutableProperties().clear();
+      if (versionBuilder_ == null) {
+        version_ = null;
+      } else {
+        version_ = null;
+        versionBuilder_ = null;
+      }
       return this;
     }
 
@@ -930,6 +986,11 @@ public  final class Feature extends
       }
       result.properties_ = internalGetProperties();
       result.properties_.makeImmutable();
+      if (versionBuilder_ == null) {
+        result.version_ = version_;
+      } else {
+        result.version_ = versionBuilder_.build();
+      }
       result.bitField0_ = to_bitField0_;
       onBuilt();
       return result;
@@ -1004,6 +1065,9 @@ public  final class Feature extends
       }
       internalGetMutableProperties().mergeFrom(
           other.internalGetProperties());
+      if (other.hasVersion()) {
+        mergeVersion(other.getVersion());
+      }
       onChanged();
       return this;
     }
@@ -1723,6 +1787,123 @@ public  final class Feature extends
         java.util.Map<java.lang.String, java.lang.String> values) {
       getMutableProperties().putAll(values);
       return this;
+    }
+
+    private outland.feature.proto.FeatureVersion version_ = null;
+    private com.google.protobuf.SingleFieldBuilderV3<
+        outland.feature.proto.FeatureVersion, outland.feature.proto.FeatureVersion.Builder, outland.feature.proto.FeatureVersionOrBuilder> versionBuilder_;
+    /**
+     * <code>optional .outland.FeatureVersion version = 12;</code>
+     */
+    public boolean hasVersion() {
+      return versionBuilder_ != null || version_ != null;
+    }
+    /**
+     * <code>optional .outland.FeatureVersion version = 12;</code>
+     */
+    public outland.feature.proto.FeatureVersion getVersion() {
+      if (versionBuilder_ == null) {
+        return version_ == null ? outland.feature.proto.FeatureVersion.getDefaultInstance() : version_;
+      } else {
+        return versionBuilder_.getMessage();
+      }
+    }
+    /**
+     * <code>optional .outland.FeatureVersion version = 12;</code>
+     */
+    public Builder setVersion(outland.feature.proto.FeatureVersion value) {
+      if (versionBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        version_ = value;
+        onChanged();
+      } else {
+        versionBuilder_.setMessage(value);
+      }
+
+      return this;
+    }
+    /**
+     * <code>optional .outland.FeatureVersion version = 12;</code>
+     */
+    public Builder setVersion(
+        outland.feature.proto.FeatureVersion.Builder builderForValue) {
+      if (versionBuilder_ == null) {
+        version_ = builderForValue.build();
+        onChanged();
+      } else {
+        versionBuilder_.setMessage(builderForValue.build());
+      }
+
+      return this;
+    }
+    /**
+     * <code>optional .outland.FeatureVersion version = 12;</code>
+     */
+    public Builder mergeVersion(outland.feature.proto.FeatureVersion value) {
+      if (versionBuilder_ == null) {
+        if (version_ != null) {
+          version_ =
+            outland.feature.proto.FeatureVersion.newBuilder(version_).mergeFrom(value).buildPartial();
+        } else {
+          version_ = value;
+        }
+        onChanged();
+      } else {
+        versionBuilder_.mergeFrom(value);
+      }
+
+      return this;
+    }
+    /**
+     * <code>optional .outland.FeatureVersion version = 12;</code>
+     */
+    public Builder clearVersion() {
+      if (versionBuilder_ == null) {
+        version_ = null;
+        onChanged();
+      } else {
+        version_ = null;
+        versionBuilder_ = null;
+      }
+
+      return this;
+    }
+    /**
+     * <code>optional .outland.FeatureVersion version = 12;</code>
+     */
+    public outland.feature.proto.FeatureVersion.Builder getVersionBuilder() {
+      
+      onChanged();
+      return getVersionFieldBuilder().getBuilder();
+    }
+    /**
+     * <code>optional .outland.FeatureVersion version = 12;</code>
+     */
+    public outland.feature.proto.FeatureVersionOrBuilder getVersionOrBuilder() {
+      if (versionBuilder_ != null) {
+        return versionBuilder_.getMessageOrBuilder();
+      } else {
+        return version_ == null ?
+            outland.feature.proto.FeatureVersion.getDefaultInstance() : version_;
+      }
+    }
+    /**
+     * <code>optional .outland.FeatureVersion version = 12;</code>
+     */
+    private com.google.protobuf.SingleFieldBuilderV3<
+        outland.feature.proto.FeatureVersion, outland.feature.proto.FeatureVersion.Builder, outland.feature.proto.FeatureVersionOrBuilder> 
+        getVersionFieldBuilder() {
+      if (versionBuilder_ == null) {
+        versionBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+            outland.feature.proto.FeatureVersion, outland.feature.proto.FeatureVersion.Builder, outland.feature.proto.FeatureVersionOrBuilder>(
+                getVersion(),
+                getParentForChildren(),
+                isClean());
+        version_ = null;
+      }
+      return versionBuilder_;
     }
     public final Builder setUnknownFields(
         final com.google.protobuf.UnknownFieldSet unknownFields) {

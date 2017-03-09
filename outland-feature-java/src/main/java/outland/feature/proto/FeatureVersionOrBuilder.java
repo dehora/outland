@@ -8,17 +8,22 @@ public interface FeatureVersionOrBuilder extends
     com.google.protobuf.MessageOrBuilder {
 
   /**
-   * <code>optional string ulid = 1;</code>
+   * <code>optional string id = 1;</code>
    */
-  java.lang.String getUlid();
+  java.lang.String getId();
   /**
-   * <code>optional string ulid = 1;</code>
+   * <code>optional string id = 1;</code>
    */
   com.google.protobuf.ByteString
-      getUlidBytes();
+      getIdBytes();
 
   /**
-   * <code>optional int64 logical = 2;</code>
+   * <code>optional int64 timestamp = 2;</code>
    */
-  long getLogical();
+  long getTimestamp();
+
+  /**
+   * <code>optional int64 counter = 3;</code>
+   */
+  long getCounter();
 }
