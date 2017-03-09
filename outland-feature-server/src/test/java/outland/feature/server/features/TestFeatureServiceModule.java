@@ -8,5 +8,6 @@ public class TestFeatureServiceModule extends AbstractModule {
     bind(FeatureService.class).to(DefaultFeatureService.class).asEagerSingleton();
     bind(FeatureStorage.class).to(TestFeatureStorage.class).asEagerSingleton();
     bind(FeatureCache.class).to(TestFeatureCache.class).asEagerSingleton();
+    bind(VersionService.class).to(Versions.class).asEagerSingleton();
   }
 }
