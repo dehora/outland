@@ -29,8 +29,8 @@ public interface VersionService {
       return counter;
     }
 
-    String asUlid() {
-      return Ulid.generate(asTimestampMillis(),
+    String id() {
+      return "ver_" + Ulid.generate(asTimestampMillis(),
           ("localTime=" + logicalTime + ",counter=" + counter).getBytes());
     }
 

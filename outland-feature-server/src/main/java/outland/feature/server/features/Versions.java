@@ -15,6 +15,7 @@ class Versions implements VersionService {
   // no idea what are good values here, let's do it live
   static final long MAX_SYSTEM_TIME_FORWARD_DRIFT = 12 * ONE_HOUR_MICROSECONDS;
   private static final long MAX_INCOMING_TIME_FORWARD_DRIFT = 12 * ONE_HOUR_MICROSECONDS;
+  private static final long INITIAL_COUNTER = 0L;
 
   private final Clock clock;
   private final AtomicLong localTime;
@@ -24,7 +25,7 @@ class Versions implements VersionService {
     this.clock = clock;
     // todo: accept these as values, to allow us to memo logicalTime from previous starts
     localTime = new AtomicLong(clock.timestampMicros());
-    localCounter = new AtomicLong(0L);
+    localCounter = new AtomicLong(INITIAL_COUNTER);
   }
 
   Versions() {
@@ -59,7 +60,7 @@ class Versions implements VersionService {
       } else {
         // things look sane, take the physical logicalTime and reset the counter
         localTime.set(physicalNow);
-        localCounter.set(0L);
+        localCounter.set(INITIAL_COUNTER);
       }
     }
 
@@ -73,7 +74,7 @@ class Versions implements VersionService {
     if (physicalNow > localTime.get() && physicalNow > incoming.logicalTime()) {
       if (!physicalNowTooFarAhead(physicalNow, localTime)) {
         localTime.set(physicalNow);
-        localCounter.set(0L);
+        localCounter.set(INITIAL_COUNTER);
       } else {
         // don't use our physical logicalTime, it's too far ahead
         traceForwardDrift(physicalNow, localTime.get());
@@ -89,7 +90,7 @@ class Versions implements VersionService {
   }
 
   private boolean physicalNowTooFarAhead(long physicalNow, AtomicLong logicalTime) {
-    return (physicalNow - logicalTime.get()) > MAX_SYSTEM_TIME_FORWARD_DRIFT;
+    return physicalNow - logicalTime.get() > MAX_SYSTEM_TIME_FORWARD_DRIFT;
   }
 
   private void resolveLocalAndIncomingTimestamps(HybridLogicalTimestamp incoming) {
