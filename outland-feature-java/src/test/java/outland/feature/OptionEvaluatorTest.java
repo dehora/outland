@@ -157,7 +157,7 @@ public class OptionEvaluatorTest {
         .setOptionType(OptionType.bool)
         .addOptions(t)
         .addOptions(f)
-        .setState(Feature.State.on)
+        .setState(Feature.State.on  )
         .build();
 
     OptionEvaluator oe = new OptionEvaluator();
