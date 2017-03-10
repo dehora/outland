@@ -17,7 +17,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import outland.feature.proto.Feature;
 import outland.feature.proto.FeatureCollection;
+import outland.feature.proto.FeatureOption;
 import outland.feature.proto.FeatureVersion;
+import outland.feature.proto.OptionType;
+import outland.feature.server.Problem;
+import outland.feature.server.ServiceException;
 
 import static outland.feature.server.StructLog.kvp;
 
@@ -78,6 +82,8 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
     builder.setState(Feature.State.off); // always disabled on registerFeature
 
     applyVersion(registering, builder);
+    builder.clearOptions();
+    applyOptionsRegister(registering, builder);
 
     Feature feature = builder.build();
 
@@ -116,7 +122,20 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
         .mergeFrom(updates)
         .setUpdated(now);
 
+    // can't change some values in update
+    builder.setOptionType(found.getOptionType());
+    builder.setCreated(found.getCreated());
+    builder.setId(found.getId());
+    builder.setAppId(found.getAppId());
+    builder.setKey(found.getKey());
+
     applyVersion(updates, builder);
+
+    if (builder.getOptionType().equals(OptionType.bool) && builder.getOptionsCount() != 0) {
+      List<FeatureOption> options = applyOptionsUpdate(updates, found);
+      builder.clearOptions();
+      builder.addAllOptions(options);
+    }
 
     // a value other than none indicates the client sent something
     if (!updates.getState().equals(Feature.State.none)) {
@@ -185,7 +204,6 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
     // todo: signal 404 if empty
     return feature;
   }
-
 
   @Override public FeatureCollection loadFeatures(String appId) {
 
@@ -268,6 +286,122 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
         TextFormat.shortDebugString(featureCollection));
 
     return featureCollection;
+  }
+
+  private List<FeatureOption> applyOptionsUpdate(Feature updated, Feature found) {
+
+    final ArrayList<FeatureOption> results = Lists.newArrayList();
+
+    // nothing in the update, return what we have
+    if(updated.getOptionsCount() == 0) {
+      results.addAll(found.getOptionsList());
+      return results;
+    }
+
+    final List<FeatureOption> updatedOptionsList = updated.getOptionsList();
+    if (updatedOptionsList.size() != 2) {
+      throw new ServiceException(Problem.clientProblem("options_wrong_number",
+          "please submit both bool options for update.", 422));
+    }
+
+    for (FeatureOption updateOption : updatedOptionsList) {
+      final String updateId = updateOption.getId();
+
+      final List<FeatureOption> foundOptionsList = found.getOptionsList();
+
+      for (FeatureOption foundOption : foundOptionsList) {
+        final FeatureOption.Builder builder = foundOption.toBuilder();
+        if (foundOption.getId().equals(updateId)) {
+          // weight is the only field we change
+          builder.setWeight(updateOption.getWeight());
+          results.add(builder.build());
+          break;
+        }
+      }
+    }
+
+    int sum = 0;
+    for (FeatureOption result : results) {
+      validateOption(result);
+      sum += result.getWeight();
+    }
+
+    if (sum != 10_000) {
+      throw new ServiceException(
+          Problem.clientProblem("weights_wrong_total", "option weights must sum to 10000",
+              422));
+    }
+
+    return results;
+  }
+
+  private void applyOptionsRegister(Feature feature, Feature.Builder builder) {
+
+    if (feature.getOptionType().equals(OptionType.flag)) {
+      // flags don't have weighted options
+      return;
+    }
+
+    if (feature.getOptionType().equals(OptionType.bool)) {
+      if (feature.getOptionsCount() != 0) {
+
+        int sum = 0;
+
+        final List<FeatureOption> options = feature.getOptionsList();
+
+        for (FeatureOption option : options) {
+
+          validateOption(option);
+
+          final FeatureOption.Builder optionBuilder = FeatureOption.newBuilder().mergeFrom(option);
+          optionBuilder.setId("opt_" + Ulid.random());
+          optionBuilder.setOptionType(OptionType.bool);
+          builder.addOptions(optionBuilder);
+
+          sum += option.getWeight();
+        }
+
+        if (sum != 10_000) {
+          throw new ServiceException(Problem.clientProblem("weights_wrong_total",
+              "option weights must sum to 10000", 422));
+        }
+      } else {
+        builder.addOptions(FeatureOption.newBuilder()
+            .setId("opt_" + Ulid.random())
+            .setName("false")
+            .setValue("false")
+            .setOptionType(OptionType.bool)
+            .setWeight(5_000));
+
+        builder.addOptions(FeatureOption.newBuilder()
+            .setId("opt_" + Ulid.random())
+            .setName("true")
+            .setValue("true")
+            .setOptionType(OptionType.bool)
+            .setWeight(5_000));
+      }
+    }
+  }
+
+  private void validateOption(FeatureOption option) {
+    if (option.getWeight() > 10_000 || option.getWeight() < 0) {
+      throw new ServiceException(Problem.clientProblem("weights_out_of_bounds",
+          "option weights must be between 0 and 10000", 422));
+    }
+
+    if (!"true".equalsIgnoreCase(option.getValue())
+        &&
+        !"false".equalsIgnoreCase(option.getValue())) {
+      throw new ServiceException(Problem.clientProblem("bad_option_value",
+          "option values must be true or false", 422));
+    }
+
+    if (!"true".equalsIgnoreCase(option.getName())
+        &&
+        !"false".equalsIgnoreCase(option.getName())) {
+      throw new ServiceException(Problem.clientProblem("bad_option_name",
+          "option names must be true or false", 422));
+    }
   }
 
   private void applyVersion(Feature registering, Feature.Builder builder) {
