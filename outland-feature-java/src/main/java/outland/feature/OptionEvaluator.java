@@ -9,14 +9,14 @@ class OptionEvaluator {
 
   private static final int MAX_WEIGHT = 10_000;
 
-  boolean evaluateFlagOptions(Feature feature) {
+  boolean evaluateBooleanOptions(Feature feature) {
 
-    if (!feature.getOptionType().equals(OptionType.flag)) {
+    if (!feature.getOptionType().equals(OptionType.bool)) {
       return false; // todo: throw this?
     }
 
-    if (feature.getOptionsCount() == 0) { // unweighted plain flag
-      return feature.getState().equals(Feature.State.on);
+    if(! feature.getState().equals(Feature.State.on)) {
+      return false; // todo: replace with a fallback when we add fallbacks for options
     }
 
     final List<FeatureOption> optionsList = feature.getOptionsList();

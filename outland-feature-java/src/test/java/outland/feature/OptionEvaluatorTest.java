@@ -46,7 +46,7 @@ public class OptionEvaluatorTest {
         .setOptionType(OptionType.flag).addOptions(t).addOptions(f).build();
 
     OptionEvaluator oe = new OptionEvaluator();
-    oe.evaluateFlagOptions(feature1);
+    oe.evaluateBooleanOptions(feature1);
 
     final int[] fCount = {0};
     final int[] tCount = {0};
@@ -56,7 +56,7 @@ public class OptionEvaluatorTest {
     IntStream.range(0, runs).forEach(
         i -> {
           @SuppressWarnings("unused")
-          int noop = oe.evaluateFlagOptions(feature1) ? tCount[0]++ : fCount[0]++;
+          int noop = oe.evaluateBooleanOptions(feature1) ? tCount[0]++ : fCount[0]++;
         }
     );
 
@@ -86,7 +86,7 @@ public class OptionEvaluatorTest {
 
     OptionEvaluator oe = new OptionEvaluator();
 
-    IntStream.range(0, 10000).forEach(i -> assertFalse(oe.evaluateFlagOptions(feature1)));
+    IntStream.range(0, 10000).forEach(i -> assertFalse(oe.evaluateBooleanOptions(feature1)));
   }
 
   @Test
@@ -103,7 +103,7 @@ public class OptionEvaluatorTest {
 
     OptionEvaluator oe = new OptionEvaluator();
 
-    IntStream.range(0, 1000).forEach(i -> assertTrue(oe.evaluateFlagOptions(feature1)));
+    IntStream.range(0, 1000).forEach(i -> assertTrue(oe.evaluateBooleanOptions(feature1)));
   }
 
   @Test
@@ -157,7 +157,7 @@ public class OptionEvaluatorTest {
         .build();
 
     OptionEvaluator oe = new OptionEvaluator();
-    oe.evaluateFlagOptions(feature1);
+    oe.evaluateBooleanOptions(feature1);
 
     final int[] fCount = {0};
     final int[] tCount = {0};
@@ -165,7 +165,7 @@ public class OptionEvaluatorTest {
     IntStream.range(0, runs).forEach(
         i -> {
           @SuppressWarnings("unused")
-          int noop = oe.evaluateFlagOptions(feature1) ? tCount[0]++ : fCount[0]++;
+          int noop = oe.evaluateBooleanOptions(feature1) ? tCount[0]++ : fCount[0]++;
         }
     );
 
