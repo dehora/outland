@@ -2,14 +2,13 @@ package outland.feature;
 
 import com.codahale.metrics.MetricRegistry;
 import java.net.URI;
-import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import okhttp3.OkHttpClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import outland.feature.proto.Feature;
-import outland.feature.proto.FeatureOption;
+import outland.feature.proto.OptionType;
 
 /**
  * A client which can be used to check feature state and access the feature management APIs.
@@ -224,10 +223,18 @@ public class FeatureClient {
       return false;
     }
 
-    return new OptionEvaluator().evaluateFlagOptions(maybe.get());
+    final Feature feature = maybe.get();
+
+    if(feature.getOptionType().equals(OptionType.flag)) {
+      return feature.getState().equals(Feature.State.on);
+    }
+
+    if(feature.getOptionType().equals(OptionType.bool)) {
+      return new OptionEvaluator().evaluateBooleanOptions(feature);
+    }
+
+    return false;
   }
-
-
 
   private boolean enabledThrowingInner(String appId, String featureKey) {
     final Optional<Feature> maybe = featureStore.find(appId, featureKey);
@@ -240,7 +247,17 @@ public class FeatureClient {
                   featureKey, appId)));
     }
 
-    return new OptionEvaluator().evaluateFlagOptions(maybe.get());
+    final Feature feature = maybe.get();
+
+    if(feature.getOptionType().equals(OptionType.flag)) {
+      return feature.getState().equals(Feature.State.on);
+    }
+
+    if(feature.getOptionType().equals(OptionType.bool)) {
+      return new OptionEvaluator().evaluateBooleanOptions(feature);
+    }
+
+    return false;
   }
 
   public static class Builder {
