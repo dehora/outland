@@ -7,7 +7,7 @@
 - Version features with a hybrid logical clock-alike
 - Fix server shadow jar's main class so that it starts up.
 - Add a docker setup for local use.
-- Allow the feature flag definitions to carry weights
+- Add feature flag bool definitions that can carry weights
 
 **Client**:
 
