@@ -37,7 +37,7 @@ public class AuthTest {
 
     try {
       final Optional<AppMember> authenticate =
-          authenticator.authenticate(new BasicCredentials("foo", "letmein"));
+          authenticator.authenticate(new BasicCredentials("foo/owner", "letmein"));
       assertTrue(authenticate.isPresent());
 
     } catch (AuthenticationException e) {
@@ -47,7 +47,7 @@ public class AuthTest {
 
     try {
       final Optional<AppMember> authenticate =
-          authenticator.authenticate(new BasicCredentials("foo", "badsecret"));
+          authenticator.authenticate(new BasicCredentials("foo/owner", "badsecret"));
       assertFalse(authenticate.isPresent());
     } catch (AuthenticationException e) {
       e.printStackTrace();
