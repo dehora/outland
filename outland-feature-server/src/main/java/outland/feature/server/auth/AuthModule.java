@@ -22,19 +22,19 @@ public class AuthModule extends AbstractModule {
 
     bind(AuthConfiguration.class).toInstance(authConfiguration);
 
-    bind(new TypeLiteral<Authenticator<String, App>>(){})
+    bind(new TypeLiteral<Authenticator<String, AppMember>>(){})
         .annotatedWith(Names.named("oauthAppAuthenticator"))
         .to(TokenOAuthAuthenticator.class);
 
-    bind(new TypeLiteral<Authorizer<App>>(){})
+    bind(new TypeLiteral<Authorizer<AppMember>>(){})
         .annotatedWith(Names.named("oauthAppAuthorizer"))
         .to(TokenAuthorizer.class);
 
-    bind(new TypeLiteral<Authenticator<BasicCredentials, App>>(){})
+    bind(new TypeLiteral<Authenticator<BasicCredentials, AppMember>>(){})
         .annotatedWith(Names.named("basicAppAuthenticator"))
         .to(BasicAuthenticator.class);
 
-    bind(new TypeLiteral<Authorizer<App>>(){})
+    bind(new TypeLiteral<Authorizer<AppMember>>(){})
         .annotatedWith(Names.named("basicAppAuthorizer"))
         .to(BasicAuthorizer.class);
 
