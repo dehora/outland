@@ -17,6 +17,7 @@ public class Problem {
   private static final URI DEFAULT_TYPE = URI.create("about:blank");
   public static final URI AUTH_TYPE = URI.create("about:auth");
   public static final URI CLIENT_TYPE = URI.create("about:client");
+  public static final URI SERVER_TYPE = URI.create("about:server");
   private static final URI ARG_TYPE = URI.create("about:argument");
 
   @JsonProperty("type")
@@ -38,6 +39,22 @@ public class Problem {
   private Map data;
 
   private volatile transient String message;
+
+  /**
+   * Create a Problem object that indicates a server error.
+   *
+   * @param title the problem title
+   * @param detail the problem detail
+   * @return a Problem object with a status of 401 and a type of "about:blank"
+   */
+  public static Problem serverProblem(String title, String detail, int code) {
+    return new Problem()
+        .title(title)
+        .detail(detail)
+        .data(Maps.newLinkedHashMap())
+        .status(code)
+        .type(SERVER_TYPE);
+  }
 
   /**
    * Create a Problem object that indicates a client   error.
