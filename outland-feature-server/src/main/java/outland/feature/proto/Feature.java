@@ -362,6 +362,10 @@ public  final class Feature extends
   public static final int APPID_FIELD_NUMBER = 3;
   private volatile java.lang.Object appId_;
   /**
+   * <pre>
+   * corresponds to App.key
+   * </pre>
+   *
    * <code>optional string appId = 3;</code>
    */
   public java.lang.String getAppId() {
@@ -377,6 +381,10 @@ public  final class Feature extends
     }
   }
   /**
+   * <pre>
+   * corresponds to App.key
+   * </pre>
+   *
    * <code>optional string appId = 3;</code>
    */
   public com.google.protobuf.ByteString
@@ -1377,6 +1385,10 @@ public  final class Feature extends
 
     private java.lang.Object appId_ = "";
     /**
+     * <pre>
+     * corresponds to App.key
+     * </pre>
+     *
      * <code>optional string appId = 3;</code>
      */
     public java.lang.String getAppId() {
@@ -1392,6 +1404,10 @@ public  final class Feature extends
       }
     }
     /**
+     * <pre>
+     * corresponds to App.key
+     * </pre>
+     *
      * <code>optional string appId = 3;</code>
      */
     public com.google.protobuf.ByteString
@@ -1408,6 +1424,10 @@ public  final class Feature extends
       }
     }
     /**
+     * <pre>
+     * corresponds to App.key
+     * </pre>
+     *
      * <code>optional string appId = 3;</code>
      */
     public Builder setAppId(
@@ -1421,6 +1441,10 @@ public  final class Feature extends
       return this;
     }
     /**
+     * <pre>
+     * corresponds to App.key
+     * </pre>
+     *
      * <code>optional string appId = 3;</code>
      */
     public Builder clearAppId() {
@@ -1430,6 +1454,10 @@ public  final class Feature extends
       return this;
     }
     /**
+     * <pre>
+     * corresponds to App.key
+     * </pre>
+     *
      * <code>optional string appId = 3;</code>
      */
     public Builder setAppIdBytes(
