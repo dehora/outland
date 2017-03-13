@@ -29,6 +29,7 @@ dependencies {
   compile project.libs.guice_servlet
   compile project.libs.hystrix_core
   compile project.libs.jedis
+  compile project.libs.okhttp3
   compile project.libs.protobuf3
   compile project.libs.protobuf3_util
   compile project.libs.reflections
