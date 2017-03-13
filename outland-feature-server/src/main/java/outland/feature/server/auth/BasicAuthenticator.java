@@ -29,7 +29,7 @@ public class BasicAuthenticator implements io.dropwizard.auth.Authenticator<Basi
     if (isUsingApiKeys(configuration)) {
       if (apiKeys.contains(credentials.getPassword())) {
 
-        final String[] split = credentials.getUsername().split("@");
+        final String[] split = credentials.getUsername().split("/");
 
         final String type = split[1];
         final String identifier = split[0];
