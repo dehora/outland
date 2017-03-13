@@ -1,5 +1,6 @@
 package outland.feature.server.auth;
 
+import com.google.common.collect.Lists;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Key;
@@ -30,12 +31,12 @@ public class AuthTest {
 
     final Injector injector = Guice.createInjector(new AuthModule(authConfiguration));
 
-    final Authenticator<BasicCredentials, App> authenticator =
-        injector.getInstance(Key.get(new TypeLiteral<Authenticator<BasicCredentials, App>>() {
+    final Authenticator<BasicCredentials, AppMember> authenticator =
+        injector.getInstance(Key.get(new TypeLiteral<Authenticator<BasicCredentials, AppMember>>() {
         }, Names.named("basicAppAuthenticator")));
 
     try {
-      final Optional<App> authenticate =
+      final Optional<AppMember> authenticate =
           authenticator.authenticate(new BasicCredentials("foo", "letmein"));
       assertTrue(authenticate.isPresent());
 
@@ -45,7 +46,7 @@ public class AuthTest {
     }
 
     try {
-      final Optional<App> authenticate =
+      final Optional<AppMember> authenticate =
           authenticator.authenticate(new BasicCredentials("foo", "badsecret"));
       assertFalse(authenticate.isPresent());
     } catch (AuthenticationException e) {
@@ -53,12 +54,19 @@ public class AuthTest {
       fail();
     }
 
-    final Authorizer<App> authorizer =
-        injector.getInstance(Key.get(new TypeLiteral<Authorizer<App>>() {
+    final Authorizer<AppMember> authorizer =
+        injector.getInstance(Key.get(new TypeLiteral<Authorizer<AppMember>>() {
         }, Names.named("basicAppAuthorizer")));
 
     // scope checks are disabled
-    assertTrue(authorizer.authorize(new App("foo"), "any"));
+    assertTrue(authorizer.authorize(new AppMember(
+        "service",
+        "foo",
+        Lists.newArrayList(),
+        "woo",
+        100000
+
+    ), "any"));
 
   }
 }

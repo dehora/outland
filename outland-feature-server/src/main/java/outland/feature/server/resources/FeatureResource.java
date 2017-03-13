@@ -28,7 +28,7 @@ import outland.feature.proto.FeatureCollection;
 import outland.feature.server.Problem;
 import outland.feature.server.ServerConfiguration;
 import outland.feature.server.ServiceException;
-import outland.feature.server.auth.App;
+import outland.feature.server.auth.AppMember;
 import outland.feature.server.features.FeatureService;
 
 import static outland.feature.server.StructLog.kvp;
@@ -61,16 +61,16 @@ public class FeatureResource {
   @PermitAll
   @Timed(name = "registerFeature")
   public Response registerFeature(
-      @Auth App app,
+      @Auth AppMember appMember,
       Feature feature,
       @Context HttpHeaders httpHeaders
   ) throws AuthenticationException {
 
     final long start = System.currentTimeMillis();
 
-    throwUnlessMatch(app, feature.getAppId());
+    throwUnlessMember(appMember, feature.getAppId());
 
-    URI loc = UriBuilder.fromUri(baseURI).path("resources")
+    URI loc = UriBuilder.fromUri(baseURI)
         .path(feature.getAppId())
         .path(feature.getKey())
         .build();
@@ -97,7 +97,7 @@ public class FeatureResource {
   @PermitAll
   @Timed(name = "updateFeature")
   public Response updateFeature(
-      @Auth App app,
+      @Auth AppMember appMember,
       @PathParam("app_id") String appId,
       @PathParam("feature_key") String featureKey,
       Feature feature,
@@ -106,7 +106,7 @@ public class FeatureResource {
 
     final long start = System.currentTimeMillis();
 
-    throwUnlessMatch(app, appId);
+    throwUnlessMember(appMember, appId);
     throwUnlessAppIdMatch(feature, appId);
     throwUnlessFeatureKeyMatch(feature, featureKey);
 
@@ -131,14 +131,14 @@ public class FeatureResource {
   @PermitAll
   @Timed(name = "getFeatureByKey")
   public Response getFeatureByKey(
-      @Auth App app,
+      @Auth AppMember appMember,
       @PathParam("app_id") String appId,
       @PathParam("feature_key") String featureKey
   ) throws AuthenticationException {
 
     final long start = System.currentTimeMillis();
 
-    throwUnlessMatch(app, appId);
+    throwUnlessMember(appMember, appId);
 
     final Optional<Feature> feature = featureService.loadFeatureByKey(appId, featureKey);
 
@@ -157,12 +157,12 @@ public class FeatureResource {
   @PermitAll
   @Timed(name = "getFeatures")
   public Response getFeatures(
-      @Auth App app,
+      @Auth AppMember appMember,
       @PathParam("app_id") String appId
   ) throws AuthenticationException {
 
     final long start = System.currentTimeMillis();
-    throwUnlessMatch(app, appId);
+    throwUnlessMember(appMember, appId);
 
     FeatureCollection features = featureService.loadFeatures(appId);
 
@@ -176,13 +176,13 @@ public class FeatureResource {
   @PermitAll
   @Timed(name = "getFeaturesSince")
   public Response getFeaturesSince(
-      @Auth App app,
+      @Auth AppMember appMember,
       @PathParam("app_id") String appId,
       @QueryParam("since") long since
   ) throws AuthenticationException {
 
     final long start = System.currentTimeMillis();
-    throwUnlessMatch(app, appId);
+    throwUnlessMember(appMember, appId);
 
     OffsetDateTime utc =
         OffsetDateTime.ofInstant(Instant.ofEpochSecond(since), ZoneId.of("UTC").normalized());
@@ -191,10 +191,7 @@ public class FeatureResource {
     return this.headers.enrich(Response.ok(features), start).build();
   }
 
-  private void throwUnlessMatch(App principal, String appId) throws AuthenticationException {
-    if (!principal.appId().equals(appId)) {
-      throw new AuthenticationException("Credentials not authenticated for request");
-    }
+  private void throwUnlessMember(AppMember appMember, String appKey) throws AuthenticationException {
   }
 
   private void throwUnlessFeatureKeyMatch(Feature feature, String featureKey) {

@@ -32,7 +32,7 @@ import org.glassfish.jersey.server.filter.EncodingFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import outland.feature.server.app.GuiceApplication;
-import outland.feature.server.auth.App;
+import outland.feature.server.auth.AppMember;
 import outland.feature.server.auth.AuthConfiguration;
 import outland.feature.server.auth.AuthModule;
 import outland.feature.server.aws.DynamoDbModule;
@@ -103,23 +103,23 @@ public class ServerMain extends GuiceApplication<ServerConfiguration> {
     if (configuration.oauthEnabled) {
       logger.info("op=auth_configuration,mechanism=oauth");
 
-      final Authenticator<String, App> oauthAppAuthenticator =
-          injector.getInstance(Key.get(new TypeLiteral<Authenticator<String, App>>() {
+      final Authenticator<String, AppMember> oauthAppAuthenticator =
+          injector.getInstance(Key.get(new TypeLiteral<Authenticator<String, AppMember>>() {
           }, Names.named("oauthAppAuthenticator")));
 
-      final Authorizer<App> oauthAppAuthorizer =
-          injector.getInstance(Key.get(new TypeLiteral<Authorizer<App>>() {
+      final Authorizer<AppMember> oauthAppAuthorizer =
+          injector.getInstance(Key.get(new TypeLiteral<Authorizer<AppMember>>() {
           }, Names.named("oauthAppAuthorizer")));
 
-      final CachingAuthenticator<String, App> cached = new CachingAuthenticator<>(
-          environment.metrics(),
-          oauthAppAuthenticator,
-          CacheBuilder.newBuilder().maximumSize(1024).expireAfterWrite(30, TimeUnit.SECONDS));
+      //final CachingAuthenticator<String, AppMember> cached = new CachingAuthenticator<>(
+      //    environment.metrics(),
+      //    oauthAppAuthenticator,
+      //    CacheBuilder.newBuilder().maximumSize(1024).expireAfterWrite(30, TimeUnit.SECONDS));
 
-      final AuthFilter oauthFilter = new OAuthCredentialAuthFilter.Builder<App>()
+      final AuthFilter oauthFilter = new OAuthCredentialAuthFilter.Builder<AppMember>()
           .setPrefix("Bearer")
           .setRealm("outland_feature")
-          .setAuthenticator(cached)
+          .setAuthenticator(oauthAppAuthenticator)
           .setAuthorizer(oauthAppAuthorizer)
           .setUnauthorizedHandler(unauthorizedHandler)
           .buildAuthFilter();
@@ -130,20 +130,20 @@ public class ServerMain extends GuiceApplication<ServerConfiguration> {
     if (configuration.basicEnabled) {
       logger.info("op=auth_configuration,mechanism=basic");
 
-      final Authorizer<App> basicAppAuthorizer =
-          injector.getInstance(Key.get(new TypeLiteral<Authorizer<App>>() {
+      final Authorizer<AppMember> basicAppAuthorizer =
+          injector.getInstance(Key.get(new TypeLiteral<Authorizer<AppMember>>() {
           }, Names.named("basicAppAuthorizer")));
 
-      final Authenticator<BasicCredentials, App> basicAppAuthenticator =
-          injector.getInstance(Key.get(new TypeLiteral<Authenticator<BasicCredentials, App>>() {
+      final Authenticator<BasicCredentials, AppMember> basicAppAuthenticator =
+          injector.getInstance(Key.get(new TypeLiteral<Authenticator<BasicCredentials, AppMember>>() {
           }, Names.named("basicAppAuthenticator")));
 
-      final CachingAuthenticator<BasicCredentials, App> cached = new CachingAuthenticator<>(
+      final CachingAuthenticator<BasicCredentials, AppMember> cached = new CachingAuthenticator<>(
           environment.metrics(),
           basicAppAuthenticator,
           CacheBuilder.newBuilder().maximumSize(1024).expireAfterWrite(60, TimeUnit.SECONDS));
 
-      final AuthFilter basicAuthFilter = new BasicCredentialAuthFilter.Builder<App>()
+      final AuthFilter basicAuthFilter = new BasicCredentialAuthFilter.Builder<AppMember>()
           .setPrefix("Basic")
           .setRealm("outland_feature")
           .setAuthenticator(basicAppAuthenticator)
@@ -160,6 +160,6 @@ public class ServerMain extends GuiceApplication<ServerConfiguration> {
 
     final ChainedAuthFilter chainedAuthFilter = new ChainedAuthFilter(filters);
     environment.jersey().register(new AuthDynamicFeature(chainedAuthFilter));
-    environment.jersey().register(new AuthValueFactoryProvider.Binder<>(App.class));
+    environment.jersey().register(new AuthValueFactoryProvider.Binder<>(AppMember.class));
   }
 }
