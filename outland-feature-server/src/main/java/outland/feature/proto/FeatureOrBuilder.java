@@ -28,10 +28,18 @@ public interface FeatureOrBuilder extends
       getKeyBytes();
 
   /**
+   * <pre>
+   * corresponds to App.key
+   * </pre>
+   *
    * <code>optional string appId = 3;</code>
    */
   java.lang.String getAppId();
   /**
+   * <pre>
+   * corresponds to App.key
+   * </pre>
+   *
    * <code>optional string appId = 3;</code>
    */
   com.google.protobuf.ByteString

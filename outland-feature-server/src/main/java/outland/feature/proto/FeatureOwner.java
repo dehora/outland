@@ -17,6 +17,7 @@ public  final class FeatureOwner extends
   private FeatureOwner() {
     name_ = "";
     email_ = "";
+    username_ = "";
   }
 
   @java.lang.Override
@@ -54,6 +55,12 @@ public  final class FeatureOwner extends
             java.lang.String s = input.readStringRequireUtf8();
 
             email_ = s;
+            break;
+          }
+          case 34: {
+            java.lang.String s = input.readStringRequireUtf8();
+
+            username_ = s;
             break;
           }
         }
@@ -116,6 +123,10 @@ public  final class FeatureOwner extends
   public static final int EMAIL_FIELD_NUMBER = 3;
   private volatile java.lang.Object email_;
   /**
+   * <pre>
+   * mappable to Owner.email
+   * </pre>
+   *
    * <code>optional string email = 3;</code>
    */
   public java.lang.String getEmail() {
@@ -131,6 +142,10 @@ public  final class FeatureOwner extends
     }
   }
   /**
+   * <pre>
+   * mappable to Owner.email
+   * </pre>
+   *
    * <code>optional string email = 3;</code>
    */
   public com.google.protobuf.ByteString
@@ -141,6 +156,40 @@ public  final class FeatureOwner extends
           com.google.protobuf.ByteString.copyFromUtf8(
               (java.lang.String) ref);
       email_ = b;
+      return b;
+    } else {
+      return (com.google.protobuf.ByteString) ref;
+    }
+  }
+
+  public static final int USERNAME_FIELD_NUMBER = 4;
+  private volatile java.lang.Object username_;
+  /**
+   * <code>optional string username = 4;</code>
+   */
+  public java.lang.String getUsername() {
+    java.lang.Object ref = username_;
+    if (ref instanceof java.lang.String) {
+      return (java.lang.String) ref;
+    } else {
+      com.google.protobuf.ByteString bs = 
+          (com.google.protobuf.ByteString) ref;
+      java.lang.String s = bs.toStringUtf8();
+      username_ = s;
+      return s;
+    }
+  }
+  /**
+   * <code>optional string username = 4;</code>
+   */
+  public com.google.protobuf.ByteString
+      getUsernameBytes() {
+    java.lang.Object ref = username_;
+    if (ref instanceof java.lang.String) {
+      com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString.copyFromUtf8(
+              (java.lang.String) ref);
+      username_ = b;
       return b;
     } else {
       return (com.google.protobuf.ByteString) ref;
@@ -165,6 +214,9 @@ public  final class FeatureOwner extends
     if (!getEmailBytes().isEmpty()) {
       com.google.protobuf.GeneratedMessageV3.writeString(output, 3, email_);
     }
+    if (!getUsernameBytes().isEmpty()) {
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 4, username_);
+    }
   }
 
   public int getSerializedSize() {
@@ -177,6 +229,9 @@ public  final class FeatureOwner extends
     }
     if (!getEmailBytes().isEmpty()) {
       size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, email_);
+    }
+    if (!getUsernameBytes().isEmpty()) {
+      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(4, username_);
     }
     memoizedSize = size;
     return size;
@@ -198,6 +253,8 @@ public  final class FeatureOwner extends
         .equals(other.getName());
     result = result && getEmail()
         .equals(other.getEmail());
+    result = result && getUsername()
+        .equals(other.getUsername());
     return result;
   }
 
@@ -212,6 +269,8 @@ public  final class FeatureOwner extends
     hash = (53 * hash) + getName().hashCode();
     hash = (37 * hash) + EMAIL_FIELD_NUMBER;
     hash = (53 * hash) + getEmail().hashCode();
+    hash = (37 * hash) + USERNAME_FIELD_NUMBER;
+    hash = (53 * hash) + getUsername().hashCode();
     hash = (29 * hash) + unknownFields.hashCode();
     memoizedHashCode = hash;
     return hash;
@@ -334,6 +393,8 @@ public  final class FeatureOwner extends
 
       email_ = "";
 
+      username_ = "";
+
       return this;
     }
 
@@ -358,6 +419,7 @@ public  final class FeatureOwner extends
       outland.feature.proto.FeatureOwner result = new outland.feature.proto.FeatureOwner(this);
       result.name_ = name_;
       result.email_ = email_;
+      result.username_ = username_;
       onBuilt();
       return result;
     }
@@ -405,6 +467,10 @@ public  final class FeatureOwner extends
       }
       if (!other.getEmail().isEmpty()) {
         email_ = other.email_;
+        onChanged();
+      }
+      if (!other.getUsername().isEmpty()) {
+        username_ = other.username_;
         onChanged();
       }
       onChanged();
@@ -504,6 +570,10 @@ public  final class FeatureOwner extends
 
     private java.lang.Object email_ = "";
     /**
+     * <pre>
+     * mappable to Owner.email
+     * </pre>
+     *
      * <code>optional string email = 3;</code>
      */
     public java.lang.String getEmail() {
@@ -519,6 +589,10 @@ public  final class FeatureOwner extends
       }
     }
     /**
+     * <pre>
+     * mappable to Owner.email
+     * </pre>
+     *
      * <code>optional string email = 3;</code>
      */
     public com.google.protobuf.ByteString
@@ -535,6 +609,10 @@ public  final class FeatureOwner extends
       }
     }
     /**
+     * <pre>
+     * mappable to Owner.email
+     * </pre>
+     *
      * <code>optional string email = 3;</code>
      */
     public Builder setEmail(
@@ -548,6 +626,10 @@ public  final class FeatureOwner extends
       return this;
     }
     /**
+     * <pre>
+     * mappable to Owner.email
+     * </pre>
+     *
      * <code>optional string email = 3;</code>
      */
     public Builder clearEmail() {
@@ -557,6 +639,10 @@ public  final class FeatureOwner extends
       return this;
     }
     /**
+     * <pre>
+     * mappable to Owner.email
+     * </pre>
+     *
      * <code>optional string email = 3;</code>
      */
     public Builder setEmailBytes(
@@ -567,6 +653,75 @@ public  final class FeatureOwner extends
   checkByteStringIsUtf8(value);
       
       email_ = value;
+      onChanged();
+      return this;
+    }
+
+    private java.lang.Object username_ = "";
+    /**
+     * <code>optional string username = 4;</code>
+     */
+    public java.lang.String getUsername() {
+      java.lang.Object ref = username_;
+      if (!(ref instanceof java.lang.String)) {
+        com.google.protobuf.ByteString bs =
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        username_ = s;
+        return s;
+      } else {
+        return (java.lang.String) ref;
+      }
+    }
+    /**
+     * <code>optional string username = 4;</code>
+     */
+    public com.google.protobuf.ByteString
+        getUsernameBytes() {
+      java.lang.Object ref = username_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        username_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+    /**
+     * <code>optional string username = 4;</code>
+     */
+    public Builder setUsername(
+        java.lang.String value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  
+      username_ = value;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>optional string username = 4;</code>
+     */
+    public Builder clearUsername() {
+      
+      username_ = getDefaultInstance().getUsername();
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>optional string username = 4;</code>
+     */
+    public Builder setUsernameBytes(
+        com.google.protobuf.ByteString value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+      
+      username_ = value;
       onChanged();
       return this;
     }

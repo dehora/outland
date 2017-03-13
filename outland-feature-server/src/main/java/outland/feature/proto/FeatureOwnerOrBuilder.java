@@ -18,12 +18,30 @@ public interface FeatureOwnerOrBuilder extends
       getNameBytes();
 
   /**
+   * <pre>
+   * mappable to Owner.email
+   * </pre>
+   *
    * <code>optional string email = 3;</code>
    */
   java.lang.String getEmail();
   /**
+   * <pre>
+   * mappable to Owner.email
+   * </pre>
+   *
    * <code>optional string email = 3;</code>
    */
   com.google.protobuf.ByteString
       getEmailBytes();
+
+  /**
+   * <code>optional string username = 4;</code>
+   */
+  java.lang.String getUsername();
+  /**
+   * <code>optional string username = 4;</code>
+   */
+  com.google.protobuf.ByteString
+      getUsernameBytes();
 }
