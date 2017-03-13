@@ -9,7 +9,8 @@ package outland;
 
 message FeatureOwner {
     string name = 2;
-    string email = 3;
+    string email = 3; // mappable to Owner.email
+    string username = 4;
 }
 
 message FeatureVersion {
@@ -40,7 +41,7 @@ message FeatureOption {
 message Feature {
     string id = 1;
     string key = 2;
-    string appId = 3;
+    string appId = 3; // corresponds to App.key
     enum State {
         none = 0;
         off = 1;
@@ -62,4 +63,31 @@ message FeatureCollection {
     string type = 1;
     string appId = 2;
     repeated Feature items = 3;
+}
+
+message App {
+    string id = 1;
+    string key = 2;
+    string name = 3;
+    string created = 6;
+    string updated = 7;
+    repeated Service services = 4;
+    repeated Owner owners = 5;
+}
+
+message Service {
+    string id = 1;
+    string key = 2;
+    string name = 3;
+    string created = 6;
+    string updated = 7;
+}
+
+message Owner {
+    string id = 1;
+    string name = 2;
+    string username = 3;
+    string email = 4;
+    string created = 5;
+    string updated = 6;
 }
