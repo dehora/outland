@@ -60,7 +60,7 @@ auth:
   oauthScopePolicy: oauth_disable_scope_check
   oauthCacheTokenSeconds: 30
   remoteOAuthServer:
-    tokenLookupURI: "https://localhost/oauth2/tokeninfo"
+    tokenLookupURI: ${OUTLAND_FEATURE_REMOTE_OAUTH_SERVER:-https://localhost/oauth2/tokeninfo}
     connectTimeout: 3000
     readTimeout: 3000
 
