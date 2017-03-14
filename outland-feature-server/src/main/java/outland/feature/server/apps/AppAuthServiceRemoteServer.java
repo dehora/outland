@@ -13,11 +13,15 @@ import javax.inject.Named;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import outland.feature.server.Problem;
 import outland.feature.server.ServiceException;
 import outland.feature.server.auth.AuthPrincipal;
 
 public class AppAuthServiceRemoteServer implements AppAuthService {
+
+  private static final Logger logger = LoggerFactory.getLogger(AppAuthServiceRemoteServer.class);
 
   private final OkHttpClient client;
   private final URI tokenLookupUri;
@@ -42,6 +46,10 @@ public class AppAuthServiceRemoteServer implements AppAuthService {
         .build();
 
     final Response response = callAuthServer(request);
+
+    logger.info("op=remote_auth,token_type={},creds={},status={}", tokenType,
+        credentials.substring(0, 7), response.code());
+
     if (response.code() != 200) {
       return Optional.empty();
     }
@@ -51,28 +59,28 @@ public class AppAuthServiceRemoteServer implements AppAuthService {
 
   private AuthPrincipal planBToAppMember(Map<String, Object> tokenInfo) {
 
-    if(tokenInfo == null) {
+    if (tokenInfo == null) {
       return null;
     }
 
     String type = "service";
     final Object realm = tokenInfo.get("realm");
-    if(realm != null) {
-      if(((String) realm).contains("employees"))  {
+    if (realm != null) {
+      if (((String) realm).contains("employees")) {
         type = "owner";
       }
     }
 
     final List<String> scopes = Lists.newArrayList();
     final Object scope = tokenInfo.get("scope");
-    if(scope != null) {
-      scopes.addAll((List<String>)tokenInfo.get("scope"));
+    if (scope != null) {
+      scopes.addAll((List<String>) tokenInfo.get("scope"));
     }
 
-    final String uid = (String)tokenInfo.get("uid");
-    final String accessToken = (String)tokenInfo.get("access_token");
+    final String uid = (String) tokenInfo.get("uid");
+    final String accessToken = (String) tokenInfo.get("access_token");
     // gson artefact; converts ints on the wire to double
-    final Long expires = Math.round((Double)tokenInfo.get("expires_in"));
+    final Long expires = Math.round((Double) tokenInfo.get("expires_in"));
 
     return new AuthPrincipal(type,
         uid, scopes,
