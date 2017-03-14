@@ -34,13 +34,7 @@ public class BasicAuthenticator implements io.dropwizard.auth.Authenticator<Basi
         final String type = split[1];
         final String identifier = split[0];
         final ArrayList<String> scopes = Lists.newArrayList(TokenAuthorizer.WILDCARD_SCOPE);
-        final AuthPrincipal value = new AuthPrincipal(
-            type,
-            identifier,
-            scopes,
-            credentials.getPassword(),
-            Long.MAX_VALUE
-        );
+        final AuthPrincipal value = new AuthPrincipal(type, identifier, scopes);
         return Optional.of(value);
 
       }
