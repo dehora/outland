@@ -34,10 +34,14 @@ public class AuthConfiguration {
   @JsonProperty
   public String basicScopePolicy = SCOPE_BASIC_POLICY_ENFORCED;
 
+  @Min(1L)
+  @Max(3600L)
+  @JsonProperty
+  public long basicCacheCredentialSeconds = 60;
+
   @NotNull
   @JsonProperty
   public Boolean oauthEnabled = true;
-
 
   @NotEmpty
   @JsonProperty
@@ -46,6 +50,12 @@ public class AuthConfiguration {
   @NotEmpty
   @JsonProperty
   public String oauthScopePolicy = SCOPE_OAUTH_POLICY_ENFORCED;
+
+  @Min(1L)
+  @Max(3600L)
+  @JsonProperty
+  public long oauthCacheTokenSeconds = 60;
+
 
   @NotEmpty
   @JsonProperty

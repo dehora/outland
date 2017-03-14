@@ -53,12 +53,14 @@ auth:
   basicAuthenticationPolicy: basic_app_username_password_keys
   basicAuthenticationKeys: topsecret
   basicScopePolicy: basic_disable_scope_check
+  basicCacheCredentialSeconds: 30
 
   oauthEnabled: false
   oauthAuthenticationPolicy: oauth_bearer_reflect
   oauthScopePolicy: oauth_disable_scope_check
+  oauthCacheTokenSeconds: 30
   remoteOAuthServer:
-    tokenLookupURI: "https://info.services.auth.zalando.com/oauth2/tokeninfo"
+    tokenLookupURI: "https://localhost/oauth2/tokeninfo"
     connectTimeout: 3000
     readTimeout: 3000
 

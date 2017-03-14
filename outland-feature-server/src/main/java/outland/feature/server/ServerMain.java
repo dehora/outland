@@ -32,6 +32,7 @@ import org.glassfish.jersey.server.filter.EncodingFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import outland.feature.server.app.GuiceApplication;
+import outland.feature.server.apps.AppAuthService;
 import outland.feature.server.apps.AppModule;
 import outland.feature.server.auth.AuthPrincipal;
 import outland.feature.server.auth.AuthConfiguration;
@@ -113,15 +114,16 @@ public class ServerMain extends GuiceApplication<ServerConfiguration> {
           injector.getInstance(Key.get(new TypeLiteral<Authorizer<AuthPrincipal>>() {
           }, Names.named("oauthAppAuthorizer")));
 
-      //final CachingAuthenticator<String, AuthPrincipal> cached = new CachingAuthenticator<>(
-      //    environment.metrics(),
-      //    oauthAppAuthenticator,
-      //    CacheBuilder.newBuilder().maximumSize(1024).expireAfterWrite(30, TimeUnit.SECONDS));
+      final CachingAuthenticator<String, AuthPrincipal> cached = new CachingAuthenticator<>(
+          environment.metrics(),
+          oauthAppAuthenticator,
+          CacheBuilder.newBuilder().maximumSize(1024)
+              .expireAfterWrite(configuration.oauthCacheTokenSeconds, TimeUnit.SECONDS));
 
       final AuthFilter oauthFilter = new OAuthCredentialAuthFilter.Builder<AuthPrincipal>()
-          .setPrefix("Bearer")
+          .setPrefix(AppAuthService.BEARER)
           .setRealm("outland_feature")
-          .setAuthenticator(oauthAppAuthenticator)
+          .setAuthenticator(cached)
           .setAuthorizer(oauthAppAuthorizer)
           .setUnauthorizedHandler(unauthorizedHandler)
           .buildAuthFilter();
@@ -143,7 +145,8 @@ public class ServerMain extends GuiceApplication<ServerConfiguration> {
       final CachingAuthenticator<BasicCredentials, AuthPrincipal> cached = new CachingAuthenticator<>(
           environment.metrics(),
           basicAppAuthenticator,
-          CacheBuilder.newBuilder().maximumSize(1024).expireAfterWrite(60, TimeUnit.SECONDS));
+          CacheBuilder.newBuilder().maximumSize(1024)
+              .expireAfterWrite(configuration.basicCacheCredentialSeconds, TimeUnit.SECONDS));
 
       final AuthFilter basicAuthFilter = new BasicCredentialAuthFilter.Builder<AuthPrincipal>()
           .setPrefix("Basic")
