@@ -63,6 +63,10 @@ auth:
   oauthAuthenticationPolicy: oauth_bearer_reflect
   # oauth_disable_scope_check: don't check scopes
   oauthScopePolicy: oauth_disable_scope_check
+  remoteOAuthServer:
+    tokenLookupURI: "https://info.services.auth.zalando.com/oauth2/tokeninfo"
+    connectTimeout: 3000
+    readTimeout: 3000
 
 redisFeatureCacheHystrix:
   hystrixCommandGroupKey: redisFeatureCacheHystrix
