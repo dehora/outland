@@ -15,7 +15,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 import outland.feature.server.Problem;
 import outland.feature.server.ServiceException;
-import outland.feature.server.auth.AppMember;
+import outland.feature.server.auth.AuthPrincipal;
 
 public class AppAuthServiceRemoteServer implements AppAuthService {
 
@@ -31,7 +31,7 @@ public class AppAuthServiceRemoteServer implements AppAuthService {
     this.tokenLookupUri = tokenLookupUri;
   }
 
-  @Override public Optional<AppMember> authenticate(String credentials, String tokenType) {
+  @Override public Optional<AuthPrincipal> authenticate(String credentials, String tokenType) {
 
     // plan-b style tokeninfo fetch; send the rcvd bearer token onto the oauth server
 
@@ -49,7 +49,7 @@ public class AppAuthServiceRemoteServer implements AppAuthService {
     return Optional.ofNullable(planBToAppMember(toTokenInfo(response, gson)));
   }
 
-  private AppMember planBToAppMember(Map<String, Object> tokenInfo) {
+  private AuthPrincipal planBToAppMember(Map<String, Object> tokenInfo) {
 
     if(tokenInfo == null) {
       return null;
@@ -74,7 +74,7 @@ public class AppAuthServiceRemoteServer implements AppAuthService {
     // gson artefact; converts ints on the wire to double
     final Long expires = Math.round((Double)tokenInfo.get("expires_in"));
 
-    return new AppMember(type,
+    return new AuthPrincipal(type,
         uid, scopes,
         accessToken,
         expires

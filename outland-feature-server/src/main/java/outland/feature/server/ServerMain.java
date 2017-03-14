@@ -33,7 +33,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import outland.feature.server.app.GuiceApplication;
 import outland.feature.server.apps.AppModule;
-import outland.feature.server.auth.AppMember;
+import outland.feature.server.auth.AuthPrincipal;
 import outland.feature.server.auth.AuthConfiguration;
 import outland.feature.server.auth.AuthModule;
 import outland.feature.server.aws.DynamoDbModule;
@@ -105,20 +105,20 @@ public class ServerMain extends GuiceApplication<ServerConfiguration> {
     if (configuration.oauthEnabled) {
       logger.info("op=auth_configuration,mechanism=oauth");
 
-      final Authenticator<String, AppMember> oauthAppAuthenticator =
-          injector.getInstance(Key.get(new TypeLiteral<Authenticator<String, AppMember>>() {
+      final Authenticator<String, AuthPrincipal> oauthAppAuthenticator =
+          injector.getInstance(Key.get(new TypeLiteral<Authenticator<String, AuthPrincipal>>() {
           }, Names.named("oauthAppAuthenticator")));
 
-      final Authorizer<AppMember> oauthAppAuthorizer =
-          injector.getInstance(Key.get(new TypeLiteral<Authorizer<AppMember>>() {
+      final Authorizer<AuthPrincipal> oauthAppAuthorizer =
+          injector.getInstance(Key.get(new TypeLiteral<Authorizer<AuthPrincipal>>() {
           }, Names.named("oauthAppAuthorizer")));
 
-      //final CachingAuthenticator<String, AppMember> cached = new CachingAuthenticator<>(
+      //final CachingAuthenticator<String, AuthPrincipal> cached = new CachingAuthenticator<>(
       //    environment.metrics(),
       //    oauthAppAuthenticator,
       //    CacheBuilder.newBuilder().maximumSize(1024).expireAfterWrite(30, TimeUnit.SECONDS));
 
-      final AuthFilter oauthFilter = new OAuthCredentialAuthFilter.Builder<AppMember>()
+      final AuthFilter oauthFilter = new OAuthCredentialAuthFilter.Builder<AuthPrincipal>()
           .setPrefix("Bearer")
           .setRealm("outland_feature")
           .setAuthenticator(oauthAppAuthenticator)
@@ -132,20 +132,20 @@ public class ServerMain extends GuiceApplication<ServerConfiguration> {
     if (configuration.basicEnabled) {
       logger.info("op=auth_configuration,mechanism=basic");
 
-      final Authorizer<AppMember> basicAppAuthorizer =
-          injector.getInstance(Key.get(new TypeLiteral<Authorizer<AppMember>>() {
+      final Authorizer<AuthPrincipal> basicAppAuthorizer =
+          injector.getInstance(Key.get(new TypeLiteral<Authorizer<AuthPrincipal>>() {
           }, Names.named("basicAppAuthorizer")));
 
-      final Authenticator<BasicCredentials, AppMember> basicAppAuthenticator =
-          injector.getInstance(Key.get(new TypeLiteral<Authenticator<BasicCredentials, AppMember>>() {
+      final Authenticator<BasicCredentials, AuthPrincipal> basicAppAuthenticator =
+          injector.getInstance(Key.get(new TypeLiteral<Authenticator<BasicCredentials, AuthPrincipal>>() {
           }, Names.named("basicAppAuthenticator")));
 
-      final CachingAuthenticator<BasicCredentials, AppMember> cached = new CachingAuthenticator<>(
+      final CachingAuthenticator<BasicCredentials, AuthPrincipal> cached = new CachingAuthenticator<>(
           environment.metrics(),
           basicAppAuthenticator,
           CacheBuilder.newBuilder().maximumSize(1024).expireAfterWrite(60, TimeUnit.SECONDS));
 
-      final AuthFilter basicAuthFilter = new BasicCredentialAuthFilter.Builder<AppMember>()
+      final AuthFilter basicAuthFilter = new BasicCredentialAuthFilter.Builder<AuthPrincipal>()
           .setPrefix("Basic")
           .setRealm("outland_feature")
           .setAuthenticator(basicAppAuthenticator)
@@ -162,6 +162,6 @@ public class ServerMain extends GuiceApplication<ServerConfiguration> {
 
     final ChainedAuthFilter chainedAuthFilter = new ChainedAuthFilter(filters);
     environment.jersey().register(new AuthDynamicFeature(chainedAuthFilter));
-    environment.jersey().register(new AuthValueFactoryProvider.Binder<>(AppMember.class));
+    environment.jersey().register(new AuthValueFactoryProvider.Binder<>(AuthPrincipal.class));
   }
 }

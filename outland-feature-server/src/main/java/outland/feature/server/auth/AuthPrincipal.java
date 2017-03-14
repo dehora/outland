@@ -3,7 +3,7 @@ package outland.feature.server.auth;
 import java.security.Principal;
 import java.util.List;
 
-public class AppMember implements Principal {
+public class AuthPrincipal implements Principal {
 
   private String type;
   private List<String> scopes;
@@ -11,7 +11,7 @@ public class AppMember implements Principal {
   private String token;
   private long expiresSeconds;
 
-  public AppMember(
+  public AuthPrincipal(
       String type,
       String identifier,
       List<String> scopes,

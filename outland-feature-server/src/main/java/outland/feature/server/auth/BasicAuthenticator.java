@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 import javax.inject.Inject;
 
-public class BasicAuthenticator implements io.dropwizard.auth.Authenticator<BasicCredentials, AppMember> {
+public class BasicAuthenticator implements io.dropwizard.auth.Authenticator<BasicCredentials, AuthPrincipal> {
 
   private final AuthConfiguration configuration;
   private final List<String> apiKeys = Lists.newArrayList();
@@ -23,7 +23,7 @@ public class BasicAuthenticator implements io.dropwizard.auth.Authenticator<Basi
     }
   }
 
-  @Override public Optional<AppMember> authenticate(BasicCredentials credentials)
+  @Override public Optional<AuthPrincipal> authenticate(BasicCredentials credentials)
       throws AuthenticationException {
 
     if (isUsingApiKeys(configuration)) {
@@ -34,7 +34,7 @@ public class BasicAuthenticator implements io.dropwizard.auth.Authenticator<Basi
         final String type = split[1];
         final String identifier = split[0];
         final ArrayList<String> scopes = Lists.newArrayList(TokenAuthorizer.WILDCARD_SCOPE);
-        final AppMember value = new AppMember(
+        final AuthPrincipal value = new AuthPrincipal(
             type,
             identifier,
             scopes,
