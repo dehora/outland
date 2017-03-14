@@ -7,14 +7,17 @@ import com.amazonaws.services.dynamodbv2.document.ItemCollection;
 import com.amazonaws.services.dynamodbv2.document.PutItemOutcome;
 import com.amazonaws.services.dynamodbv2.document.QueryOutcome;
 import com.amazonaws.services.dynamodbv2.document.Table;
+import com.amazonaws.services.dynamodbv2.document.internal.IteratorSupport;
 import com.amazonaws.services.dynamodbv2.document.spec.QuerySpec;
 import com.amazonaws.services.dynamodbv2.document.utils.ValueMap;
 import com.codahale.metrics.MetricRegistry;
+import java.util.Optional;
 import javax.inject.Inject;
 import javax.inject.Named;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import outland.feature.proto.App;
+import outland.feature.server.app.AppSupport;
 import outland.feature.server.features.DynamoDbCommand;
 import outland.feature.server.features.TableConfiguration;
 import outland.feature.server.hystrix.HystrixConfiguration;
@@ -142,6 +145,35 @@ public class DefaultAppStorage implements AppStorage {
 
     // can't use getLastLowLevelResult directly; it's false unless the outcome is iterated first :|
       return cmd.execute().iterator().hasNext();
+  }
+
+  @Override public Optional<App> loadAppByKey(String appKey) {
+    Table table = dynamoDB.getTable(this.appsTableName);
+
+    QuerySpec querySpec = new QuerySpec()
+        .withKeyConditionExpression("app_key = :k_app_key")
+        .withValueMap(new ValueMap()
+            .withString(":k_app_key", appKey)
+        )
+        .withMaxResultSize(1)
+        .withConsistentRead(true);
+
+    DynamoDbCommand<ItemCollection<QueryOutcome>> cmd = new DynamoDbCommand<>("loadAppByKey",
+        () -> queryTable(table, querySpec),
+        () -> {
+          throw new RuntimeException("loadAppByKey");
+        },
+        dynamodbAppGraphQueryHystrix,
+        metrics);
+
+    final ItemCollection<QueryOutcome> items = cmd.execute();
+    final IteratorSupport<Item, QueryOutcome> iterator = items.iterator();
+    if (iterator.hasNext()) {
+      return Optional.of(AppSupport.toApp(iterator.next().getString("json")));
+    }
+
+    return Optional.empty();
+
   }
 
   private ItemCollection<QueryOutcome> queryTable(Table table, QuerySpec querySpec) {

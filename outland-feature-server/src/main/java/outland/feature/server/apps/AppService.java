@@ -26,4 +26,5 @@ public interface AppService {
 
   boolean appHasService(String appKey, String ownerKey);
 
+  Optional<App> loadAppByKey(String appKey);
 }

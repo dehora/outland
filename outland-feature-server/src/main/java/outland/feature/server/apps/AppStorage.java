@@ -1,5 +1,6 @@
 package outland.feature.server.apps;
 
+import java.util.Optional;
 import outland.feature.proto.App;
 
 public interface AppStorage {
@@ -12,4 +13,6 @@ public interface AppStorage {
   Void saveRelation(App app, String relationHashKey, String relationRangeKey);
 
   boolean queryRelationExists(String relationHashKey, String relationRangeKey);
+
+  Optional<App> loadAppByKey(String appKey);
 }
