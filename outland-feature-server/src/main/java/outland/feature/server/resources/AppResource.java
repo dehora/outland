@@ -6,12 +6,12 @@ import io.dropwizard.auth.Auth;
 import io.dropwizard.auth.AuthenticationException;
 import java.net.URI;
 import java.util.Optional;
-import java.util.function.Consumer;
 import java.util.function.Function;
 import javax.annotation.Resource;
 import javax.annotation.security.PermitAll;
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -132,6 +132,58 @@ public class AppResource {
       Service service
   ) throws AuthenticationException {
     return postUpdate(authPrincipal, appKey, app -> appService.addToApp(app, service));
+  }
+
+  @DELETE
+  @Path("/{app_key}/services/{service_key}")
+  @Produces(MediaType.APPLICATION_JSON)
+  @PermitAll
+  @Timed(name = "removeService")
+  public Response removeService(
+      @Auth AuthPrincipal authPrincipal,
+      @PathParam("app_key") String appKey,
+      @PathParam("service_key") String serviceKey
+  ) throws AuthenticationException {
+    final long start = System.currentTimeMillis();
+
+    final Optional<App> maybe = appService.loadAppByKey(appKey);
+
+    if (maybe.isPresent()) {
+      final App app = maybe.get();
+      throwUnlessMember(authPrincipal, app);
+      final App updated = appService.removeService(app, serviceKey);
+
+      return headers.enrich(Response.ok(updated), start).build();
+    }
+
+    return headers.enrich(Response.status(404).entity(
+        Problem.clientProblem("app_not_found", "", 404)), start).build();
+  }
+
+  @DELETE
+  @Path("/{app_key}/owners")
+  @Produces(MediaType.APPLICATION_JSON)
+  @PermitAll
+  @Timed(name = "removeOwner")
+  public Response removeService(
+      @Auth AuthPrincipal authPrincipal,
+      @PathParam("app_key") String appKey,
+      @QueryParam("username") String username,
+      @QueryParam("email") String email
+  ) throws AuthenticationException {
+    final long start = System.currentTimeMillis();
+
+    final Optional<App> maybe = appService.loadAppByKey(appKey);
+
+    if (maybe.isPresent()) {
+      final App app = maybe.get();
+      throwUnlessMember(authPrincipal, app);
+      final App updated = appService.removeOwner(app, username, email);
+      return headers.enrich(Response.ok(updated), start).build();
+    }
+
+    return headers.enrich(Response.status(404).entity(
+        Problem.clientProblem("app_not_found", "", 404)), start).build();
   }
 
   /*

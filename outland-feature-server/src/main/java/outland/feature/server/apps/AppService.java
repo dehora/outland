@@ -30,6 +30,10 @@ public interface AppService {
 
   App addToApp(App app, Owner owner);
 
+  App removeService(App app, String serviceKey);
+
+  App removeOwner(App app, String username, String email);
+
   boolean appHasOwner(String appKey, String username);
 
   boolean appHasService(String appKey, String ownerKey);

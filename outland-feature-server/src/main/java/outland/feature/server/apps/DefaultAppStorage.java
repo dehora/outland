@@ -1,9 +1,11 @@
 package outland.feature.server.apps;
 
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
+import com.amazonaws.services.dynamodbv2.document.DeleteItemOutcome;
 import com.amazonaws.services.dynamodbv2.document.DynamoDB;
 import com.amazonaws.services.dynamodbv2.document.Item;
 import com.amazonaws.services.dynamodbv2.document.ItemCollection;
+import com.amazonaws.services.dynamodbv2.document.PrimaryKey;
 import com.amazonaws.services.dynamodbv2.document.PutItemOutcome;
 import com.amazonaws.services.dynamodbv2.document.QueryOutcome;
 import com.amazonaws.services.dynamodbv2.document.Table;
@@ -118,6 +120,36 @@ public class DefaultAppStorage implements AppStorage {
             "result", "ok"),
 
         outcome.getPutItemResult().toString());
+
+    return null;
+  }
+
+  @Override public Void removeRelation(App app, String relationHashKey, String relationRangeKey) {
+
+    Table table = dynamoDB.getTable(appsGraphTableName);
+
+    final PrimaryKey key = new PrimaryKey(
+        AppStorage.SUBJECT_KEY, relationHashKey,
+        AppStorage.OBJECT_RELATION_KEY, relationRangeKey
+    );
+
+    DynamoDbCommand<DeleteItemOutcome> cmd = new DynamoDbCommand<>("removeRelation",
+        () -> table.deleteItem(key),
+        () -> {
+          throw new RuntimeException("removeRelation");
+        },
+        dynamodbAppGraphWriteHystrix,
+        metrics);
+
+    final DeleteItemOutcome deleteItemOutcome = cmd.execute();
+
+    logger.info("{} /dynamodb_remove_item_result=[{}]",
+        kvp("op", "removeRelation",
+            "app_id", app.getKey(),
+            "hash_key", relationHashKey,
+            "range_key", relationRangeKey,
+            "result", "ok"),
+        deleteItemOutcome.getDeleteItemResult().toString());
 
     return null;
   }
