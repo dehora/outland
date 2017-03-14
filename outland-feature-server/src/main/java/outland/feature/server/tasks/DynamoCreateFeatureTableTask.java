@@ -18,10 +18,9 @@ import io.dropwizard.servlets.tasks.Task;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import javax.inject.Inject;
-import javax.inject.Named;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import outland.feature.server.features.FeatureTableConfiguration;
+import outland.feature.server.features.TableConfiguration;
 
 public class DynamoCreateFeatureTableTask extends Task {
 
@@ -33,11 +32,11 @@ public class DynamoCreateFeatureTableTask extends Task {
   @Inject
   public DynamoCreateFeatureTableTask(
       AmazonDynamoDB amazonDynamoDB,
-      FeatureTableConfiguration featureTableConfiguration
+      TableConfiguration tableConfiguration
   ) {
     super("DynamoCreateFeatureTableTask");
     this.amazonDynamoDB = amazonDynamoDB;
-    this.tableName = featureTableConfiguration.outlandFeaturesTable;
+    this.tableName = tableConfiguration.outlandFeaturesTable;
   }
 
   @Override public void execute(ImmutableMultimap<String, String> parameters, PrintWriter output)
