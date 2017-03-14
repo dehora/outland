@@ -174,13 +174,13 @@ class FeatureResourceReal implements FeatureResource {
 
   private FeatureCollection toFeatureCollection(String json) throws InvalidProtocolBufferException {
     FeatureCollection.Builder builder = FeatureCollection.newBuilder();
-    JsonFormat.parser().merge(json, builder);
+    JsonFormat.parser().ignoringUnknownFields().merge(json, builder);
     return builder.build();
   }
 
   private Feature toFeature(String json) throws InvalidProtocolBufferException {
     Feature.Builder builder = Feature.newBuilder();
-    JsonFormat.parser().merge(json, builder);
+    JsonFormat.parser().ignoringUnknownFields().merge(json, builder);
     return builder.build();
   }
 
