@@ -5,8 +5,9 @@ import com.google.common.base.Strings;
 import io.dropwizard.auth.Auth;
 import io.dropwizard.auth.AuthenticationException;
 import java.net.URI;
-import java.util.List;
 import java.util.Optional;
+import java.util.function.Consumer;
+import java.util.function.Function;
 import javax.annotation.Resource;
 import javax.annotation.security.PermitAll;
 import javax.inject.Inject;
@@ -107,6 +108,32 @@ public class AppResource {
         Problem.clientProblem("app_not_found", "", 404)), start).build();
   }
 
+  @POST
+  @Path("/{app_key}/owners")
+  @Produces(MediaType.APPLICATION_JSON)
+  @PermitAll
+  @Timed(name = "addOwner")
+  public Response addOwner(
+      @Auth AuthPrincipal authPrincipal,
+      @PathParam("app_key") String appKey,
+      Owner owner
+  ) throws AuthenticationException {
+    return postUpdate(authPrincipal, appKey, app -> appService.addToApp(app, owner));
+  }
+
+  @POST
+  @Path("/{app_key}/services")
+  @Produces(MediaType.APPLICATION_JSON)
+  @PermitAll
+  @Timed(name = "addService")
+  public Response addService(
+      @Auth AuthPrincipal authPrincipal,
+      @PathParam("app_key") String appKey,
+      Service service
+  ) throws AuthenticationException {
+    return postUpdate(authPrincipal, appKey, app -> appService.addToApp(app, service));
+  }
+
   /*
    * Test endpoint to see how our graph writes are doing.
    */
@@ -134,6 +161,26 @@ public class AppResource {
     } else {
       return Response.status(404).build();
     }
+  }
+
+  private Response postUpdate(
+      AuthPrincipal authPrincipal,
+      String appKey,
+      Function<App, App> updater
+  ) throws AuthenticationException {
+
+    final long start = System.currentTimeMillis();
+    final Optional<App> maybe = appService.loadAppByKey(appKey);
+
+    if (maybe.isPresent()) {
+      final App app = maybe.get();
+      throwUnlessMember(authPrincipal, app);
+      final App updated = updater.apply(app);
+      return headers.enrich(Response.ok(updated), start).build();
+    }
+
+    return headers.enrich(Response.status(404).entity(
+        Problem.clientProblem("app_not_found", "", 404)), start).build();
   }
 
   private void throwUnlessMember(AuthPrincipal authPrincipal, App app)
