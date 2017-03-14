@@ -141,7 +141,7 @@ public class DefaultAppStorage implements AppStorage {
         metrics);
 
     // can't use getLastLowLevelResult directly; it's false unless the outcome is iterated first :|
-    return cmd.execute().iterator().hasNext();
+      return cmd.execute().iterator().hasNext();
   }
 
   private ItemCollection<QueryOutcome> queryTable(Table table, QuerySpec querySpec) {
