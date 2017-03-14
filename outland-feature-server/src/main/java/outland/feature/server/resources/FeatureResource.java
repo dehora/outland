@@ -199,9 +199,9 @@ public class FeatureResource {
 
     boolean member;
     if(appMember.type().equals(AppService.OWNER)) {
-      member = appService.appHasService(appKey, appMember.identifier());
-    } else {
       member = appService.appHasOwner(appKey, appMember.identifier());
+    } else {
+      member = appService.appHasService(appKey, appMember.identifier());
     }
 
     if (! member) {
