@@ -71,9 +71,13 @@ public class AppResource {
         .path(app.getKey())
         .build();
 
-    // noop: todo: fill this out on seen=t
     final Optional<String> optional = idempotencyChecker.extractKey(httpHeaders);
     final boolean seen = optional.isPresent() && idempotencyChecker.seen(optional.get());
+    if (seen) {
+      return headers.enrich(
+          Response.ok(appService.loadAppByKey(app.getKey()))
+              .header(IdempotencyChecker.RES_HEADER, "key=" + optional.get()), start).build();
+    }
 
     App registered = appService.registerApp(app)
         .orElseThrow(() -> new RuntimeException("todo"));
