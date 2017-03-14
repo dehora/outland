@@ -2,6 +2,22 @@
 
 ### 0.0.2
 
+**Server**:
+
+- App support - apps group features for one or more services and belong to owners.
+- Allows apps to have be created via the API with owner/services add/removes.
+- Make idempotency key checks for repeated app creation requests.
+- Add a dynamodb apps and graph table for holding apps and app/member mappings.
+- Add a remote OAuth access token check based on Plan B's tokeninfo.
+- Externalise auth mechanism choices (basic, oauth) to envars.
+- Allow access to any apps/features to an authenticated service/owner access list.
+
+**Client**:
+
+- Add apps, owners and services messages to protocol buffer (not directly exposed yet).
+- Set the client's json protobuf parser to must ignore.
+
+
 ### 0.0.1
 
 **Server**:
