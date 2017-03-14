@@ -63,7 +63,7 @@ auth:
     tokenLookupURI: ${OUTLAND_FEATURE_REMOTE_OAUTH_SERVER:-https://localhost/oauth2/tokeninfo}
     connectTimeout: 3000
     readTimeout: 3000
-
+  multipleAppAccessList: ${OUTLAND_FEATURE_MULTIPLE_APP_ACCESS_GRANT_LIST}
 
 redisFeatureCacheHystrix:
   hystrixCommandGroupKey: redisFeatureCacheHystrix

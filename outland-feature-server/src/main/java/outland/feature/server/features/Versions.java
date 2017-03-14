@@ -6,7 +6,7 @@ import org.slf4j.LoggerFactory;
 
 import static outland.feature.server.StructLog.kvp;
 
-class Versions implements VersionService {
+public class Versions implements VersionService {
 
   private static final Logger logger = LoggerFactory.getLogger(Versions.class);
 

@@ -29,6 +29,7 @@ import outland.feature.server.Problem;
 import outland.feature.server.ServerConfiguration;
 import outland.feature.server.ServiceException;
 import outland.feature.server.apps.AppService;
+import outland.feature.server.auth.AccessControlSupport;
 import outland.feature.server.auth.AuthPrincipal;
 import outland.feature.server.features.FeatureService;
 
@@ -41,6 +42,7 @@ public class FeatureResource {
   private final FeatureService featureService;
   private final AppService appService;
   private final IdempotencyChecker idempotencyChecker;
+  private final AccessControlSupport accessControlSupport;
   private final URI baseURI;
   private final Headers headers;
 
@@ -49,6 +51,7 @@ public class FeatureResource {
       FeatureService featureService,
       AppService appService,
       IdempotencyChecker idempotencyChecker,
+      AccessControlSupport accessControlSupport,
       ServerConfiguration serviceConfiguration,
       Headers headers
   ) {
@@ -56,6 +59,7 @@ public class FeatureResource {
     this.appService = appService;
     this.idempotencyChecker = idempotencyChecker;
     this.baseURI = serviceConfiguration.baseURI;
+    this.accessControlSupport = accessControlSupport;
     this.headers = headers;
   }
 
@@ -72,7 +76,7 @@ public class FeatureResource {
 
     final long start = System.currentTimeMillis();
 
-    throwUnlessMember(authPrincipal, feature.getAppId());
+    accessControlSupport.throwUnlessMember(authPrincipal, feature.getAppId());
 
     URI loc = UriBuilder.fromUri(baseURI)
         .path(feature.getAppId())
@@ -110,7 +114,7 @@ public class FeatureResource {
 
     final long start = System.currentTimeMillis();
 
-    throwUnlessMember(authPrincipal, appId);
+    accessControlSupport.throwUnlessMember(authPrincipal, appId);
     throwUnlessAppIdMatch(feature, appId);
     throwUnlessFeatureKeyMatch(feature, featureKey);
 
@@ -142,7 +146,7 @@ public class FeatureResource {
 
     final long start = System.currentTimeMillis();
 
-    throwUnlessMember(authPrincipal, appId);
+    accessControlSupport.throwUnlessMember(authPrincipal, appId);
 
     final Optional<Feature> feature = featureService.loadFeatureByKey(appId, featureKey);
 
@@ -166,7 +170,7 @@ public class FeatureResource {
   ) throws AuthenticationException {
 
     final long start = System.currentTimeMillis();
-    throwUnlessMember(authPrincipal, appId);
+    accessControlSupport.throwUnlessMember(authPrincipal, appId);
 
     FeatureCollection features = featureService.loadFeatures(appId);
 
@@ -186,7 +190,7 @@ public class FeatureResource {
   ) throws AuthenticationException {
 
     final long start = System.currentTimeMillis();
-    throwUnlessMember(authPrincipal, appId);
+    accessControlSupport.throwUnlessMember(authPrincipal, appId);
 
     OffsetDateTime utc =
         OffsetDateTime.ofInstant(Instant.ofEpochSecond(since), ZoneId.of("UTC").normalized());
@@ -195,19 +199,6 @@ public class FeatureResource {
     return this.headers.enrich(Response.ok(features), start).build();
   }
 
-  private void throwUnlessMember(AuthPrincipal authPrincipal, String appKey) throws AuthenticationException {
-
-    boolean member;
-    if(authPrincipal.type().equals(AppService.OWNER)) {
-      member = appService.appHasOwner(appKey, authPrincipal.identifier());
-    } else {
-      member = appService.appHasService(appKey, authPrincipal.identifier());
-    }
-
-    if (! member) {
-      throw new AuthenticationException("Membership not authenticated for request");
-    }
-  }
 
   private void throwUnlessFeatureKeyMatch(Feature feature, String featureKey) {
     if (!feature.getKey().equals(featureKey)) {

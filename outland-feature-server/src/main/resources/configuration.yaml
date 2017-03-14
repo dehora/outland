@@ -73,6 +73,10 @@ auth:
     connectTimeout: 3000
     readTimeout: 3000
 
+  # if these services are authenticated, allow them to access any app/feature
+  multipleAppAccessList: ${OUTLAND_FEATURE_MULTIPLE_APP_ACCESS_GRANT_LIST:-outland.feature.ui,acme.thread.safe}
+
+
 redisFeatureCacheHystrix:
   hystrixCommandGroupKey: redisFeatureCacheHystrix
   executionTimeoutInMilliseconds: 150
