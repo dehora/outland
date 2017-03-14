@@ -7,7 +7,10 @@ import io.dropwizard.auth.Authenticator;
 import io.dropwizard.auth.Authorizer;
 import io.dropwizard.auth.UnauthorizedHandler;
 import io.dropwizard.auth.basic.BasicCredentials;
+import java.net.URI;
+import java.util.concurrent.TimeUnit;
 import javax.inject.Inject;
+import okhttp3.OkHttpClient;
 
 public class AuthModule extends AbstractModule {
 
@@ -39,5 +42,19 @@ public class AuthModule extends AbstractModule {
         .to(BasicAuthorizer.class);
 
     bind(UnauthorizedHandler.class).to(DefaultUnauthorizedHandler.class);
+
+    OkHttpClient.Builder builder = new OkHttpClient.Builder()
+        .connectTimeout(authConfiguration.remoteOAuthServer.connectTimeout, TimeUnit.MILLISECONDS)
+        .readTimeout(authConfiguration.remoteOAuthServer.connectTimeout, TimeUnit.MILLISECONDS);
+
+    OkHttpClient client = builder.build();
+
+    bind(OkHttpClient.class)
+        .annotatedWith(Names.named("OAuthServiceClient"))
+        .toInstance(client);
+
+    bind(URI.class)
+        .annotatedWith(Names.named("OAuthServiceTokenLookupUri"))
+        .toInstance(authConfiguration.remoteOAuthServer.tokenLookupURI);
   }
 }

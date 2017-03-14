@@ -4,16 +4,20 @@ import com.google.common.collect.Lists;
 import io.dropwizard.auth.AuthenticationException;
 import java.util.Optional;
 import javax.inject.Inject;
+import outland.feature.server.apps.AppAuthService;
 
 public class TokenOAuthAuthenticator implements io.dropwizard.auth.Authenticator<String, AppMember> {
 
   private final AuthConfiguration serviceConfiguration;
+  private final AppAuthService appAuthService;
 
   @Inject
   public TokenOAuthAuthenticator(
-      AuthConfiguration configuration
+      AuthConfiguration configuration,
+      AppAuthService appAuthService
   ) {
     this.serviceConfiguration = configuration;
+    this.appAuthService = appAuthService;
   }
 
   @Override public Optional<AppMember> authenticate(String credentials) throws AuthenticationException {
@@ -36,6 +40,6 @@ public class TokenOAuthAuthenticator implements io.dropwizard.auth.Authenticator
       ));
     }
 
-    return Optional.empty();
+    return appAuthService.authenticate(credentials, AppAuthService.BEARER);
   }
 }
