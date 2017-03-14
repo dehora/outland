@@ -1,6 +1,7 @@
 package outland.feature.server.resources;
 
 import com.google.gson.Gson;
+import com.google.inject.Injector;
 import com.google.protobuf.util.JsonFormat;
 import io.dropwizard.testing.junit.DropwizardAppRule;
 import java.util.logging.Level;
@@ -15,9 +16,14 @@ import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Ignore;
 import org.junit.Test;
+import outland.feature.proto.App;
 import outland.feature.proto.Feature;
+import outland.feature.proto.Owner;
+import outland.feature.proto.Service;
 import outland.feature.server.Problem;
 import outland.feature.server.ServerConfiguration;
+import outland.feature.server.ServerMain;
+import outland.feature.server.apps.AppService;
 import outland.feature.server.features.Ulid;
 import outland.feature.server.protobuf.Protobuf3Support;
 
@@ -33,13 +39,35 @@ public class FeatureResourceTest {
 
   @ClassRule public static final DropwizardAppRule<ServerConfiguration> APP = ServerSuite.APP;
   private String basicPassword;
+  private final Injector injector = ((ServerMain)APP.getApplication()).injector();
+  private final AppService appService = injector.getInstance(AppService.class);
 
   @Before
   public void setUp() throws Exception {
     basicPassword = APP.getConfiguration().auth.basicAuthenticationKeys;
+    appService.registerApp(
+        App.newBuilder()
+            .setKey("own")
+            .addServices(Service.newBuilder().setKey("own"))
+            .build()
+    );
+
+    appService.registerApp(
+        App.newBuilder()
+            .setKey("foo")
+            .addOwners(Owner.newBuilder().setUsername("own"))
+            .addServices(Service.newBuilder().setKey("foo"))
+            .build()
+    );
+
+    appService.registerApp(
+        App.newBuilder()
+            .setKey("bar")
+            .addServices(Service.newBuilder().setKey("bar"))
+            .build()
+    );
   }
 
-  @Ignore
   @Test
   public void testAuthFailures() {
 
@@ -49,7 +77,16 @@ public class FeatureResourceTest {
     auth mechanism
      */
 
-    final String appId = "foo";
+    final String appId = "testAuthFailures";
+    final String user = "unknownuser";
+    final String service = "knownservice";
+
+    appService.registerApp(
+        App.newBuilder()
+            .setKey("testAuthFailures")
+            .addServices(Service.newBuilder().setKey(service))
+            .build()
+    );
 
     String url = "http://localhost:" + APP.getLocalPort() + "/features";
     JerseyClient clientNoAuth = ServerSuite.client();
@@ -71,7 +108,7 @@ public class FeatureResourceTest {
 
     Response response1 = clientWithAuth.target(url + "/" + appId)
         .request()
-        .property(HTTP_AUTHENTICATION_BASIC_USERNAME, "own/owner")
+        .property(HTTP_AUTHENTICATION_BASIC_USERNAME, user+"/owner")
         .property(HTTP_AUTHENTICATION_BASIC_PASSWORD, basicPassword)
         .get();
 
@@ -81,14 +118,13 @@ public class FeatureResourceTest {
 
     Response response2 = clientWithAuth.target(url + "/" + appId)
         .request()
-        .property(HTTP_AUTHENTICATION_BASIC_USERNAME, appId + "/service")
+        .property(HTTP_AUTHENTICATION_BASIC_USERNAME, service + "/service")
         .property(HTTP_AUTHENTICATION_BASIC_PASSWORD, basicPassword)
         .get();
 
     assertTrue(response2.getStatus() == 200);
   }
 
-  @Ignore
   @Test
   public void testGetWithNonMatchingAppIdAndBearerCauses401() {
 
@@ -112,7 +148,7 @@ public class FeatureResourceTest {
     Gson gson = new Gson();
     final Problem problem = gson.fromJson(jsonRes, Problem.class);
     assertTrue(problem.status() == 401);
-    assertTrue(problem.title().contains("Credentials not authenticated for request"));
+    assertTrue(problem.title().contains("Membership not authenticated for request"));
     assertEquals(Problem.AUTH_TYPE, problem.type());
   }
 
@@ -231,6 +267,14 @@ public class FeatureResourceTest {
 
   @Test
   public void testPost() throws Exception {
+
+    final AppService instance = injector.getInstance(AppService.class);
+    instance.registerApp(
+        App.newBuilder()
+            .setKey("own")
+            .addServices(Service.newBuilder().setKey("own"))
+            .build()
+    );
 
     String url = "http://localhost:" + APP.getLocalPort() + "/features";
     JerseyClient client = ServerSuite.client()
