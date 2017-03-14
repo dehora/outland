@@ -6,6 +6,8 @@ services:
     environment:
       - FEATURE_API_KEYS
       - OUTLAND_FEATURE_REMOTE_OAUTH_SERVER
+      - OUTLAND_FEATURE_AUTH_OAUTH_ENABLED
+      - OUTLAND_FEATURE_AUTH_BASIC_ENABLED
     ports:
      - "8180:8180"
      - "8181:8181"
