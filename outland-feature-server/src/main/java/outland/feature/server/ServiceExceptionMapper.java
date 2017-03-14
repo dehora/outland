@@ -35,7 +35,7 @@ public class ServiceExceptionMapper implements ExceptionMapper<Exception> {
       final Problem problem = se.problem();
 
       //noinspection unchecked
-      problem.data().put("trace_id", String.format("%016x", grepCode));
+      problem.data().put("trace_id", formattedGrepCode);
 
       return Response
           .status(problem.status())
@@ -50,7 +50,7 @@ public class ServiceExceptionMapper implements ExceptionMapper<Exception> {
       final Problem problem = Problem.authProblem(ae.getMessage(), "").status(401);
 
       //noinspection unchecked
-      problem.data().put("trace_id", String.format("%016x", grepCode));
+      problem.data().put("trace_id", formattedGrepCode);
 
       return Response
           .status(401)
@@ -66,7 +66,7 @@ public class ServiceExceptionMapper implements ExceptionMapper<Exception> {
       final Problem problem = Problem.unspecifiedProblem(wae.getMessage(), "").status(status);
 
       //noinspection unchecked
-      problem.data().put("trace_id", String.format("%016x", grepCode));
+      problem.data().put("trace_id", formattedGrepCode);
 
       return Response
           .status(status)
