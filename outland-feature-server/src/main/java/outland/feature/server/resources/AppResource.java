@@ -2,6 +2,7 @@ package outland.feature.server.resources;
 
 import com.codahale.metrics.annotation.Timed;
 import com.google.common.base.Strings;
+import io.dropwizard.auth.Auth;
 import io.dropwizard.auth.AuthenticationException;
 import java.net.URI;
 import java.util.Optional;
@@ -21,6 +22,7 @@ import javax.ws.rs.core.UriBuilder;
 import outland.feature.proto.App;
 import outland.feature.server.ServerConfiguration;
 import outland.feature.server.apps.AppService;
+import outland.feature.server.auth.AppMember;
 
 @Resource
 @Path("/apps")
@@ -50,6 +52,7 @@ public class AppResource {
   @Produces(MediaType.APPLICATION_JSON)
   @Timed(name = "registerApp")
   public Response registerApp(
+      @Auth AppMember appMember,
       App app,
       @Context HttpHeaders httpHeaders
   ) throws AuthenticationException {
@@ -76,6 +79,7 @@ public class AppResource {
   @GET
   @Path("graph")
   public Response belongsTo(
+      @Auth AppMember appMember,
       @QueryParam("app_key") String appKey,
       @QueryParam("username") String username,
       @QueryParam("email") String email,
