@@ -27,4 +27,9 @@ public class TestAppStorage implements AppStorage {
   @Override public Optional<App> loadAppByKey(String appKey) {
     return Optional.ofNullable(members.get(appKey));
   }
+
+  @Override public Void removeRelation(App app, String relationHashKey, String relationRangeKey) {
+    members.remove(relationHashKey+relationRangeKey);
+    return null;
+  }
 }

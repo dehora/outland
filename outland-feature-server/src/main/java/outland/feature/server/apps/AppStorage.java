@@ -12,6 +12,8 @@ public interface AppStorage {
 
   Void saveRelation(App app, String relationHashKey, String relationRangeKey);
 
+  Void removeRelation(App app, String relationHashKey, String relationRangeKey);
+
   boolean queryRelationExists(String relationHashKey, String relationRangeKey);
 
   Optional<App> loadAppByKey(String appKey);

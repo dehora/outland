@@ -32,6 +32,7 @@ public class DefaultAppService implements AppService, MetricsTimer {
   private Timer saveServiceTimer;
   private Timer saveOwnerTimer;
   private Timer readAppTimer;
+  private Timer removeRelationTimer;
 
   @Inject
   public DefaultAppService(
@@ -69,6 +70,78 @@ public class DefaultAppService implements AppService, MetricsTimer {
 
     return processUpdate(app,
         builder -> builder.addOwners(owner.toBuilder().setId(mintOwnerId()).build()));
+  }
+
+  @Override public App removeService(App app, String serviceKey) {
+
+    if(serviceKey == null) {
+      return  app;
+    }
+
+    final App.Builder builder = app.toBuilder();
+    final List<Service> list = builder.getServicesList();
+    Service service = null;
+    for (int i = 0; i < list.size(); i++) {
+      if (serviceKey.equals(list.get(i).getKey())) {
+        builder.removeServices(i);
+        service = list.get(i);
+        break;
+      }
+    }
+
+    if(service == null) {
+      return app;
+    }
+
+    OffsetDateTime now = OffsetDateTime.now();
+    String updateTime = AppService.asString(now);
+    builder.setUpdated(updateTime);
+
+    final App updated = builder.build();
+    updateAppInner(updated);
+    removeServiceFromGraph(updated, service);
+    return updated;
+  }
+
+  @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
+  @Override public App removeOwner(App app, String username, String email) {
+
+    if(username == null && email == null) {
+      return app;
+    }
+
+    final App.Builder builder = app.toBuilder();
+
+    final List<Owner> ownersList = builder.getOwnersList();
+    Owner owner = null;
+    for (int i = 0; i < ownersList.size(); i++) {
+
+      final Owner ownerNext = ownersList.get(i);
+      if(username != null && username.equals(ownerNext.getUsername())) {
+        builder.removeOwners(i);
+        owner = ownerNext;
+        break;
+      }
+
+      if(email != null && email.equals(ownerNext.getEmail())) {
+        builder.removeOwners(i);
+        owner = ownerNext;
+        break;
+      }
+    }
+
+    if(owner == null) {
+      return app;
+    }
+
+    OffsetDateTime now = OffsetDateTime.now();
+    String updateTime = AppService.asString(now);
+    builder.setUpdated(updateTime);
+
+    final App updated = builder.build();
+    updateAppInner(updated);
+    removeOwnerFromGraph(updated, owner);
+    return updated;
   }
 
   @Override public boolean appHasOwner(String appKey, String username) {
@@ -246,6 +319,60 @@ public class DefaultAppService implements AppService, MetricsTimer {
         () -> appStorage.saveRelation(app, inverseRelationHashKey, inverseRelationRangeKey));
   }
 
+  private void removeOwnerFromGraph(App app, Owner owner) {
+    final String relation = "has_member";
+    final String subjectType = "app";
+    final String subjectKey = app.getKey();
+    final String objectType = AppService.OWNER;
+
+    if(! Strings.isNullOrEmpty(owner.getUsername())) {
+      final String objectKey = owner.getUsername();
+      removeGraphRelation(
+          app, relation, subjectType, subjectKey, objectType, objectKey, saveOwnerTimer);
+    }
+
+    if(! Strings.isNullOrEmpty(owner.getEmail())) {
+      final String objectKey = owner.getEmail();
+      removeGraphRelation(
+          app, relation, subjectType, subjectKey, objectType, objectKey, saveOwnerTimer);
+    }
+  }
+
+
+  private void removeServiceFromGraph(App app, Service service) {
+    final String relation = "has_member";
+    final String subjectType = "app";
+    final String subjectKey = app.getKey();
+    final String objectType = AppService.SERVICE;
+    final String objectKey = service.getKey();
+
+    removeGraphRelation(
+        app, relation, subjectType, subjectKey, objectType, objectKey, removeRelationTimer);
+  }
+
+  private void removeGraphRelation(
+      App app,
+      String relation,
+      String subjectType,
+      String subjectKey,
+      String objectType,
+      String objectKey,
+      Timer timer
+  ) {
+    final String rel = "rel.";
+    final String inv = "inv.";
+
+    final String relationHashKey = subjectType + "." + subjectKey;
+    final String relationRangeKey = rel + relation + "." + objectType + "." + objectKey;
+    timed(timer,
+        () -> appStorage.removeRelation(app, relationHashKey, relationRangeKey));
+
+    final String inverseRelationHashKey = objectType + "." + objectKey;
+    final String inverseRelationRangeKey = inv + relation + "." + subjectType + "." + subjectKey;
+    timed(timer,
+        () -> appStorage.removeRelation(app, inverseRelationHashKey, inverseRelationRangeKey));
+  }
+
   private void configureMetrics(MetricRegistry metrics) {
     saveAppTimer = metrics.timer(MetricRegistry.name(DefaultAppService.class,
         "saveAppTimer"));
@@ -255,5 +382,7 @@ public class DefaultAppService implements AppService, MetricsTimer {
         "saveServiceTimer"));
     readAppTimer = metrics.timer(MetricRegistry.name(DefaultAppService.class,
         "readAppTimer"));
+    removeRelationTimer = metrics.timer(MetricRegistry.name(DefaultAppService.class,
+        "removeRelationTimer"));
   }
 }
