@@ -7,8 +7,7 @@ import javax.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.NotEmpty;
 import outland.feature.server.auth.AuthConfiguration;
 import outland.feature.server.aws.AwsConfiguration;
-import outland.feature.server.aws.DynamoDbModule;
-import outland.feature.server.features.FeatureTableConfiguration;
+import outland.feature.server.features.TableConfiguration;
 import outland.feature.server.hystrix.HystrixConfiguration;
 import outland.feature.server.redis.RedisServersConfiguration;
 
@@ -40,7 +39,7 @@ public class ServerConfiguration extends Configuration {
 
   @NotNull
   @JsonProperty
-  public FeatureTableConfiguration featureTable = new FeatureTableConfiguration();
+  public TableConfiguration featureTable = new TableConfiguration();
 
   @NotNull
   @JsonProperty
@@ -53,4 +52,17 @@ public class ServerConfiguration extends Configuration {
   @NotNull
   @JsonProperty
   public HystrixConfiguration dynamodbFeatureReadHystrix = new HystrixConfiguration();
+
+  @NotNull
+  @JsonProperty
+  public HystrixConfiguration dynamodbAppGraphWriteHystrix = new HystrixConfiguration();
+
+  @NotNull
+  @JsonProperty
+  public HystrixConfiguration dynamodbAppWriteHystrix = new HystrixConfiguration();
+
+  @NotNull
+  @JsonProperty
+  public HystrixConfiguration dynamodbAppGraphQueryHystrix = new HystrixConfiguration();
+
 }

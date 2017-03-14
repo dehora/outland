@@ -5,15 +5,15 @@ import javax.inject.Inject;
 
 public class FeatureModule extends AbstractModule {
 
-  private final FeatureTableConfiguration featureTableConfiguration;
+  private final TableConfiguration tableConfiguration;
 
   @Inject
-  public FeatureModule(FeatureTableConfiguration featureTableConfiguration) {
-    this.featureTableConfiguration = featureTableConfiguration;
+  public FeatureModule(TableConfiguration tableConfiguration) {
+    this.tableConfiguration = tableConfiguration;
   }
 
   @Override protected void configure() {
-    bind(FeatureTableConfiguration.class).toInstance(featureTableConfiguration);
+    bind(TableConfiguration.class).toInstance(tableConfiguration);
     bind(FeatureService.class).to(DefaultFeatureService.class).asEagerSingleton();
     bind(FeatureStorage.class).to(DefaultFeatureStorage.class).asEagerSingleton();
     bind(FeatureCache.class).to(DefaultFeatureCache.class).asEagerSingleton();
