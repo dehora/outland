@@ -8,6 +8,7 @@ import com.google.protobuf.TextFormat;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Consumer;
 import javax.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,6 +49,28 @@ public class DefaultAppService implements AppService, MetricsTimer {
     return processRegistration(app);
   }
 
+  @Override public App updateApp(App app) {
+    logger.info("{} /app[{}]", kvp("op", "updateApp"), TextFormat.shortDebugString(app));
+
+    return processUpdate(app, builder -> {});
+  }
+
+  @Override public App addToApp(App app, Service service) {
+    logger.info("{} /app[{}]/svc[{}]", kvp("op", "updateApp"),
+        TextFormat.shortDebugString(app), TextFormat.shortDebugString(service));
+
+    return processUpdate(app,
+        builder -> builder.addServices(service.toBuilder().setId(mintServiceId()).build()));
+  }
+
+  @Override public App addToApp(App app, final Owner owner) {
+    logger.info("{} /app[{}]/own[{}]", kvp("op", "updateApp"),
+        TextFormat.shortDebugString(app), TextFormat.shortDebugString(owner));
+
+    return processUpdate(app,
+        builder -> builder.addOwners(owner.toBuilder().setId(mintOwnerId()).build()));
+  }
+
   @Override public boolean appHasOwner(String appKey, String username) {
     return appHasMemberRelation(appKey, AppService.OWNER, username);
   }
@@ -58,6 +81,19 @@ public class DefaultAppService implements AppService, MetricsTimer {
 
   @Override public Optional<App> loadAppByKey(String appKey) {
     return timed(readAppTimer, () -> appStorage.loadAppByKey(appKey));
+  }
+
+  private App processUpdate(App app, Consumer<App.Builder> updateExtra) {
+    final App.Builder builder = app.toBuilder();
+    OffsetDateTime now = OffsetDateTime.now();
+    String updateTime = AppService.asString(now);
+    builder.setUpdated(updateTime);
+    updateExtra.accept(builder);
+    final App updated = builder.build();
+    updateAppInner(updated);
+    updateOwners(updated);
+    updateServices(updated);
+    return updated;
   }
 
   private Optional<App> processRegistration(App app) {
@@ -71,12 +107,12 @@ public class DefaultAppService implements AppService, MetricsTimer {
 
     List<Owner> ownersReady = Lists.newArrayList();
     app.getOwnersList().forEach(
-        owner -> ownersReady.add(owner.toBuilder().setId("usr_" + Ulid.random()).build()));
+        owner -> ownersReady.add(owner.toBuilder().setId(mintOwnerId()).build()));
     builder.clearOwners().addAllOwners(ownersReady);
 
     List<Service> servicesReady = Lists.newArrayList();
     app.getServicesList().forEach(
-        service -> servicesReady.add(service.toBuilder().setId("svc_" + Ulid.random()).build()));
+        service -> servicesReady.add(service.toBuilder().setId(mintServiceId()).build()));
     builder.clearServices().addAllServices(servicesReady);
 
     final App registered = builder.build();
@@ -112,6 +148,26 @@ public class DefaultAppService implements AppService, MetricsTimer {
   }
 
   private void registerOwners(App app) {
+    app.getOwnersList().forEach(service -> addOwnerToGraph(app, service));
+  }
+
+  private String mintOwnerId() {
+    return "usr_" + Ulid.random();
+  }
+
+  private String mintServiceId() {
+    return "svc_" + Ulid.random();
+  }
+
+  private void updateAppInner(App registered) {
+    timed(saveAppTimer, () -> appStorage.saveApp(registered));
+  }
+
+  private void updateServices(App app) {
+    app.getServicesList().forEach(service -> addServiceToGraph(app, service));
+  }
+
+  private void updateOwners(App app) {
     app.getOwnersList().forEach(service -> addOwnerToGraph(app, service));
   }
 

@@ -4,6 +4,8 @@ import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 import outland.feature.proto.App;
+import outland.feature.proto.Owner;
+import outland.feature.proto.Service;
 
 public interface AppService {
 
@@ -21,6 +23,12 @@ public interface AppService {
   }
 
   Optional<App> registerApp(App app);
+
+  App updateApp(App app);
+
+  App addToApp(App app, Service service);
+
+  App addToApp(App app, Owner owner);
 
   boolean appHasOwner(String appKey, String username);
 
