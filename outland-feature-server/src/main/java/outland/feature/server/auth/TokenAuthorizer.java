@@ -2,7 +2,7 @@ package outland.feature.server.auth;
 
 import javax.inject.Inject;
 
-public class TokenAuthorizer implements io.dropwizard.auth.Authorizer<AppMember> {
+public class TokenAuthorizer implements io.dropwizard.auth.Authorizer<AuthPrincipal> {
 
   public static final String WILDCARD_SCOPE = "*";
 
@@ -14,7 +14,7 @@ public class TokenAuthorizer implements io.dropwizard.auth.Authorizer<AppMember>
   }
 
 
-  @Override public boolean authorize(AppMember principal, String role) {
+  @Override public boolean authorize(AuthPrincipal principal, String role) {
 
     if(AuthConfiguration.SCOPE_OAUTH_POLICY_DISABLED.equals(serviceConfiguration.oauthScopePolicy)) {
       return true;

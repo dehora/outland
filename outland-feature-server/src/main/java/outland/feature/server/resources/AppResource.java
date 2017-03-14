@@ -22,7 +22,7 @@ import javax.ws.rs.core.UriBuilder;
 import outland.feature.proto.App;
 import outland.feature.server.ServerConfiguration;
 import outland.feature.server.apps.AppService;
-import outland.feature.server.auth.AppMember;
+import outland.feature.server.auth.AuthPrincipal;
 
 @Resource
 @Path("/apps")
@@ -52,7 +52,7 @@ public class AppResource {
   @Produces(MediaType.APPLICATION_JSON)
   @Timed(name = "registerApp")
   public Response registerApp(
-      @Auth AppMember appMember,
+      @Auth AuthPrincipal authPrincipal,
       App app,
       @Context HttpHeaders httpHeaders
   ) throws AuthenticationException {
@@ -79,7 +79,7 @@ public class AppResource {
   @GET
   @Path("graph")
   public Response belongsTo(
-      @Auth AppMember appMember,
+      @Auth AuthPrincipal authPrincipal,
       @QueryParam("app_key") String appKey,
       @QueryParam("username") String username,
       @QueryParam("email") String email,

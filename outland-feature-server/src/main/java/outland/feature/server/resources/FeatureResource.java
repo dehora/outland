@@ -29,7 +29,7 @@ import outland.feature.server.Problem;
 import outland.feature.server.ServerConfiguration;
 import outland.feature.server.ServiceException;
 import outland.feature.server.apps.AppService;
-import outland.feature.server.auth.AppMember;
+import outland.feature.server.auth.AuthPrincipal;
 import outland.feature.server.features.FeatureService;
 
 import static outland.feature.server.StructLog.kvp;
@@ -65,14 +65,14 @@ public class FeatureResource {
   @PermitAll
   @Timed(name = "registerFeature")
   public Response registerFeature(
-      @Auth AppMember appMember,
+      @Auth AuthPrincipal authPrincipal,
       Feature feature,
       @Context HttpHeaders httpHeaders
   ) throws AuthenticationException {
 
     final long start = System.currentTimeMillis();
 
-    throwUnlessMember(appMember, feature.getAppId());
+    throwUnlessMember(authPrincipal, feature.getAppId());
 
     URI loc = UriBuilder.fromUri(baseURI)
         .path(feature.getAppId())
@@ -101,7 +101,7 @@ public class FeatureResource {
   @PermitAll
   @Timed(name = "updateFeature")
   public Response updateFeature(
-      @Auth AppMember appMember,
+      @Auth AuthPrincipal authPrincipal,
       @PathParam("app_id") String appId,
       @PathParam("feature_key") String featureKey,
       Feature feature,
@@ -110,7 +110,7 @@ public class FeatureResource {
 
     final long start = System.currentTimeMillis();
 
-    throwUnlessMember(appMember, appId);
+    throwUnlessMember(authPrincipal, appId);
     throwUnlessAppIdMatch(feature, appId);
     throwUnlessFeatureKeyMatch(feature, featureKey);
 
@@ -135,14 +135,14 @@ public class FeatureResource {
   @PermitAll
   @Timed(name = "getFeatureByKey")
   public Response getFeatureByKey(
-      @Auth AppMember appMember,
+      @Auth AuthPrincipal authPrincipal,
       @PathParam("app_id") String appId,
       @PathParam("feature_key") String featureKey
   ) throws AuthenticationException {
 
     final long start = System.currentTimeMillis();
 
-    throwUnlessMember(appMember, appId);
+    throwUnlessMember(authPrincipal, appId);
 
     final Optional<Feature> feature = featureService.loadFeatureByKey(appId, featureKey);
 
@@ -161,12 +161,12 @@ public class FeatureResource {
   @PermitAll
   @Timed(name = "getFeatures")
   public Response getFeatures(
-      @Auth AppMember appMember,
+      @Auth AuthPrincipal authPrincipal,
       @PathParam("app_id") String appId
   ) throws AuthenticationException {
 
     final long start = System.currentTimeMillis();
-    throwUnlessMember(appMember, appId);
+    throwUnlessMember(authPrincipal, appId);
 
     FeatureCollection features = featureService.loadFeatures(appId);
 
@@ -180,13 +180,13 @@ public class FeatureResource {
   @PermitAll
   @Timed(name = "getFeaturesSince")
   public Response getFeaturesSince(
-      @Auth AppMember appMember,
+      @Auth AuthPrincipal authPrincipal,
       @PathParam("app_id") String appId,
       @QueryParam("since") long since
   ) throws AuthenticationException {
 
     final long start = System.currentTimeMillis();
-    throwUnlessMember(appMember, appId);
+    throwUnlessMember(authPrincipal, appId);
 
     OffsetDateTime utc =
         OffsetDateTime.ofInstant(Instant.ofEpochSecond(since), ZoneId.of("UTC").normalized());
@@ -195,13 +195,13 @@ public class FeatureResource {
     return this.headers.enrich(Response.ok(features), start).build();
   }
 
-  private void throwUnlessMember(AppMember appMember, String appKey) throws AuthenticationException {
+  private void throwUnlessMember(AuthPrincipal authPrincipal, String appKey) throws AuthenticationException {
 
     boolean member;
-    if(appMember.type().equals(AppService.OWNER)) {
-      member = appService.appHasOwner(appKey, appMember.identifier());
+    if(authPrincipal.type().equals(AppService.OWNER)) {
+      member = appService.appHasOwner(appKey, authPrincipal.identifier());
     } else {
-      member = appService.appHasService(appKey, appMember.identifier());
+      member = appService.appHasService(appKey, authPrincipal.identifier());
     }
 
     if (! member) {

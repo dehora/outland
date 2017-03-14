@@ -2,7 +2,7 @@ package outland.feature.server.auth;
 
 import javax.inject.Inject;
 
-public class BasicAuthorizer implements io.dropwizard.auth.Authorizer<AppMember> {
+public class BasicAuthorizer implements io.dropwizard.auth.Authorizer<AuthPrincipal> {
 
   private final AuthConfiguration authConfiguration;
 
@@ -11,7 +11,7 @@ public class BasicAuthorizer implements io.dropwizard.auth.Authorizer<AppMember>
     this.authConfiguration = authConfiguration;
   }
 
-  @Override public boolean authorize(AppMember principal, String role) {
+  @Override public boolean authorize(AuthPrincipal principal, String role) {
 
     if(AuthConfiguration.SCOPE_BASIC_POLICY_DISABLED.equals(authConfiguration.basicScopePolicy)) {
       return true;

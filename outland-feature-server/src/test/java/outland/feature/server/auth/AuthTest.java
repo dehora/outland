@@ -2,11 +2,9 @@ package outland.feature.server.auth;
 
 import com.google.common.collect.Lists;
 import com.google.inject.AbstractModule;
-import com.google.inject.Binder;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Key;
-import com.google.inject.Module;
 import com.google.inject.TypeLiteral;
 import com.google.inject.name.Names;
 import io.dropwizard.auth.AuthenticationException;
@@ -53,12 +51,12 @@ public class AuthTest {
 
     );
 
-    final Authenticator<BasicCredentials, AppMember> authenticator =
-        injector.getInstance(Key.get(new TypeLiteral<Authenticator<BasicCredentials, AppMember>>() {
+    final Authenticator<BasicCredentials, AuthPrincipal> authenticator =
+        injector.getInstance(Key.get(new TypeLiteral<Authenticator<BasicCredentials, AuthPrincipal>>() {
         }, Names.named("basicAppAuthenticator")));
 
     try {
-      final Optional<AppMember> authenticate =
+      final Optional<AuthPrincipal> authenticate =
           authenticator.authenticate(new BasicCredentials("foo/owner", "letmein"));
       assertTrue(authenticate.isPresent());
 
@@ -68,7 +66,7 @@ public class AuthTest {
     }
 
     try {
-      final Optional<AppMember> authenticate =
+      final Optional<AuthPrincipal> authenticate =
           authenticator.authenticate(new BasicCredentials("foo/owner", "badsecret"));
       assertFalse(authenticate.isPresent());
     } catch (AuthenticationException e) {
@@ -76,12 +74,12 @@ public class AuthTest {
       fail();
     }
 
-    final Authorizer<AppMember> authorizer =
-        injector.getInstance(Key.get(new TypeLiteral<Authorizer<AppMember>>() {
+    final Authorizer<AuthPrincipal> authorizer =
+        injector.getInstance(Key.get(new TypeLiteral<Authorizer<AuthPrincipal>>() {
         }, Names.named("basicAppAuthorizer")));
 
     // scope checks are disabled
-    assertTrue(authorizer.authorize(new AppMember(
+    assertTrue(authorizer.authorize(new AuthPrincipal(
         "service",
         "foo",
         Lists.newArrayList(),
