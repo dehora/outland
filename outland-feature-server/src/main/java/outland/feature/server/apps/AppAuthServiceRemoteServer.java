@@ -71,7 +71,8 @@ public class AppAuthServiceRemoteServer implements AppAuthService {
 
     final String uid = (String)tokenInfo.get("uid");
     final String accessToken = (String)tokenInfo.get("access_token");
-    final Long expires = (Long)tokenInfo.get("expires_in");
+    // gson artefact; converts ints on the wire to double
+    final Long expires = Math.round((Double)tokenInfo.get("expires_in"));
 
     return new AppMember(type,
         uid, scopes,

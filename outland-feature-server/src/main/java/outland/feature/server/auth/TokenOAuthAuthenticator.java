@@ -25,7 +25,7 @@ public class TokenOAuthAuthenticator implements io.dropwizard.auth.Authenticator
     if (AuthConfiguration.AUTHENTICATION_POLICY_OAUTH_BEARER_REFLECT.equals(
         serviceConfiguration.oauthAuthenticationPolicy)) {
       /*
-      Exercises oauth by sending bearer credentials in the form identity@[service,owner].
+      Exercises oauth by sending bearer credentials in the form identity/[service,owner].
       Exists for development.
        */
 
