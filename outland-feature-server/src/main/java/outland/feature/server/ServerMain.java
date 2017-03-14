@@ -61,9 +61,10 @@ public class ServerMain extends GuiceApplication<ServerConfiguration> {
 
   @Override
   public void initialize(Bootstrap<ServerConfiguration> bootstrap) {
+    final boolean strict = false;
     bootstrap.setConfigurationSourceProvider(
         new SubstitutingSourceProvider(
-            bootstrap.getConfigurationSourceProvider(), new EnvironmentVariableSubstitutor()));
+            bootstrap.getConfigurationSourceProvider(), new EnvironmentVariableSubstitutor(strict)));
     bootstrap.addBundle(new Java8Bundle());
     bootstrap.addBundle(new Protobuf3Bundle());
     super.initialize(bootstrap);
