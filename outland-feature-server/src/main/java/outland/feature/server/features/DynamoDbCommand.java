@@ -25,7 +25,7 @@ public class DynamoDbCommand<R> extends HystrixCommand<R> implements MetricsTime
   private final Meter failMeter;
   private final Meter throughputFailMeter;
 
-  DynamoDbCommand(
+  public DynamoDbCommand(
       String commandName,
       Supplier<R> storageAction,
       Supplier<R> fallbackAction,
