@@ -32,6 +32,7 @@ import org.glassfish.jersey.server.filter.EncodingFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import outland.feature.server.app.GuiceApplication;
+import outland.feature.server.apps.AppModule;
 import outland.feature.server.auth.AppMember;
 import outland.feature.server.auth.AuthConfiguration;
 import outland.feature.server.auth.AuthModule;
@@ -75,7 +76,8 @@ public class ServerMain extends GuiceApplication<ServerConfiguration> {
         new RedisModule(configuration.redis),
         new DynamoDbModule(configuration.aws),
         new AuthModule(configuration.auth),
-        new FeatureModule(configuration.featureTable)
+        new FeatureModule(configuration.featureTable),
+        new AppModule()
     );
   }
 
