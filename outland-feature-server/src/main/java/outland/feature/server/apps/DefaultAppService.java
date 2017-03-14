@@ -30,6 +30,7 @@ public class DefaultAppService implements AppService, MetricsTimer {
   private Timer saveAppTimer;
   private Timer saveServiceTimer;
   private Timer saveOwnerTimer;
+  private Timer readAppTimer;
 
   @Inject
   public DefaultAppService(
@@ -53,6 +54,10 @@ public class DefaultAppService implements AppService, MetricsTimer {
 
   @Override public boolean appHasService(String appKey, String serviceKey) {
     return appHasMemberRelation(appKey, AppService.SERVICE, serviceKey);
+  }
+
+  @Override public Optional<App> loadAppByKey(String appKey) {
+    return timed(readAppTimer, () -> appStorage.loadAppByKey(appKey));
   }
 
   private Optional<App> processRegistration(App app) {
@@ -131,13 +136,13 @@ public class DefaultAppService implements AppService, MetricsTimer {
     if(! Strings.isNullOrEmpty(owner.getUsername())) {
       final String objectKey = owner.getUsername();
       saveGraphRelation(
-          app, relation, subjectType, subjectKey, objectType, objectKey, saveServiceTimer);
+          app, relation, subjectType, subjectKey, objectType, objectKey, saveOwnerTimer);
     }
 
     if(! Strings.isNullOrEmpty(owner.getEmail())) {
       final String objectKey = owner.getEmail();
       saveGraphRelation(
-          app, relation, subjectType, subjectKey, objectType, objectKey, saveServiceTimer);
+          app, relation, subjectType, subjectKey, objectType, objectKey, saveOwnerTimer);
     }
 
   }
@@ -192,5 +197,7 @@ public class DefaultAppService implements AppService, MetricsTimer {
         "saveOwnerTimer"));
     saveServiceTimer = metrics.timer(MetricRegistry.name(DefaultAppService.class,
         "saveServiceTimer"));
+    readAppTimer = metrics.timer(MetricRegistry.name(DefaultAppService.class,
+        "readAppTimer"));
   }
 }
