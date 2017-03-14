@@ -19,12 +19,15 @@ public class ServiceExceptionMapper implements ExceptionMapper<Exception> {
   private static final Logger logger = LoggerFactory.getLogger(ServiceExceptionMapper.class);
 
   @Override public Response toResponse(Exception e) {
-    e.printStackTrace();
 
     final long grepCode = grepCode();
     final String formattedGrepCode = String.format("%016x", grepCode);
 
-    logger.error(e.getMessage() + " trace_id=" + formattedGrepCode);
+    if(logger.isDebugEnabled()) {
+      logger.error(e.getMessage() + " trace_id=" + formattedGrepCode, e);
+    } else {
+      logger.error(e.getMessage() + " trace_id=" + formattedGrepCode);
+    }
 
     if (ServiceException.class.isAssignableFrom(e.getClass())) {
 
