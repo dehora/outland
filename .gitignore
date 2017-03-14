@@ -21,3 +21,5 @@ target/
 out
 
 **/docker/*.jar
+
+scratch.md
