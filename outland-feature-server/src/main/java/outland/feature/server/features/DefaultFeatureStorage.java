@@ -42,13 +42,13 @@ public class DefaultFeatureStorage implements FeatureStorage {
   @Inject
   public DefaultFeatureStorage(
       AmazonDynamoDB amazonDynamoDB,
-      FeatureTableConfiguration featureTableConfiguration,
+      TableConfiguration tableConfiguration,
       @Named("dynamodbFeatureWriteHystrix") HystrixConfiguration hystrixWriteConfiguration,
       @Named("dynamodbFeatureReadHystrix") HystrixConfiguration hystrixReadConfiguration,
       MetricRegistry metrics
   ) {
     this.dynamoDB = new DynamoDB(amazonDynamoDB);
-    this.featureTableName = featureTableConfiguration.outlandFeaturesTable;
+    this.featureTableName = tableConfiguration.outlandFeaturesTable;
     this.hystrixWriteConfiguration = hystrixWriteConfiguration;
     this.hystrixReadConfiguration = hystrixReadConfiguration;
     this.metrics = metrics;
