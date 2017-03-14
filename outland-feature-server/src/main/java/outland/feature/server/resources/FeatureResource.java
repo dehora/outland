@@ -28,6 +28,7 @@ import outland.feature.proto.FeatureCollection;
 import outland.feature.server.Problem;
 import outland.feature.server.ServerConfiguration;
 import outland.feature.server.ServiceException;
+import outland.feature.server.apps.AppService;
 import outland.feature.server.auth.AppMember;
 import outland.feature.server.features.FeatureService;
 
@@ -38,6 +39,7 @@ import static outland.feature.server.StructLog.kvp;
 public class FeatureResource {
 
   private final FeatureService featureService;
+  private final AppService appService;
   private final IdempotencyChecker idempotencyChecker;
   private final URI baseURI;
   private final Headers headers;
@@ -45,11 +47,13 @@ public class FeatureResource {
   @Inject
   public FeatureResource(
       FeatureService featureService,
+      AppService appService,
       IdempotencyChecker idempotencyChecker,
       ServerConfiguration serviceConfiguration,
       Headers headers
   ) {
     this.featureService = featureService;
+    this.appService = appService;
     this.idempotencyChecker = idempotencyChecker;
     this.baseURI = serviceConfiguration.baseURI;
     this.headers = headers;
@@ -192,6 +196,17 @@ public class FeatureResource {
   }
 
   private void throwUnlessMember(AppMember appMember, String appKey) throws AuthenticationException {
+
+    boolean member;
+    if(appMember.type().equals(AppService.OWNER)) {
+      member = appService.appHasService(appKey, appMember.identifier());
+    } else {
+      member = appService.appHasOwner(appKey, appMember.identifier());
+    }
+
+    if (! member) {
+      throw new AuthenticationException("Membership not authenticated for request");
+    }
   }
 
   private void throwUnlessFeatureKeyMatch(Feature feature, String featureKey) {
