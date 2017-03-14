@@ -49,13 +49,13 @@ featureTable:
   outlandAppGraphTable: dev_outland_app_graph
 
 auth:
-  basicEnabled: true
+  basicEnabled: ${OUTLAND_FEATURE_AUTH_BASIC_ENABLED:-true}
   basicAuthenticationPolicy: basic_app_username_password_keys
   basicAuthenticationKeys: topsecret
   basicScopePolicy: basic_disable_scope_check
   basicCacheCredentialSeconds: 30
 
-  oauthEnabled: false
+  oauthEnabled: ${OUTLAND_FEATURE_AUTH_OAUTH_ENABLED:-false}
   oauthAuthenticationPolicy: oauth_bearer_reflect
   oauthScopePolicy: oauth_disable_scope_check
   oauthCacheTokenSeconds: 30

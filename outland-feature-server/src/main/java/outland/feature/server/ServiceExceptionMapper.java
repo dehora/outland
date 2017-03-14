@@ -19,6 +19,7 @@ public class ServiceExceptionMapper implements ExceptionMapper<Exception> {
   private static final Logger logger = LoggerFactory.getLogger(ServiceExceptionMapper.class);
 
   @Override public Response toResponse(Exception e) {
+    e.printStackTrace();
 
     final long grepCode = grepCode();
     final String formattedGrepCode = String.format("%016x", grepCode);
