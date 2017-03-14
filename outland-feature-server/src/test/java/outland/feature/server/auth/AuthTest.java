@@ -15,7 +15,7 @@ import java.net.URI;
 import java.util.Optional;
 import org.junit.Test;
 import outland.feature.server.apps.AppAuthService;
-import outland.feature.server.apps.AppAuthServiceRemoteServer;
+import outland.feature.server.apps.AppAuthServiceViaPlanBServer;
 
 import static junit.framework.TestCase.fail;
 import static org.junit.Assert.assertFalse;
@@ -45,7 +45,7 @@ public class AuthTest {
         new AuthModule(authConfiguration),
         new AbstractModule(){
           @Override protected void configure() {
-            bind(AppAuthService.class).to(AppAuthServiceRemoteServer.class).asEagerSingleton();
+            bind(AppAuthService.class).to(AppAuthServiceViaPlanBServer.class).asEagerSingleton();
           }
         }
 
@@ -80,12 +80,7 @@ public class AuthTest {
 
     // scope checks are disabled
     assertTrue(authorizer.authorize(new AuthPrincipal(
-        "service",
-        "foo",
-        Lists.newArrayList(),
-        "woo",
-        100000
-
+        "service","foo", Lists.newArrayList()
     ), "any"));
 
   }

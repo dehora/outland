@@ -32,11 +32,7 @@ public class TokenOAuthAuthenticator implements io.dropwizard.auth.Authenticator
       final String[] split = credentials.split("/");
 
       return Optional.of(new AuthPrincipal(
-          split[1],
-          split[0],
-          Lists.newArrayList(TokenAuthorizer.WILDCARD_SCOPE),
-          credentials,
-          Long.MAX_VALUE
+          split[1], split[0], Lists.newArrayList(TokenAuthorizer.WILDCARD_SCOPE)
       ));
     }
 
