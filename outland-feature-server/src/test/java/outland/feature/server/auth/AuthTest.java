@@ -1,5 +1,6 @@
 package outland.feature.server.auth;
 
+import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
@@ -12,10 +13,14 @@ import io.dropwizard.auth.Authenticator;
 import io.dropwizard.auth.Authorizer;
 import io.dropwizard.auth.basic.BasicCredentials;
 import java.net.URI;
+import java.util.List;
 import java.util.Optional;
 import org.junit.Test;
 import outland.feature.server.apps.AppAuthService;
 import outland.feature.server.apps.AppAuthServiceViaPlanBServer;
+import outland.feature.server.apps.TestAppModule;
+import outland.feature.server.features.VersionService;
+import outland.feature.server.features.Versions;
 
 import static junit.framework.TestCase.fail;
 import static org.junit.Assert.assertFalse;
@@ -40,12 +45,22 @@ public class AuthTest {
     authConfiguration.basicAuthenticationKeys="letmein,secret";
     authConfiguration.basicEnabled=true;
     authConfiguration.basicScopePolicy = AuthConfiguration.SCOPE_BASIC_POLICY_DISABLED;
+    authConfiguration.multipleAppAccessList = "acme.ui";
 
     final Injector injector = Guice.createInjector(
         new AuthModule(authConfiguration),
+        new TestAppModule(),
         new AbstractModule(){
           @Override protected void configure() {
+            bind(VersionService.class).to(Versions.class).asEagerSingleton();
             bind(AppAuthService.class).to(AppAuthServiceViaPlanBServer.class).asEagerSingleton();
+            List<String> multipleAppAccessList = Lists.newArrayList();
+            multipleAppAccessList.addAll(
+                Splitter.on(",").splitToList(authConfiguration.multipleAppAccessList));
+            bind(new TypeLiteral<List<String>>() {
+            }).annotatedWith(Names.named("multipleAppAccessList"))
+                .toInstance(multipleAppAccessList);
+            bind(AccessControlSupport.class).asEagerSingleton();
           }
         }
 

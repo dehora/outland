@@ -29,6 +29,7 @@ import outland.feature.proto.Service;
 import outland.feature.server.Problem;
 import outland.feature.server.ServerConfiguration;
 import outland.feature.server.apps.AppService;
+import outland.feature.server.auth.AccessControlSupport;
 import outland.feature.server.auth.AuthPrincipal;
 
 @Resource
@@ -37,6 +38,7 @@ public class AppResource {
 
   private final AppService appService;
   private final IdempotencyChecker idempotencyChecker;
+  private final AccessControlSupport accessControlSupport;
   private final URI baseURI;
   private final Headers headers;
 
@@ -44,11 +46,13 @@ public class AppResource {
   public AppResource(
       AppService appService,
       IdempotencyChecker idempotencyChecker,
+      AccessControlSupport accessControlSupport,
       ServerConfiguration serviceConfiguration,
       Headers headers
   ) {
     this.appService = appService;
     this.idempotencyChecker = idempotencyChecker;
+    this.accessControlSupport = accessControlSupport;
     this.baseURI = serviceConfiguration.baseURI;
     ;
     this.headers = headers;
@@ -66,7 +70,7 @@ public class AppResource {
 
     final long start = System.currentTimeMillis();
 
-    throwUnlessMember(authPrincipal, app);
+    accessControlSupport.throwUnlessMember(authPrincipal, app);
 
     URI loc = UriBuilder.fromUri(baseURI)
         .path(app.getKey())
@@ -100,7 +104,7 @@ public class AppResource {
     final Optional<App> maybe = appService.loadAppByKey(appKey);
 
     if (maybe.isPresent()) {
-      throwUnlessMember(authPrincipal, maybe.get());
+      accessControlSupport.throwUnlessMember(authPrincipal, maybe.get());
       return headers.enrich(Response.ok(maybe.get()), start).build();
     }
 
@@ -150,7 +154,7 @@ public class AppResource {
 
     if (maybe.isPresent()) {
       final App app = maybe.get();
-      throwUnlessMember(authPrincipal, app);
+      accessControlSupport.throwUnlessMember(authPrincipal, app);
       final App updated = appService.removeService(app, serviceKey);
 
       return headers.enrich(Response.ok(updated), start).build();
@@ -177,7 +181,7 @@ public class AppResource {
 
     if (maybe.isPresent()) {
       final App app = maybe.get();
-      throwUnlessMember(authPrincipal, app);
+      accessControlSupport.throwUnlessMember(authPrincipal, app);
       final App updated = appService.removeOwner(app, username, email);
       return headers.enrich(Response.ok(updated), start).build();
     }
@@ -197,22 +201,33 @@ public class AppResource {
       @QueryParam("username") String username,
       @QueryParam("email") String email,
       @QueryParam("service_key") String serviceKey
-  ) {
+  ) throws AuthenticationException {
 
-    boolean found;
-    if (!Strings.isNullOrEmpty(username)) {
-      found = appService.appHasOwner(appKey, username);
-    } else if (!Strings.isNullOrEmpty(email)) {
-      found = appService.appHasOwner(appKey, email);
-    } else {
-      found = appService.appHasService(appKey, serviceKey);
+    final long start = System.currentTimeMillis();
+
+    final Optional<App> maybe = appService.loadAppByKey(appKey);
+    if (maybe.isPresent()) {
+      accessControlSupport.throwUnlessMember(authPrincipal, maybe.get());
+
+      boolean found;
+      if (!Strings.isNullOrEmpty(username)) {
+        found = appService.appHasOwner(appKey, username);
+      } else if (!Strings.isNullOrEmpty(email)) {
+        found = appService.appHasOwner(appKey, email);
+      } else {
+        found = appService.appHasService(appKey, serviceKey);
+      }
+
+      if (found) {
+        return Response.ok().build();
+      } else {
+        return Response.status(404).build();
+      }
     }
 
-    if (found) {
-      return Response.ok().build();
-    } else {
-      return Response.status(404).build();
-    }
+    return headers.enrich(Response.status(404).entity(
+        Problem.clientProblem("app_not_found", "", 404)), start).build();
+
   }
 
   private Response postUpdate(
@@ -226,35 +241,12 @@ public class AppResource {
 
     if (maybe.isPresent()) {
       final App app = maybe.get();
-      throwUnlessMember(authPrincipal, app);
+     accessControlSupport.throwUnlessMember(authPrincipal, app);
       final App updated = updater.apply(app);
       return headers.enrich(Response.ok(updated), start).build();
     }
 
     return headers.enrich(Response.status(404).entity(
         Problem.clientProblem("app_not_found", "", 404)), start).build();
-  }
-
-  private void throwUnlessMember(AuthPrincipal authPrincipal, App app)
-      throws AuthenticationException {
-
-    // todo: whitelist user interface service
-
-    boolean member;
-
-    if (authPrincipal.type().equals(AppService.OWNER)) {
-      member = app.getOwnersList().stream()
-          .anyMatch(owner ->
-              owner.getUsername().equals(authPrincipal.identifier())
-                  ||
-                  owner.getEmail().equals(authPrincipal.identifier()));
-    } else {
-      member = app.getServicesList().stream()
-          .anyMatch(service -> service.getKey().equals(authPrincipal.identifier()));
-    }
-
-    if (!member) {
-      throw new AuthenticationException("Membership not authenticated for request");
-    }
   }
 }

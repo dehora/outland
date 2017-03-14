@@ -1,5 +1,7 @@
 package outland.feature.server.auth;
 
+import com.google.common.base.Splitter;
+import com.google.common.collect.Lists;
 import com.google.inject.AbstractModule;
 import com.google.inject.TypeLiteral;
 import com.google.inject.name.Names;
@@ -8,6 +10,7 @@ import io.dropwizard.auth.Authorizer;
 import io.dropwizard.auth.UnauthorizedHandler;
 import io.dropwizard.auth.basic.BasicCredentials;
 import java.net.URI;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 import javax.inject.Inject;
 import okhttp3.OkHttpClient;
@@ -48,6 +51,16 @@ public class AuthModule extends AbstractModule {
     })
         .annotatedWith(Names.named("basicAppAuthorizer"))
         .to(BasicAuthorizer.class);
+
+    List<String> multipleAppAccessList = Lists.newArrayList();
+
+    multipleAppAccessList.addAll(
+        Splitter.on(",").splitToList(authConfiguration.multipleAppAccessList));
+
+    bind(new TypeLiteral<List<String>>() {
+    }).annotatedWith(Names.named("multipleAppAccessList")).toInstance(multipleAppAccessList);
+
+    bind(AccessControlSupport.class).asEagerSingleton();
 
     bind(UnauthorizedHandler.class).to(DefaultUnauthorizedHandler.class);
 
