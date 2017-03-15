@@ -401,6 +401,32 @@ public class FeatureResourceTest {
     assertEquals(Feature.State.on, featResponseGet.getState());
   }
 
+  @Test
+  public void testMissingAppThrows404() throws Exception {
+
+    String url = "http://localhost:" + APP.getLocalPort() + "/features";
+    JerseyClient client = ServerSuite.client()
+        .register(
+            new LoggingFeature(Logger.getLogger(getClass().getName()), Level.INFO, null, null))
+        .register(HttpAuthenticationFeature.universalBuilder().build());
+
+
+    String key = "testMissingAppThrows404";
+    String appId = Ulid.random();
+    String serviceCaller = "own";
+
+    Feature feature = buildTestFeature(appId, key);
+    String jsonReq = Protobuf3Support.toJsonString(feature);
+
+    Response post = client.target(url)
+        .request()
+        .property(HTTP_AUTHENTICATION_BASIC_USERNAME, serviceCaller+"/service")
+        .property(HTTP_AUTHENTICATION_BASIC_PASSWORD, basicPassword)
+        .post(Entity.entity(jsonReq, MediaType.APPLICATION_JSON_TYPE));
+
+    assertTrue(post.getStatus() == 404);
+  }
+
   private Feature buildTestFeature(String appId, String key) {
     return Feature.newBuilder()
         .setKey(key)
