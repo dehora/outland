@@ -1,5 +1,10 @@
 ### Changes
 
+### 0.0.3
+
+- Checks the app exists before allowing a feature creation.
+
+
 ### 0.0.2
 
 **Server**:
