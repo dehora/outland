@@ -26,8 +26,8 @@ import outland.cluster.proto.ShuffleReplyMessage;
 
 class ClusterCoordinator implements ServiceHandler {
 
-  private static final Logger logger = LoggerFactory.getLogger("tolkan-cluster");
-  private static final Logger viewLogger = LoggerFactory.getLogger("tolkan-view");
+  private static final Logger logger = LoggerFactory.getLogger("outland-cluster");
+  private static final Logger viewLogger = LoggerFactory.getLogger("outland-view");
 
   private static final int ACTIVE_RANDOM_WALK_LENGTH = 6; // paper: 6
   private static final int PASSIVE_RANDOM_WALK_LENGTH = 3; // paper: 3
