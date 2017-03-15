@@ -1,0 +1,460 @@
+{
+    "compile": {
+        "com.google.code.gson:gson": {
+            "locked": "2.8.0",
+            "requested": "2.8.0"
+        },
+        "com.google.guava:guava": {
+            "locked": "19.0",
+            "requested": "19.+"
+        },
+        "com.google.protobuf:protobuf-java": {
+            "locked": "3.2.0",
+            "requested": "3.2.+"
+        },
+        "com.google.protobuf:protobuf-java-util": {
+            "locked": "3.2.0",
+            "requested": "3.2.+"
+        },
+        "com.squareup.okhttp3:logging-interceptor": {
+            "locked": "3.6.0",
+            "requested": "3.+"
+        },
+        "com.squareup.okhttp3:okhttp": {
+            "locked": "3.6.0",
+            "requested": "3.+"
+        },
+        "io.dropwizard.metrics:metrics-core": {
+            "locked": "3.1.2",
+            "requested": "3.1.2"
+        },
+        "io.reactivex:rxjava": {
+            "locked": "1.2.7",
+            "requested": "1.+"
+        },
+        "org.rocksdb:rocksdbjni": {
+            "locked": "4.4.1",
+            "requested": "4.4.1"
+        },
+        "org.slf4j:slf4j-api": {
+            "locked": "1.7.23",
+            "requested": "1.7.23"
+        }
+    },
+    "compileClasspath": {
+        "com.google.code.gson:gson": {
+            "locked": "2.8.0",
+            "requested": "2.8.0"
+        },
+        "com.google.guava:guava": {
+            "locked": "19.0",
+            "requested": "19.+"
+        },
+        "com.google.protobuf:protobuf-java": {
+            "locked": "3.2.0",
+            "requested": "3.2.+"
+        },
+        "com.google.protobuf:protobuf-java-util": {
+            "locked": "3.2.0",
+            "requested": "3.2.+"
+        },
+        "com.squareup.okhttp3:logging-interceptor": {
+            "locked": "3.6.0",
+            "requested": "3.+"
+        },
+        "com.squareup.okhttp3:okhttp": {
+            "locked": "3.6.0",
+            "requested": "3.+"
+        },
+        "io.dropwizard.metrics:metrics-core": {
+            "locked": "3.1.2",
+            "requested": "3.1.2"
+        },
+        "io.reactivex:rxjava": {
+            "locked": "1.2.7",
+            "requested": "1.+"
+        },
+        "org.rocksdb:rocksdbjni": {
+            "locked": "4.4.1",
+            "requested": "4.4.1"
+        },
+        "org.slf4j:slf4j-api": {
+            "locked": "1.7.23",
+            "requested": "1.7.23"
+        }
+    },
+    "compileOnly": {
+        "com.google.code.gson:gson": {
+            "locked": "2.8.0",
+            "requested": "2.8.0"
+        },
+        "com.google.guava:guava": {
+            "locked": "19.0",
+            "requested": "19.+"
+        },
+        "com.google.protobuf:protobuf-java": {
+            "locked": "3.2.0",
+            "requested": "3.2.+"
+        },
+        "com.google.protobuf:protobuf-java-util": {
+            "locked": "3.2.0",
+            "requested": "3.2.+"
+        },
+        "com.squareup.okhttp3:logging-interceptor": {
+            "locked": "3.6.0",
+            "requested": "3.+"
+        },
+        "com.squareup.okhttp3:okhttp": {
+            "locked": "3.6.0",
+            "requested": "3.+"
+        },
+        "io.dropwizard.metrics:metrics-core": {
+            "locked": "3.1.2",
+            "requested": "3.1.2"
+        },
+        "io.reactivex:rxjava": {
+            "locked": "1.2.7",
+            "requested": "1.+"
+        },
+        "org.rocksdb:rocksdbjni": {
+            "locked": "4.4.1",
+            "requested": "4.4.1"
+        },
+        "org.slf4j:slf4j-api": {
+            "locked": "1.7.23",
+            "requested": "1.7.23"
+        }
+    },
+    "default": {
+        "com.google.code.gson:gson": {
+            "locked": "2.8.0",
+            "requested": "2.8.0"
+        },
+        "com.google.guava:guava": {
+            "locked": "19.0",
+            "requested": "19.+"
+        },
+        "com.google.protobuf:protobuf-java": {
+            "locked": "3.2.0",
+            "requested": "3.2.+"
+        },
+        "com.google.protobuf:protobuf-java-util": {
+            "locked": "3.2.0",
+            "requested": "3.2.+"
+        },
+        "com.squareup.okhttp3:logging-interceptor": {
+            "locked": "3.6.0",
+            "requested": "3.+"
+        },
+        "com.squareup.okhttp3:okhttp": {
+            "locked": "3.6.0",
+            "requested": "3.+"
+        },
+        "io.dropwizard.metrics:metrics-core": {
+            "locked": "3.1.2",
+            "requested": "3.1.2"
+        },
+        "io.reactivex:rxjava": {
+            "locked": "1.2.7",
+            "requested": "1.+"
+        },
+        "org.rocksdb:rocksdbjni": {
+            "locked": "4.4.1",
+            "requested": "4.4.1"
+        },
+        "org.slf4j:slf4j-api": {
+            "locked": "1.7.23",
+            "requested": "1.7.23"
+        }
+    },
+    "runtime": {
+        "com.google.code.gson:gson": {
+            "locked": "2.8.0",
+            "requested": "2.8.0"
+        },
+        "com.google.guava:guava": {
+            "locked": "19.0",
+            "requested": "19.+"
+        },
+        "com.google.protobuf:protobuf-java": {
+            "locked": "3.2.0",
+            "requested": "3.2.+"
+        },
+        "com.google.protobuf:protobuf-java-util": {
+            "locked": "3.2.0",
+            "requested": "3.2.+"
+        },
+        "com.squareup.okhttp3:logging-interceptor": {
+            "locked": "3.6.0",
+            "requested": "3.+"
+        },
+        "com.squareup.okhttp3:okhttp": {
+            "locked": "3.6.0",
+            "requested": "3.+"
+        },
+        "io.dropwizard.metrics:metrics-core": {
+            "locked": "3.1.2",
+            "requested": "3.1.2"
+        },
+        "io.reactivex:rxjava": {
+            "locked": "1.2.7",
+            "requested": "1.+"
+        },
+        "org.rocksdb:rocksdbjni": {
+            "locked": "4.4.1",
+            "requested": "4.4.1"
+        },
+        "org.slf4j:slf4j-api": {
+            "locked": "1.7.23",
+            "requested": "1.7.23"
+        }
+    },
+    "testCompile": {
+        "ch.qos.logback:logback-classic": {
+            "locked": "1.1.10",
+            "requested": "1.1.10"
+        },
+        "ch.qos.logback:logback-core": {
+            "locked": "1.1.10",
+            "requested": "1.1.10"
+        },
+        "com.google.code.gson:gson": {
+            "locked": "2.8.0",
+            "requested": "2.8.0"
+        },
+        "com.google.guava:guava": {
+            "locked": "19.0",
+            "requested": "19.+"
+        },
+        "com.google.protobuf:protobuf-java": {
+            "locked": "3.2.0",
+            "requested": "3.2.+"
+        },
+        "com.google.protobuf:protobuf-java-util": {
+            "locked": "3.2.0",
+            "requested": "3.2.+"
+        },
+        "com.squareup.okhttp3:logging-interceptor": {
+            "locked": "3.6.0",
+            "requested": "3.+"
+        },
+        "com.squareup.okhttp3:mockwebserver": {
+            "locked": "3.6.0",
+            "requested": "3.+"
+        },
+        "com.squareup.okhttp3:okhttp": {
+            "locked": "3.6.0",
+            "requested": "3.+"
+        },
+        "io.dropwizard.metrics:metrics-core": {
+            "locked": "3.1.2",
+            "requested": "3.1.2"
+        },
+        "io.reactivex:rxjava": {
+            "locked": "1.2.7",
+            "requested": "1.+"
+        },
+        "junit:junit": {
+            "locked": "4.12",
+            "requested": "4.+"
+        },
+        "org.mockito:mockito-core": {
+            "locked": "2.0.111-beta",
+            "requested": "2.0.111-beta"
+        },
+        "org.rocksdb:rocksdbjni": {
+            "locked": "4.4.1",
+            "requested": "4.4.1"
+        },
+        "org.slf4j:slf4j-api": {
+            "locked": "1.7.23",
+            "requested": "1.7.23"
+        }
+    },
+    "testCompileClasspath": {
+        "ch.qos.logback:logback-classic": {
+            "locked": "1.1.10",
+            "requested": "1.1.10"
+        },
+        "ch.qos.logback:logback-core": {
+            "locked": "1.1.10",
+            "requested": "1.1.10"
+        },
+        "com.google.code.gson:gson": {
+            "locked": "2.8.0",
+            "requested": "2.8.0"
+        },
+        "com.google.guava:guava": {
+            "locked": "19.0",
+            "requested": "19.+"
+        },
+        "com.google.protobuf:protobuf-java": {
+            "locked": "3.2.0",
+            "requested": "3.2.+"
+        },
+        "com.google.protobuf:protobuf-java-util": {
+            "locked": "3.2.0",
+            "requested": "3.2.+"
+        },
+        "com.squareup.okhttp3:logging-interceptor": {
+            "locked": "3.6.0",
+            "requested": "3.+"
+        },
+        "com.squareup.okhttp3:mockwebserver": {
+            "locked": "3.6.0",
+            "requested": "3.+"
+        },
+        "com.squareup.okhttp3:okhttp": {
+            "locked": "3.6.0",
+            "requested": "3.+"
+        },
+        "io.dropwizard.metrics:metrics-core": {
+            "locked": "3.1.2",
+            "requested": "3.1.2"
+        },
+        "io.reactivex:rxjava": {
+            "locked": "1.2.7",
+            "requested": "1.+"
+        },
+        "junit:junit": {
+            "locked": "4.12",
+            "requested": "4.+"
+        },
+        "org.mockito:mockito-core": {
+            "locked": "2.0.111-beta",
+            "requested": "2.0.111-beta"
+        },
+        "org.rocksdb:rocksdbjni": {
+            "locked": "4.4.1",
+            "requested": "4.4.1"
+        },
+        "org.slf4j:slf4j-api": {
+            "locked": "1.7.23",
+            "requested": "1.7.23"
+        }
+    },
+    "testCompileOnly": {
+        "ch.qos.logback:logback-classic": {
+            "locked": "1.1.10",
+            "requested": "1.1.10"
+        },
+        "ch.qos.logback:logback-core": {
+            "locked": "1.1.10",
+            "requested": "1.1.10"
+        },
+        "com.google.code.gson:gson": {
+            "locked": "2.8.0",
+            "requested": "2.8.0"
+        },
+        "com.google.guava:guava": {
+            "locked": "19.0",
+            "requested": "19.+"
+        },
+        "com.google.protobuf:protobuf-java": {
+            "locked": "3.2.0",
+            "requested": "3.2.+"
+        },
+        "com.google.protobuf:protobuf-java-util": {
+            "locked": "3.2.0",
+            "requested": "3.2.+"
+        },
+        "com.squareup.okhttp3:logging-interceptor": {
+            "locked": "3.6.0",
+            "requested": "3.+"
+        },
+        "com.squareup.okhttp3:mockwebserver": {
+            "locked": "3.6.0",
+            "requested": "3.+"
+        },
+        "com.squareup.okhttp3:okhttp": {
+            "locked": "3.6.0",
+            "requested": "3.+"
+        },
+        "io.dropwizard.metrics:metrics-core": {
+            "locked": "3.1.2",
+            "requested": "3.1.2"
+        },
+        "io.reactivex:rxjava": {
+            "locked": "1.2.7",
+            "requested": "1.+"
+        },
+        "junit:junit": {
+            "locked": "4.12",
+            "requested": "4.+"
+        },
+        "org.mockito:mockito-core": {
+            "locked": "2.0.111-beta",
+            "requested": "2.0.111-beta"
+        },
+        "org.rocksdb:rocksdbjni": {
+            "locked": "4.4.1",
+            "requested": "4.4.1"
+        },
+        "org.slf4j:slf4j-api": {
+            "locked": "1.7.23",
+            "requested": "1.7.23"
+        }
+    },
+    "testRuntime": {
+        "ch.qos.logback:logback-classic": {
+            "locked": "1.1.10",
+            "requested": "1.1.10"
+        },
+        "ch.qos.logback:logback-core": {
+            "locked": "1.1.10",
+            "requested": "1.1.10"
+        },
+        "com.google.code.gson:gson": {
+            "locked": "2.8.0",
+            "requested": "2.8.0"
+        },
+        "com.google.guava:guava": {
+            "locked": "19.0",
+            "requested": "19.+"
+        },
+        "com.google.protobuf:protobuf-java": {
+            "locked": "3.2.0",
+            "requested": "3.2.+"
+        },
+        "com.google.protobuf:protobuf-java-util": {
+            "locked": "3.2.0",
+            "requested": "3.2.+"
+        },
+        "com.squareup.okhttp3:logging-interceptor": {
+            "locked": "3.6.0",
+            "requested": "3.+"
+        },
+        "com.squareup.okhttp3:mockwebserver": {
+            "locked": "3.6.0",
+            "requested": "3.+"
+        },
+        "com.squareup.okhttp3:okhttp": {
+            "locked": "3.6.0",
+            "requested": "3.+"
+        },
+        "io.dropwizard.metrics:metrics-core": {
+            "locked": "3.1.2",
+            "requested": "3.1.2"
+        },
+        "io.reactivex:rxjava": {
+            "locked": "1.2.7",
+            "requested": "1.+"
+        },
+        "junit:junit": {
+            "locked": "4.12",
+            "requested": "4.+"
+        },
+        "org.mockito:mockito-core": {
+            "locked": "2.0.111-beta",
+            "requested": "2.0.111-beta"
+        },
+        "org.rocksdb:rocksdbjni": {
+            "locked": "4.4.1",
+            "requested": "4.4.1"
+        },
+        "org.slf4j:slf4j-api": {
+            "locked": "1.7.23",
+            "requested": "1.7.23"
+        }
+    }
+}
