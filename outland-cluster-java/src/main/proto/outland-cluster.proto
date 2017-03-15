@@ -1,0 +1,119 @@
+syntax = "proto3";
+
+option optimize_for = SPEED;
+option java_multiple_files = true;
+option java_package = "outland.cluster.proto";
+option java_outer_classname = "ClusterMessage";
+
+package outland;
+
+service OutlandService {
+
+    rpc JoinRequest (JoinMessage) returns (Response) {
+    }
+
+    rpc JoinReply (JoinReplyMessage) returns (Response) {
+    }
+
+    rpc ForwardJoinRequest (ForwardJoinMessage) returns (Response) {
+    }
+
+    rpc DisconnectRequest (DisconnectMessage) returns (Response) {
+    }
+
+    rpc NeighborRequest (NeighborMessage) returns (NeighbourReplyMessage) {
+    }
+
+    rpc ShuffleRequest (ShuffleMessage) returns (Response) {
+    }
+
+    rpc ShuffleReply (ShuffleReplyMessage) returns (Response) {
+    }
+
+    rpc Ruok (Rouk) returns (Imok) {
+    }
+
+    rpc Ruoks (stream Rouk) returns (stream Imok) {
+    }
+}
+
+message Rouk {
+    string id = 1;
+    Node sender = 2;
+}
+
+message Imok {
+    string id = 1;
+    string cid = 2;
+    Node sender = 3;
+}
+
+message Node {
+    string id = 1;
+    string host = 2;
+    int32 port = 3;
+}
+
+message Response {
+    string requestId = 1;
+    Node sender = 2;
+}
+
+message JoinMessage {
+    string id = 1;
+    Node sender = 2;
+}
+
+message JoinReplyMessage {
+    string id = 1;
+    Node sender = 2;
+    string correlationId = 3;
+}
+
+message ForwardJoinMessage {
+    string id = 1;
+    Node sender = 2;
+    Node joiner = 3;
+    int32 ttl = 4;
+}
+
+message DisconnectMessage {
+    string id = 1;
+    Node sender = 2;
+}
+
+message NeighborMessage {
+    string id = 1;
+    Node sender = 2;
+    enum Priority {
+        low = 0;
+        high = 1;
+    }
+    Priority priority = 3;
+}
+
+message NeighbourReplyMessage {
+    string id = 1;
+    Node sender = 2;
+    string correlationId = 3;
+    enum Response {
+        reject = 0;
+        accept = 1;
+    }
+    Response response = 4;
+}
+
+message ShuffleMessage {
+    string id = 1;
+    Node sender = 2;
+    Node origin = 3;
+    repeated Node exchangeList = 4;
+    int32 ttl = 5;
+}
+
+message ShuffleReplyMessage {
+    string id = 1;
+    Node sender = 2;
+    string originalMessageId = 3;
+    repeated Node exchangeList = 4;
+}
