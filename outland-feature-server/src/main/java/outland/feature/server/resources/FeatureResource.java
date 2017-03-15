@@ -23,6 +23,7 @@ import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
+import outland.feature.proto.App;
 import outland.feature.proto.Feature;
 import outland.feature.proto.FeatureCollection;
 import outland.feature.server.Problem;
@@ -76,7 +77,13 @@ public class FeatureResource {
 
     final long start = System.currentTimeMillis();
 
-    accessControlSupport.throwUnlessMember(authPrincipal, feature.getAppId());
+    final Optional<App> maybe = appService.loadAppByKey(feature.getAppId());
+    if(! maybe.isPresent()) {
+      return headers.enrich(Response.status(404).entity(
+          Problem.clientProblem("app_not_found", "", 404)), start).build();
+    }
+
+    accessControlSupport.throwUnlessMember(authPrincipal, maybe.get());
 
     URI loc = UriBuilder.fromUri(baseURI)
         .path(feature.getAppId())
