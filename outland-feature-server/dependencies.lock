@@ -1,0 +1,556 @@
+{
+    "compile": {
+        "com.amazonaws:aws-java-sdk-dynamodb": {
+            "locked": "1.11.93",
+            "requested": "1.11.93"
+        },
+        "com.google.inject.extensions:guice-servlet": {
+            "locked": "4.0",
+            "requested": "4.0"
+        },
+        "com.google.inject:guice": {
+            "locked": "4.0",
+            "requested": "4.0"
+        },
+        "com.google.protobuf:protobuf-java": {
+            "locked": "3.2.0",
+            "requested": "3.2.+"
+        },
+        "com.google.protobuf:protobuf-java-util": {
+            "locked": "3.2.0",
+            "requested": "3.2.+"
+        },
+        "com.netflix.hystrix:hystrix-core": {
+            "locked": "1.5.9",
+            "requested": "1.5.9"
+        },
+        "com.squarespace.jersey2-guice:jersey2-guice-impl": {
+            "locked": "1.0.6",
+            "requested": "1.0.6"
+        },
+        "com.squareup.okhttp3:okhttp": {
+            "locked": "3.6.0",
+            "requested": "3.+"
+        },
+        "io.dropwizard.modules:dropwizard-java8": {
+            "locked": "0.9.0-1",
+            "requested": "0.9.0-1"
+        },
+        "io.dropwizard:dropwizard-auth": {
+            "locked": "1.0.6",
+            "requested": "1.0.6"
+        },
+        "io.dropwizard:dropwizard-configuration": {
+            "locked": "1.0.6",
+            "requested": "1.0.6"
+        },
+        "io.dropwizard:dropwizard-core": {
+            "locked": "1.0.6",
+            "requested": "1.0.6"
+        },
+        "org.reflections:reflections": {
+            "locked": "0.9.10",
+            "requested": "0.9.10"
+        },
+        "redis.clients:jedis": {
+            "locked": "2.9.0",
+            "requested": "2.9.+"
+        }
+    },
+    "compileClasspath": {
+        "com.amazonaws:aws-java-sdk-dynamodb": {
+            "locked": "1.11.93",
+            "requested": "1.11.93"
+        },
+        "com.google.inject.extensions:guice-servlet": {
+            "locked": "4.0",
+            "requested": "4.0"
+        },
+        "com.google.inject:guice": {
+            "locked": "4.0",
+            "requested": "4.0"
+        },
+        "com.google.protobuf:protobuf-java": {
+            "locked": "3.2.0",
+            "requested": "3.2.+"
+        },
+        "com.google.protobuf:protobuf-java-util": {
+            "locked": "3.2.0",
+            "requested": "3.2.+"
+        },
+        "com.netflix.hystrix:hystrix-core": {
+            "locked": "1.5.9",
+            "requested": "1.5.9"
+        },
+        "com.squarespace.jersey2-guice:jersey2-guice-impl": {
+            "locked": "1.0.6",
+            "requested": "1.0.6"
+        },
+        "com.squareup.okhttp3:okhttp": {
+            "locked": "3.6.0",
+            "requested": "3.+"
+        },
+        "io.dropwizard.modules:dropwizard-java8": {
+            "locked": "0.9.0-1",
+            "requested": "0.9.0-1"
+        },
+        "io.dropwizard:dropwizard-auth": {
+            "locked": "1.0.6",
+            "requested": "1.0.6"
+        },
+        "io.dropwizard:dropwizard-configuration": {
+            "locked": "1.0.6",
+            "requested": "1.0.6"
+        },
+        "io.dropwizard:dropwizard-core": {
+            "locked": "1.0.6",
+            "requested": "1.0.6"
+        },
+        "org.reflections:reflections": {
+            "locked": "0.9.10",
+            "requested": "0.9.10"
+        },
+        "redis.clients:jedis": {
+            "locked": "2.9.0",
+            "requested": "2.9.+"
+        }
+    },
+    "compileOnly": {
+        "com.amazonaws:aws-java-sdk-dynamodb": {
+            "locked": "1.11.93",
+            "requested": "1.11.93"
+        },
+        "com.google.inject.extensions:guice-servlet": {
+            "locked": "4.0",
+            "requested": "4.0"
+        },
+        "com.google.inject:guice": {
+            "locked": "4.0",
+            "requested": "4.0"
+        },
+        "com.google.protobuf:protobuf-java": {
+            "locked": "3.2.0",
+            "requested": "3.2.+"
+        },
+        "com.google.protobuf:protobuf-java-util": {
+            "locked": "3.2.0",
+            "requested": "3.2.+"
+        },
+        "com.netflix.hystrix:hystrix-core": {
+            "locked": "1.5.9",
+            "requested": "1.5.9"
+        },
+        "com.squarespace.jersey2-guice:jersey2-guice-impl": {
+            "locked": "1.0.6",
+            "requested": "1.0.6"
+        },
+        "com.squareup.okhttp3:okhttp": {
+            "locked": "3.6.0",
+            "requested": "3.+"
+        },
+        "io.dropwizard.modules:dropwizard-java8": {
+            "locked": "0.9.0-1",
+            "requested": "0.9.0-1"
+        },
+        "io.dropwizard:dropwizard-auth": {
+            "locked": "1.0.6",
+            "requested": "1.0.6"
+        },
+        "io.dropwizard:dropwizard-configuration": {
+            "locked": "1.0.6",
+            "requested": "1.0.6"
+        },
+        "io.dropwizard:dropwizard-core": {
+            "locked": "1.0.6",
+            "requested": "1.0.6"
+        },
+        "org.reflections:reflections": {
+            "locked": "0.9.10",
+            "requested": "0.9.10"
+        },
+        "redis.clients:jedis": {
+            "locked": "2.9.0",
+            "requested": "2.9.+"
+        }
+    },
+    "default": {
+        "com.amazonaws:aws-java-sdk-dynamodb": {
+            "locked": "1.11.93",
+            "requested": "1.11.93"
+        },
+        "com.google.inject.extensions:guice-servlet": {
+            "locked": "4.0",
+            "requested": "4.0"
+        },
+        "com.google.inject:guice": {
+            "locked": "4.0",
+            "requested": "4.0"
+        },
+        "com.google.protobuf:protobuf-java": {
+            "locked": "3.2.0",
+            "requested": "3.2.+"
+        },
+        "com.google.protobuf:protobuf-java-util": {
+            "locked": "3.2.0",
+            "requested": "3.2.+"
+        },
+        "com.netflix.hystrix:hystrix-core": {
+            "locked": "1.5.9",
+            "requested": "1.5.9"
+        },
+        "com.squarespace.jersey2-guice:jersey2-guice-impl": {
+            "locked": "1.0.6",
+            "requested": "1.0.6"
+        },
+        "com.squareup.okhttp3:okhttp": {
+            "locked": "3.6.0",
+            "requested": "3.+"
+        },
+        "io.dropwizard.modules:dropwizard-java8": {
+            "locked": "0.9.0-1",
+            "requested": "0.9.0-1"
+        },
+        "io.dropwizard:dropwizard-auth": {
+            "locked": "1.0.6",
+            "requested": "1.0.6"
+        },
+        "io.dropwizard:dropwizard-configuration": {
+            "locked": "1.0.6",
+            "requested": "1.0.6"
+        },
+        "io.dropwizard:dropwizard-core": {
+            "locked": "1.0.6",
+            "requested": "1.0.6"
+        },
+        "org.reflections:reflections": {
+            "locked": "0.9.10",
+            "requested": "0.9.10"
+        },
+        "redis.clients:jedis": {
+            "locked": "2.9.0",
+            "requested": "2.9.+"
+        }
+    },
+    "runtime": {
+        "com.amazonaws:aws-java-sdk-dynamodb": {
+            "locked": "1.11.93",
+            "requested": "1.11.93"
+        },
+        "com.google.inject.extensions:guice-servlet": {
+            "locked": "4.0",
+            "requested": "4.0"
+        },
+        "com.google.inject:guice": {
+            "locked": "4.0",
+            "requested": "4.0"
+        },
+        "com.google.protobuf:protobuf-java": {
+            "locked": "3.2.0",
+            "requested": "3.2.+"
+        },
+        "com.google.protobuf:protobuf-java-util": {
+            "locked": "3.2.0",
+            "requested": "3.2.+"
+        },
+        "com.netflix.hystrix:hystrix-core": {
+            "locked": "1.5.9",
+            "requested": "1.5.9"
+        },
+        "com.squarespace.jersey2-guice:jersey2-guice-impl": {
+            "locked": "1.0.6",
+            "requested": "1.0.6"
+        },
+        "com.squareup.okhttp3:okhttp": {
+            "locked": "3.6.0",
+            "requested": "3.+"
+        },
+        "io.dropwizard.modules:dropwizard-java8": {
+            "locked": "0.9.0-1",
+            "requested": "0.9.0-1"
+        },
+        "io.dropwizard:dropwizard-auth": {
+            "locked": "1.0.6",
+            "requested": "1.0.6"
+        },
+        "io.dropwizard:dropwizard-configuration": {
+            "locked": "1.0.6",
+            "requested": "1.0.6"
+        },
+        "io.dropwizard:dropwizard-core": {
+            "locked": "1.0.6",
+            "requested": "1.0.6"
+        },
+        "org.reflections:reflections": {
+            "locked": "0.9.10",
+            "requested": "0.9.10"
+        },
+        "redis.clients:jedis": {
+            "locked": "2.9.0",
+            "requested": "2.9.+"
+        }
+    },
+    "testCompile": {
+        "com.amazonaws:aws-java-sdk-dynamodb": {
+            "locked": "1.11.93",
+            "requested": "1.11.93"
+        },
+        "com.google.inject.extensions:guice-servlet": {
+            "locked": "4.0",
+            "requested": "4.0"
+        },
+        "com.google.inject:guice": {
+            "locked": "4.0",
+            "requested": "4.0"
+        },
+        "com.google.protobuf:protobuf-java": {
+            "locked": "3.2.0",
+            "requested": "3.2.+"
+        },
+        "com.google.protobuf:protobuf-java-util": {
+            "locked": "3.2.0",
+            "requested": "3.2.+"
+        },
+        "com.netflix.hystrix:hystrix-core": {
+            "locked": "1.5.9",
+            "requested": "1.5.9"
+        },
+        "com.squarespace.jersey2-guice:jersey2-guice-impl": {
+            "locked": "1.0.6",
+            "requested": "1.0.6"
+        },
+        "com.squareup.okhttp3:okhttp": {
+            "locked": "3.6.0",
+            "requested": "3.+"
+        },
+        "io.dropwizard.modules:dropwizard-java8": {
+            "locked": "0.9.0-1",
+            "requested": "0.9.0-1"
+        },
+        "io.dropwizard:dropwizard-auth": {
+            "locked": "1.0.6",
+            "requested": "1.0.6"
+        },
+        "io.dropwizard:dropwizard-configuration": {
+            "locked": "1.0.6",
+            "requested": "1.0.6"
+        },
+        "io.dropwizard:dropwizard-core": {
+            "locked": "1.0.6",
+            "requested": "1.0.6"
+        },
+        "io.dropwizard:dropwizard-testing": {
+            "locked": "1.0.6",
+            "requested": "1.0.6"
+        },
+        "junit:junit": {
+            "locked": "4.12",
+            "requested": "4.+"
+        },
+        "org.reflections:reflections": {
+            "locked": "0.9.10",
+            "requested": "0.9.10"
+        },
+        "redis.clients:jedis": {
+            "locked": "2.9.0",
+            "requested": "2.9.+"
+        }
+    },
+    "testCompileClasspath": {
+        "com.amazonaws:aws-java-sdk-dynamodb": {
+            "locked": "1.11.93",
+            "requested": "1.11.93"
+        },
+        "com.google.inject.extensions:guice-servlet": {
+            "locked": "4.0",
+            "requested": "4.0"
+        },
+        "com.google.inject:guice": {
+            "locked": "4.0",
+            "requested": "4.0"
+        },
+        "com.google.protobuf:protobuf-java": {
+            "locked": "3.2.0",
+            "requested": "3.2.+"
+        },
+        "com.google.protobuf:protobuf-java-util": {
+            "locked": "3.2.0",
+            "requested": "3.2.+"
+        },
+        "com.netflix.hystrix:hystrix-core": {
+            "locked": "1.5.9",
+            "requested": "1.5.9"
+        },
+        "com.squarespace.jersey2-guice:jersey2-guice-impl": {
+            "locked": "1.0.6",
+            "requested": "1.0.6"
+        },
+        "com.squareup.okhttp3:okhttp": {
+            "locked": "3.6.0",
+            "requested": "3.+"
+        },
+        "io.dropwizard.modules:dropwizard-java8": {
+            "locked": "0.9.0-1",
+            "requested": "0.9.0-1"
+        },
+        "io.dropwizard:dropwizard-auth": {
+            "locked": "1.0.6",
+            "requested": "1.0.6"
+        },
+        "io.dropwizard:dropwizard-configuration": {
+            "locked": "1.0.6",
+            "requested": "1.0.6"
+        },
+        "io.dropwizard:dropwizard-core": {
+            "locked": "1.0.6",
+            "requested": "1.0.6"
+        },
+        "io.dropwizard:dropwizard-testing": {
+            "locked": "1.0.6",
+            "requested": "1.0.6"
+        },
+        "junit:junit": {
+            "locked": "4.12",
+            "requested": "4.+"
+        },
+        "org.reflections:reflections": {
+            "locked": "0.9.10",
+            "requested": "0.9.10"
+        },
+        "redis.clients:jedis": {
+            "locked": "2.9.0",
+            "requested": "2.9.+"
+        }
+    },
+    "testCompileOnly": {
+        "com.amazonaws:aws-java-sdk-dynamodb": {
+            "locked": "1.11.93",
+            "requested": "1.11.93"
+        },
+        "com.google.inject.extensions:guice-servlet": {
+            "locked": "4.0",
+            "requested": "4.0"
+        },
+        "com.google.inject:guice": {
+            "locked": "4.0",
+            "requested": "4.0"
+        },
+        "com.google.protobuf:protobuf-java": {
+            "locked": "3.2.0",
+            "requested": "3.2.+"
+        },
+        "com.google.protobuf:protobuf-java-util": {
+            "locked": "3.2.0",
+            "requested": "3.2.+"
+        },
+        "com.netflix.hystrix:hystrix-core": {
+            "locked": "1.5.9",
+            "requested": "1.5.9"
+        },
+        "com.squarespace.jersey2-guice:jersey2-guice-impl": {
+            "locked": "1.0.6",
+            "requested": "1.0.6"
+        },
+        "com.squareup.okhttp3:okhttp": {
+            "locked": "3.6.0",
+            "requested": "3.+"
+        },
+        "io.dropwizard.modules:dropwizard-java8": {
+            "locked": "0.9.0-1",
+            "requested": "0.9.0-1"
+        },
+        "io.dropwizard:dropwizard-auth": {
+            "locked": "1.0.6",
+            "requested": "1.0.6"
+        },
+        "io.dropwizard:dropwizard-configuration": {
+            "locked": "1.0.6",
+            "requested": "1.0.6"
+        },
+        "io.dropwizard:dropwizard-core": {
+            "locked": "1.0.6",
+            "requested": "1.0.6"
+        },
+        "io.dropwizard:dropwizard-testing": {
+            "locked": "1.0.6",
+            "requested": "1.0.6"
+        },
+        "junit:junit": {
+            "locked": "4.12",
+            "requested": "4.+"
+        },
+        "org.reflections:reflections": {
+            "locked": "0.9.10",
+            "requested": "0.9.10"
+        },
+        "redis.clients:jedis": {
+            "locked": "2.9.0",
+            "requested": "2.9.+"
+        }
+    },
+    "testRuntime": {
+        "com.amazonaws:aws-java-sdk-dynamodb": {
+            "locked": "1.11.93",
+            "requested": "1.11.93"
+        },
+        "com.google.inject.extensions:guice-servlet": {
+            "locked": "4.0",
+            "requested": "4.0"
+        },
+        "com.google.inject:guice": {
+            "locked": "4.0",
+            "requested": "4.0"
+        },
+        "com.google.protobuf:protobuf-java": {
+            "locked": "3.2.0",
+            "requested": "3.2.+"
+        },
+        "com.google.protobuf:protobuf-java-util": {
+            "locked": "3.2.0",
+            "requested": "3.2.+"
+        },
+        "com.netflix.hystrix:hystrix-core": {
+            "locked": "1.5.9",
+            "requested": "1.5.9"
+        },
+        "com.squarespace.jersey2-guice:jersey2-guice-impl": {
+            "locked": "1.0.6",
+            "requested": "1.0.6"
+        },
+        "com.squareup.okhttp3:okhttp": {
+            "locked": "3.6.0",
+            "requested": "3.+"
+        },
+        "io.dropwizard.modules:dropwizard-java8": {
+            "locked": "0.9.0-1",
+            "requested": "0.9.0-1"
+        },
+        "io.dropwizard:dropwizard-auth": {
+            "locked": "1.0.6",
+            "requested": "1.0.6"
+        },
+        "io.dropwizard:dropwizard-configuration": {
+            "locked": "1.0.6",
+            "requested": "1.0.6"
+        },
+        "io.dropwizard:dropwizard-core": {
+            "locked": "1.0.6",
+            "requested": "1.0.6"
+        },
+        "io.dropwizard:dropwizard-testing": {
+            "locked": "1.0.6",
+            "requested": "1.0.6"
+        },
+        "junit:junit": {
+            "locked": "4.12",
+            "requested": "4.+"
+        },
+        "org.reflections:reflections": {
+            "locked": "0.9.10",
+            "requested": "0.9.10"
+        },
+        "redis.clients:jedis": {
+            "locked": "2.9.0",
+            "requested": "2.9.+"
+        }
+    }
+}
