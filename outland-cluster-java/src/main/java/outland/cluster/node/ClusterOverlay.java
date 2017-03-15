@@ -22,8 +22,8 @@ import outland.cluster.proto.Node;
 
 class ClusterOverlay {
 
-  private static final Logger logger = LoggerFactory.getLogger("tolkan-overlay");
-  private static final Logger viewLogger = LoggerFactory.getLogger("tolkan-views");
+  private static final Logger logger = LoggerFactory.getLogger("outland-overlay");
+  private static final Logger viewLogger = LoggerFactory.getLogger("outland-views");
   private static final int ACTIVE_VIEW_MAX = 5; // paper: 5
   private static final int PASSIVE_VIEW_MAX = ACTIVE_VIEW_MAX * 6; // paper: 30
   private static final List<Node> SENTINEL_NODES = Lists.newArrayList();

@@ -21,7 +21,7 @@ import outland.cluster.proto.OutlandServiceGrpc;
 public class GrpcService extends OutlandServiceGrpc.OutlandServiceImplBase {
 
   public static final String EMPTY_STRING = "";
-  private static final org.slf4j.Logger logger = LoggerFactory.getLogger("tolkan-grpc");
+  private static final org.slf4j.Logger logger = LoggerFactory.getLogger("outland-grpc");
   private final String id;
   private final ServiceHandler handler;
 

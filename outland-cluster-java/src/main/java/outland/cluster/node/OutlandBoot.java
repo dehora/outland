@@ -14,7 +14,7 @@ import outland.cluster.proto.Node;
 
 class OutlandBoot {
 
-  private static final org.slf4j.Logger logger = LoggerFactory.getLogger("tolkan");
+  private static final org.slf4j.Logger logger = LoggerFactory.getLogger("outland");
   private static final int PASSIVE_VIEW_WORKER_DELAY = 30;
   private static final int ACTIVE_VIEW_WORKER_DELAY = 30;
 

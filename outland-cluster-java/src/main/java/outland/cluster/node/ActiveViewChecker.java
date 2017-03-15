@@ -15,7 +15,7 @@ import outland.cluster.proto.Node;
 
 class ActiveViewChecker {
 
-  private static final Logger logger = LoggerFactory.getLogger("tolkan-ruok");
+  private static final Logger logger = LoggerFactory.getLogger("outland-ruok");
 
   private final ScheduledThreadPoolExecutor ruokExecutor;
   private final String id;
@@ -26,7 +26,7 @@ class ActiveViewChecker {
     this.id = id;
     this.clusterCoordinator = clusterCoordinator;
     final ThreadFactory tf =
-        new ThreadFactoryBuilder().setNameFormat("tolkan-ruok-" + this.id).build();
+        new ThreadFactoryBuilder().setNameFormat("outland-ruok-" + this.id).build();
     ruokExecutor = new ScheduledThreadPoolExecutor(2, tf);
   }
 

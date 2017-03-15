@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 @SuppressWarnings("WeakerAccess")
 public class GrpcServiceWorker implements Runnable {
 
-  private static final org.slf4j.Logger logger = LoggerFactory.getLogger("tolkan");
+  private static final org.slf4j.Logger logger = LoggerFactory.getLogger("outland");
 
   private final String id;
   private final String hostname;

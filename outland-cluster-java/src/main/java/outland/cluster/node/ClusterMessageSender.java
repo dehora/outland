@@ -29,7 +29,7 @@ import outland.cluster.proto.OutlandServiceGrpc.OutlandServiceBlockingStub;
 
 class ClusterMessageSender {
 
-  private static final org.slf4j.Logger logger = LoggerFactory.getLogger("tolkan-sender");
+  private static final org.slf4j.Logger logger = LoggerFactory.getLogger("outland-sender");
   private static final int DEADLINE_DISCONNECT = 8;
   private static final int DEADLINE_FWD_JOIN = 62;
   private static final int DEADLINE_SHUFFLE_REQUEST = 62;
@@ -146,7 +146,7 @@ class ClusterMessageSender {
   private static final class ChannelManager {
 
     private static final org.slf4j.Logger logger =
-        LoggerFactory.getLogger("tolkan-channel-manager");
+        LoggerFactory.getLogger("outland-channel-manager");
 
     final RemovalListener<Node, ManagedChannel> removalListener;
     private final LoadingCache<Node, ManagedChannel> channels;
