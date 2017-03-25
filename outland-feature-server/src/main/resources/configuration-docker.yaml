@@ -1,0 +1,106 @@
+serviceName: Outland Feature Service Docker
+environment: ${OUTLAND_FEATURE_ENV:-docker}
+
+baseURI: ${OUTLAND_FEATURE_BASE_URI:-http://localhost:8180}
+
+server:
+  registerDefaultExceptionMappers: false
+  applicationConnectors:
+    - type: http
+      port: 8180
+      idleTimeout: ${OUTLAND_FEATURE_API_IDLE_TO:-10 seconds}
+  adminConnectors:
+    - type: http
+      port: 8181
+
+redis:
+  servers:
+    - name: outland_feature_cache_redis
+      host: redis
+      port: 6379
+      maxConnections: ${OUTLAND_FEATURE_REDIS_MAXCONN:-8}
+    - name: outland_feature_idempotency_check_redis
+      host: redis
+      port: 6379
+      maxConnections: ${OUTLAND_FEATURE_REDIS_MAXCONN:-8}
+
+logging:
+  level: INFO
+  appenders:
+    - type: console
+      timeZone: UTC
+      threshold: INFO
+      target: stderr
+    - type: file
+      currentLogFilename: application.log
+      archive: true
+      archivedFileCount: 6
+      archivedLogFilenamePattern: application-%d.log.gz
+      timeZone: UTC
+
+aws:
+  environment: ${OUTLAND_FEATURE_ENV:-docker}
+  accessKey: ${OUTLAND_FEATURE_AWS_KEY:-AWS_KEY}
+  secretKey: ${OUTLAND_FEATURE_AWS_SECRET:-AWS_SECRET}
+  dynamoDbUrl: ${OUTLAND_FEATURE_DYNAMODB_URL:-http://dynamodb:8000}
+  signingRegion: ${OUTLAND_FEATURE_DYNAMODB_REGION:-eu-central-1}
+
+featureTable:
+  outlandFeaturesTable: ${OUTLAND_FEATURE_TABLE_FEATURES:-dev_outland_features}
+  outlandAppsTable: ${OUTLAND_FEATURE_TABLE_APPS:-dev_outland_apps}
+  outlandAppGraphTable: ${OUTLAND_FEATURE_TABLE_GRAPHS:-dev_outland_app_graph}
+
+auth:
+  basicEnabled: ${OUTLAND_FEATURE_AUTH_BASIC_ENABLED:-true}
+  basicAuthenticationPolicy: ${OUTLAND_FEATURE_AUTH_BASIC_AUTH_POLICY:-basic_app_username_password_keys}
+  basicAuthenticationKeys: ${OUTLAND_FEATURE_AUTH_BASIC_API_KEYS}
+  basicScopePolicy: ${OUTLAND_FEATURE_AUTH_BASIC_SCOPE_POLICY:-basic_disable_scope_check}
+  basicCacheCredentialSeconds: ${OUTLAND_FEATURE_AUTH_BASIC_CACHE_CREDENTIALS_SECONDS:-30}
+
+  oauthEnabled: ${OUTLAND_FEATURE_AUTH_OAUTH_ENABLED:-false}
+  # oauth_bearer_reflect: return the bearer token as the app id (for local testing with token services)
+  oauthAuthenticationPolicy: ${OUTLAND_FEATURE_AUTH_OAUTH_AUTH_POLICY:-oauth_bearer_reflect}
+  # oauth_disable_scope_check: don't check scopes
+  oauthScopePolicy: ${OUTLAND_FEATURE_AUTH_OAUTH_SCOPE_POLICY:-oauth_disable_scope_check}
+  oauthCacheTokenSeconds: ${OUTLAND_FEATURE_AUTH_OAUTH_CACHE_TOKEN_SECONDS:-30}
+  remoteOAuthServer:
+    tokenLookupURI: ${OUTLAND_FEATURE_REMOTE_OAUTH_SERVER:-https://localhost/oauth2/tokeninfo}
+    connectTimeout: ${OUTLAND_FEATURE_AUTH_OAUTH_CONNECT_TO_MILLIS:-3000}
+    readTimeout: ${OUTLAND_FEATURE_AUTH_OAUTH_READ_TO_MILLIS:-3000}
+  multipleAppAccessList: ${OUTLAND_FEATURE_MULTIPLE_APP_ACCESS_GRANT_LIST}
+
+redisFeatureCacheHystrix:
+  hystrixCommandGroupKey: redisFeatureCacheHystrix
+  executionTimeoutInMilliseconds: 3000
+  threadpool:
+    coreSize: 32
+
+dynamodbFeatureWriteHystrix:
+  hystrixCommandGroupKey: dynamodbFeatureWriteHystrix
+  executionTimeoutInMilliseconds: 3000
+  threadpool:
+    coreSize: 8
+
+dynamodbFeatureReadHystrix:
+   hystrixCommandGroupKey: dynamodbFeatureReadHystrix
+   executionTimeoutInMilliseconds: 1000
+   threadpool:
+     coreSize: 16
+
+dynamodbAppGraphWriteHystrix:
+  hystrixCommandGroupKey: dynamodbAppGraphWriteHystrix
+  executionTimeoutInMilliseconds: 3000
+  threadpool:
+    coreSize: 8
+
+dynamodbAppWriteHystrix:
+  hystrixCommandGroupKey: dynamodbAppWriteHystrix
+  executionTimeoutInMilliseconds: 3000
+  threadpool:
+    coreSize: 8
+
+dynamodbAppGraphQueryHystrix:
+  hystrixCommandGroupKey: dynamodbAppGraphQueryHystrix
+  executionTimeoutInMilliseconds: 3000
+  threadpool:
+    coreSize: 8
