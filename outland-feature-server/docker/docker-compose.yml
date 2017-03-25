@@ -29,6 +29,7 @@ services:
       - OUTLAND_FEATURE_AUTH_OAUTH_CONNECT_TO_MILLIS
       - OUTLAND_FEATURE_AUTH_OAUTH_READ_TO_MILLIS
       - OUTLAND_FEATURE_MULTIPLE_APP_ACCESS_GRANT_LIST
+      # set jvm options here
       - JAVA_OPTS
     ports:
      - "8180:8180"
