@@ -56,7 +56,7 @@ auth:
   # basic_app_username_password_keys: use the values in basicAuthenticationKeys as global api keys
   basicAuthenticationPolicy: basic_app_username_password_keys
   # set a comma separated list of keys via the DW_API_KEYS envar
-  basicAuthenticationKeys: ${FEATURE_API_KEYS}
+  basicAuthenticationKeys: ${OUTLAND_FEATURE_AUTH_BASIC_API_KEYS}
   # basic_disable_scope_check: ignore scope checks for api requests
   basicScopePolicy: basic_disable_scope_check
   basicCacheCredentialSeconds: 30
