@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+./build_service
+docker build -t docker_outland_server .
