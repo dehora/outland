@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+version="$1"
+
+./build_service
+
+public_name="dehora/outland-feature-server"
+
+docker build -t $public_name:latest .
+docker build -t $public_name:$version .
+docker push $public_name:latest
+docker push $public_name:$version
