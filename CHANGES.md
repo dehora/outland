@@ -2,7 +2,11 @@
 
 ### 0.0.3
 
+**Server**
+
 - Checks the app exists before allowing a feature creation.
+
+- Adds an implementation of HyParView using gRPC.
 
 
 ### 0.0.2
