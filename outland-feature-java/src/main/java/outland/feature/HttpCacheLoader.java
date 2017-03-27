@@ -56,21 +56,21 @@ class HttpCacheLoader extends CacheLoader<String, Feature> {
     return t;
   }
 
-  private Feature httpLoad(String appId, String featureKey) {
-    logger.info("op=cache_load_from_api, app_id={}, feature_key={}", appId, featureKey);
-    return resources.features().findByKey(appId, featureKey);
+  private Feature httpLoad(String appKey, String featureKey) {
+    logger.info("op=cache_load_from_api, appkey={}, feature_key={}", appKey, featureKey);
+    return resources.features().findByKey(appKey, featureKey);
   }
 
-  private Feature httpLoad(String appId, String featureKey, Feature oldValue) {
+  private Feature httpLoad(String appKey, String featureKey, Feature oldValue) {
     try {
-      logger.info("op=background_cache_load_from_api, app_id={}, feature_key={}", appId, featureKey);
-      return resources.features().findByKey(appId, featureKey);
+      logger.info("op=background_cache_load_from_api, appkey={}, feature_key={}", appKey, featureKey);
+      return resources.features().findByKey(appKey, featureKey);
     } catch (FeatureException e) {
       logger.error(
           String.format(
-              "op=background_cache_load_from_api, app_id=%s, feature_key=%s, "
+              "op=background_cache_load_from_api, appkey=%s, feature_key=%s, "
                   + "action=retaining_old_feature, err=%s",
-              appId, featureKey, e.getMessage()));
+              appKey, featureKey, e.getMessage()));
       return oldValue;
     }
   }

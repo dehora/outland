@@ -12,7 +12,7 @@ public class ServerConfiguration {
   static final int REFRESH_AFTER_WRITE_S = 8;
 
   private URI baseURI;
-  private String appId;
+  private String appKey;
   private long connectTimeout = 5_000L;
   private long readTimeout = 3_000L;
   private boolean httpLoggingEnabled;
@@ -71,12 +71,12 @@ public class ServerConfiguration {
     return this;
   }
 
-  public String appId() {
-    return appId;
+  public String appKey() {
+    return appKey;
   }
 
-  public ServerConfiguration appId(String appId) {
-    this.appId = appId;
+  public ServerConfiguration appKey(String appKey) {
+    this.appKey = appKey;
     return this;
   }
 
@@ -144,18 +144,18 @@ public class ServerConfiguration {
         "Please provide a base URI for the feature server");
 
 
-    if(! multiAppEnabled() && appId() == null) {
+    if(! multiAppEnabled() && appKey() == null) {
       throw new FeatureException(Problem.configProblem("neither_multi_app_or_single_app_enabled",
           "Please configure the client to have an app id, or use multi app support."));
     }
 
-    if(! multiAppEnabled() && Strings.isNullOrEmpty(appId())) {
+    if(! multiAppEnabled() && Strings.isNullOrEmpty(appKey())) {
 
       throw new FeatureException(Problem.configProblem("neither_multi_app_or_single_app_enabled",
           "Please configure the client to have an app id, or use multi app support."));
     }
 
-    if (multiAppEnabled() && appId() != null) {
+    if (multiAppEnabled() && appKey() != null) {
       throw new FeatureException(Problem.configProblem("multi_app_and_single_app_enabled",
           "Cannot configure multi app support and a single app at the same time."));
     }

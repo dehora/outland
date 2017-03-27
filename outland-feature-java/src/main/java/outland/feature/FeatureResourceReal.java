@@ -17,20 +17,20 @@ class FeatureResourceReal implements FeatureResource {
 
   private final ResourceProvider resourceProvider;
   private final AuthorizationProvider authorizationProvider;
-  private final String appId;
+  private final String appKey;
   private final URI baseUri;
   private final boolean multiAppEnabled;
 
   FeatureResourceReal(
       ResourceProvider resourceProvider,
       AuthorizationProvider authorizationProvider,
-      String appId,
+      String appKey,
       URI baseUri,
       boolean multiAppEnabled
   ) {
     this.resourceProvider = resourceProvider;
     this.authorizationProvider = authorizationProvider;
-    this.appId = appId;
+    this.appKey = appKey;
     this.baseUri = baseUri;
     this.multiAppEnabled = multiAppEnabled;
   }
@@ -52,13 +52,13 @@ class FeatureResourceReal implements FeatureResource {
 
   @Override public Feature update(Feature feature) {
     FeatureException.throwIfNull(feature, "Please supply a feature");
-    FeatureException.throwIfNull(feature.getAppId(), "Please add an app id to the feature");
+    FeatureException.throwIfNull(feature.getAppkey(), "Please add an app id to the feature");
     FeatureException.throwIfNull(feature.getKey(), "Please add a feature key to the feature");
 
     try {
       String url = UriBuilder.builder(baseUri)
           .path(PATH_FEATURES)
-          .path(feature.getAppId())
+          .path(feature.getAppkey())
           .path(feature.getKey())
           .buildString();
 
@@ -71,102 +71,102 @@ class FeatureResourceReal implements FeatureResource {
 
   @Override public Feature findByKey(String featureKey) {
     if(multiAppEnabled) {
-      throw new FeatureException(Problem.configProblem("find_by_key_multi_with_no_app_id",
+      throw new FeatureException(Problem.configProblem("find_by_key_multi_with_no_appkey",
           "Find by key cannot be called with only a feature key when multi app is configured. "
               + "Please supply an app id as well as a feature for multi app configuration."));
     }
 
     FeatureException.throwIfNull(featureKey, "Please supply a featureKey");
 
-    return findByKey(appId, featureKey);
+    return findByKey(appKey, featureKey);
   }
 
   @Override public FeatureCollection listFeatures() {
     if(multiAppEnabled) {
-      throw new FeatureException(Problem.configProblem("list_features_multi_with_no_app_id",
+      throw new FeatureException(Problem.configProblem("list_features_multi_with_no_appkey",
           "List features cannot be called without an app id key when multi app is configured. "
               + "Please supply an app id for multi app configuration."));
     }
 
-    return listFeatures(appId);
+    return listFeatures(appKey);
   }
 
   @Override public FeatureCollection listFeaturesSince(long timestamp, TimeUnit timeUnit) {
     if(multiAppEnabled) {
-      throw new FeatureException(Problem.configProblem("list_features_since_multi_with_no_app_id",
+      throw new FeatureException(Problem.configProblem("list_features_since_multi_with_no_appkey",
           "List features since cannot be called without an app id key when multi app is configured. "
               + "Please supply an app id for multi app configuration."));
     }
 
     FeatureException.throwIfNull(timeUnit, "Please supply a timeUnit");
 
-    return listFeaturesSince(appId, timestamp, timeUnit);
+    return listFeaturesSince(appKey, timestamp, timeUnit);
   }
 
   @Override
-  public Feature findByKey(String appId, String featureKey) {
-    FeatureException.throwIfNull(appId, "Please supply an appId");
+  public Feature findByKey(String appKey, String featureKey) {
+    FeatureException.throwIfNull(appKey, "Please supply an appKey");
     FeatureException.throwIfNull(featureKey, "Please supply a featureKey");
 
-    return findByKeyInner(appId, featureKey);
+    return findByKeyInner(appKey, featureKey);
   }
 
   @Override
-  public FeatureCollection listFeatures(String appId) {
-    FeatureException.throwIfNull(appId, "Please supply an appId");
+  public FeatureCollection listFeatures(String appKey) {
+    FeatureException.throwIfNull(appKey, "Please supply an appKey");
 
-    return listFeaturesInner(appId);
+    return listFeaturesInner(appKey);
   }
 
   @Override
-  public FeatureCollection listFeaturesSince(String appId, long timestamp, TimeUnit timeUnit) {
-    FeatureException.throwIfNull(appId, "Please supply an appId");
+  public FeatureCollection listFeaturesSince(String appKey, long timestamp, TimeUnit timeUnit) {
+    FeatureException.throwIfNull(appKey, "Please supply an appKey");
     FeatureException.throwIfNull(timeUnit, "Please supply a timeUnit");
 
-    return listFeaturesSinceInner(appId, timestamp, timeUnit);
+    return listFeaturesSinceInner(appKey, timestamp, timeUnit);
   }
 
-  private Feature findByKeyInner(String appId, String key) {
+  private Feature findByKeyInner(String appKey, String key) {
     try {
 
       String url = UriBuilder.builder(baseUri)
           .path(PATH_FEATURES)
-          .path(appId)
+          .path(appKey)
           .path(key)
           .buildString();
 
-      return toFeature(getRequest(appId, url).body().string());
+      return toFeature(getRequest(appKey, url).body().string());
     } catch (IOException e) {
       throw new FeatureException(Problem.localProblem(e.getMessage(), ""), e);
     }
   }
 
-  private FeatureCollection listFeaturesInner(String appId) {
+  private FeatureCollection listFeaturesInner(String appKey) {
     try {
 
       String url = UriBuilder.builder(baseUri)
           .path(PATH_FEATURES)
-          .path(appId)
+          .path(appKey)
           .buildString();
 
-      return toFeatureCollection(getRequest(appId, url).body().string());
+      return toFeatureCollection(getRequest(appKey, url).body().string());
     } catch (IOException e) {
       throw new FeatureException(Problem.localProblem(e.getMessage(), ""), e);
     }
   }
 
-  private FeatureCollection listFeaturesSinceInner(String appId, long timestamp,
+  private FeatureCollection listFeaturesSinceInner(String appKey, long timestamp,
       TimeUnit timeUnit) {
     try {
       long ts = timeUnit.toSeconds(timestamp);
 
       String url = UriBuilder.builder(baseUri)
           .path(PATH_FEATURES)
-          .path(appId)
+          .path(appKey)
           .query(PARAM_SINCE, ts + "")
           .buildString();
 
-      return toFeatureCollection(getRequest(appId, url).body().string());
+      return toFeatureCollection(getRequest(appKey, url).body().string());
     } catch (IOException e) {
       throw new FeatureException(Problem.localProblem(e.getMessage(), ""), e);
     }
@@ -184,21 +184,21 @@ class FeatureResourceReal implements FeatureResource {
     return builder.build();
   }
 
-  private Response getRequest(String appId, String url) {
+  private Response getRequest(String appKey, String url) {
     return resourceProvider
         .newResource()
-        .requestThrowing(Resource.GET, url, prepareOptions(appId));
+        .requestThrowing(Resource.GET, url, prepareOptions(appKey));
   }
 
   private Response postRequest(String url, Feature feature) {
     return resourceProvider
         .newResource()
-        .requestThrowing(Resource.POST, url, prepareOptions(feature.getAppId()), feature);
+        .requestThrowing(Resource.POST, url, prepareOptions(feature.getAppkey()), feature);
   }
 
-  private ResourceOptions prepareOptions(String appId) {
+  private ResourceOptions prepareOptions(String appKey) {
     return ResourceSupport.options(APPLICATION_JSON)
-        .appId(appId)
+        .appKey(appKey)
         .securityTokenProvider(authorizationProvider);
   }
 }

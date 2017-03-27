@@ -25,7 +25,7 @@ public class FeatureClient {
   private final Resources resources;
   private final ContentSupport contentSupport;
   private final URI baseURI;
-  private final String appId;
+  private final String appKey;
   private final boolean multiAppEnabled;
   private final boolean localStoreEnabled;
   private final MetricRegistry metricRegistry;
@@ -33,7 +33,7 @@ public class FeatureClient {
   public FeatureClient(Builder builder) {
     this.serverConfiguration = builder.serverConfiguration;
     this.baseURI = serverConfiguration.baseURI();
-    this.appId = serverConfiguration.appId();
+    this.appKey = serverConfiguration.appKey();
     this.multiAppEnabled = serverConfiguration.multiAppEnabled();
     this.localStoreEnabled = serverConfiguration.localStoreEnabled();
     this.authorizationProvider = builder.authorizationProvider;
@@ -43,7 +43,7 @@ public class FeatureClient {
     this.resources = new Resources(
         this.resourceProvider,
         this.authorizationProvider,
-        this.appId,
+        this.appKey,
         this.baseURI,
         this.multiAppEnabled
     );
@@ -107,7 +107,7 @@ public class FeatureClient {
     throwIfMultiApp();
     FeatureException.throwIfNull(featureKey, "Please supply a feature key");
 
-    return enabledInner(appId(), featureKey);
+    return enabledInner(appKey(), featureKey);
   }
 
   /**
@@ -128,21 +128,21 @@ public class FeatureClient {
     throwIfMultiApp();
     FeatureException.throwIfNull(featureKey, "Please supply a feature key");
 
-    return enabledThrowingInner(appId(), featureKey);
+    return enabledThrowingInner(appKey(), featureKey);
   }
 
-  @SuppressWarnings("WeakerAccess") public boolean enabledFor(String appId, String featureKey) {
-    FeatureException.throwIfNull(appId, "Please supply an appId");
+  @SuppressWarnings("WeakerAccess") public boolean enabledFor(String appKey, String featureKey) {
+    FeatureException.throwIfNull(appKey, "Please supply an appKey");
     FeatureException.throwIfNull(featureKey, "Please supply a featureKey");
 
-    return enabledInner(appId, featureKey);
+    return enabledInner(appKey, featureKey);
   }
 
-  public boolean enabledForThrowing(String appId, String featureKey) {
-    FeatureException.throwIfNull(appId, "Please supply an appId");
+  public boolean enabledForThrowing(String appKey, String featureKey) {
+    FeatureException.throwIfNull(appKey, "Please supply an appKey");
     FeatureException.throwIfNull(featureKey, "Please supply a featureKey");
 
-    return enabledThrowingInner(appId, featureKey);
+    return enabledThrowingInner(appKey, featureKey);
   }
 
   /**
@@ -196,8 +196,8 @@ public class FeatureClient {
     return baseURI;
   }
 
-  String appId() {
-    return appId;
+  String appKey() {
+    return appKey;
   }
 
   boolean multiAppEnabled() {
@@ -210,14 +210,14 @@ public class FeatureClient {
 
   private void throwIfMultiApp() {
     if (multiAppEnabled()) {
-      throw new FeatureException(Problem.configProblem("enabled_check_and_multi_with_no_app_id",
+      throw new FeatureException(Problem.configProblem("enabled_check_and_multi_with_no_appkey",
           "A feature flag check cannot be called without an app id when multi app is configured. "
               + "Please use the app id plus feature key variants for multi app configuration."));
     }
   }
 
-  private boolean enabledInner(String appId, String featureKey) {
-    final Optional<Feature> maybe = featureStore.find(appId, featureKey);
+  private boolean enabledInner(String appKey, String featureKey) {
+    final Optional<Feature> maybe = featureStore.find(appKey, featureKey);
 
     if(! maybe.isPresent()) {
       return false;
@@ -236,15 +236,15 @@ public class FeatureClient {
     return false;
   }
 
-  private boolean enabledThrowingInner(String appId, String featureKey) {
-    final Optional<Feature> maybe = featureStore.find(appId, featureKey);
+  private boolean enabledThrowingInner(String appKey, String featureKey) {
+    final Optional<Feature> maybe = featureStore.find(appKey, featureKey);
 
     if(! maybe.isPresent()) {
       throw new FeatureException(
           Problem.noSuchFeature("feature_not_found",
               String.format(
                   "feature %s for app %s was not found and raising an error was requested",
-                  featureKey, appId)));
+                  featureKey, appKey)));
     }
 
     final Feature feature = maybe.get();

@@ -14,7 +14,7 @@ public class FeatureSupportTest {
     Feature feature = Feature.newBuilder()
         .setId("id1")
         .setKey("key1")
-        .setAppId("app1")
+        .setAppkey("app1")
         .setDescription("desc1")
         .setState(Feature.State.off)
         .build();
@@ -25,7 +25,7 @@ public class FeatureSupportTest {
 
     assertEquals(feature.getId(), feature1.getId());
     assertEquals(feature.getKey(), feature1.getKey());
-    assertEquals(feature.getAppId(), feature1.getAppId());
+    assertEquals(feature.getAppkey(), feature1.getAppkey());
     assertEquals(feature.getDescription(), feature1.getDescription());
     assertEquals(feature.getState(), feature1.getState());
 

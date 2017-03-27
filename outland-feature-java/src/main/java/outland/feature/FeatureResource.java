@@ -16,9 +16,9 @@ public interface FeatureResource {
 
   FeatureCollection listFeaturesSince(long timestamp, TimeUnit timeUnit);
 
-  FeatureCollection listFeatures(String appId);
+  FeatureCollection listFeatures(String appKey);
 
-  Feature findByKey(String appId, String featureKey);
+  Feature findByKey(String appKey, String featureKey);
 
-  FeatureCollection listFeaturesSince(String appId, long timestamp, TimeUnit timeUnit);
+  FeatureCollection listFeaturesSince(String appKey, long timestamp, TimeUnit timeUnit);
 }

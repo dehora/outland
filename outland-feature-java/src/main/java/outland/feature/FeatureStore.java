@@ -8,11 +8,11 @@ interface FeatureStore {
 
   Void put(Feature feature) throws FeatureException;
 
-  Optional<Feature> find(String appId, String key) throws FeatureException;
+  Optional<Feature> find(String appKey, String key) throws FeatureException;
 
-  FeatureCollection findAll(String appId) throws FeatureException;
+  FeatureCollection findAll(String appKey) throws FeatureException;
 
-  Void remove(String appId, String featureKey) throws FeatureException;
+  Void remove(String appKey, String featureKey) throws FeatureException;
 
   Void removeAll() throws FeatureException;
 

@@ -22,10 +22,10 @@ public class FlushCacheItemTask extends Task {
   @Override public void execute(ImmutableMultimap<String, String> parameters, PrintWriter output)
       throws Exception {
 
-    final String appId = parameters.get("app_id").asList().get(0);
+    final String appKey = parameters.get("appkey").asList().get(0);
     final String featureKey = parameters.get("feature_key").asList().get(0);
     final String id = parameters.get("id").asList().get(0);
 
-    featureCache.flushCache(appId, featureKey, id);
+    featureCache.flushCache(appKey, featureKey, id);
   }
 }

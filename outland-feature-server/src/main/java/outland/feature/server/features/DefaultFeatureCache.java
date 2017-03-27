@@ -32,8 +32,8 @@ public class DefaultFeatureCache implements FeatureCache {
     this.metrics = metrics;
   }
 
-  @Override public String buildCacheKeyByFeatureKey(String appId, String featureKey) {
-    return "features:" + appId + ":" + featureKey;
+  @Override public String buildCacheKeyByFeatureKey(String appKey, String featureKey) {
+    return "features:" + appKey + ":" + featureKey;
   }
 
   @Override public Void addToCache(Feature feature) {
@@ -46,13 +46,13 @@ public class DefaultFeatureCache implements FeatureCache {
         metrics).execute();
 
     new RedisCacheCommand<>("CacheSet",
-        () -> redisCache.set(buildCacheKeyByFeatureKey(feature.getAppId(), feature.getKey()), raw),
+        () -> redisCache.set(buildCacheKeyByFeatureKey(feature.getAppkey(), feature.getKey()), raw),
         () -> null,
         hystrixConfiguration,
         metrics).execute();
 
     new RedisCacheCommand<>("CacheHSet",
-        () -> redisCache.hset(feature.getAppId(), feature.getKey(), raw),
+        () -> redisCache.hset(feature.getAppkey(), feature.getKey(), raw),
         () -> null,
         hystrixConfiguration,
         metrics).execute();
@@ -60,12 +60,12 @@ public class DefaultFeatureCache implements FeatureCache {
     return null;
   }
 
-  @Override public Optional<Map<String, String>> getCacheSet(String cacheKey) {
-    logger.info("{}", kvp("op", "getCacheSet", "key", cacheKey));
+  @Override public Optional<Map<String, String>> getCacheSet(String appKey) {
+    logger.info("{}", kvp("op", "getCacheSet", "key", appKey));
 
     //noinspection unchecked
     return (Optional<Map<String, String>>) new RedisCacheCommand<>("CacheHSet",
-        () -> redisCache.hgetAll(cacheKey),
+        () -> redisCache.hgetAll(appKey),
         Optional::empty,
         hystrixConfiguration,
         metrics).execute();
@@ -92,11 +92,11 @@ public class DefaultFeatureCache implements FeatureCache {
     return Optional.empty();
   }
 
-  @Override public Void flushCache(String appId, String featureKey, String id) {
+  @Override public Void flushCache(String appKey, String featureKey, String id) {
     logger.info("{}",
-        kvp("op", "flushCache", "app_id", appId, "feature_key", featureKey, "id", id));
+        kvp("op", "flushCache", "appkey", appKey, "feature_key", featureKey, "id", id));
 
-    executeFlushCache(appId, featureKey, id);
+    executeFlushCache(appKey, featureKey, id);
 
     try {
       Thread.sleep(2000);
@@ -104,7 +104,7 @@ public class DefaultFeatureCache implements FeatureCache {
       Thread.currentThread().interrupt();
     }
 
-    executeFlushCache(appId, featureKey, id);
+    executeFlushCache(appKey, featureKey, id);
 
     return null;
   }
@@ -113,11 +113,11 @@ public class DefaultFeatureCache implements FeatureCache {
     return redisCache.flushAll();
   }
 
-  private void executeFlushCache(String appId, String featureKey, String id) {
+  private void executeFlushCache(String appKey, String featureKey, String id) {
 
     // we have to drop the entire hset to avoid getting cache stuck with a partial list
     new RedisCacheCommand<>("CacheDel",
-        () -> redisCache.del(appId),
+        () -> redisCache.del(appKey),
         () -> null,
         hystrixConfiguration,
         metrics).execute();
@@ -129,7 +129,7 @@ public class DefaultFeatureCache implements FeatureCache {
         metrics).execute();
 
     new RedisCacheCommand<>("CacheDel",
-        () -> buildCacheKeyByFeatureKey(appId, featureKey),
+        () -> buildCacheKeyByFeatureKey(appKey, featureKey),
         () -> null,
         hystrixConfiguration,
         metrics).execute();

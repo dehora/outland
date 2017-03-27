@@ -46,8 +46,8 @@ public class DynamoCreateFeatureTableTask extends Task {
 
   public void createTable() {
 
-    final AttributeDefinition appId =
-        new AttributeDefinition().withAttributeName("app_id").withAttributeType(
+    final AttributeDefinition appKey =
+        new AttributeDefinition().withAttributeName("appkey").withAttributeType(
             ScalarAttributeType.S);
 
     final AttributeDefinition featureKey =
@@ -59,11 +59,11 @@ public class DynamoCreateFeatureTableTask extends Task {
             .withAttributeType(ScalarAttributeType.S);
 
     final ArrayList<AttributeDefinition>
-        tableAttributeDefinitions = Lists.newArrayList(appId, featureKey, id);
+        tableAttributeDefinitions = Lists.newArrayList(appKey, featureKey, id);
     final ArrayList<KeySchemaElement> tableKeySchema = Lists.newArrayList();
 
     tableKeySchema.add(
-        new KeySchemaElement().withAttributeName("app_id").withKeyType(KeyType.HASH));
+        new KeySchemaElement().withAttributeName("appkey").withKeyType(KeyType.HASH));
     tableKeySchema.add(
         new KeySchemaElement().withAttributeName("feature_key").withKeyType(KeyType.RANGE));
 
@@ -74,7 +74,7 @@ public class DynamoCreateFeatureTableTask extends Task {
 
     final ArrayList<KeySchemaElement> indexKeySchema = new ArrayList<>();
     indexKeySchema.add(
-        new KeySchemaElement().withAttributeName("app_id").withKeyType(KeyType.HASH));
+        new KeySchemaElement().withAttributeName("appkey").withKeyType(KeyType.HASH));
     indexKeySchema.add(new KeySchemaElement().withAttributeName("id").withKeyType(KeyType.RANGE));
 
     final Projection projection = new Projection().withProjectionType(ProjectionType.INCLUDE);
@@ -84,7 +84,7 @@ public class DynamoCreateFeatureTableTask extends Task {
     projection.setNonKeyAttributes(indexColumns);
 
     final LocalSecondaryIndex localSecondaryIndex = new LocalSecondaryIndex()
-        .withIndexName("feature_by_app_id_and_id_lsi_idx")
+        .withIndexName("feature_by_appkey_and_id_lsi_idx")
         .withKeySchema(indexKeySchema)
         .withProjection(projection);
 
