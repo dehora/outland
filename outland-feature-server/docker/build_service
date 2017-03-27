@@ -1,9 +1,0 @@
-#!/usr/bin/env bash
-
-SERVICE="outland-feature-server"
-
-rm $SERVICE-*.jar
-cd ../..
-./gradlew clean shadow
-cd $SERVICE/docker
-cp ../build/libs/$SERVICE-*.jar .
