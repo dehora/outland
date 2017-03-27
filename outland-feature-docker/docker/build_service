@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+
+version=`cat ../../gradle.properties | grep "version" | cut -d= -f2`
+service="outland-feature-server"
+
+echo "Removing local $service-*.jar files from work area"
+echo "---------------------------------------------------------------"
+rm $service-*.jar
+
+echo ""
+
+echo "Building new $service-$version.jar "
+echo "---------------------------------------------------------------"
+cd ../..
+./gradlew clean shadow
+
+
+echo "---------------------------------------------------------------"
+echo "Copying built $service-$version.jar to work area"
+echo "---------------------------------------------------------------"
+cd outland-feature-docker/docker
+cp ../../$service/build/libs/$service-$version.jar .
