@@ -50,10 +50,10 @@ class FeatureStoreReal implements FeatureStore {
   }
 
   @Override public Void put(Feature feature) {
-    final String storageKey = FeatureStoreKeys.storageKey(feature.getAppId(), feature.getKey());
+    final String storageKey = FeatureStoreKeys.storageKey(feature.getAppkey(), feature.getKey());
 
-    logger.info("op=put, storage=cache, app_id={}, feature_key={} storage_key={}",
-        feature.getAppId(), feature.getKey(), storageKey);
+    logger.info("op=put, storage=cache, appkey={}, feature_key={} storage_key={}",
+        feature.getAppkey(), feature.getKey(), storageKey);
 
     featureCache.put(storageKey, feature);
 
@@ -63,13 +63,13 @@ class FeatureStoreReal implements FeatureStore {
     return null;
   }
 
-  @Override public Optional<Feature> find(String appId, String featureKey) {
+  @Override public Optional<Feature> find(String appKey, String featureKey) {
     try {
 
-      final String storageKey = FeatureStoreKeys.storageKey(appId, featureKey);
+      final String storageKey = FeatureStoreKeys.storageKey(appKey, featureKey);
 
-      logger.debug("op=find, app_id={}, feature_key={}, storage_key={}",
-          appId, featureKey, storageKey);
+      logger.debug("op=find, appkey={}, feature_key={}, storage_key={}",
+          appKey, featureKey, storageKey);
 
       return Optional.ofNullable(featureCache.get(storageKey));
     } catch (ExecutionException | UncheckedExecutionException e) {
@@ -78,18 +78,18 @@ class FeatureStoreReal implements FeatureStore {
     }
   }
 
-  @Override public FeatureCollection findAll(String appId) {
-    logger.info("op=findAll, app_id={}", appId);
+  @Override public FeatureCollection findAll(String appKey) {
+    logger.info("op=findAll, appkey={}", appKey);
 
-    return client.resources().features().listFeatures(appId);
+    return client.resources().features().listFeatures(appKey);
   }
 
-  @Override public Void remove(String appId, String featureKey) {
+  @Override public Void remove(String appKey, String featureKey) {
 
-    final String storageKey = FeatureStoreKeys.storageKey(appId, featureKey);
+    final String storageKey = FeatureStoreKeys.storageKey(appKey, featureKey);
 
-    logger.info("op=remove, app_id={}, feature_key={} storage_key={}",
-        appId, featureKey, storageKey);
+    logger.info("op=remove, appkey={}, feature_key={} storage_key={}",
+        appKey, featureKey, storageKey);
 
     featureCache.invalidate(storageKey);
     return null;
@@ -109,8 +109,8 @@ class FeatureStoreReal implements FeatureStore {
         final ConcurrentMap<String, Feature> map = featureCache.asMap();
         final Set<Map.Entry<String, Feature>> entries = map.entrySet();
         for (Map.Entry<String, Feature> entry : entries) {
-          logger.info("op=close, action=flush_feature_to_local_store, app_id={}, feature_key={}",
-              entry.getValue().getAppId(), entry.getValue().getKey());
+          logger.info("op=close, action=flush_feature_to_local_store, appkey={}, feature_key={}",
+              entry.getValue().getAppkey(), entry.getValue().getKey());
           backingFeatureStore.put(entry.getValue());
         }
       } catch (Exception e) {
@@ -134,10 +134,10 @@ class FeatureStoreReal implements FeatureStore {
   private void loadFeaturesIntoCache() {
 
     // only call the api when we are working with one app id
-    if (client.appId() != null) {
+    if (client.appKey() != null) {
       loadFromApiAttempted.getAndSet(true);
       logger.info("op=populateCache, action=attempt_load, source=api");
-      if (loadedFromApi(client.appId())) {
+      if (loadedFromApi(client.appKey())) {
         loadFromApiSuccessful.getAndSet(true);
         logger.info("op=populateCache, action=attempt_load, source=api result=ok");
       }
@@ -157,22 +157,22 @@ class FeatureStoreReal implements FeatureStore {
     }
   }
 
-  private boolean loadedFromApi(String appId) {
+  private boolean loadedFromApi(String appKey) {
 
     try {
-      FeatureCollection all = findAll(appId);
+      FeatureCollection all = findAll(appKey);
       // todo: do we need a distinction between empty and failed or trust the exception?
       if (all != null) {
-        logger.info("op=populateCache, action=load, source=api, feature_count={}, app_id={}",
+        logger.info("op=populateCache, action=load, source=api, feature_count={}, appkey={}",
             all.getItemsCount(),
-            appId);
+            appKey);
         all.getItemsList().forEach(this::put);
         return true;
       }
     } catch (FeatureException e) {
       logger.error(
-          String.format("op=populateCache, action=load, source=api, app_id=%s err=%s",
-              appId, e.problem().toMessage()));
+          String.format("op=populateCache, action=load, source=api, appkey=%s err=%s",
+              appKey, e.problem().toMessage()));
     }
 
     return false;
@@ -186,9 +186,9 @@ class FeatureStoreReal implements FeatureStore {
         logger.info("op=loadedFromLocal, action=attempt_load_multi_app, source=local");
         all = backingFeatureStore.loadAll();
       } else {
-        logger.info("op=loadedFromLocal, action=attempt_load_single_app, source=local app_id={}",
-            client.appId());
-        all = backingFeatureStore.findAll(client.appId());
+        logger.info("op=loadedFromLocal, action=attempt_load_single_app, source=local appkey={}",
+            client.appKey());
+        all = backingFeatureStore.findAll(client.appKey());
       }
 
       if (all != null) {
@@ -198,7 +198,7 @@ class FeatureStoreReal implements FeatureStore {
 
         // access cache directly to avoid writing back out to store
         itemsList.forEach(
-            f -> featureCache.put(FeatureStoreKeys.storageKey(f.getAppId(), f.getKey()), f));
+            f -> featureCache.put(FeatureStoreKeys.storageKey(f.getAppkey(), f.getKey()), f));
         return true;
       } else {
         logger.warn("op=populateCache, action=load, source=local, result=null");

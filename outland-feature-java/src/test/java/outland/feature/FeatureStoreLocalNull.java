@@ -13,7 +13,7 @@ public class FeatureStoreLocalNull implements FeatureStoreLocal {
     return null;
   }
 
-  @Override public FeatureCollection findAll(String appId) throws FeatureException {
+  @Override public FeatureCollection findAll(String appKey) throws FeatureException {
     return null;
   }
 

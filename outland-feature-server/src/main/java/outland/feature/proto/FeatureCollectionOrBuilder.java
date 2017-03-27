@@ -18,14 +18,14 @@ public interface FeatureCollectionOrBuilder extends
       getTypeBytes();
 
   /**
-   * <code>optional string appId = 2;</code>
+   * <code>optional string appkey = 2;</code>
    */
-  java.lang.String getAppId();
+  java.lang.String getAppkey();
   /**
-   * <code>optional string appId = 2;</code>
+   * <code>optional string appkey = 2;</code>
    */
   com.google.protobuf.ByteString
-      getAppIdBytes();
+      getAppkeyBytes();
 
   /**
    * <code>repeated .outland.Feature items = 3;</code>

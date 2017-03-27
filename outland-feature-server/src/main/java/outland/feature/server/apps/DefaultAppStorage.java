@@ -86,7 +86,7 @@ public class DefaultAppStorage implements AppStorage {
 
     logger.info("{} /dynamodb_put_item_result=[{}]",
         kvp("op", "saveApp",
-            "app_id", app.getId(),
+            "appkey", app.getId(),
             "app_key", app.getKey(),
             "result", "ok"),
         outcome.getPutItemResult().toString());
@@ -114,7 +114,7 @@ public class DefaultAppStorage implements AppStorage {
 
     logger.info("{} /dynamodb_put_item_result=[{}]",
         kvp("op", "saveRelation",
-            "app_id", app.getKey(),
+            "appkey", app.getKey(),
             "hash_key", relationHashKey,
             "range_key", relationRangeKey,
             "result", "ok"),
@@ -145,7 +145,7 @@ public class DefaultAppStorage implements AppStorage {
 
     logger.info("{} /dynamodb_remove_item_result=[{}]",
         kvp("op", "removeRelation",
-            "app_id", app.getKey(),
+            "appkey", app.getKey(),
             "hash_key", relationHashKey,
             "range_key", relationRangeKey,
             "result", "ok"),

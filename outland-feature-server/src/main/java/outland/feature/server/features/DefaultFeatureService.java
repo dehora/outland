@@ -97,25 +97,25 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
   }
 
   @Override
-  public Optional<Feature> updateFeature(String appId, String featureKey, Feature updates) {
+  public Optional<Feature> updateFeature(String appKey, String featureKey, Feature updates) {
 
     logger.info("{} /update_feature=[{}]",
-        kvp("op", "updateFeature", "app_id", appId, "feature_key", featureKey),
+        kvp("op", "updateFeature", "appkey", appKey, "feature_key", featureKey),
         TextFormat.shortDebugString(updates));
 
     String now = FeatureService.asString(OffsetDateTime.now());
     Optional<Feature> maybeFound =
-        timed(loadFeatureByKeyTimer, () -> featureStorage.loadFeatureByKey(appId, featureKey));
+        timed(loadFeatureByKeyTimer, () -> featureStorage.loadFeatureByKey(appKey, featureKey));
 
     if (!maybeFound.isPresent()) {
-      logger.info("updateFeature not_found {} {}", appId, updates);
+      logger.info("updateFeature not_found {} {}", appKey, updates);
       return maybeFound;
     }
 
     Feature found = maybeFound.get();
 
     logger.info("{} /found_feature=[{}]",
-        kvp("op", "updateFeature", "app_id", appId, "feature_key", featureKey),
+        kvp("op", "updateFeature", "appkey", appKey, "feature_key", featureKey),
         TextFormat.shortDebugString(found));
 
     Feature.Builder builder = found.toBuilder()
@@ -126,7 +126,7 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
     builder.setOptionType(found.getOptionType());
     builder.setCreated(found.getCreated());
     builder.setId(found.getId());
-    builder.setAppId(found.getAppId());
+    builder.setAppkey(found.getAppkey());
     builder.setKey(found.getKey());
 
     applyVersion(updates, builder);
@@ -147,24 +147,24 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
     timed(updateFeatureTimer, () -> featureStorage.updateFeature(updated));
 
     logger.info("{} /updated_feature=[{}]",
-        kvp("op", "updateFeature", "app_id", appId, "feature_key", featureKey),
+        kvp("op", "updateFeature", "appkey", appKey, "feature_key", featureKey),
         TextFormat.shortDebugString(updated));
 
     addToCache(updated);
     return Optional.of(updated);
   }
 
-  @Override public Optional<Feature> loadFeatureByKey(String appId, String featureKey) {
+  @Override public Optional<Feature> loadFeatureByKey(String appKey, String featureKey) {
 
-    logger.info("{}", kvp("op", "loadFeatureByKey", "app_id", appId, "feature_key", featureKey));
+    logger.info("{}", kvp("op", "loadFeatureByKey", "appkey", appKey, "feature_key", featureKey));
 
     Optional<Feature> cached = timed(loadFeatureCacheTimer,
-        () -> featureCache.findInCache(featureCache.buildCacheKeyByFeatureKey(appId, featureKey)));
+        () -> featureCache.findInCache(featureCache.buildCacheKeyByFeatureKey(appKey, featureKey)));
 
     if (cached.isPresent()) {
       loadFeatureCacheHitMeter.mark();
       logger.info("{} /feature=[{}]", kvp("op", "loadFeatureByKey",
-          "app_id", appId,
+          "appkey", appKey,
           "feature_key", featureKey,
           "result", "cache_hit"),
           TextFormat.shortDebugString(cached.get()));
@@ -174,7 +174,7 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
     loadFeatureCacheMissMeter.mark();
 
     Optional<Feature> feature =
-        timed(loadFeatureByKeyTimer, () -> featureStorage.loadFeatureByKey(appId, featureKey));
+        timed(loadFeatureByKeyTimer, () -> featureStorage.loadFeatureByKey(appKey, featureKey));
 
     if (feature.isPresent()) {
       /*
@@ -184,13 +184,13 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
       */
       logger.info("{}", kvp(
           "op", "loadFeatureByKey",
-          "app_id", appId,
+          "appkey", appKey,
           "feature_key", featureKey,
           "msg", "force_cache_reload"
       ));
-      addAllToCache(appId, timed(loadFeaturesTimer, () -> featureStorage.loadFeatures(appId)));
+      addAllToCache(appKey, timed(loadFeaturesTimer, () -> featureStorage.loadFeatures(appKey)));
       logger.info("{} /feature=[{}]", kvp("op", "loadFeatureByKey",
-          "app_id", appId,
+          "appkey", appKey,
           "feature_key", featureKey,
           "result", "cache_miss",
           "msg", "add_to_cache"),
@@ -198,23 +198,23 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
     }
 
     logger.info("{}", kvp("op", "loadFeatureByKey",
-        "app_id", appId,
+        "appkey", appKey,
         "result", feature.isPresent() ? "ok" : "not_found"));
 
     // todo: signal 404 if empty
     return feature;
   }
 
-  @Override public FeatureCollection loadFeatures(String appId) {
+  @Override public FeatureCollection loadFeatures(String appKey) {
 
-    logger.info("{}", kvp("op", "loadFeatures", "app_id", appId));
+    logger.info("{}", kvp("op", "loadFeatures", "appkey", appKey));
 
     FeatureCollection.Builder builder = FeatureCollection.newBuilder();
     builder.setType("feature.list");
-    builder.setAppId(appId);
+    builder.setAppkey(appKey);
 
     Optional<Map<String, String>> cacheSet = timed(loadFeaturesCacheTimer,
-        () -> featureCache.getCacheSet(appId));
+        () -> featureCache.getCacheSet(appKey));
 
     if (cacheSet.isPresent()) {
       loadFeaturesCacheHitMeter.mark();
@@ -229,7 +229,7 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
       FeatureCollection featureCollection = builder.build();
 
       logger.info("{} /features=[{}]", kvp("op", "loadFeatures",
-          "app_id", appId,
+          "appkey", appKey,
           "result", "cache_hit"),
           TextFormat.shortDebugString(featureCollection));
 
@@ -238,26 +238,26 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
 
     loadFeaturesCacheMissMeter.mark();
 
-    List<Feature> features = timed(loadFeaturesTimer, () -> featureStorage.loadFeatures(appId));
+    List<Feature> features = timed(loadFeaturesTimer, () -> featureStorage.loadFeatures(appKey));
     features.sort(byUpdatedOrdering);
     builder.addAllItems(features);
     FeatureCollection featureCollection = builder.build();
 
-    addAllToCache(appId, features);
+    addAllToCache(appKey, features);
 
     logger.info("{} /features=[{}]", kvp("op", "loadFeatures",
-        "app_id", appId,
+        "appkey", appKey,
         "result", "ok"),
         TextFormat.shortDebugString(featureCollection));
 
     return featureCollection;
   }
 
-  @Override public FeatureCollection loadFeaturesChangedSince(String appId, OffsetDateTime since) {
+  @Override public FeatureCollection loadFeaturesChangedSince(String appKey, OffsetDateTime since) {
 
-     logger.info("{}", kvp("op", "loadFeaturesSince", "app_id", appId, "since", since));
+     logger.info("{}", kvp("op", "loadFeaturesSince", "appkey", appKey, "since", since));
 
-    FeatureCollection collection = loadFeatures(appId);
+    FeatureCollection collection = loadFeatures(appKey);
 
     List<Feature> sinceList = Lists.newArrayList();
 
@@ -274,13 +274,13 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
     FeatureCollection.Builder builder = FeatureCollection.newBuilder();
     final FeatureCollection featureCollection = builder
         .addAllItems(sinceList)
-        .setAppId(appId)
+        .setAppkey(appKey)
         .setType("feature.list")
         .build();
 
     logger.info("{} /features=[{}]",
         kvp("op", "loadFeaturesSince",
-            "app_id", appId,
+            "appkey", appKey,
             "since", since,
             "result", "ok"),
         TextFormat.shortDebugString(featureCollection));
@@ -421,11 +421,11 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
         .setId(next.id()));
   }
 
-  private void addAllToCache(String appId, List<Feature> features) {
+  private void addAllToCache(String appKey, List<Feature> features) {
     for (Feature feature : features) {
 
       logger.info("{} /feature=[{}]", kvp("op", "loadFeatures",
-          "app_id", appId,
+          "appkey", appKey,
           "result", "cache_miss",
           "msg", "add_to_cache"),
           TextFormat.shortDebugString(feature));

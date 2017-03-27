@@ -58,7 +58,7 @@ public class DefaultFeatureStorage implements FeatureStorage {
 
     String key = feature.getKey();
     String id = feature.getId();
-    String appId = feature.getAppId();
+    String appKey = feature.getAppkey();
 
     String json = Protobuf3Support.toJsonString(feature);
     Map<String, String> owner = Maps.newHashMap();
@@ -69,7 +69,7 @@ public class DefaultFeatureStorage implements FeatureStorage {
     owner.put("email", feature.getOwner().getEmail());
 
     Item item = new Item()
-        .withString("app_id", appId)
+        .withString("appkey", appKey)
         .withString("feature_key", key)
         .withString("id", id)
         .withString("state", feature.getState().name())
@@ -96,7 +96,7 @@ public class DefaultFeatureStorage implements FeatureStorage {
     PutItemOutcome outcome = cmd.execute();
 
     logger.info("{} /dynamodb_put_item_result=[{}]",
-        kvp("op", "saveFeature", "app_id", appId, "feature_key", key, "result", "ok"),
+        kvp("op", "saveFeature", "appkey", appKey, "feature_key", key, "result", "ok"),
         outcome.getPutItemResult().toString());
 
     return null;
@@ -104,18 +104,18 @@ public class DefaultFeatureStorage implements FeatureStorage {
 
   @Override public Void updateFeature(Feature feature) {
     logger.info("{}",
-        kvp("op", "updateFeature", "app_id", feature.getAppId(), "feature_key", feature.getKey()));
+        kvp("op", "updateFeature", "appkey", feature.getAppkey(), "feature_key", feature.getKey()));
     saveFeature(feature);
     return null;
   }
 
-  @Override public Optional<Feature> loadFeatureByKey(String appId, String key) {
-    logger.info("{}", kvp("op", "loadFeatureByKey", "app_id", appId, "feature_key", key));
+  @Override public Optional<Feature> loadFeatureByKey(String appKey, String key) {
+    logger.info("{}", kvp("op", "loadFeatureByKey", "appkey", appKey, "feature_key", key));
 
     Table table = dynamoDB.getTable(featureTableName);
 
     DynamoDbCommand<Item> cmd = new DynamoDbCommand<>("loadFeatureByKey",
-        () -> getItem(appId, key, table),
+        () -> getItem(appKey, key, table),
         () -> {
           throw new RuntimeException("loadFeatureById");
         },
@@ -129,19 +129,19 @@ public class DefaultFeatureStorage implements FeatureStorage {
     return Optional.of(FeatureSupport.toFeature(item.getString("json")));
   }
 
-  private Item getItem(String appId, String key, Table table) {
-    return table.getItem("app_id", appId, "feature_key",key);
+  private Item getItem(String appKey, String key, Table table) {
+    return table.getItem("appkey", appKey, "feature_key",key);
   }
 
-  @Override public List<Feature> loadFeatures(String appId) {
-    logger.info("{}", kvp("op", "loadFeatures", "app_id", appId));
+  @Override public List<Feature> loadFeatures(String appKey) {
+    logger.info("{}", kvp("op", "loadFeatures", "appkey", appKey));
     List<Feature> features = Lists.newArrayList();
 
     Table table = dynamoDB.getTable(featureTableName);
 
     QuerySpec querySpec = new QuerySpec()
-        .withKeyConditionExpression("app_id = :k_app_id")
-        .withValueMap(new ValueMap().withString(":k_app_id", appId))
+        .withKeyConditionExpression("appkey = :k_appkey")
+        .withValueMap(new ValueMap().withString(":k_appkey", appKey))
         .withConsistentRead(true);
 
     DynamoDbCommand<ItemCollection<QueryOutcome>> cmd = new DynamoDbCommand<>("loadFeatures",

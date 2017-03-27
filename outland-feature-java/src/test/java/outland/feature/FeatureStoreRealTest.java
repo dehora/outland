@@ -28,7 +28,7 @@ public class FeatureStoreRealTest {
         .serverConfiguration(serverConfiguration)
         .build();
 
-    assertTrue(client.appId() == null);
+    assertTrue(client.appKey() == null);
     assertTrue(client.localStoreEnabled());
 
     final File dbPath = Files.createTempDirectory("unittest_outland_feature_store_").toFile();
@@ -72,7 +72,7 @@ public class FeatureStoreRealTest {
         .serverConfiguration(serverConfiguration)
         .build();
 
-    assertTrue(client.appId() == null);
+    assertTrue(client.appKey() == null);
     assertTrue(client.multiAppEnabled());
     assertFalse(client.localStoreEnabled());
 
@@ -104,7 +104,7 @@ public class FeatureStoreRealTest {
         new ServerConfiguration()
             .baseURI("http://localhost")
             .localStoreEnabled(false) // disable rocks
-            .appId("anapp");
+            .appKey("anapp");
 
     final FeatureClient client = FeatureClient.newBuilder()
         // set useless store and backing
@@ -113,7 +113,7 @@ public class FeatureStoreRealTest {
         .serverConfiguration(serverConfiguration)
         .build();
 
-    assertTrue(client.appId() != null);
+    assertTrue(client.appKey() != null);
     assertFalse(client.localStoreEnabled());
 
     FeatureStoreLocal rocks =
@@ -144,7 +144,7 @@ public class FeatureStoreRealTest {
     ServerConfiguration serverConfiguration =
         new ServerConfiguration()
             .baseURI("http://localhost")
-            .appId("the_app");
+            .appKey("the_app");
 
     final FeatureClient client = FeatureClient.newBuilder()
         // set useless store and backing
@@ -180,7 +180,7 @@ public class FeatureStoreRealTest {
     ServerConfiguration serverConfiguration =
         new ServerConfiguration()
             .baseURI("http://localhost")
-            .appId("the_app");
+            .appKey("the_app");
 
     final FeatureClient client = FeatureClient.newBuilder()
         // set useless store and backing
@@ -215,7 +215,7 @@ public class FeatureStoreRealTest {
     ServerConfiguration serverConfiguration =
         new ServerConfiguration()
             .baseURI("http://localhost")
-            .appId("the_app");
+            .appKey("the_app");
 
     final FeatureClient client = FeatureClient.newBuilder()
         // storage requests are circumvented with exceptions
@@ -250,15 +250,15 @@ public class FeatureStoreRealTest {
       return null;
     }
 
-    @Override public Optional<Feature> find(String appId, String key) throws FeatureException {
+    @Override public Optional<Feature> find(String appKey, String key) throws FeatureException {
       throw new FeatureException(Problem.localProblem("failstore", ""));
     }
 
-    @Override public FeatureCollection findAll(String appId) throws FeatureException {
+    @Override public FeatureCollection findAll(String appKey) throws FeatureException {
       throw new FeatureException(Problem.localProblem("failstore", ""));
     }
 
-    @Override public Void remove(String appId, String featureKey) throws FeatureException {
+    @Override public Void remove(String appKey, String featureKey) throws FeatureException {
       throw new FeatureException(Problem.localProblem("failstore", ""));
     }
 

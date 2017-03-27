@@ -77,7 +77,7 @@ public class FeatureResourceTest {
     auth mechanism
      */
 
-    final String appId = "testAuthFailures";
+    final String appKey = "testAuthFailures";
     final String user = "unknownuser";
     final String service = "knownservice";
 
@@ -93,7 +93,7 @@ public class FeatureResourceTest {
     
     // no auth header returns 401
 
-    Response response = clientNoAuth.target(url + "/" + appId)
+    Response response = clientNoAuth.target(url + "/" + appKey)
         .request()
         .get();
     assertTrue(response.getStatus() == 401);
@@ -106,7 +106,7 @@ public class FeatureResourceTest {
         //    new LoggingFeature(Logger.getLogger(getClass().getName()), Level.INFO, null, null))
         .register(HttpAuthenticationFeature.universalBuilder().build());
 
-    Response response1 = clientWithAuth.target(url + "/" + appId)
+    Response response1 = clientWithAuth.target(url + "/" + appKey)
         .request()
         .property(HTTP_AUTHENTICATION_BASIC_USERNAME, user+"/owner")
         .property(HTTP_AUTHENTICATION_BASIC_PASSWORD, basicPassword)
@@ -116,7 +116,7 @@ public class FeatureResourceTest {
 
     // matching auth header and url works
 
-    Response response2 = clientWithAuth.target(url + "/" + appId)
+    Response response2 = clientWithAuth.target(url + "/" + appKey)
         .request()
         .property(HTTP_AUTHENTICATION_BASIC_USERNAME, service + "/service")
         .property(HTTP_AUTHENTICATION_BASIC_PASSWORD, basicPassword)
@@ -126,7 +126,7 @@ public class FeatureResourceTest {
   }
 
   @Test
-  public void testGetWithNonMatchingAppIdAndBearerCauses401() {
+  public void testGetWithNonMatchingappKeyAndBearerCauses401() {
 
     String url = "http://localhost:" + APP.getLocalPort() + "/features";
     JerseyClient client = ServerSuite.client()
@@ -153,10 +153,10 @@ public class FeatureResourceTest {
   }
 
   @Test
-  public void testUpdateNonMatchingAppIdUrlAndDataCauses422() throws Exception {
+  public void testUpdateNonMatchingappKeyUrlAndDataCauses422() throws Exception {
 
-    final String appId = "foo";
-    final String appId2 = "bar";
+    final String appKey = "foo";
+    final String appKey2 = "bar";
 
     String urlKey = Ulid.random();
 
@@ -167,16 +167,16 @@ public class FeatureResourceTest {
         .register(HttpAuthenticationFeature.universalBuilder().build());
 
 
-    Feature feature = buildTestFeature(appId, urlKey);
+    Feature feature = buildTestFeature(appKey, urlKey);
     String jsonReq = Protobuf3Support.toJsonString(feature);
 
     // the url and bearer need to be the same to pass the auth check
 
-    final String uri = url + "/" + appId2 + "/" + urlKey;
+    final String uri = url + "/" + appKey2 + "/" + urlKey;
     System.out.println(uri);
     Response response = client.target(uri)
         .request()
-        .property(HTTP_AUTHENTICATION_BASIC_USERNAME, appId2 +"/service")
+        .property(HTTP_AUTHENTICATION_BASIC_USERNAME, appKey2 +"/service")
         .property(HTTP_AUTHENTICATION_BASIC_PASSWORD, basicPassword)
         .post(Entity.entity(jsonReq, MediaType.APPLICATION_JSON_TYPE));
 
@@ -185,8 +185,8 @@ public class FeatureResourceTest {
     Gson gson = new Gson();
     final Problem problem = gson.fromJson(jsonRes, Problem.class);
     assertTrue(problem.status() == 422);
-    assertTrue(problem.detail().get().contains("url_app_id"));
-    assertTrue(problem.detail().get().contains("data_app_id"));
+    assertTrue(problem.detail().get().contains("url_appkey"));
+    assertTrue(problem.detail().get().contains("data_appkey"));
 
     assertEquals(Problem.CLIENT_TYPE, problem.type());
   }
@@ -194,7 +194,7 @@ public class FeatureResourceTest {
   @Test
   public void testUpdateNonMatchingFeatureUrlAndDataCauses422() throws Exception {
 
-    final String appId = "foo";
+    final String appKey = "foo";
 
     String urlKey = Ulid.random();
     String featureKey = Ulid.random();
@@ -206,14 +206,14 @@ public class FeatureResourceTest {
         .register(HttpAuthenticationFeature.universalBuilder().build());
 
 
-    Feature feature = buildTestFeature(appId, featureKey);
+    Feature feature = buildTestFeature(appKey, featureKey);
     String jsonReq = Protobuf3Support.toJsonString(feature);
 
-    final String uri = url + "/" + appId + "/" + urlKey;
+    final String uri = url + "/" + appKey + "/" + urlKey;
     System.out.println(uri);
     Response response = client.target(uri)
         .request()
-        .property(HTTP_AUTHENTICATION_BASIC_USERNAME, appId+"/service")
+        .property(HTTP_AUTHENTICATION_BASIC_USERNAME, appKey+"/service")
         .property(HTTP_AUTHENTICATION_BASIC_PASSWORD, basicPassword)
         .post(Entity.entity(jsonReq, MediaType.APPLICATION_JSON_TYPE));
 
@@ -412,10 +412,10 @@ public class FeatureResourceTest {
 
 
     String key = "testMissingAppThrows404";
-    String appId = Ulid.random();
+    String appKey = Ulid.random();
     String serviceCaller = "own";
 
-    Feature feature = buildTestFeature(appId, key);
+    Feature feature = buildTestFeature(appKey, key);
     String jsonReq = Protobuf3Support.toJsonString(feature);
 
     Response post = client.target(url)
@@ -427,11 +427,11 @@ public class FeatureResourceTest {
     assertTrue(post.getStatus() == 404);
   }
 
-  private Feature buildTestFeature(String appId, String key) {
+  private Feature buildTestFeature(String appKey, String key) {
     return Feature.newBuilder()
         .setKey(key)
         .setDescription("desc")
-        .setAppId(appId)
+        .setAppkey(appKey)
         .build();
   }
 }

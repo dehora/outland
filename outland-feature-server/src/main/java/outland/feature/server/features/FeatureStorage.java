@@ -10,7 +10,7 @@ public interface FeatureStorage {
 
   Void updateFeature(Feature feature);
 
-  Optional<Feature> loadFeatureByKey(String appId, String key);
+  Optional<Feature> loadFeatureByKey(String appKey, String key);
 
-  List<Feature> loadFeatures(String appId);
+  List<Feature> loadFeatures(String appKey);
 }

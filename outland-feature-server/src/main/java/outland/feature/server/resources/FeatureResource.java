@@ -77,7 +77,7 @@ public class FeatureResource {
 
     final long start = System.currentTimeMillis();
 
-    final Optional<App> maybe = appService.loadAppByKey(feature.getAppId());
+    final Optional<App> maybe = appService.loadAppByKey(feature.getAppkey());
     if(! maybe.isPresent()) {
       return headers.enrich(Response.status(404).entity(
           Problem.clientProblem("app_not_found", "", 404)), start).build();
@@ -86,7 +86,7 @@ public class FeatureResource {
     accessControlSupport.throwUnlessMember(authPrincipal, maybe.get());
 
     URI loc = UriBuilder.fromUri(baseURI)
-        .path(feature.getAppId())
+        .path(feature.getAppkey())
         .path(feature.getKey())
         .build();
 
@@ -95,7 +95,7 @@ public class FeatureResource {
     if (optional.isPresent() && seen) {
       return headers.enrich(
           Response.created(loc).header(IdempotencyChecker.RES_HEADER, "key=" + optional.get())
-              .entity(featureService.loadFeatureByKey(feature.getAppId(), feature.getKey()))
+              .entity(featureService.loadFeatureByKey(feature.getAppkey(), feature.getKey()))
           , start).build();
     }
 
@@ -106,14 +106,14 @@ public class FeatureResource {
   }
 
   @POST
-  @Path("/{app_id}/{feature_key}")
+  @Path("/{appkey}/{feature_key}")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
   @PermitAll
   @Timed(name = "updateFeature")
   public Response updateFeature(
       @Auth AuthPrincipal authPrincipal,
-      @PathParam("app_id") String appId,
+      @PathParam("appkey") String appKey,
       @PathParam("feature_key") String featureKey,
       Feature feature,
       @Context HttpHeaders httpHeaders
@@ -121,41 +121,41 @@ public class FeatureResource {
 
     final long start = System.currentTimeMillis();
 
-    accessControlSupport.throwUnlessMember(authPrincipal, appId);
-    throwUnlessAppIdMatch(feature, appId);
+    accessControlSupport.throwUnlessMember(authPrincipal, appKey);
+    throwUnlessappKeyMatch(feature, appKey);
     throwUnlessFeatureKeyMatch(feature, featureKey);
 
     final Optional<String> optional = idempotencyChecker.extractKey(httpHeaders);
 
     if (optional.isPresent() && idempotencyChecker.seen(optional.get())) {
       return headers.enrich(
-          Response.ok(featureService.loadFeatureByKey(feature.getAppId(), feature.getKey()))
+          Response.ok(featureService.loadFeatureByKey(feature.getAppkey(), feature.getKey()))
               .header(IdempotencyChecker.RES_HEADER, "key=" + optional.get()),
           start).build();
     }
 
-    Feature updated = featureService.updateFeature(appId, featureKey, feature)
+    Feature updated = featureService.updateFeature(appKey, featureKey, feature)
         .orElseThrow(() -> new RuntimeException(""));
 
     return headers.enrich(Response.ok(updated), start).build();
   }
 
   @GET
-  @Path("/{app_id}/{feature_key}")
+  @Path("/{appkey}/{feature_key}")
   @Produces(MediaType.APPLICATION_JSON)
   @PermitAll
   @Timed(name = "getFeatureByKey")
   public Response getFeatureByKey(
       @Auth AuthPrincipal authPrincipal,
-      @PathParam("app_id") String appId,
+      @PathParam("appkey") String appKey,
       @PathParam("feature_key") String featureKey
   ) throws AuthenticationException {
 
     final long start = System.currentTimeMillis();
 
-    accessControlSupport.throwUnlessMember(authPrincipal, appId);
+    accessControlSupport.throwUnlessMember(authPrincipal, appKey);
 
-    final Optional<Feature> feature = featureService.loadFeatureByKey(appId, featureKey);
+    final Optional<Feature> feature = featureService.loadFeatureByKey(appKey, featureKey);
 
     if(feature.isPresent()) {
       return headers.enrich(Response.ok(feature.get()), start).build();
@@ -166,42 +166,42 @@ public class FeatureResource {
   }
 
   @GET
-  @Path("/{app_id}")
+  @Path("/{appkey}")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
   @PermitAll
   @Timed(name = "getFeatures")
   public Response getFeatures(
       @Auth AuthPrincipal authPrincipal,
-      @PathParam("app_id") String appId
+      @PathParam("appkey") String appKey
   ) throws AuthenticationException {
 
     final long start = System.currentTimeMillis();
-    accessControlSupport.throwUnlessMember(authPrincipal, appId);
+    accessControlSupport.throwUnlessMember(authPrincipal, appKey);
 
-    FeatureCollection features = featureService.loadFeatures(appId);
+    FeatureCollection features = featureService.loadFeatures(appKey);
 
     return this.headers.enrich(Response.ok(features), start).build();
   }
 
   @GET
-  @Path("/{app_id}/feed")
+  @Path("/{appkey}/feed")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
   @PermitAll
   @Timed(name = "getFeaturesSince")
   public Response getFeaturesSince(
       @Auth AuthPrincipal authPrincipal,
-      @PathParam("app_id") String appId,
+      @PathParam("appkey") String appKey,
       @QueryParam("since") long since
   ) throws AuthenticationException {
 
     final long start = System.currentTimeMillis();
-    accessControlSupport.throwUnlessMember(authPrincipal, appId);
+    accessControlSupport.throwUnlessMember(authPrincipal, appKey);
 
     OffsetDateTime utc =
         OffsetDateTime.ofInstant(Instant.ofEpochSecond(since), ZoneId.of("UTC").normalized());
-    FeatureCollection features = featureService.loadFeaturesChangedSince(appId, utc);
+    FeatureCollection features = featureService.loadFeaturesChangedSince(appKey, utc);
 
     return this.headers.enrich(Response.ok(features), start).build();
   }
@@ -216,11 +216,11 @@ public class FeatureResource {
     }
   }
 
-  private void throwUnlessAppIdMatch(Feature feature, String appId) {
-    if (!feature.getAppId().equals(appId)) {
+  private void throwUnlessappKeyMatch(Feature feature, String appKey) {
+    if (!feature.getAppkey().equals(appKey)) {
       throw new ServiceException(Problem.clientProblem(
           "Resource and entity app ids do not match.",
-          kvp("url_app_id", appId, "data_app_id", feature.getAppId()),
+          kvp("url_appkey", appKey, "data_appkey", feature.getAppkey()),
           422));
     }
   }

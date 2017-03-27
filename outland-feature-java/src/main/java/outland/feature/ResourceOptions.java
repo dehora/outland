@@ -9,7 +9,7 @@ class ResourceOptions {
   private final Map<String, Object> headers = new HashMap<>();
   private AuthorizationProvider provider;
   private String scope;
-  private String appId;
+  private String appKey;
 
   public ResourceOptions securityTokenProvider(AuthorizationProvider provider) {
     FeatureException.throwIfNull(provider, "Please provide a AuthorizationProvider");
@@ -36,9 +36,9 @@ class ResourceOptions {
     return this;
   }
 
-  public ResourceOptions appId(String appId) {
-    FeatureException.throwIfNull(appId, "Please provide an appId");
-    this.appId = appId;
+  public ResourceOptions appKey(String appKey) {
+    FeatureException.throwIfNull(appKey, "Please provide an appKey");
+    this.appKey = appKey;
     return this;
   }
 
@@ -47,7 +47,7 @@ class ResourceOptions {
   }
 
   public Optional<Authorization> supplyToken() {
-    return provider.authorization(this.appId, this.scope);
+    return provider.authorization(this.appKey, this.scope);
   }
 
   public String scope() {
