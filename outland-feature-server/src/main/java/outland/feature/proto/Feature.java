@@ -95,11 +95,11 @@ public  final class Feature extends
             break;
           }
           case 66: {
-            outland.feature.proto.FeatureOwner.Builder subBuilder = null;
+            outland.feature.proto.Owner.Builder subBuilder = null;
             if (owner_ != null) {
               subBuilder = owner_.toBuilder();
             }
-            owner_ = input.readMessage(outland.feature.proto.FeatureOwner.parser(), extensionRegistry);
+            owner_ = input.readMessage(outland.feature.proto.Owner.parser(), extensionRegistry);
             if (subBuilder != null) {
               subBuilder.mergeFrom(owner_);
               owner_ = subBuilder.buildPartial();
@@ -519,23 +519,23 @@ public  final class Feature extends
   }
 
   public static final int OWNER_FIELD_NUMBER = 8;
-  private outland.feature.proto.FeatureOwner owner_;
+  private outland.feature.proto.Owner owner_;
   /**
-   * <code>optional .outland.FeatureOwner owner = 8;</code>
+   * <code>optional .outland.Owner owner = 8;</code>
    */
   public boolean hasOwner() {
     return owner_ != null;
   }
   /**
-   * <code>optional .outland.FeatureOwner owner = 8;</code>
+   * <code>optional .outland.Owner owner = 8;</code>
    */
-  public outland.feature.proto.FeatureOwner getOwner() {
-    return owner_ == null ? outland.feature.proto.FeatureOwner.getDefaultInstance() : owner_;
+  public outland.feature.proto.Owner getOwner() {
+    return owner_ == null ? outland.feature.proto.Owner.getDefaultInstance() : owner_;
   }
   /**
-   * <code>optional .outland.FeatureOwner owner = 8;</code>
+   * <code>optional .outland.Owner owner = 8;</code>
    */
-  public outland.feature.proto.FeatureOwnerOrBuilder getOwnerOrBuilder() {
+  public outland.feature.proto.OwnerOrBuilder getOwnerOrBuilder() {
     return getOwner();
   }
 
@@ -1753,29 +1753,29 @@ public  final class Feature extends
       return this;
     }
 
-    private outland.feature.proto.FeatureOwner owner_ = null;
+    private outland.feature.proto.Owner owner_ = null;
     private com.google.protobuf.SingleFieldBuilderV3<
-        outland.feature.proto.FeatureOwner, outland.feature.proto.FeatureOwner.Builder, outland.feature.proto.FeatureOwnerOrBuilder> ownerBuilder_;
+        outland.feature.proto.Owner, outland.feature.proto.Owner.Builder, outland.feature.proto.OwnerOrBuilder> ownerBuilder_;
     /**
-     * <code>optional .outland.FeatureOwner owner = 8;</code>
+     * <code>optional .outland.Owner owner = 8;</code>
      */
     public boolean hasOwner() {
       return ownerBuilder_ != null || owner_ != null;
     }
     /**
-     * <code>optional .outland.FeatureOwner owner = 8;</code>
+     * <code>optional .outland.Owner owner = 8;</code>
      */
-    public outland.feature.proto.FeatureOwner getOwner() {
+    public outland.feature.proto.Owner getOwner() {
       if (ownerBuilder_ == null) {
-        return owner_ == null ? outland.feature.proto.FeatureOwner.getDefaultInstance() : owner_;
+        return owner_ == null ? outland.feature.proto.Owner.getDefaultInstance() : owner_;
       } else {
         return ownerBuilder_.getMessage();
       }
     }
     /**
-     * <code>optional .outland.FeatureOwner owner = 8;</code>
+     * <code>optional .outland.Owner owner = 8;</code>
      */
-    public Builder setOwner(outland.feature.proto.FeatureOwner value) {
+    public Builder setOwner(outland.feature.proto.Owner value) {
       if (ownerBuilder_ == null) {
         if (value == null) {
           throw new NullPointerException();
@@ -1789,10 +1789,10 @@ public  final class Feature extends
       return this;
     }
     /**
-     * <code>optional .outland.FeatureOwner owner = 8;</code>
+     * <code>optional .outland.Owner owner = 8;</code>
      */
     public Builder setOwner(
-        outland.feature.proto.FeatureOwner.Builder builderForValue) {
+        outland.feature.proto.Owner.Builder builderForValue) {
       if (ownerBuilder_ == null) {
         owner_ = builderForValue.build();
         onChanged();
@@ -1803,13 +1803,13 @@ public  final class Feature extends
       return this;
     }
     /**
-     * <code>optional .outland.FeatureOwner owner = 8;</code>
+     * <code>optional .outland.Owner owner = 8;</code>
      */
-    public Builder mergeOwner(outland.feature.proto.FeatureOwner value) {
+    public Builder mergeOwner(outland.feature.proto.Owner value) {
       if (ownerBuilder_ == null) {
         if (owner_ != null) {
           owner_ =
-            outland.feature.proto.FeatureOwner.newBuilder(owner_).mergeFrom(value).buildPartial();
+            outland.feature.proto.Owner.newBuilder(owner_).mergeFrom(value).buildPartial();
         } else {
           owner_ = value;
         }
@@ -1821,7 +1821,7 @@ public  final class Feature extends
       return this;
     }
     /**
-     * <code>optional .outland.FeatureOwner owner = 8;</code>
+     * <code>optional .outland.Owner owner = 8;</code>
      */
     public Builder clearOwner() {
       if (ownerBuilder_ == null) {
@@ -1835,33 +1835,33 @@ public  final class Feature extends
       return this;
     }
     /**
-     * <code>optional .outland.FeatureOwner owner = 8;</code>
+     * <code>optional .outland.Owner owner = 8;</code>
      */
-    public outland.feature.proto.FeatureOwner.Builder getOwnerBuilder() {
+    public outland.feature.proto.Owner.Builder getOwnerBuilder() {
       
       onChanged();
       return getOwnerFieldBuilder().getBuilder();
     }
     /**
-     * <code>optional .outland.FeatureOwner owner = 8;</code>
+     * <code>optional .outland.Owner owner = 8;</code>
      */
-    public outland.feature.proto.FeatureOwnerOrBuilder getOwnerOrBuilder() {
+    public outland.feature.proto.OwnerOrBuilder getOwnerOrBuilder() {
       if (ownerBuilder_ != null) {
         return ownerBuilder_.getMessageOrBuilder();
       } else {
         return owner_ == null ?
-            outland.feature.proto.FeatureOwner.getDefaultInstance() : owner_;
+            outland.feature.proto.Owner.getDefaultInstance() : owner_;
       }
     }
     /**
-     * <code>optional .outland.FeatureOwner owner = 8;</code>
+     * <code>optional .outland.Owner owner = 8;</code>
      */
     private com.google.protobuf.SingleFieldBuilderV3<
-        outland.feature.proto.FeatureOwner, outland.feature.proto.FeatureOwner.Builder, outland.feature.proto.FeatureOwnerOrBuilder> 
+        outland.feature.proto.Owner, outland.feature.proto.Owner.Builder, outland.feature.proto.OwnerOrBuilder> 
         getOwnerFieldBuilder() {
       if (ownerBuilder_ == null) {
         ownerBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-            outland.feature.proto.FeatureOwner, outland.feature.proto.FeatureOwner.Builder, outland.feature.proto.FeatureOwnerOrBuilder>(
+            outland.feature.proto.Owner, outland.feature.proto.Owner.Builder, outland.feature.proto.OwnerOrBuilder>(
                 getOwner(),
                 getParentForChildren(),
                 isClean());

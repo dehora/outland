@@ -19,7 +19,7 @@ import org.slf4j.LoggerFactory;
 import outland.feature.proto.Feature;
 import outland.feature.proto.FeatureCollection;
 import outland.feature.proto.FeatureOption;
-import outland.feature.proto.FeatureOwner;
+import outland.feature.proto.Owner;
 import outland.feature.proto.FeatureVersion;
 import outland.feature.proto.OptionType;
 import outland.feature.server.Problem;
@@ -403,14 +403,14 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
   }
 
   private void applyOwnerRegister(Feature registering, Feature.Builder builder) {
-    final FeatureOwner owner = registering.getOwner();
+    final Owner owner = registering.getOwner();
 
     if(Strings.isNullOrEmpty(owner.getUsername()) && Strings.isNullOrEmpty(owner.getEmail())) {
       throw new ServiceException(Problem.clientProblem("owner_incomplete",
           "owner has no email or username", 422));
     }
 
-    final FeatureOwner.Builder ownerBuilder = owner.toBuilder();
+    final Owner.Builder ownerBuilder = owner.toBuilder();
     ownerBuilder.setType("featureowner");
     builder.setOwner(ownerBuilder.buildPartial());
   }

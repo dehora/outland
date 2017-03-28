@@ -17,7 +17,7 @@ import org.junit.ClassRule;
 import org.junit.Test;
 import outland.feature.proto.App;
 import outland.feature.proto.Feature;
-import outland.feature.proto.FeatureOwner;
+import outland.feature.proto.Owner;
 import outland.feature.proto.Owner;
 import outland.feature.proto.Service;
 import outland.feature.server.Problem;
@@ -476,8 +476,8 @@ public class FeatureResourceTest {
   }
 
   private Feature buildTestFeature(String appKey, String key) {
-    final FeatureOwner owner =
-        FeatureOwner.newBuilder().setEmail("wile.e@acme.com").setUsername("wile,e").build();
+    final Owner owner =
+        Owner.newBuilder().setEmail("wile.e@acme.com").setUsername("wile,e").build();
     return Feature.newBuilder()
         .setKey(key)
         .setDescription("desc")
