@@ -130,7 +130,7 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
 
     // can't change some values in update
     builder.setType("feature");
-    builder.setOptionType(found.getOptionType());
+    builder.setOption(found.getOption());
     builder.setCreated(found.getCreated());
     builder.setId(found.getId());
     builder.setAppkey(found.getAppkey());
@@ -138,7 +138,7 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
 
     applyVersion(updates, builder);
 
-    if (builder.getOptionType().equals(OptionType.bool) && builder.getOptionsCount() != 0) {
+    if (builder.getOption().equals(OptionType.bool) && builder.getOptionsCount() != 0) {
       List<FeatureOption> options = applyOptionsUpdate(updates, found);
       builder.clearOptions();
       builder.addAllOptions(options);
@@ -349,12 +349,12 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
 
   private void applyOptionsRegister(Feature feature, Feature.Builder builder) {
 
-    if (feature.getOptionType().equals(OptionType.flag)) {
+    if (feature.getOption().equals(OptionType.flag)) {
       // flags don't have weighted options
       return;
     }
 
-    if (feature.getOptionType().equals(OptionType.bool)) {
+    if (feature.getOption().equals(OptionType.bool)) {
       if (feature.getOptionsCount() != 0) {
 
         int sum = 0;
@@ -368,7 +368,7 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
           final FeatureOption.Builder optionBuilder = FeatureOption.newBuilder().mergeFrom(option);
           optionBuilder.setType("option");
           optionBuilder.setId("opt_" + Ulid.random());
-          optionBuilder.setOptionType(OptionType.bool);
+          optionBuilder.setOption(OptionType.bool);
           builder.addOptions(optionBuilder);
 
           sum += option.getWeight();
@@ -384,7 +384,7 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
             .setId("opt_" + Ulid.random())
             .setName("false")
             .setValue("false")
-            .setOptionType(OptionType.bool)
+            .setOption(OptionType.bool)
             .setWeight(5_000));
 
         builder.addOptions(FeatureOption.newBuilder()
@@ -392,7 +392,7 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
             .setId("opt_" + Ulid.random())
             .setName("true")
             .setValue("true")
-            .setOptionType(OptionType.bool)
+            .setOption(OptionType.bool)
             .setWeight(5_000));
       }
     }
