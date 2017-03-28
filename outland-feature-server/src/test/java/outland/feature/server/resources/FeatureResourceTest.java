@@ -14,10 +14,10 @@ import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
 import org.glassfish.jersey.logging.LoggingFeature;
 import org.junit.Before;
 import org.junit.ClassRule;
-import org.junit.Ignore;
 import org.junit.Test;
 import outland.feature.proto.App;
 import outland.feature.proto.Feature;
+import outland.feature.proto.FeatureOwner;
 import outland.feature.proto.Owner;
 import outland.feature.proto.Service;
 import outland.feature.server.Problem;
@@ -41,6 +41,11 @@ public class FeatureResourceTest {
   private String basicPassword;
   private final Injector injector = ((ServerMain)APP.getApplication()).injector();
   private final AppService appService = injector.getInstance(AppService.class);
+  private final Gson gson;
+
+  public FeatureResourceTest() {
+    gson = new Gson();
+  }
 
   @Before
   public void setUp() throws Exception {
@@ -145,7 +150,6 @@ public class FeatureResourceTest {
 
     assertTrue(response.getStatus() == 401);
     String jsonRes = response.readEntity(String.class);
-    Gson gson = new Gson();
     final Problem problem = gson.fromJson(jsonRes, Problem.class);
     assertTrue(problem.status() == 401);
     assertTrue(problem.title().contains("Membership not authenticated for request"));
@@ -427,11 +431,58 @@ public class FeatureResourceTest {
     assertTrue(post.getStatus() == 404);
   }
 
+  @Test
+  public void testOwnerIncomplete422() throws Exception {
+
+    final String whitelisted = "own";
+    final String appKey = "testOwnerIncomplete422App";
+
+    final AppService instance = injector.getInstance(AppService.class);
+    instance.registerApp(
+        App.newBuilder()
+            .setKey(appKey)
+            .addServices(Service.newBuilder().setKey(whitelisted))
+            .build()
+    );
+
+    String url = "http://localhost:" + APP.getLocalPort() + "/features";
+    JerseyClient client = ServerSuite.client()
+        .register(
+            new LoggingFeature(Logger.getLogger(getClass().getName()), Level.INFO, null, null))
+        .register(HttpAuthenticationFeature.universalBuilder().build());
+
+    String key = "testOwnerIncomplete422Feature";
+    Feature feature = Feature.newBuilder()
+        .setKey(key)
+        .setDescription("desc")
+        .setAppkey(appKey)
+        .build();
+    ;
+    String jsonReq = Protobuf3Support.toJsonString(feature);
+
+    Response response = client.target(url)
+        .request()
+        .property(HTTP_AUTHENTICATION_BASIC_USERNAME, whitelisted +"/service")
+        .property(HTTP_AUTHENTICATION_BASIC_PASSWORD, basicPassword)
+        .post(Entity.entity(jsonReq, MediaType.APPLICATION_JSON_TYPE));
+
+    assertTrue(response.getStatus() == 422);
+
+    String jsonRes = response.readEntity(String.class);
+    final Problem problem = gson.fromJson(jsonRes, Problem.class);
+    assertTrue(problem.status() == 422);
+    assertTrue(problem.title().contains("owner_incomplete"));
+    assertEquals(Problem.CLIENT_TYPE, problem.type());
+  }
+
   private Feature buildTestFeature(String appKey, String key) {
+    final FeatureOwner owner =
+        FeatureOwner.newBuilder().setEmail("wile.e@acme.com").setUsername("wile,e").build();
     return Feature.newBuilder()
         .setKey(key)
         .setDescription("desc")
         .setAppkey(appKey)
+        .setOwner(owner)
         .build();
   }
 }
