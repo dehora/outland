@@ -77,17 +77,17 @@ public interface FeatureOrBuilder extends
       getUpdatedBytes();
 
   /**
-   * <code>optional .outland.FeatureOwner owner = 8;</code>
+   * <code>optional .outland.Owner owner = 8;</code>
    */
   boolean hasOwner();
   /**
-   * <code>optional .outland.FeatureOwner owner = 8;</code>
+   * <code>optional .outland.Owner owner = 8;</code>
    */
-  outland.feature.proto.FeatureOwner getOwner();
+  outland.feature.proto.Owner getOwner();
   /**
-   * <code>optional .outland.FeatureOwner owner = 8;</code>
+   * <code>optional .outland.Owner owner = 8;</code>
    */
-  outland.feature.proto.FeatureOwnerOrBuilder getOwnerOrBuilder();
+  outland.feature.proto.OwnerOrBuilder getOwnerOrBuilder();
 
   /**
    * <code>map&lt;string, string&gt; properties = 9;</code>
