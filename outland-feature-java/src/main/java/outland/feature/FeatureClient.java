@@ -225,11 +225,11 @@ public class FeatureClient {
 
     final Feature feature = maybe.get();
 
-    if(feature.getOptionType().equals(OptionType.flag)) {
+    if(feature.getOption().equals(OptionType.flag)) {
       return feature.getState().equals(Feature.State.on);
     }
 
-    if(feature.getOptionType().equals(OptionType.bool)) {
+    if(feature.getOption().equals(OptionType.bool)) {
       return new OptionEvaluator().evaluateBooleanOptions(feature);
     }
 
@@ -249,11 +249,11 @@ public class FeatureClient {
 
     final Feature feature = maybe.get();
 
-    if(feature.getOptionType().equals(OptionType.flag)) {
+    if(feature.getOption().equals(OptionType.flag)) {
       return feature.getState().equals(Feature.State.on);
     }
 
-    if(feature.getOptionType().equals(OptionType.bool)) {
+    if(feature.getOption().equals(OptionType.bool)) {
       return new OptionEvaluator().evaluateBooleanOptions(feature);
     }
 

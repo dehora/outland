@@ -72,36 +72,36 @@ public final class FeatureMessage {
       "\022\014\n\004type\030\001 \001(\t\022\014\n\004name\030\002 \001(\t\022\r\n\005email\030\003 " +
       "\001(\t\022\020\n\010username\030\004 \001(\t\022\n\n\002id\030\005 \001(\t\"N\n\016Fea" +
       "tureVersion\022\n\n\002id\030\001 \001(\t\022\021\n\ttimestamp\030\002 \001" +
-      "(\003\022\017\n\007counter\030\003 \001(\003\022\014\n\004type\030\004 \001(\t\"\177\n\rFea" +
-      "tureOption\022\n\n\002id\030\001 \001(\t\022\'\n\noptionType\030\002 \001" +
-      "(\0162\023.outland.OptionType\022\014\n\004name\030\003 \001(\t\022\r\n" +
-      "\005value\030\004 \001(\t\022\016\n\006weight\030\005 \001(\005\022\014\n\004type\030\006 \001" +
-      "(\t\"\315\003\n\007Feature\022\n\n\002id\030\001 \001(\t\022\013\n\003key\030\002 \001(\t\022" +
-      "\016\n\006appkey\030\003 \001(\t\022%\n\005state\030\004 \001(\0162\026.outland",
-      ".Feature.State\022\023\n\013description\030\005 \001(\t\022\017\n\007c" +
-      "reated\030\006 \001(\t\022\017\n\007updated\030\007 \001(\t\022$\n\005owner\030\010" +
-      " \001(\0132\025.outland.FeatureOwner\0224\n\npropertie" +
-      "s\030\t \003(\0132 .outland.Feature.PropertiesEntr" +
-      "y\022\'\n\noptionType\030\n \001(\0162\023.outland.OptionTy" +
-      "pe\022\'\n\007options\030\013 \003(\0132\026.outland.FeatureOpt" +
-      "ion\022(\n\007version\030\014 \001(\0132\027.outland.FeatureVe" +
-      "rsion\022\014\n\004type\030\r \001(\t\0321\n\017PropertiesEntry\022\013" +
-      "\n\003key\030\001 \001(\t\022\r\n\005value\030\002 \001(\t:\0028\001\"\"\n\005State\022" +
-      "\010\n\004none\020\000\022\007\n\003off\020\001\022\006\n\002on\020\002\"R\n\021FeatureCol",
-      "lection\022\014\n\004type\030\001 \001(\t\022\016\n\006appkey\030\002 \001(\t\022\037\n" +
-      "\005items\030\003 \003(\0132\020.outland.Feature\"\240\001\n\003App\022\n" +
-      "\n\002id\030\001 \001(\t\022\013\n\003key\030\002 \001(\t\022\014\n\004name\030\003 \001(\t\022\017\n" +
-      "\007created\030\006 \001(\t\022\017\n\007updated\030\007 \001(\t\022\"\n\010servi" +
-      "ces\030\004 \003(\0132\020.outland.Service\022\036\n\006owners\030\005 " +
-      "\003(\0132\016.outland.Owner\022\014\n\004type\030\010 \001(\t\"`\n\007Ser" +
-      "vice\022\n\n\002id\030\001 \001(\t\022\013\n\003key\030\002 \001(\t\022\014\n\004name\030\003 " +
-      "\001(\t\022\017\n\007created\030\006 \001(\t\022\017\n\007updated\030\007 \001(\t\022\014\n" +
-      "\004type\030\010 \001(\t\"r\n\005Owner\022\n\n\002id\030\001 \001(\t\022\014\n\004name" +
-      "\030\002 \001(\t\022\020\n\010username\030\003 \001(\t\022\r\n\005email\030\004 \001(\t\022",
-      "\017\n\007created\030\005 \001(\t\022\017\n\007updated\030\006 \001(\t\022\014\n\004typ" +
-      "e\030\007 \001(\t* \n\nOptionType\022\010\n\004flag\020\000\022\010\n\004bool\020" +
-      "\001B+\n\025outland.feature.protoB\016FeatureMessa" +
-      "geH\001P\001b\006proto3"
+      "(\003\022\017\n\007counter\030\003 \001(\003\022\014\n\004type\030\004 \001(\t\"{\n\rFea" +
+      "tureOption\022\n\n\002id\030\001 \001(\t\022#\n\006option\030\002 \001(\0162\023" +
+      ".outland.OptionType\022\014\n\004name\030\003 \001(\t\022\r\n\005val" +
+      "ue\030\004 \001(\t\022\016\n\006weight\030\005 \001(\005\022\014\n\004type\030\006 \001(\t\"\311" +
+      "\003\n\007Feature\022\n\n\002id\030\001 \001(\t\022\013\n\003key\030\002 \001(\t\022\016\n\006a" +
+      "ppkey\030\003 \001(\t\022%\n\005state\030\004 \001(\0162\026.outland.Fea",
+      "ture.State\022\023\n\013description\030\005 \001(\t\022\017\n\007creat" +
+      "ed\030\006 \001(\t\022\017\n\007updated\030\007 \001(\t\022$\n\005owner\030\010 \001(\013" +
+      "2\025.outland.FeatureOwner\0224\n\nproperties\030\t " +
+      "\003(\0132 .outland.Feature.PropertiesEntry\022#\n" +
+      "\006option\030\n \001(\0162\023.outland.OptionType\022\'\n\007op" +
+      "tions\030\013 \003(\0132\026.outland.FeatureOption\022(\n\007v" +
+      "ersion\030\014 \001(\0132\027.outland.FeatureVersion\022\014\n" +
+      "\004type\030\r \001(\t\0321\n\017PropertiesEntry\022\013\n\003key\030\001 " +
+      "\001(\t\022\r\n\005value\030\002 \001(\t:\0028\001\"\"\n\005State\022\010\n\004none\020" +
+      "\000\022\007\n\003off\020\001\022\006\n\002on\020\002\"R\n\021FeatureCollection\022",
+      "\014\n\004type\030\001 \001(\t\022\016\n\006appkey\030\002 \001(\t\022\037\n\005items\030\003" +
+      " \003(\0132\020.outland.Feature\"\240\001\n\003App\022\n\n\002id\030\001 \001" +
+      "(\t\022\013\n\003key\030\002 \001(\t\022\014\n\004name\030\003 \001(\t\022\017\n\007created" +
+      "\030\006 \001(\t\022\017\n\007updated\030\007 \001(\t\022\"\n\010services\030\004 \003(" +
+      "\0132\020.outland.Service\022\036\n\006owners\030\005 \003(\0132\016.ou" +
+      "tland.Owner\022\014\n\004type\030\010 \001(\t\"`\n\007Service\022\n\n\002" +
+      "id\030\001 \001(\t\022\013\n\003key\030\002 \001(\t\022\014\n\004name\030\003 \001(\t\022\017\n\007c" +
+      "reated\030\006 \001(\t\022\017\n\007updated\030\007 \001(\t\022\014\n\004type\030\010 " +
+      "\001(\t\"r\n\005Owner\022\n\n\002id\030\001 \001(\t\022\014\n\004name\030\002 \001(\t\022\020" +
+      "\n\010username\030\003 \001(\t\022\r\n\005email\030\004 \001(\t\022\017\n\007creat",
+      "ed\030\005 \001(\t\022\017\n\007updated\030\006 \001(\t\022\014\n\004type\030\007 \001(\t*" +
+      " \n\nOptionType\022\010\n\004flag\020\000\022\010\n\004bool\020\001B+\n\025out" +
+      "land.feature.protoB\016FeatureMessageH\001P\001b\006" +
+      "proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -132,13 +132,13 @@ public final class FeatureMessage {
     internal_static_outland_FeatureOption_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_outland_FeatureOption_descriptor,
-        new java.lang.String[] { "Id", "OptionType", "Name", "Value", "Weight", "Type", });
+        new java.lang.String[] { "Id", "Option", "Name", "Value", "Weight", "Type", });
     internal_static_outland_Feature_descriptor =
       getDescriptor().getMessageTypes().get(3);
     internal_static_outland_Feature_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_outland_Feature_descriptor,
-        new java.lang.String[] { "Id", "Key", "Appkey", "State", "Description", "Created", "Updated", "Owner", "Properties", "OptionType", "Options", "Version", "Type", });
+        new java.lang.String[] { "Id", "Key", "Appkey", "State", "Description", "Created", "Updated", "Owner", "Properties", "Option", "Options", "Version", "Type", });
     internal_static_outland_Feature_PropertiesEntry_descriptor =
       internal_static_outland_Feature_descriptor.getNestedTypes().get(0);
     internal_static_outland_Feature_PropertiesEntry_fieldAccessorTable = new

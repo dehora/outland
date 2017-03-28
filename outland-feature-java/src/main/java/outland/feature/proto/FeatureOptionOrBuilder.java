@@ -18,13 +18,13 @@ public interface FeatureOptionOrBuilder extends
       getIdBytes();
 
   /**
-   * <code>optional .outland.OptionType optionType = 2;</code>
+   * <code>optional .outland.OptionType option = 2;</code>
    */
-  int getOptionTypeValue();
+  int getOptionValue();
   /**
-   * <code>optional .outland.OptionType optionType = 2;</code>
+   * <code>optional .outland.OptionType option = 2;</code>
    */
-  outland.feature.proto.OptionType getOptionType();
+  outland.feature.proto.OptionType getOption();
 
   /**
    * <code>optional string name = 3;</code>
