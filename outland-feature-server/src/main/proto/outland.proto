@@ -70,20 +70,34 @@ message FeatureCollection {
     repeated Feature items = 3;
 }
 
+message ServiceGrant {
+    string type = 1;
+    string id = 2;
+    string name = 10;
+    string key = 11;
+}
+
+message MemberGrant {
+    string type = 1;
+    string id = 2;
+    string name = 10;
+    string username = 11;
+    string email = 12;
+}
+
+message GrantCollection {
+    string type = 1;
+    repeated ServiceGrant services = 10;
+    repeated MemberGrant members = 11;
+}
+
 message App {
+    string type = 8;
     string id = 1;
     string key = 2;
     string name = 3;
     string created = 6;
     string updated = 7;
-    repeated Service services = 4;
     repeated Owner owners = 5;
-    string type = 8;
-}
-
-message Service {
-    string id = 1;
-    string key = 2;
-    string name = 3;
-    string type = 8;
+    GrantCollection granted = 9;
 }
