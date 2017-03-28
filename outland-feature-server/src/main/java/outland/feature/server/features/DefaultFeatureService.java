@@ -3,6 +3,7 @@ package outland.feature.server.features;
 import com.codahale.metrics.Meter;
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.Timer;
+import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
 import com.google.protobuf.TextFormat;
@@ -18,6 +19,7 @@ import org.slf4j.LoggerFactory;
 import outland.feature.proto.Feature;
 import outland.feature.proto.FeatureCollection;
 import outland.feature.proto.FeatureOption;
+import outland.feature.proto.FeatureOwner;
 import outland.feature.proto.FeatureVersion;
 import outland.feature.proto.OptionType;
 import outland.feature.server.Problem;
@@ -76,6 +78,7 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
     String created = FeatureService.asString(now);
 
     Feature.Builder builder = registering.toBuilder();
+    builder.setType("feature");
     builder.setId(id);
     builder.setCreated(created);
     builder.setUpdated(builder.getCreated());
@@ -84,6 +87,9 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
     applyVersion(registering, builder);
     builder.clearOptions();
     applyOptionsRegister(registering, builder);
+
+    builder.clearOwner();
+    applyOwnerRegister(registering, builder);
 
     Feature feature = builder.build();
 
@@ -123,6 +129,7 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
         .setUpdated(now);
 
     // can't change some values in update
+    builder.setType("feature");
     builder.setOptionType(found.getOptionType());
     builder.setCreated(found.getCreated());
     builder.setId(found.getId());
@@ -135,6 +142,11 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
       List<FeatureOption> options = applyOptionsUpdate(updates, found);
       builder.clearOptions();
       builder.addAllOptions(options);
+    }
+
+    if(updates.hasOwner()) {
+      builder.clearOwner();
+      applyOwnerUpdate(updates, builder);
     }
 
     // a value other than none indicates the client sent something
@@ -354,6 +366,7 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
           validateOption(option);
 
           final FeatureOption.Builder optionBuilder = FeatureOption.newBuilder().mergeFrom(option);
+          optionBuilder.setType("option");
           optionBuilder.setId("opt_" + Ulid.random());
           optionBuilder.setOptionType(OptionType.bool);
           builder.addOptions(optionBuilder);
@@ -367,6 +380,7 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
         }
       } else {
         builder.addOptions(FeatureOption.newBuilder()
+            .setType("option")
             .setId("opt_" + Ulid.random())
             .setName("false")
             .setValue("false")
@@ -374,6 +388,7 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
             .setWeight(5_000));
 
         builder.addOptions(FeatureOption.newBuilder()
+            .setType("option")
             .setId("opt_" + Ulid.random())
             .setName("true")
             .setValue("true")
@@ -381,6 +396,23 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
             .setWeight(5_000));
       }
     }
+  }
+
+  private void applyOwnerUpdate(Feature registering, Feature.Builder builder) {
+    applyOwnerRegister(registering, builder);
+  }
+
+  private void applyOwnerRegister(Feature registering, Feature.Builder builder) {
+    final FeatureOwner owner = registering.getOwner();
+
+    if(Strings.isNullOrEmpty(owner.getUsername()) && Strings.isNullOrEmpty(owner.getEmail())) {
+      throw new ServiceException(Problem.clientProblem("owner_incomplete",
+          "owner has no email or username", 422));
+    }
+
+    final FeatureOwner.Builder ownerBuilder = owner.toBuilder();
+    ownerBuilder.setType("featureowner");
+    builder.setOwner(ownerBuilder.buildPartial());
   }
 
   private void validateOption(FeatureOption option) {
@@ -416,6 +448,7 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
     }
 
     builder.setVersion(FeatureVersion.newBuilder()
+        .setType("hlcver")
         .setCounter(next.counter())
         .setTimestamp(next.logicalTime())
         .setId(next.id()));

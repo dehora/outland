@@ -104,4 +104,14 @@ public interface AppOrBuilder extends
    */
   outland.feature.proto.OwnerOrBuilder getOwnersOrBuilder(
       int index);
+
+  /**
+   * <code>optional string type = 8;</code>
+   */
+  java.lang.String getType();
+  /**
+   * <code>optional string type = 8;</code>
+   */
+  com.google.protobuf.ByteString
+      getTypeBytes();
 }

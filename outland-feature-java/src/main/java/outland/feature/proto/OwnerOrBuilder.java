@@ -66,4 +66,14 @@ public interface OwnerOrBuilder extends
    */
   com.google.protobuf.ByteString
       getUpdatedBytes();
+
+  /**
+   * <code>optional string type = 7;</code>
+   */
+  java.lang.String getType();
+  /**
+   * <code>optional string type = 7;</code>
+   */
+  com.google.protobuf.ByteString
+      getTypeBytes();
 }

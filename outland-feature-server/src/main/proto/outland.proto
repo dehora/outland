@@ -8,6 +8,7 @@ option java_outer_classname = "FeatureMessage";
 package outland;
 
 message FeatureOwner {
+    string type = 1;
     string name = 2;
     string email = 3; // mappable to Owner.email
     string username = 4;
@@ -17,6 +18,7 @@ message FeatureVersion {
     string id = 1;
     int64 timestamp = 2;
     int64 counter = 3;
+    string type = 4;
 }
 
 enum OptionType {
@@ -36,6 +38,7 @@ message FeatureOption {
     string name = 3;
     string value = 4;
     int32 weight = 5;
+    string type = 6;
 }
 
 message Feature {
@@ -57,6 +60,7 @@ message Feature {
     OptionType optionType = 10;
     repeated FeatureOption options = 11;
     FeatureVersion version = 12;
+    string type = 13;
 }
 
 message FeatureCollection {
@@ -73,12 +77,14 @@ message App {
     string updated = 7;
     repeated Service services = 4;
     repeated Owner owners = 5;
+    string type = 8;
 }
 
 message Service {
     string id = 1;
     string key = 2;
     string name = 3;
+    string type = 8;
 }
 
 message Owner {
@@ -86,4 +92,5 @@ message Owner {
     string name = 2;
     string username = 3;
     string email = 4;
+    string type = 7;
 }

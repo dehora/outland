@@ -168,4 +168,14 @@ public interface FeatureOrBuilder extends
    * <code>optional .outland.FeatureVersion version = 12;</code>
    */
   outland.feature.proto.FeatureVersionOrBuilder getVersionOrBuilder();
+
+  /**
+   * <code>optional string type = 13;</code>
+   */
+  java.lang.String getType();
+  /**
+   * <code>optional string type = 13;</code>
+   */
+  com.google.protobuf.ByteString
+      getTypeBytes();
 }

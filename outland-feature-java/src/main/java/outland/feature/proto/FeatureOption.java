@@ -20,6 +20,7 @@ public  final class FeatureOption extends
     name_ = "";
     value_ = "";
     weight_ = 0;
+    type_ = "";
   }
 
   @java.lang.Override
@@ -74,6 +75,12 @@ public  final class FeatureOption extends
           case 40: {
 
             weight_ = input.readInt32();
+            break;
+          }
+          case 50: {
+            java.lang.String s = input.readStringRequireUtf8();
+
+            type_ = s;
             break;
           }
         }
@@ -226,6 +233,40 @@ public  final class FeatureOption extends
     return weight_;
   }
 
+  public static final int TYPE_FIELD_NUMBER = 6;
+  private volatile java.lang.Object type_;
+  /**
+   * <code>optional string type = 6;</code>
+   */
+  public java.lang.String getType() {
+    java.lang.Object ref = type_;
+    if (ref instanceof java.lang.String) {
+      return (java.lang.String) ref;
+    } else {
+      com.google.protobuf.ByteString bs = 
+          (com.google.protobuf.ByteString) ref;
+      java.lang.String s = bs.toStringUtf8();
+      type_ = s;
+      return s;
+    }
+  }
+  /**
+   * <code>optional string type = 6;</code>
+   */
+  public com.google.protobuf.ByteString
+      getTypeBytes() {
+    java.lang.Object ref = type_;
+    if (ref instanceof java.lang.String) {
+      com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString.copyFromUtf8(
+              (java.lang.String) ref);
+      type_ = b;
+      return b;
+    } else {
+      return (com.google.protobuf.ByteString) ref;
+    }
+  }
+
   private byte memoizedIsInitialized = -1;
   public final boolean isInitialized() {
     byte isInitialized = memoizedIsInitialized;
@@ -253,6 +294,9 @@ public  final class FeatureOption extends
     if (weight_ != 0) {
       output.writeInt32(5, weight_);
     }
+    if (!getTypeBytes().isEmpty()) {
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 6, type_);
+    }
   }
 
   public int getSerializedSize() {
@@ -276,6 +320,9 @@ public  final class FeatureOption extends
     if (weight_ != 0) {
       size += com.google.protobuf.CodedOutputStream
         .computeInt32Size(5, weight_);
+    }
+    if (!getTypeBytes().isEmpty()) {
+      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(6, type_);
     }
     memoizedSize = size;
     return size;
@@ -302,6 +349,8 @@ public  final class FeatureOption extends
         .equals(other.getValue());
     result = result && (getWeight()
         == other.getWeight());
+    result = result && getType()
+        .equals(other.getType());
     return result;
   }
 
@@ -322,6 +371,8 @@ public  final class FeatureOption extends
     hash = (53 * hash) + getValue().hashCode();
     hash = (37 * hash) + WEIGHT_FIELD_NUMBER;
     hash = (53 * hash) + getWeight();
+    hash = (37 * hash) + TYPE_FIELD_NUMBER;
+    hash = (53 * hash) + getType().hashCode();
     hash = (29 * hash) + unknownFields.hashCode();
     memoizedHashCode = hash;
     return hash;
@@ -450,6 +501,8 @@ public  final class FeatureOption extends
 
       weight_ = 0;
 
+      type_ = "";
+
       return this;
     }
 
@@ -477,6 +530,7 @@ public  final class FeatureOption extends
       result.name_ = name_;
       result.value_ = value_;
       result.weight_ = weight_;
+      result.type_ = type_;
       onBuilt();
       return result;
     }
@@ -535,6 +589,10 @@ public  final class FeatureOption extends
       }
       if (other.getWeight() != 0) {
         setWeight(other.getWeight());
+      }
+      if (!other.getType().isEmpty()) {
+        type_ = other.type_;
+        onChanged();
       }
       onChanged();
       return this;
@@ -835,6 +893,75 @@ public  final class FeatureOption extends
     public Builder clearWeight() {
       
       weight_ = 0;
+      onChanged();
+      return this;
+    }
+
+    private java.lang.Object type_ = "";
+    /**
+     * <code>optional string type = 6;</code>
+     */
+    public java.lang.String getType() {
+      java.lang.Object ref = type_;
+      if (!(ref instanceof java.lang.String)) {
+        com.google.protobuf.ByteString bs =
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        type_ = s;
+        return s;
+      } else {
+        return (java.lang.String) ref;
+      }
+    }
+    /**
+     * <code>optional string type = 6;</code>
+     */
+    public com.google.protobuf.ByteString
+        getTypeBytes() {
+      java.lang.Object ref = type_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        type_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+    /**
+     * <code>optional string type = 6;</code>
+     */
+    public Builder setType(
+        java.lang.String value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  
+      type_ = value;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>optional string type = 6;</code>
+     */
+    public Builder clearType() {
+      
+      type_ = getDefaultInstance().getType();
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>optional string type = 6;</code>
+     */
+    public Builder setTypeBytes(
+        com.google.protobuf.ByteString value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+      
+      type_ = value;
       onChanged();
       return this;
     }
