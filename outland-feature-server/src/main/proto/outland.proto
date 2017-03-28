@@ -7,11 +7,12 @@ option java_outer_classname = "FeatureMessage";
 
 package outland;
 
-message FeatureOwner {
-    string type = 1;
+message Owner {
+    string id = 1;
     string name = 2;
-    string email = 3; // mappable to Owner.email
-    string username = 4;
+    string username = 3;
+    string email = 4;
+    string type = 7;
 }
 
 message FeatureVersion {
@@ -54,7 +55,7 @@ message Feature {
     string description = 5;
     string created = 6;
     string updated = 7;
-    FeatureOwner owner = 8;
+    Owner owner = 8;
     map<string, string> properties = 9;
 
     OptionType option = 10;
@@ -85,12 +86,4 @@ message Service {
     string key = 2;
     string name = 3;
     string type = 8;
-}
-
-message Owner {
-    string id = 1;
-    string name = 2;
-    string username = 3;
-    string email = 4;
-    string type = 7;
 }
