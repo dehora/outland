@@ -60,16 +60,14 @@ public class DefaultAppService implements AppService, MetricsTimer {
     logger.info("{} /app[{}]/svc[{}]", kvp("op", "updateApp"),
         TextFormat.shortDebugString(app), TextFormat.shortDebugString(service));
 
-    return processUpdate(app,
-        builder -> builder.addServices(service.toBuilder().setId(mintServiceId()).build()));
+    return processUpdate(app, builder -> builder.addServices(prepareService(service)));
   }
 
   @Override public App addToApp(App app, final Owner owner) {
     logger.info("{} /app[{}]/own[{}]", kvp("op", "updateApp"),
         TextFormat.shortDebugString(app), TextFormat.shortDebugString(owner));
 
-    return processUpdate(app,
-        builder -> builder.addOwners(owner.toBuilder().setId(mintOwnerId()).build()));
+    return processUpdate(app, builder -> builder.addOwners(prepareOwner(owner)));
   }
 
   @Override public App removeService(App app, String serviceKey) {
@@ -156,11 +154,17 @@ public class DefaultAppService implements AppService, MetricsTimer {
     return timed(readAppTimer, () -> appStorage.loadAppByKey(appKey));
   }
 
+  private Owner prepareOwner(Owner owner) {
+    return owner.toBuilder().setType("owner").setId(mintOwnerId()).build();
+  }
+
+  private Service prepareService(Service service) {
+    return service.toBuilder().setType("service").setId(mintServiceId()).build();
+  }
+
   private App processUpdate(App app, Consumer<App.Builder> updateExtra) {
-    final App.Builder builder = app.toBuilder();
-    OffsetDateTime now = OffsetDateTime.now();
-    String updateTime = AppService.asString(now);
-    builder.setUpdated(updateTime);
+    final App.Builder builder = newAppBuilder(app);
+    builder.setUpdated(AppService.asString(OffsetDateTime.now()));
     updateExtra.accept(builder);
     final App updated = builder.build();
     updateAppInner(updated);
@@ -171,21 +175,18 @@ public class DefaultAppService implements AppService, MetricsTimer {
 
   private Optional<App> processRegistration(App app) {
     OffsetDateTime now = OffsetDateTime.now();
-    String id = "app_" + Ulid.random(now.toInstant().toEpochMilli());
     String created = AppService.asString(now);
-    App.Builder builder = app.toBuilder();
-    builder.setId(id);
+    final App.Builder builder = newAppBuilder(app);
+    builder.setId("app_" + Ulid.random(now.toInstant().toEpochMilli()));
     builder.setCreated(created);
     builder.setUpdated(created);
 
     List<Owner> ownersReady = Lists.newArrayList();
-    app.getOwnersList().forEach(
-        owner -> ownersReady.add(owner.toBuilder().setId(mintOwnerId()).build()));
+    app.getOwnersList().forEach(owner -> ownersReady.add(prepareOwner(owner)));
     builder.clearOwners().addAllOwners(ownersReady);
 
     List<Service> servicesReady = Lists.newArrayList();
-    app.getServicesList().forEach(
-        service -> servicesReady.add(service.toBuilder().setId(mintServiceId()).build()));
+    app.getServicesList().forEach(service -> servicesReady.add(prepareService(service)));
     builder.clearServices().addAllServices(servicesReady);
 
     final App registered = builder.build();
@@ -196,6 +197,10 @@ public class DefaultAppService implements AppService, MetricsTimer {
     registerServices(registered);
 
     return Optional.of(registered);
+  }
+
+  private App.Builder newAppBuilder(App app) {
+    return app.toBuilder().setType("app");
   }
 
   private boolean appHasMemberRelation(String appKey, String relatedType, String relatedKey) {

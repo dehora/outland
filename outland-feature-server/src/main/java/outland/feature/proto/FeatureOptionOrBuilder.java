@@ -50,4 +50,14 @@ public interface FeatureOptionOrBuilder extends
    * <code>optional int32 weight = 5;</code>
    */
   int getWeight();
+
+  /**
+   * <code>optional string type = 6;</code>
+   */
+  java.lang.String getType();
+  /**
+   * <code>optional string type = 6;</code>
+   */
+  com.google.protobuf.ByteString
+      getTypeBytes();
 }

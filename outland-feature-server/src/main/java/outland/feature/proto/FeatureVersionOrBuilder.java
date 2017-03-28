@@ -26,4 +26,14 @@ public interface FeatureVersionOrBuilder extends
    * <code>optional int64 counter = 3;</code>
    */
   long getCounter();
+
+  /**
+   * <code>optional string type = 4;</code>
+   */
+  java.lang.String getType();
+  /**
+   * <code>optional string type = 4;</code>
+   */
+  com.google.protobuf.ByteString
+      getTypeBytes();
 }

@@ -24,6 +24,7 @@ public  final class Feature extends
     updated_ = "";
     optionType_ = 0;
     options_ = java.util.Collections.emptyList();
+    type_ = "";
   }
 
   @java.lang.Override
@@ -144,6 +145,12 @@ public  final class Feature extends
               version_ = subBuilder.buildPartial();
             }
 
+            break;
+          }
+          case 106: {
+            java.lang.String s = input.readStringRequireUtf8();
+
+            type_ = s;
             break;
           }
         }
@@ -680,6 +687,40 @@ public  final class Feature extends
     return getVersion();
   }
 
+  public static final int TYPE_FIELD_NUMBER = 13;
+  private volatile java.lang.Object type_;
+  /**
+   * <code>optional string type = 13;</code>
+   */
+  public java.lang.String getType() {
+    java.lang.Object ref = type_;
+    if (ref instanceof java.lang.String) {
+      return (java.lang.String) ref;
+    } else {
+      com.google.protobuf.ByteString bs = 
+          (com.google.protobuf.ByteString) ref;
+      java.lang.String s = bs.toStringUtf8();
+      type_ = s;
+      return s;
+    }
+  }
+  /**
+   * <code>optional string type = 13;</code>
+   */
+  public com.google.protobuf.ByteString
+      getTypeBytes() {
+    java.lang.Object ref = type_;
+    if (ref instanceof java.lang.String) {
+      com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString.copyFromUtf8(
+              (java.lang.String) ref);
+      type_ = b;
+      return b;
+    } else {
+      return (com.google.protobuf.ByteString) ref;
+    }
+  }
+
   private byte memoizedIsInitialized = -1;
   public final boolean isInitialized() {
     byte isInitialized = memoizedIsInitialized;
@@ -733,6 +774,9 @@ public  final class Feature extends
     }
     if (version_ != null) {
       output.writeMessage(12, getVersion());
+    }
+    if (!getTypeBytes().isEmpty()) {
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 13, type_);
     }
   }
 
@@ -789,6 +833,9 @@ public  final class Feature extends
       size += com.google.protobuf.CodedOutputStream
         .computeMessageSize(12, getVersion());
     }
+    if (!getTypeBytes().isEmpty()) {
+      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(13, type_);
+    }
     memoizedSize = size;
     return size;
   }
@@ -833,6 +880,8 @@ public  final class Feature extends
       result = result && getVersion()
           .equals(other.getVersion());
     }
+    result = result && getType()
+        .equals(other.getType());
     return result;
   }
 
@@ -875,6 +924,8 @@ public  final class Feature extends
       hash = (37 * hash) + VERSION_FIELD_NUMBER;
       hash = (53 * hash) + getVersion().hashCode();
     }
+    hash = (37 * hash) + TYPE_FIELD_NUMBER;
+    hash = (53 * hash) + getType().hashCode();
     hash = (29 * hash) + unknownFields.hashCode();
     memoizedHashCode = hash;
     return hash;
@@ -1051,6 +1102,8 @@ public  final class Feature extends
         version_ = null;
         versionBuilder_ = null;
       }
+      type_ = "";
+
       return this;
     }
 
@@ -1104,6 +1157,7 @@ public  final class Feature extends
       } else {
         result.version_ = versionBuilder_.build();
       }
+      result.type_ = type_;
       result.bitField0_ = to_bitField0_;
       onBuilt();
       return result;
@@ -1209,6 +1263,10 @@ public  final class Feature extends
       }
       if (other.hasVersion()) {
         mergeVersion(other.getVersion());
+      }
+      if (!other.getType().isEmpty()) {
+        type_ = other.type_;
+        onChanged();
       }
       onChanged();
       return this;
@@ -2330,6 +2388,75 @@ public  final class Feature extends
         version_ = null;
       }
       return versionBuilder_;
+    }
+
+    private java.lang.Object type_ = "";
+    /**
+     * <code>optional string type = 13;</code>
+     */
+    public java.lang.String getType() {
+      java.lang.Object ref = type_;
+      if (!(ref instanceof java.lang.String)) {
+        com.google.protobuf.ByteString bs =
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        type_ = s;
+        return s;
+      } else {
+        return (java.lang.String) ref;
+      }
+    }
+    /**
+     * <code>optional string type = 13;</code>
+     */
+    public com.google.protobuf.ByteString
+        getTypeBytes() {
+      java.lang.Object ref = type_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        type_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+    /**
+     * <code>optional string type = 13;</code>
+     */
+    public Builder setType(
+        java.lang.String value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  
+      type_ = value;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>optional string type = 13;</code>
+     */
+    public Builder clearType() {
+      
+      type_ = getDefaultInstance().getType();
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>optional string type = 13;</code>
+     */
+    public Builder setTypeBytes(
+        com.google.protobuf.ByteString value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+      
+      type_ = value;
+      onChanged();
+      return this;
     }
     public final Builder setUnknownFields(
         final com.google.protobuf.UnknownFieldSet unknownFields) {

@@ -8,6 +8,16 @@ public interface FeatureOwnerOrBuilder extends
     com.google.protobuf.MessageOrBuilder {
 
   /**
+   * <code>optional string type = 1;</code>
+   */
+  java.lang.String getType();
+  /**
+   * <code>optional string type = 1;</code>
+   */
+  com.google.protobuf.ByteString
+      getTypeBytes();
+
+  /**
    * <code>optional string name = 2;</code>
    */
   java.lang.String getName();
