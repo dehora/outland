@@ -71,6 +71,10 @@ public class DefaultFeatureStorage implements FeatureStorage {
       owner.put("email", feature.getOwner().getEmail());
     }
 
+    if (!Strings.isNullOrEmpty(feature.getOwner().getUsername())) {
+      owner.put("username", feature.getOwner().getUsername());
+    }
+
     Item item = new Item()
         .withString("appkey", appKey)
         .withString("feature_key", key)
