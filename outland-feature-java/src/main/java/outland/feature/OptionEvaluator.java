@@ -11,7 +11,7 @@ class OptionEvaluator {
 
   boolean evaluateBooleanOptions(Feature feature) {
 
-    if (!feature.getOptionType().equals(OptionType.bool)) {
+    if (!feature.getOption().equals(OptionType.bool)) {
       return false; // todo: throw this?
     }
 

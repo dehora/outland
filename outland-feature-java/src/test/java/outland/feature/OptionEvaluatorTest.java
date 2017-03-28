@@ -43,7 +43,7 @@ public class OptionEvaluatorTest {
         .setName("true").setValue("true").setWeight(5_000).build();
 
     final Feature feature1 = Feature.newBuilder()
-        .setOptionType(OptionType.bool).addOptions(t).addOptions(f).setState(Feature.State.on)
+        .setOption(OptionType.bool).addOptions(t).addOptions(f).setState(Feature.State.on)
         .build();
 
     OptionEvaluator oe = new OptionEvaluator();
@@ -83,7 +83,7 @@ public class OptionEvaluatorTest {
         .setName("true").setValue("true").setWeight(0).build();
 
     final Feature feature1 = Feature.newBuilder()
-        .setOptionType(OptionType.bool).addOptions(t).addOptions(f).setState(Feature.State.on)
+        .setOption(OptionType.bool).addOptions(t).addOptions(f).setState(Feature.State.on)
         .build();
 
     OptionEvaluator oe = new OptionEvaluator();
@@ -101,7 +101,7 @@ public class OptionEvaluatorTest {
         .setName("true").setValue("true").setWeight(10_000).build();
 
     final Feature feature1 = Feature.newBuilder()
-        .setOptionType(OptionType.bool).addOptions(t).addOptions(f).setState(Feature.State.on)
+        .setOption(OptionType.bool).addOptions(t).addOptions(f).setState(Feature.State.on)
         .build();
 
     OptionEvaluator oe = new OptionEvaluator();
@@ -154,7 +154,7 @@ public class OptionEvaluatorTest {
         .build();
 
     final Feature feature1 = Feature.newBuilder()
-        .setOptionType(OptionType.bool)
+        .setOption(OptionType.bool)
         .addOptions(t)
         .addOptions(f)
         .setState(Feature.State.on  )

@@ -22,7 +22,7 @@ public  final class Feature extends
     description_ = "";
     created_ = "";
     updated_ = "";
-    optionType_ = 0;
+    option_ = 0;
     options_ = java.util.Collections.emptyList();
     type_ = "";
   }
@@ -122,7 +122,7 @@ public  final class Feature extends
           case 80: {
             int rawValue = input.readEnum();
 
-            optionType_ = rawValue;
+            option_ = rawValue;
             break;
           }
           case 90: {
@@ -615,19 +615,19 @@ public  final class Feature extends
     return map.get(key);
   }
 
-  public static final int OPTIONTYPE_FIELD_NUMBER = 10;
-  private int optionType_;
+  public static final int OPTION_FIELD_NUMBER = 10;
+  private int option_;
   /**
-   * <code>optional .outland.OptionType optionType = 10;</code>
+   * <code>optional .outland.OptionType option = 10;</code>
    */
-  public int getOptionTypeValue() {
-    return optionType_;
+  public int getOptionValue() {
+    return option_;
   }
   /**
-   * <code>optional .outland.OptionType optionType = 10;</code>
+   * <code>optional .outland.OptionType option = 10;</code>
    */
-  public outland.feature.proto.OptionType getOptionType() {
-    outland.feature.proto.OptionType result = outland.feature.proto.OptionType.valueOf(optionType_);
+  public outland.feature.proto.OptionType getOption() {
+    outland.feature.proto.OptionType result = outland.feature.proto.OptionType.valueOf(option_);
     return result == null ? outland.feature.proto.OptionType.UNRECOGNIZED : result;
   }
 
@@ -766,8 +766,8 @@ public  final class Feature extends
           .build();
       output.writeMessage(9, properties);
     }
-    if (optionType_ != outland.feature.proto.OptionType.flag.getNumber()) {
-      output.writeEnum(10, optionType_);
+    if (option_ != outland.feature.proto.OptionType.flag.getNumber()) {
+      output.writeEnum(10, option_);
     }
     for (int i = 0; i < options_.size(); i++) {
       output.writeMessage(11, options_.get(i));
@@ -821,9 +821,9 @@ public  final class Feature extends
       size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(9, properties);
     }
-    if (optionType_ != outland.feature.proto.OptionType.flag.getNumber()) {
+    if (option_ != outland.feature.proto.OptionType.flag.getNumber()) {
       size += com.google.protobuf.CodedOutputStream
-        .computeEnumSize(10, optionType_);
+        .computeEnumSize(10, option_);
     }
     for (int i = 0; i < options_.size(); i++) {
       size += com.google.protobuf.CodedOutputStream
@@ -872,7 +872,7 @@ public  final class Feature extends
     }
     result = result && internalGetProperties().equals(
         other.internalGetProperties());
-    result = result && optionType_ == other.optionType_;
+    result = result && option_ == other.option_;
     result = result && getOptionsList()
         .equals(other.getOptionsList());
     result = result && (hasVersion() == other.hasVersion());
@@ -914,8 +914,8 @@ public  final class Feature extends
       hash = (37 * hash) + PROPERTIES_FIELD_NUMBER;
       hash = (53 * hash) + internalGetProperties().hashCode();
     }
-    hash = (37 * hash) + OPTIONTYPE_FIELD_NUMBER;
-    hash = (53 * hash) + optionType_;
+    hash = (37 * hash) + OPTION_FIELD_NUMBER;
+    hash = (53 * hash) + option_;
     if (getOptionsCount() > 0) {
       hash = (37 * hash) + OPTIONS_FIELD_NUMBER;
       hash = (53 * hash) + getOptionsList().hashCode();
@@ -1088,7 +1088,7 @@ public  final class Feature extends
         ownerBuilder_ = null;
       }
       internalGetMutableProperties().clear();
-      optionType_ = 0;
+      option_ = 0;
 
       if (optionsBuilder_ == null) {
         options_ = java.util.Collections.emptyList();
@@ -1142,7 +1142,7 @@ public  final class Feature extends
       }
       result.properties_ = internalGetProperties();
       result.properties_.makeImmutable();
-      result.optionType_ = optionType_;
+      result.option_ = option_;
       if (optionsBuilder_ == null) {
         if (((bitField0_ & 0x00000400) == 0x00000400)) {
           options_ = java.util.Collections.unmodifiableList(options_);
@@ -1232,8 +1232,8 @@ public  final class Feature extends
       }
       internalGetMutableProperties().mergeFrom(
           other.internalGetProperties());
-      if (other.optionType_ != 0) {
-        setOptionTypeValue(other.getOptionTypeValue());
+      if (other.option_ != 0) {
+        setOptionValue(other.getOptionValue());
       }
       if (optionsBuilder_ == null) {
         if (!other.options_.isEmpty()) {
@@ -1989,46 +1989,46 @@ public  final class Feature extends
       return this;
     }
 
-    private int optionType_ = 0;
+    private int option_ = 0;
     /**
-     * <code>optional .outland.OptionType optionType = 10;</code>
+     * <code>optional .outland.OptionType option = 10;</code>
      */
-    public int getOptionTypeValue() {
-      return optionType_;
+    public int getOptionValue() {
+      return option_;
     }
     /**
-     * <code>optional .outland.OptionType optionType = 10;</code>
+     * <code>optional .outland.OptionType option = 10;</code>
      */
-    public Builder setOptionTypeValue(int value) {
-      optionType_ = value;
+    public Builder setOptionValue(int value) {
+      option_ = value;
       onChanged();
       return this;
     }
     /**
-     * <code>optional .outland.OptionType optionType = 10;</code>
+     * <code>optional .outland.OptionType option = 10;</code>
      */
-    public outland.feature.proto.OptionType getOptionType() {
-      outland.feature.proto.OptionType result = outland.feature.proto.OptionType.valueOf(optionType_);
+    public outland.feature.proto.OptionType getOption() {
+      outland.feature.proto.OptionType result = outland.feature.proto.OptionType.valueOf(option_);
       return result == null ? outland.feature.proto.OptionType.UNRECOGNIZED : result;
     }
     /**
-     * <code>optional .outland.OptionType optionType = 10;</code>
+     * <code>optional .outland.OptionType option = 10;</code>
      */
-    public Builder setOptionType(outland.feature.proto.OptionType value) {
+    public Builder setOption(outland.feature.proto.OptionType value) {
       if (value == null) {
         throw new NullPointerException();
       }
       
-      optionType_ = value.getNumber();
+      option_ = value.getNumber();
       onChanged();
       return this;
     }
     /**
-     * <code>optional .outland.OptionType optionType = 10;</code>
+     * <code>optional .outland.OptionType option = 10;</code>
      */
-    public Builder clearOptionType() {
+    public Builder clearOption() {
       
-      optionType_ = 0;
+      option_ = 0;
       onChanged();
       return this;
     }

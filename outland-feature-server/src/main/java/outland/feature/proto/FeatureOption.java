@@ -16,7 +16,7 @@ public  final class FeatureOption extends
   }
   private FeatureOption() {
     id_ = "";
-    optionType_ = 0;
+    option_ = 0;
     name_ = "";
     value_ = "";
     weight_ = 0;
@@ -57,7 +57,7 @@ public  final class FeatureOption extends
           case 16: {
             int rawValue = input.readEnum();
 
-            optionType_ = rawValue;
+            option_ = rawValue;
             break;
           }
           case 26: {
@@ -140,19 +140,19 @@ public  final class FeatureOption extends
     }
   }
 
-  public static final int OPTIONTYPE_FIELD_NUMBER = 2;
-  private int optionType_;
+  public static final int OPTION_FIELD_NUMBER = 2;
+  private int option_;
   /**
-   * <code>optional .outland.OptionType optionType = 2;</code>
+   * <code>optional .outland.OptionType option = 2;</code>
    */
-  public int getOptionTypeValue() {
-    return optionType_;
+  public int getOptionValue() {
+    return option_;
   }
   /**
-   * <code>optional .outland.OptionType optionType = 2;</code>
+   * <code>optional .outland.OptionType option = 2;</code>
    */
-  public outland.feature.proto.OptionType getOptionType() {
-    outland.feature.proto.OptionType result = outland.feature.proto.OptionType.valueOf(optionType_);
+  public outland.feature.proto.OptionType getOption() {
+    outland.feature.proto.OptionType result = outland.feature.proto.OptionType.valueOf(option_);
     return result == null ? outland.feature.proto.OptionType.UNRECOGNIZED : result;
   }
 
@@ -282,8 +282,8 @@ public  final class FeatureOption extends
     if (!getIdBytes().isEmpty()) {
       com.google.protobuf.GeneratedMessageV3.writeString(output, 1, id_);
     }
-    if (optionType_ != outland.feature.proto.OptionType.flag.getNumber()) {
-      output.writeEnum(2, optionType_);
+    if (option_ != outland.feature.proto.OptionType.flag.getNumber()) {
+      output.writeEnum(2, option_);
     }
     if (!getNameBytes().isEmpty()) {
       com.google.protobuf.GeneratedMessageV3.writeString(output, 3, name_);
@@ -307,9 +307,9 @@ public  final class FeatureOption extends
     if (!getIdBytes().isEmpty()) {
       size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, id_);
     }
-    if (optionType_ != outland.feature.proto.OptionType.flag.getNumber()) {
+    if (option_ != outland.feature.proto.OptionType.flag.getNumber()) {
       size += com.google.protobuf.CodedOutputStream
-        .computeEnumSize(2, optionType_);
+        .computeEnumSize(2, option_);
     }
     if (!getNameBytes().isEmpty()) {
       size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, name_);
@@ -342,7 +342,7 @@ public  final class FeatureOption extends
     boolean result = true;
     result = result && getId()
         .equals(other.getId());
-    result = result && optionType_ == other.optionType_;
+    result = result && option_ == other.option_;
     result = result && getName()
         .equals(other.getName());
     result = result && getValue()
@@ -363,8 +363,8 @@ public  final class FeatureOption extends
     hash = (19 * hash) + getDescriptorForType().hashCode();
     hash = (37 * hash) + ID_FIELD_NUMBER;
     hash = (53 * hash) + getId().hashCode();
-    hash = (37 * hash) + OPTIONTYPE_FIELD_NUMBER;
-    hash = (53 * hash) + optionType_;
+    hash = (37 * hash) + OPTION_FIELD_NUMBER;
+    hash = (53 * hash) + option_;
     hash = (37 * hash) + NAME_FIELD_NUMBER;
     hash = (53 * hash) + getName().hashCode();
     hash = (37 * hash) + VALUE_FIELD_NUMBER;
@@ -493,7 +493,7 @@ public  final class FeatureOption extends
       super.clear();
       id_ = "";
 
-      optionType_ = 0;
+      option_ = 0;
 
       name_ = "";
 
@@ -526,7 +526,7 @@ public  final class FeatureOption extends
     public outland.feature.proto.FeatureOption buildPartial() {
       outland.feature.proto.FeatureOption result = new outland.feature.proto.FeatureOption(this);
       result.id_ = id_;
-      result.optionType_ = optionType_;
+      result.option_ = option_;
       result.name_ = name_;
       result.value_ = value_;
       result.weight_ = weight_;
@@ -576,8 +576,8 @@ public  final class FeatureOption extends
         id_ = other.id_;
         onChanged();
       }
-      if (other.optionType_ != 0) {
-        setOptionTypeValue(other.getOptionTypeValue());
+      if (other.option_ != 0) {
+        setOptionValue(other.getOptionValue());
       }
       if (!other.getName().isEmpty()) {
         name_ = other.name_;
@@ -689,46 +689,46 @@ public  final class FeatureOption extends
       return this;
     }
 
-    private int optionType_ = 0;
+    private int option_ = 0;
     /**
-     * <code>optional .outland.OptionType optionType = 2;</code>
+     * <code>optional .outland.OptionType option = 2;</code>
      */
-    public int getOptionTypeValue() {
-      return optionType_;
+    public int getOptionValue() {
+      return option_;
     }
     /**
-     * <code>optional .outland.OptionType optionType = 2;</code>
+     * <code>optional .outland.OptionType option = 2;</code>
      */
-    public Builder setOptionTypeValue(int value) {
-      optionType_ = value;
+    public Builder setOptionValue(int value) {
+      option_ = value;
       onChanged();
       return this;
     }
     /**
-     * <code>optional .outland.OptionType optionType = 2;</code>
+     * <code>optional .outland.OptionType option = 2;</code>
      */
-    public outland.feature.proto.OptionType getOptionType() {
-      outland.feature.proto.OptionType result = outland.feature.proto.OptionType.valueOf(optionType_);
+    public outland.feature.proto.OptionType getOption() {
+      outland.feature.proto.OptionType result = outland.feature.proto.OptionType.valueOf(option_);
       return result == null ? outland.feature.proto.OptionType.UNRECOGNIZED : result;
     }
     /**
-     * <code>optional .outland.OptionType optionType = 2;</code>
+     * <code>optional .outland.OptionType option = 2;</code>
      */
-    public Builder setOptionType(outland.feature.proto.OptionType value) {
+    public Builder setOption(outland.feature.proto.OptionType value) {
       if (value == null) {
         throw new NullPointerException();
       }
       
-      optionType_ = value.getNumber();
+      option_ = value.getNumber();
       onChanged();
       return this;
     }
     /**
-     * <code>optional .outland.OptionType optionType = 2;</code>
+     * <code>optional .outland.OptionType option = 2;</code>
      */
-    public Builder clearOptionType() {
+    public Builder clearOption() {
       
-      optionType_ = 0;
+      option_ = 0;
       onChanged();
       return this;
     }

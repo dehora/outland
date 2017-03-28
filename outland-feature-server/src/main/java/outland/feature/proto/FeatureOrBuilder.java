@@ -124,13 +124,13 @@ public interface FeatureOrBuilder extends
       java.lang.String key);
 
   /**
-   * <code>optional .outland.OptionType optionType = 10;</code>
+   * <code>optional .outland.OptionType option = 10;</code>
    */
-  int getOptionTypeValue();
+  int getOptionValue();
   /**
-   * <code>optional .outland.OptionType optionType = 10;</code>
+   * <code>optional .outland.OptionType option = 10;</code>
    */
-  outland.feature.proto.OptionType getOptionType();
+  outland.feature.proto.OptionType getOption();
 
   /**
    * <code>repeated .outland.FeatureOption options = 11;</code>

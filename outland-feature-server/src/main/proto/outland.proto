@@ -34,7 +34,7 @@ enum OptionType {
 
 message FeatureOption {
     string id = 1;
-    OptionType optionType = 2;
+    OptionType option = 2;
     string name = 3;
     string value = 4;
     int32 weight = 5;
@@ -57,7 +57,7 @@ message Feature {
     FeatureOwner owner = 8;
     map<string, string> properties = 9;
 
-    OptionType optionType = 10;
+    OptionType option = 10;
     repeated FeatureOption options = 11;
     FeatureVersion version = 12;
     string type = 13;
