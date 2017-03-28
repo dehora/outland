@@ -34,7 +34,7 @@ public interface AppService {
 
   App removeOwner(App app, String username, String email);
 
-  boolean appHasOwner(String appKey, String username);
+  boolean appHasOwner(String appKey, String usernameOrEmail);
 
   boolean appHasService(String appKey, String ownerKey);
 
