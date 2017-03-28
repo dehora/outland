@@ -144,8 +144,8 @@ public class DefaultAppService implements AppService, MetricsTimer {
     return updated;
   }
 
-  @Override public boolean appHasOwner(String appKey, String username) {
-    return appHasMemberRelation(appKey, AppService.OWNER, username);
+  @Override public boolean appHasOwner(String appKey, String usernameOrEmail) {
+    return appHasMemberRelation(appKey, AppService.OWNER, usernameOrEmail);
   }
 
   @Override public boolean appHasService(String appKey, String serviceKey) {
