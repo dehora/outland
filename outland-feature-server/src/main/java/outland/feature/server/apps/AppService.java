@@ -4,13 +4,17 @@ import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 import outland.feature.proto.App;
+import outland.feature.proto.MemberGrant;
 import outland.feature.proto.Owner;
-import outland.feature.proto.Service;
+import outland.feature.proto.ServiceGrant;
 
 public interface AppService {
 
   String OWNER = "owner";
   String SERVICE = "service";
+  String MEMBER = "member";
+  public static final String GRANT_RELATION = "has_grant";
+  public static final String OWNER_RELATION = "has_owner";
 
   DateTimeFormatter ISO = DateTimeFormatter.ISO_OFFSET_DATE_TIME;
 
@@ -26,17 +30,23 @@ public interface AppService {
 
   App updateApp(App app);
 
-  App addToApp(App app, Service service);
+  App addToApp(App app, ServiceGrant service);
+
+  App addToApp(App app, MemberGrant member);
 
   App addToApp(App app, Owner owner);
 
-  App removeService(App app, String serviceKey);
+  App removeServiceGrant(App app, String serviceKey);
+
+  App removeMemberGrant(App app, String memberKey);
 
   App removeOwner(App app, String username, String email);
 
   boolean appHasOwner(String appKey, String usernameOrEmail);
 
-  boolean appHasService(String appKey, String ownerKey);
+  boolean appHasServiceGrant(String appKey, String serviceKey);
+
+  boolean appHasMemberGrant(String appKey, String usernameOrEmail);
 
   Optional<App> loadAppByKey(String appKey);
 }

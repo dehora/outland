@@ -13,8 +13,10 @@ import javax.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import outland.feature.proto.App;
+import outland.feature.proto.GrantCollection;
+import outland.feature.proto.MemberGrant;
 import outland.feature.proto.Owner;
-import outland.feature.proto.Service;
+import outland.feature.proto.ServiceGrant;
 import outland.feature.server.features.MetricsTimer;
 import outland.feature.server.features.Ulid;
 import outland.feature.server.features.VersionService;
@@ -31,6 +33,7 @@ public class DefaultAppService implements AppService, MetricsTimer {
   private Timer saveAppTimer;
   private Timer saveServiceTimer;
   private Timer saveOwnerTimer;
+  private Timer saveMemberTimer;
   private Timer readAppTimer;
   private Timer removeRelationTimer;
 
@@ -56,32 +59,41 @@ public class DefaultAppService implements AppService, MetricsTimer {
     return processUpdate(app, builder -> {});
   }
 
-  @Override public App addToApp(App app, Service service) {
-    logger.info("{} /app[{}]/svc[{}]", kvp("op", "updateApp"),
+  @Override public App addToApp(App app, ServiceGrant service) {
+    logger.info("{} /app[{}]/svc[{}]", kvp("op", "addToApp.service"),
         TextFormat.shortDebugString(app), TextFormat.shortDebugString(service));
 
-    return processUpdate(app, builder -> builder.addServices(prepareService(service)));
+    return processUpdate(app,
+        builder -> builder.getGranted().getServicesList().add(prepareService(service)));
+  }
+
+  @Override public App addToApp(App app, MemberGrant member) {
+    logger.info("{} /app[{}]/mbr[{}]", kvp("op", "addToApp.member"),
+        TextFormat.shortDebugString(app), TextFormat.shortDebugString(member));
+
+    return processUpdate(app,
+        builder -> builder.getGranted().getMembersList().add(prepareMember(member)));
   }
 
   @Override public App addToApp(App app, final Owner owner) {
-    logger.info("{} /app[{}]/own[{}]", kvp("op", "updateApp"),
+    logger.info("{} /app[{}]/own[{}]", kvp("op", "addToApp.owner"),
         TextFormat.shortDebugString(app), TextFormat.shortDebugString(owner));
 
     return processUpdate(app, builder -> builder.addOwners(prepareOwner(owner)));
   }
 
-  @Override public App removeService(App app, String serviceKey) {
+  @Override public App removeServiceGrant(App app, String serviceKey) {
 
     if(serviceKey == null) {
       return  app;
     }
 
     final App.Builder builder = app.toBuilder();
-    final List<Service> list = builder.getServicesList();
-    Service service = null;
+    final List<ServiceGrant> list = builder.getGranted().getServicesList();
+    ServiceGrant service = null;
     for (int i = 0; i < list.size(); i++) {
       if (serviceKey.equals(list.get(i).getKey())) {
-        builder.removeServices(i);
+        builder.getGranted().getServicesList().remove(i);
         service = list.get(i);
         break;
       }
@@ -99,6 +111,46 @@ public class DefaultAppService implements AppService, MetricsTimer {
     updateAppInner(updated);
     removeServiceFromGraph(updated, service);
     return updated;
+  }
+
+  @Override public App removeMemberGrant(App app, String memberKey) {
+    if(memberKey == null) {
+      return  app;
+    }
+
+    final App.Builder builder = app.toBuilder();
+
+    final List<MemberGrant> ownersList = builder.getGranted().getMembersList();
+    MemberGrant memberGrant = null;
+    for (int i = 0; i < ownersList.size(); i++) {
+
+      final MemberGrant ownerNext = ownersList.get(i);
+      if(memberKey.equals(ownerNext.getUsername())) {
+        builder.removeOwners(i);
+        memberGrant = ownerNext;
+        break;
+      }
+
+      if(memberKey.equals(ownerNext.getEmail())) {
+        builder.removeOwners(i);
+        memberGrant = ownerNext;
+        break;
+      }
+    }
+
+    if(memberGrant == null) {
+      return app;
+    }
+
+    OffsetDateTime now = OffsetDateTime.now();
+    String updateTime = AppService.asString(now);
+    builder.setUpdated(updateTime);
+
+    final App updated = builder.build();
+    updateAppInner(updated);
+    removeMemberFromGraph(updated, memberGrant);
+    return updated;
+
   }
 
   @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
@@ -143,11 +195,15 @@ public class DefaultAppService implements AppService, MetricsTimer {
   }
 
   @Override public boolean appHasOwner(String appKey, String usernameOrEmail) {
-    return appHasMemberRelation(appKey, AppService.OWNER, usernameOrEmail);
+    return appHasOwnerRelation(appKey, AppService.OWNER, usernameOrEmail);
   }
 
-  @Override public boolean appHasService(String appKey, String serviceKey) {
-    return appHasMemberRelation(appKey, AppService.SERVICE, serviceKey);
+  @Override public boolean appHasServiceGrant(String appKey, String serviceKey) {
+    return appHasGrantRelation(appKey, AppService.SERVICE, serviceKey);
+  }
+
+  @Override public boolean appHasMemberGrant(String appKey, String usernameOrEmail) {
+    return appHasGrantRelation(appKey, AppService.MEMBER, usernameOrEmail);
   }
 
   @Override public Optional<App> loadAppByKey(String appKey) {
@@ -158,8 +214,12 @@ public class DefaultAppService implements AppService, MetricsTimer {
     return owner.toBuilder().setType("owner").setId(mintOwnerId()).build();
   }
 
-  private Service prepareService(Service service) {
+  private ServiceGrant prepareService(ServiceGrant service) {
     return service.toBuilder().setType("service").setId(mintServiceId()).build();
+  }
+
+  private MemberGrant prepareMember(MemberGrant member) {
+    return member.toBuilder().setType("member").setId(mintMemberId()).build();
   }
 
   private App processUpdate(App app, Consumer<App.Builder> updateExtra) {
@@ -169,6 +229,7 @@ public class DefaultAppService implements AppService, MetricsTimer {
     final App updated = builder.build();
     updateAppInner(updated);
     updateOwners(updated);
+    updateMembers(updated);
     updateServices(updated);
     return updated;
   }
@@ -176,25 +237,35 @@ public class DefaultAppService implements AppService, MetricsTimer {
   private Optional<App> processRegistration(App app) {
     OffsetDateTime now = OffsetDateTime.now();
     String created = AppService.asString(now);
-    final App.Builder builder = newAppBuilder(app);
-    builder.setId("app_" + Ulid.random(now.toInstant().toEpochMilli()));
-    builder.setCreated(created);
-    builder.setUpdated(created);
+    final App.Builder appBuilder = newAppBuilder(app);
+    appBuilder.setId("app_" + Ulid.random(now.toInstant().toEpochMilli()));
+    appBuilder.setCreated(created);
+    appBuilder.setUpdated(created);
 
     List<Owner> ownersReady = Lists.newArrayList();
     app.getOwnersList().forEach(owner -> ownersReady.add(prepareOwner(owner)));
-    builder.clearOwners().addAllOwners(ownersReady);
+    appBuilder.clearOwners().addAllOwners(ownersReady);
 
-    List<Service> servicesReady = Lists.newArrayList();
-    app.getServicesList().forEach(service -> servicesReady.add(prepareService(service)));
-    builder.clearServices().addAllServices(servicesReady);
+    GrantCollection.Builder grantCollectionBuilder = GrantCollection.newBuilder();
 
-    final App registered = builder.build();
+    List<ServiceGrant> servicesReady = Lists.newArrayList();
+    app.getGranted().getServicesList().forEach(service -> servicesReady.add(prepareService(service)));
+    grantCollectionBuilder.addAllServices(servicesReady);
+
+    List<MemberGrant> memberReady = Lists.newArrayList();
+    app.getGranted().getMembersList().forEach(grant -> memberReady.add(prepareMember(grant)));
+    grantCollectionBuilder.addAllMembers(memberReady);
+
+    appBuilder.clearGranted();
+    appBuilder.setGranted(grantCollectionBuilder.buildPartial());
+
+    final App registered = appBuilder.build();
 
     // todo: the usual compensating write failure stuff
     registerAppInner(registered);
     registerOwners(registered);
     registerServices(registered);
+    registerMembers(registered);
 
     return Optional.of(registered);
   }
@@ -203,8 +274,16 @@ public class DefaultAppService implements AppService, MetricsTimer {
     return app.toBuilder().setType("app");
   }
 
-  private boolean appHasMemberRelation(String appKey, String relatedType, String relatedKey) {
-    final String relation = "has_member";
+  private boolean appHasOwnerRelation(String appKey, String relatedType, String relatedKey) {
+    return appHasRelation(appKey, relatedType, relatedKey, OWNER_RELATION);
+  }
+
+  private boolean appHasGrantRelation(String appKey, String relatedType, String relatedKey) {
+    return appHasRelation(appKey, relatedType, relatedKey, GRANT_RELATION);
+  }
+
+  private boolean appHasRelation(String appKey, String relatedType, String relatedKey,
+      String relation) {
     final String subjectType = "app";
     final String subjectKey = appKey;
     final String objectType = relatedType;
@@ -222,7 +301,11 @@ public class DefaultAppService implements AppService, MetricsTimer {
   }
 
   private void registerServices(App app) {
-    app.getServicesList().forEach(service -> addServiceToGraph(app, service));
+    app.getGranted().getServicesList().forEach(service -> addServiceToGraph(app, service));
+  }
+
+  private void registerMembers(App app) {
+    app.getGranted().getMembersList().forEach(member -> addMemberToGraph(app, member));
   }
 
   private void registerOwners(App app) {
@@ -237,21 +320,29 @@ public class DefaultAppService implements AppService, MetricsTimer {
     return "svc_" + Ulid.random();
   }
 
+  private String mintMemberId() {
+    return "mbr_" + Ulid.random();
+  }
+
   private void updateAppInner(App registered) {
     timed(saveAppTimer, () -> appStorage.saveApp(registered));
   }
 
   private void updateServices(App app) {
-    app.getServicesList().forEach(service -> addServiceToGraph(app, service));
+    app.getGranted().getServicesList().forEach(service -> addServiceToGraph(app, service));
+  }
+
+  private void updateMembers(App app) {
+    app.getGranted().getMembersList().forEach(member -> addMemberToGraph(app, member));
   }
 
   private void updateOwners(App app) {
     app.getOwnersList().forEach(service -> addOwnerToGraph(app, service));
   }
 
-  private void addServiceToGraph(App app, Service service) {
+  private void addServiceToGraph(App app, ServiceGrant service) {
 
-    final String relation = "has_member";
+    final String relation = GRANT_RELATION;
     final String subjectType = "app";
     final String subjectKey = app.getKey();
     final String objectType = AppService.SERVICE;
@@ -261,8 +352,27 @@ public class DefaultAppService implements AppService, MetricsTimer {
         app, relation, subjectType, subjectKey, objectType, objectKey, saveServiceTimer);
   }
 
+  private void addMemberToGraph(App app, MemberGrant member) {
+    final String relation = GRANT_RELATION;
+    final String subjectType = "app";
+    final String subjectKey = app.getKey();
+    final String objectType = AppService.MEMBER;
+
+    if(! Strings.isNullOrEmpty(member.getUsername())) {
+      final String objectKey = member.getUsername();
+      saveGraphRelation(
+          app, relation, subjectType, subjectKey, objectType, objectKey, saveOwnerTimer);
+    }
+
+    if(! Strings.isNullOrEmpty(member.getEmail())) {
+      final String objectKey = member.getEmail();
+      saveGraphRelation(
+          app, relation, subjectType, subjectKey, objectType, objectKey, saveOwnerTimer);
+    }
+  }
+
   private void addOwnerToGraph(App app, Owner owner) {
-    final String relation = "has_member";
+    final String relation = OWNER_RELATION;
     final String subjectType = "app";
     final String subjectKey = app.getKey();
     final String objectType = AppService.OWNER;
@@ -325,7 +435,7 @@ public class DefaultAppService implements AppService, MetricsTimer {
   }
 
   private void removeOwnerFromGraph(App app, Owner owner) {
-    final String relation = "has_member";
+    final String relation = OWNER_RELATION;
     final String subjectType = "app";
     final String subjectKey = app.getKey();
     final String objectType = AppService.OWNER;
@@ -343,9 +453,27 @@ public class DefaultAppService implements AppService, MetricsTimer {
     }
   }
 
+  private void removeMemberFromGraph(App app, MemberGrant member) {
+    final String relation = GRANT_RELATION;
+    final String subjectType = "app";
+    final String subjectKey = app.getKey();
+    final String objectType = AppService.MEMBER;
 
-  private void removeServiceFromGraph(App app, Service service) {
-    final String relation = "has_member";
+    if(! Strings.isNullOrEmpty(member.getUsername())) {
+      final String objectKey = member.getUsername();
+      removeGraphRelation(
+          app, relation, subjectType, subjectKey, objectType, objectKey, saveOwnerTimer);
+    }
+
+    if(! Strings.isNullOrEmpty(member.getEmail())) {
+      final String objectKey = member.getEmail();
+      removeGraphRelation(
+          app, relation, subjectType, subjectKey, objectType, objectKey, saveOwnerTimer);
+    }
+  }
+
+  private void removeServiceFromGraph(App app, ServiceGrant service) {
+    final String relation = GRANT_RELATION;
     final String subjectType = "app";
     final String subjectKey = app.getKey();
     final String objectType = AppService.SERVICE;
@@ -385,6 +513,8 @@ public class DefaultAppService implements AppService, MetricsTimer {
         "saveOwnerTimer"));
     saveServiceTimer = metrics.timer(MetricRegistry.name(DefaultAppService.class,
         "saveServiceTimer"));
+    saveMemberTimer = metrics.timer(MetricRegistry.name(DefaultAppService.class,
+        "saveMemberTimer"));
     readAppTimer = metrics.timer(MetricRegistry.name(DefaultAppService.class,
         "readAppTimer"));
     removeRelationTimer = metrics.timer(MetricRegistry.name(DefaultAppService.class,

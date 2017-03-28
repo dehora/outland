@@ -83,7 +83,7 @@ public class FeatureResource {
           Problem.clientProblem("app_not_found", "", 404)), start).build();
     }
 
-    accessControlSupport.throwUnlessMember(authPrincipal, maybe.get());
+    accessControlSupport.throwUnlessGrantedForApp(authPrincipal, maybe.get());
 
     URI loc = UriBuilder.fromUri(baseURI)
         .path(feature.getAppkey())
@@ -121,7 +121,7 @@ public class FeatureResource {
 
     final long start = System.currentTimeMillis();
 
-    accessControlSupport.throwUnlessMember(authPrincipal, appKey);
+    accessControlSupport.throwUnlessGrantedForApp(authPrincipal, appKey);
     throwUnlessappKeyMatch(feature, appKey);
     throwUnlessFeatureKeyMatch(feature, featureKey);
 
@@ -153,7 +153,7 @@ public class FeatureResource {
 
     final long start = System.currentTimeMillis();
 
-    accessControlSupport.throwUnlessMember(authPrincipal, appKey);
+    accessControlSupport.throwUnlessGrantedForApp(authPrincipal, appKey);
 
     final Optional<Feature> feature = featureService.loadFeatureByKey(appKey, featureKey);
 
@@ -177,7 +177,7 @@ public class FeatureResource {
   ) throws AuthenticationException {
 
     final long start = System.currentTimeMillis();
-    accessControlSupport.throwUnlessMember(authPrincipal, appKey);
+    accessControlSupport.throwUnlessGrantedForApp(authPrincipal, appKey);
 
     FeatureCollection features = featureService.loadFeatures(appKey);
 
@@ -197,7 +197,7 @@ public class FeatureResource {
   ) throws AuthenticationException {
 
     final long start = System.currentTimeMillis();
-    accessControlSupport.throwUnlessMember(authPrincipal, appKey);
+    accessControlSupport.throwUnlessGrantedForApp(authPrincipal, appKey);
 
     OffsetDateTime utc =
         OffsetDateTime.ofInstant(Instant.ofEpochSecond(since), ZoneId.of("UTC").normalized());

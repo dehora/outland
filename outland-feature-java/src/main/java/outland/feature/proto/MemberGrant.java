@@ -4,21 +4,22 @@
 package outland.feature.proto;
 
 /**
- * Protobuf type {@code outland.Service}
+ * Protobuf type {@code outland.MemberGrant}
  */
-public  final class Service extends
+public  final class MemberGrant extends
     com.google.protobuf.GeneratedMessageV3 implements
-    // @@protoc_insertion_point(message_implements:outland.Service)
-    ServiceOrBuilder {
-  // Use Service.newBuilder() to construct.
-  private Service(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+    // @@protoc_insertion_point(message_implements:outland.MemberGrant)
+    MemberGrantOrBuilder {
+  // Use MemberGrant.newBuilder() to construct.
+  private MemberGrant(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
     super(builder);
   }
-  private Service() {
-    id_ = "";
-    key_ = "";
-    name_ = "";
+  private MemberGrant() {
     type_ = "";
+    id_ = "";
+    name_ = "";
+    username_ = "";
+    email_ = "";
   }
 
   @java.lang.Override
@@ -26,7 +27,7 @@ public  final class Service extends
   getUnknownFields() {
     return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
   }
-  private Service(
+  private MemberGrant(
       com.google.protobuf.CodedInputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
@@ -49,25 +50,31 @@ public  final class Service extends
           case 10: {
             java.lang.String s = input.readStringRequireUtf8();
 
-            id_ = s;
+            type_ = s;
             break;
           }
           case 18: {
             java.lang.String s = input.readStringRequireUtf8();
 
-            key_ = s;
+            id_ = s;
             break;
           }
-          case 26: {
+          case 82: {
             java.lang.String s = input.readStringRequireUtf8();
 
             name_ = s;
             break;
           }
-          case 66: {
+          case 90: {
             java.lang.String s = input.readStringRequireUtf8();
 
-            type_ = s;
+            username_ = s;
+            break;
+          }
+          case 98: {
+            java.lang.String s = input.readStringRequireUtf8();
+
+            email_ = s;
             break;
           }
         }
@@ -83,20 +90,54 @@ public  final class Service extends
   }
   public static final com.google.protobuf.Descriptors.Descriptor
       getDescriptor() {
-    return outland.feature.proto.FeatureMessage.internal_static_outland_Service_descriptor;
+    return outland.feature.proto.FeatureMessage.internal_static_outland_MemberGrant_descriptor;
   }
 
   protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internalGetFieldAccessorTable() {
-    return outland.feature.proto.FeatureMessage.internal_static_outland_Service_fieldAccessorTable
+    return outland.feature.proto.FeatureMessage.internal_static_outland_MemberGrant_fieldAccessorTable
         .ensureFieldAccessorsInitialized(
-            outland.feature.proto.Service.class, outland.feature.proto.Service.Builder.class);
+            outland.feature.proto.MemberGrant.class, outland.feature.proto.MemberGrant.Builder.class);
   }
 
-  public static final int ID_FIELD_NUMBER = 1;
+  public static final int TYPE_FIELD_NUMBER = 1;
+  private volatile java.lang.Object type_;
+  /**
+   * <code>optional string type = 1;</code>
+   */
+  public java.lang.String getType() {
+    java.lang.Object ref = type_;
+    if (ref instanceof java.lang.String) {
+      return (java.lang.String) ref;
+    } else {
+      com.google.protobuf.ByteString bs = 
+          (com.google.protobuf.ByteString) ref;
+      java.lang.String s = bs.toStringUtf8();
+      type_ = s;
+      return s;
+    }
+  }
+  /**
+   * <code>optional string type = 1;</code>
+   */
+  public com.google.protobuf.ByteString
+      getTypeBytes() {
+    java.lang.Object ref = type_;
+    if (ref instanceof java.lang.String) {
+      com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString.copyFromUtf8(
+              (java.lang.String) ref);
+      type_ = b;
+      return b;
+    } else {
+      return (com.google.protobuf.ByteString) ref;
+    }
+  }
+
+  public static final int ID_FIELD_NUMBER = 2;
   private volatile java.lang.Object id_;
   /**
-   * <code>optional string id = 1;</code>
+   * <code>optional string id = 2;</code>
    */
   public java.lang.String getId() {
     java.lang.Object ref = id_;
@@ -111,7 +152,7 @@ public  final class Service extends
     }
   }
   /**
-   * <code>optional string id = 1;</code>
+   * <code>optional string id = 2;</code>
    */
   public com.google.protobuf.ByteString
       getIdBytes() {
@@ -127,44 +168,10 @@ public  final class Service extends
     }
   }
 
-  public static final int KEY_FIELD_NUMBER = 2;
-  private volatile java.lang.Object key_;
-  /**
-   * <code>optional string key = 2;</code>
-   */
-  public java.lang.String getKey() {
-    java.lang.Object ref = key_;
-    if (ref instanceof java.lang.String) {
-      return (java.lang.String) ref;
-    } else {
-      com.google.protobuf.ByteString bs = 
-          (com.google.protobuf.ByteString) ref;
-      java.lang.String s = bs.toStringUtf8();
-      key_ = s;
-      return s;
-    }
-  }
-  /**
-   * <code>optional string key = 2;</code>
-   */
-  public com.google.protobuf.ByteString
-      getKeyBytes() {
-    java.lang.Object ref = key_;
-    if (ref instanceof java.lang.String) {
-      com.google.protobuf.ByteString b = 
-          com.google.protobuf.ByteString.copyFromUtf8(
-              (java.lang.String) ref);
-      key_ = b;
-      return b;
-    } else {
-      return (com.google.protobuf.ByteString) ref;
-    }
-  }
-
-  public static final int NAME_FIELD_NUMBER = 3;
+  public static final int NAME_FIELD_NUMBER = 10;
   private volatile java.lang.Object name_;
   /**
-   * <code>optional string name = 3;</code>
+   * <code>optional string name = 10;</code>
    */
   public java.lang.String getName() {
     java.lang.Object ref = name_;
@@ -179,7 +186,7 @@ public  final class Service extends
     }
   }
   /**
-   * <code>optional string name = 3;</code>
+   * <code>optional string name = 10;</code>
    */
   public com.google.protobuf.ByteString
       getNameBytes() {
@@ -195,34 +202,68 @@ public  final class Service extends
     }
   }
 
-  public static final int TYPE_FIELD_NUMBER = 8;
-  private volatile java.lang.Object type_;
+  public static final int USERNAME_FIELD_NUMBER = 11;
+  private volatile java.lang.Object username_;
   /**
-   * <code>optional string type = 8;</code>
+   * <code>optional string username = 11;</code>
    */
-  public java.lang.String getType() {
-    java.lang.Object ref = type_;
+  public java.lang.String getUsername() {
+    java.lang.Object ref = username_;
     if (ref instanceof java.lang.String) {
       return (java.lang.String) ref;
     } else {
       com.google.protobuf.ByteString bs = 
           (com.google.protobuf.ByteString) ref;
       java.lang.String s = bs.toStringUtf8();
-      type_ = s;
+      username_ = s;
       return s;
     }
   }
   /**
-   * <code>optional string type = 8;</code>
+   * <code>optional string username = 11;</code>
    */
   public com.google.protobuf.ByteString
-      getTypeBytes() {
-    java.lang.Object ref = type_;
+      getUsernameBytes() {
+    java.lang.Object ref = username_;
     if (ref instanceof java.lang.String) {
       com.google.protobuf.ByteString b = 
           com.google.protobuf.ByteString.copyFromUtf8(
               (java.lang.String) ref);
-      type_ = b;
+      username_ = b;
+      return b;
+    } else {
+      return (com.google.protobuf.ByteString) ref;
+    }
+  }
+
+  public static final int EMAIL_FIELD_NUMBER = 12;
+  private volatile java.lang.Object email_;
+  /**
+   * <code>optional string email = 12;</code>
+   */
+  public java.lang.String getEmail() {
+    java.lang.Object ref = email_;
+    if (ref instanceof java.lang.String) {
+      return (java.lang.String) ref;
+    } else {
+      com.google.protobuf.ByteString bs = 
+          (com.google.protobuf.ByteString) ref;
+      java.lang.String s = bs.toStringUtf8();
+      email_ = s;
+      return s;
+    }
+  }
+  /**
+   * <code>optional string email = 12;</code>
+   */
+  public com.google.protobuf.ByteString
+      getEmailBytes() {
+    java.lang.Object ref = email_;
+    if (ref instanceof java.lang.String) {
+      com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString.copyFromUtf8(
+              (java.lang.String) ref);
+      email_ = b;
       return b;
     } else {
       return (com.google.protobuf.ByteString) ref;
@@ -241,17 +282,20 @@ public  final class Service extends
 
   public void writeTo(com.google.protobuf.CodedOutputStream output)
                       throws java.io.IOException {
-    if (!getIdBytes().isEmpty()) {
-      com.google.protobuf.GeneratedMessageV3.writeString(output, 1, id_);
+    if (!getTypeBytes().isEmpty()) {
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 1, type_);
     }
-    if (!getKeyBytes().isEmpty()) {
-      com.google.protobuf.GeneratedMessageV3.writeString(output, 2, key_);
+    if (!getIdBytes().isEmpty()) {
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 2, id_);
     }
     if (!getNameBytes().isEmpty()) {
-      com.google.protobuf.GeneratedMessageV3.writeString(output, 3, name_);
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 10, name_);
     }
-    if (!getTypeBytes().isEmpty()) {
-      com.google.protobuf.GeneratedMessageV3.writeString(output, 8, type_);
+    if (!getUsernameBytes().isEmpty()) {
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 11, username_);
+    }
+    if (!getEmailBytes().isEmpty()) {
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 12, email_);
     }
   }
 
@@ -260,17 +304,20 @@ public  final class Service extends
     if (size != -1) return size;
 
     size = 0;
-    if (!getIdBytes().isEmpty()) {
-      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, id_);
+    if (!getTypeBytes().isEmpty()) {
+      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, type_);
     }
-    if (!getKeyBytes().isEmpty()) {
-      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, key_);
+    if (!getIdBytes().isEmpty()) {
+      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, id_);
     }
     if (!getNameBytes().isEmpty()) {
-      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, name_);
+      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(10, name_);
     }
-    if (!getTypeBytes().isEmpty()) {
-      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(8, type_);
+    if (!getUsernameBytes().isEmpty()) {
+      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(11, username_);
+    }
+    if (!getEmailBytes().isEmpty()) {
+      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(12, email_);
     }
     memoizedSize = size;
     return size;
@@ -282,20 +329,22 @@ public  final class Service extends
     if (obj == this) {
      return true;
     }
-    if (!(obj instanceof outland.feature.proto.Service)) {
+    if (!(obj instanceof outland.feature.proto.MemberGrant)) {
       return super.equals(obj);
     }
-    outland.feature.proto.Service other = (outland.feature.proto.Service) obj;
+    outland.feature.proto.MemberGrant other = (outland.feature.proto.MemberGrant) obj;
 
     boolean result = true;
-    result = result && getId()
-        .equals(other.getId());
-    result = result && getKey()
-        .equals(other.getKey());
-    result = result && getName()
-        .equals(other.getName());
     result = result && getType()
         .equals(other.getType());
+    result = result && getId()
+        .equals(other.getId());
+    result = result && getName()
+        .equals(other.getName());
+    result = result && getUsername()
+        .equals(other.getUsername());
+    result = result && getEmail()
+        .equals(other.getEmail());
     return result;
   }
 
@@ -306,71 +355,73 @@ public  final class Service extends
     }
     int hash = 41;
     hash = (19 * hash) + getDescriptorForType().hashCode();
-    hash = (37 * hash) + ID_FIELD_NUMBER;
-    hash = (53 * hash) + getId().hashCode();
-    hash = (37 * hash) + KEY_FIELD_NUMBER;
-    hash = (53 * hash) + getKey().hashCode();
-    hash = (37 * hash) + NAME_FIELD_NUMBER;
-    hash = (53 * hash) + getName().hashCode();
     hash = (37 * hash) + TYPE_FIELD_NUMBER;
     hash = (53 * hash) + getType().hashCode();
+    hash = (37 * hash) + ID_FIELD_NUMBER;
+    hash = (53 * hash) + getId().hashCode();
+    hash = (37 * hash) + NAME_FIELD_NUMBER;
+    hash = (53 * hash) + getName().hashCode();
+    hash = (37 * hash) + USERNAME_FIELD_NUMBER;
+    hash = (53 * hash) + getUsername().hashCode();
+    hash = (37 * hash) + EMAIL_FIELD_NUMBER;
+    hash = (53 * hash) + getEmail().hashCode();
     hash = (29 * hash) + unknownFields.hashCode();
     memoizedHashCode = hash;
     return hash;
   }
 
-  public static outland.feature.proto.Service parseFrom(
+  public static outland.feature.proto.MemberGrant parseFrom(
       com.google.protobuf.ByteString data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static outland.feature.proto.Service parseFrom(
+  public static outland.feature.proto.MemberGrant parseFrom(
       com.google.protobuf.ByteString data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static outland.feature.proto.Service parseFrom(byte[] data)
+  public static outland.feature.proto.MemberGrant parseFrom(byte[] data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static outland.feature.proto.Service parseFrom(
+  public static outland.feature.proto.MemberGrant parseFrom(
       byte[] data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static outland.feature.proto.Service parseFrom(java.io.InputStream input)
+  public static outland.feature.proto.MemberGrant parseFrom(java.io.InputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input);
   }
-  public static outland.feature.proto.Service parseFrom(
+  public static outland.feature.proto.MemberGrant parseFrom(
       java.io.InputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input, extensionRegistry);
   }
-  public static outland.feature.proto.Service parseDelimitedFrom(java.io.InputStream input)
+  public static outland.feature.proto.MemberGrant parseDelimitedFrom(java.io.InputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseDelimitedWithIOException(PARSER, input);
   }
-  public static outland.feature.proto.Service parseDelimitedFrom(
+  public static outland.feature.proto.MemberGrant parseDelimitedFrom(
       java.io.InputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
   }
-  public static outland.feature.proto.Service parseFrom(
+  public static outland.feature.proto.MemberGrant parseFrom(
       com.google.protobuf.CodedInputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input);
   }
-  public static outland.feature.proto.Service parseFrom(
+  public static outland.feature.proto.MemberGrant parseFrom(
       com.google.protobuf.CodedInputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
@@ -382,7 +433,7 @@ public  final class Service extends
   public static Builder newBuilder() {
     return DEFAULT_INSTANCE.toBuilder();
   }
-  public static Builder newBuilder(outland.feature.proto.Service prototype) {
+  public static Builder newBuilder(outland.feature.proto.MemberGrant prototype) {
     return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
   }
   public Builder toBuilder() {
@@ -397,25 +448,25 @@ public  final class Service extends
     return builder;
   }
   /**
-   * Protobuf type {@code outland.Service}
+   * Protobuf type {@code outland.MemberGrant}
    */
   public static final class Builder extends
       com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-      // @@protoc_insertion_point(builder_implements:outland.Service)
-      outland.feature.proto.ServiceOrBuilder {
+      // @@protoc_insertion_point(builder_implements:outland.MemberGrant)
+      outland.feature.proto.MemberGrantOrBuilder {
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return outland.feature.proto.FeatureMessage.internal_static_outland_Service_descriptor;
+      return outland.feature.proto.FeatureMessage.internal_static_outland_MemberGrant_descriptor;
     }
 
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return outland.feature.proto.FeatureMessage.internal_static_outland_Service_fieldAccessorTable
+      return outland.feature.proto.FeatureMessage.internal_static_outland_MemberGrant_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              outland.feature.proto.Service.class, outland.feature.proto.Service.Builder.class);
+              outland.feature.proto.MemberGrant.class, outland.feature.proto.MemberGrant.Builder.class);
     }
 
-    // Construct using outland.feature.proto.Service.newBuilder()
+    // Construct using outland.feature.proto.MemberGrant.newBuilder()
     private Builder() {
       maybeForceBuilderInitialization();
     }
@@ -432,40 +483,43 @@ public  final class Service extends
     }
     public Builder clear() {
       super.clear();
-      id_ = "";
+      type_ = "";
 
-      key_ = "";
+      id_ = "";
 
       name_ = "";
 
-      type_ = "";
+      username_ = "";
+
+      email_ = "";
 
       return this;
     }
 
     public com.google.protobuf.Descriptors.Descriptor
         getDescriptorForType() {
-      return outland.feature.proto.FeatureMessage.internal_static_outland_Service_descriptor;
+      return outland.feature.proto.FeatureMessage.internal_static_outland_MemberGrant_descriptor;
     }
 
-    public outland.feature.proto.Service getDefaultInstanceForType() {
-      return outland.feature.proto.Service.getDefaultInstance();
+    public outland.feature.proto.MemberGrant getDefaultInstanceForType() {
+      return outland.feature.proto.MemberGrant.getDefaultInstance();
     }
 
-    public outland.feature.proto.Service build() {
-      outland.feature.proto.Service result = buildPartial();
+    public outland.feature.proto.MemberGrant build() {
+      outland.feature.proto.MemberGrant result = buildPartial();
       if (!result.isInitialized()) {
         throw newUninitializedMessageException(result);
       }
       return result;
     }
 
-    public outland.feature.proto.Service buildPartial() {
-      outland.feature.proto.Service result = new outland.feature.proto.Service(this);
-      result.id_ = id_;
-      result.key_ = key_;
-      result.name_ = name_;
+    public outland.feature.proto.MemberGrant buildPartial() {
+      outland.feature.proto.MemberGrant result = new outland.feature.proto.MemberGrant(this);
       result.type_ = type_;
+      result.id_ = id_;
+      result.name_ = name_;
+      result.username_ = username_;
+      result.email_ = email_;
       onBuilt();
       return result;
     }
@@ -497,30 +551,34 @@ public  final class Service extends
       return (Builder) super.addRepeatedField(field, value);
     }
     public Builder mergeFrom(com.google.protobuf.Message other) {
-      if (other instanceof outland.feature.proto.Service) {
-        return mergeFrom((outland.feature.proto.Service)other);
+      if (other instanceof outland.feature.proto.MemberGrant) {
+        return mergeFrom((outland.feature.proto.MemberGrant)other);
       } else {
         super.mergeFrom(other);
         return this;
       }
     }
 
-    public Builder mergeFrom(outland.feature.proto.Service other) {
-      if (other == outland.feature.proto.Service.getDefaultInstance()) return this;
-      if (!other.getId().isEmpty()) {
-        id_ = other.id_;
+    public Builder mergeFrom(outland.feature.proto.MemberGrant other) {
+      if (other == outland.feature.proto.MemberGrant.getDefaultInstance()) return this;
+      if (!other.getType().isEmpty()) {
+        type_ = other.type_;
         onChanged();
       }
-      if (!other.getKey().isEmpty()) {
-        key_ = other.key_;
+      if (!other.getId().isEmpty()) {
+        id_ = other.id_;
         onChanged();
       }
       if (!other.getName().isEmpty()) {
         name_ = other.name_;
         onChanged();
       }
-      if (!other.getType().isEmpty()) {
-        type_ = other.type_;
+      if (!other.getUsername().isEmpty()) {
+        username_ = other.username_;
+        onChanged();
+      }
+      if (!other.getEmail().isEmpty()) {
+        email_ = other.email_;
         onChanged();
       }
       onChanged();
@@ -535,11 +593,11 @@ public  final class Service extends
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      outland.feature.proto.Service parsedMessage = null;
+      outland.feature.proto.MemberGrant parsedMessage = null;
       try {
         parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        parsedMessage = (outland.feature.proto.Service) e.getUnfinishedMessage();
+        parsedMessage = (outland.feature.proto.MemberGrant) e.getUnfinishedMessage();
         throw e.unwrapIOException();
       } finally {
         if (parsedMessage != null) {
@@ -549,216 +607,9 @@ public  final class Service extends
       return this;
     }
 
-    private java.lang.Object id_ = "";
-    /**
-     * <code>optional string id = 1;</code>
-     */
-    public java.lang.String getId() {
-      java.lang.Object ref = id_;
-      if (!(ref instanceof java.lang.String)) {
-        com.google.protobuf.ByteString bs =
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        id_ = s;
-        return s;
-      } else {
-        return (java.lang.String) ref;
-      }
-    }
-    /**
-     * <code>optional string id = 1;</code>
-     */
-    public com.google.protobuf.ByteString
-        getIdBytes() {
-      java.lang.Object ref = id_;
-      if (ref instanceof String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        id_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-    /**
-     * <code>optional string id = 1;</code>
-     */
-    public Builder setId(
-        java.lang.String value) {
-      if (value == null) {
-    throw new NullPointerException();
-  }
-  
-      id_ = value;
-      onChanged();
-      return this;
-    }
-    /**
-     * <code>optional string id = 1;</code>
-     */
-    public Builder clearId() {
-      
-      id_ = getDefaultInstance().getId();
-      onChanged();
-      return this;
-    }
-    /**
-     * <code>optional string id = 1;</code>
-     */
-    public Builder setIdBytes(
-        com.google.protobuf.ByteString value) {
-      if (value == null) {
-    throw new NullPointerException();
-  }
-  checkByteStringIsUtf8(value);
-      
-      id_ = value;
-      onChanged();
-      return this;
-    }
-
-    private java.lang.Object key_ = "";
-    /**
-     * <code>optional string key = 2;</code>
-     */
-    public java.lang.String getKey() {
-      java.lang.Object ref = key_;
-      if (!(ref instanceof java.lang.String)) {
-        com.google.protobuf.ByteString bs =
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        key_ = s;
-        return s;
-      } else {
-        return (java.lang.String) ref;
-      }
-    }
-    /**
-     * <code>optional string key = 2;</code>
-     */
-    public com.google.protobuf.ByteString
-        getKeyBytes() {
-      java.lang.Object ref = key_;
-      if (ref instanceof String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        key_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-    /**
-     * <code>optional string key = 2;</code>
-     */
-    public Builder setKey(
-        java.lang.String value) {
-      if (value == null) {
-    throw new NullPointerException();
-  }
-  
-      key_ = value;
-      onChanged();
-      return this;
-    }
-    /**
-     * <code>optional string key = 2;</code>
-     */
-    public Builder clearKey() {
-      
-      key_ = getDefaultInstance().getKey();
-      onChanged();
-      return this;
-    }
-    /**
-     * <code>optional string key = 2;</code>
-     */
-    public Builder setKeyBytes(
-        com.google.protobuf.ByteString value) {
-      if (value == null) {
-    throw new NullPointerException();
-  }
-  checkByteStringIsUtf8(value);
-      
-      key_ = value;
-      onChanged();
-      return this;
-    }
-
-    private java.lang.Object name_ = "";
-    /**
-     * <code>optional string name = 3;</code>
-     */
-    public java.lang.String getName() {
-      java.lang.Object ref = name_;
-      if (!(ref instanceof java.lang.String)) {
-        com.google.protobuf.ByteString bs =
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        name_ = s;
-        return s;
-      } else {
-        return (java.lang.String) ref;
-      }
-    }
-    /**
-     * <code>optional string name = 3;</code>
-     */
-    public com.google.protobuf.ByteString
-        getNameBytes() {
-      java.lang.Object ref = name_;
-      if (ref instanceof String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        name_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-    /**
-     * <code>optional string name = 3;</code>
-     */
-    public Builder setName(
-        java.lang.String value) {
-      if (value == null) {
-    throw new NullPointerException();
-  }
-  
-      name_ = value;
-      onChanged();
-      return this;
-    }
-    /**
-     * <code>optional string name = 3;</code>
-     */
-    public Builder clearName() {
-      
-      name_ = getDefaultInstance().getName();
-      onChanged();
-      return this;
-    }
-    /**
-     * <code>optional string name = 3;</code>
-     */
-    public Builder setNameBytes(
-        com.google.protobuf.ByteString value) {
-      if (value == null) {
-    throw new NullPointerException();
-  }
-  checkByteStringIsUtf8(value);
-      
-      name_ = value;
-      onChanged();
-      return this;
-    }
-
     private java.lang.Object type_ = "";
     /**
-     * <code>optional string type = 8;</code>
+     * <code>optional string type = 1;</code>
      */
     public java.lang.String getType() {
       java.lang.Object ref = type_;
@@ -773,7 +624,7 @@ public  final class Service extends
       }
     }
     /**
-     * <code>optional string type = 8;</code>
+     * <code>optional string type = 1;</code>
      */
     public com.google.protobuf.ByteString
         getTypeBytes() {
@@ -789,7 +640,7 @@ public  final class Service extends
       }
     }
     /**
-     * <code>optional string type = 8;</code>
+     * <code>optional string type = 1;</code>
      */
     public Builder setType(
         java.lang.String value) {
@@ -802,7 +653,7 @@ public  final class Service extends
       return this;
     }
     /**
-     * <code>optional string type = 8;</code>
+     * <code>optional string type = 1;</code>
      */
     public Builder clearType() {
       
@@ -811,7 +662,7 @@ public  final class Service extends
       return this;
     }
     /**
-     * <code>optional string type = 8;</code>
+     * <code>optional string type = 1;</code>
      */
     public Builder setTypeBytes(
         com.google.protobuf.ByteString value) {
@@ -821,6 +672,282 @@ public  final class Service extends
   checkByteStringIsUtf8(value);
       
       type_ = value;
+      onChanged();
+      return this;
+    }
+
+    private java.lang.Object id_ = "";
+    /**
+     * <code>optional string id = 2;</code>
+     */
+    public java.lang.String getId() {
+      java.lang.Object ref = id_;
+      if (!(ref instanceof java.lang.String)) {
+        com.google.protobuf.ByteString bs =
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        id_ = s;
+        return s;
+      } else {
+        return (java.lang.String) ref;
+      }
+    }
+    /**
+     * <code>optional string id = 2;</code>
+     */
+    public com.google.protobuf.ByteString
+        getIdBytes() {
+      java.lang.Object ref = id_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        id_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+    /**
+     * <code>optional string id = 2;</code>
+     */
+    public Builder setId(
+        java.lang.String value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  
+      id_ = value;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>optional string id = 2;</code>
+     */
+    public Builder clearId() {
+      
+      id_ = getDefaultInstance().getId();
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>optional string id = 2;</code>
+     */
+    public Builder setIdBytes(
+        com.google.protobuf.ByteString value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+      
+      id_ = value;
+      onChanged();
+      return this;
+    }
+
+    private java.lang.Object name_ = "";
+    /**
+     * <code>optional string name = 10;</code>
+     */
+    public java.lang.String getName() {
+      java.lang.Object ref = name_;
+      if (!(ref instanceof java.lang.String)) {
+        com.google.protobuf.ByteString bs =
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        name_ = s;
+        return s;
+      } else {
+        return (java.lang.String) ref;
+      }
+    }
+    /**
+     * <code>optional string name = 10;</code>
+     */
+    public com.google.protobuf.ByteString
+        getNameBytes() {
+      java.lang.Object ref = name_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        name_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+    /**
+     * <code>optional string name = 10;</code>
+     */
+    public Builder setName(
+        java.lang.String value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  
+      name_ = value;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>optional string name = 10;</code>
+     */
+    public Builder clearName() {
+      
+      name_ = getDefaultInstance().getName();
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>optional string name = 10;</code>
+     */
+    public Builder setNameBytes(
+        com.google.protobuf.ByteString value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+      
+      name_ = value;
+      onChanged();
+      return this;
+    }
+
+    private java.lang.Object username_ = "";
+    /**
+     * <code>optional string username = 11;</code>
+     */
+    public java.lang.String getUsername() {
+      java.lang.Object ref = username_;
+      if (!(ref instanceof java.lang.String)) {
+        com.google.protobuf.ByteString bs =
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        username_ = s;
+        return s;
+      } else {
+        return (java.lang.String) ref;
+      }
+    }
+    /**
+     * <code>optional string username = 11;</code>
+     */
+    public com.google.protobuf.ByteString
+        getUsernameBytes() {
+      java.lang.Object ref = username_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        username_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+    /**
+     * <code>optional string username = 11;</code>
+     */
+    public Builder setUsername(
+        java.lang.String value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  
+      username_ = value;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>optional string username = 11;</code>
+     */
+    public Builder clearUsername() {
+      
+      username_ = getDefaultInstance().getUsername();
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>optional string username = 11;</code>
+     */
+    public Builder setUsernameBytes(
+        com.google.protobuf.ByteString value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+      
+      username_ = value;
+      onChanged();
+      return this;
+    }
+
+    private java.lang.Object email_ = "";
+    /**
+     * <code>optional string email = 12;</code>
+     */
+    public java.lang.String getEmail() {
+      java.lang.Object ref = email_;
+      if (!(ref instanceof java.lang.String)) {
+        com.google.protobuf.ByteString bs =
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        email_ = s;
+        return s;
+      } else {
+        return (java.lang.String) ref;
+      }
+    }
+    /**
+     * <code>optional string email = 12;</code>
+     */
+    public com.google.protobuf.ByteString
+        getEmailBytes() {
+      java.lang.Object ref = email_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        email_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+    /**
+     * <code>optional string email = 12;</code>
+     */
+    public Builder setEmail(
+        java.lang.String value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  
+      email_ = value;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>optional string email = 12;</code>
+     */
+    public Builder clearEmail() {
+      
+      email_ = getDefaultInstance().getEmail();
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>optional string email = 12;</code>
+     */
+    public Builder setEmailBytes(
+        com.google.protobuf.ByteString value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+      
+      email_ = value;
       onChanged();
       return this;
     }
@@ -835,39 +962,39 @@ public  final class Service extends
     }
 
 
-    // @@protoc_insertion_point(builder_scope:outland.Service)
+    // @@protoc_insertion_point(builder_scope:outland.MemberGrant)
   }
 
-  // @@protoc_insertion_point(class_scope:outland.Service)
-  private static final outland.feature.proto.Service DEFAULT_INSTANCE;
+  // @@protoc_insertion_point(class_scope:outland.MemberGrant)
+  private static final outland.feature.proto.MemberGrant DEFAULT_INSTANCE;
   static {
-    DEFAULT_INSTANCE = new outland.feature.proto.Service();
+    DEFAULT_INSTANCE = new outland.feature.proto.MemberGrant();
   }
 
-  public static outland.feature.proto.Service getDefaultInstance() {
+  public static outland.feature.proto.MemberGrant getDefaultInstance() {
     return DEFAULT_INSTANCE;
   }
 
-  private static final com.google.protobuf.Parser<Service>
-      PARSER = new com.google.protobuf.AbstractParser<Service>() {
-    public Service parsePartialFrom(
+  private static final com.google.protobuf.Parser<MemberGrant>
+      PARSER = new com.google.protobuf.AbstractParser<MemberGrant>() {
+    public MemberGrant parsePartialFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-        return new Service(input, extensionRegistry);
+        return new MemberGrant(input, extensionRegistry);
     }
   };
 
-  public static com.google.protobuf.Parser<Service> parser() {
+  public static com.google.protobuf.Parser<MemberGrant> parser() {
     return PARSER;
   }
 
   @java.lang.Override
-  public com.google.protobuf.Parser<Service> getParserForType() {
+  public com.google.protobuf.Parser<MemberGrant> getParserForType() {
     return PARSER;
   }
 
-  public outland.feature.proto.Service getDefaultInstanceForType() {
+  public outland.feature.proto.MemberGrant getDefaultInstanceForType() {
     return DEFAULT_INSTANCE;
   }
 
