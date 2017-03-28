@@ -8,6 +8,16 @@ public interface AppOrBuilder extends
     com.google.protobuf.MessageOrBuilder {
 
   /**
+   * <code>optional string type = 8;</code>
+   */
+  java.lang.String getType();
+  /**
+   * <code>optional string type = 8;</code>
+   */
+  com.google.protobuf.ByteString
+      getTypeBytes();
+
+  /**
    * <code>optional string id = 1;</code>
    */
   java.lang.String getId();
@@ -58,30 +68,6 @@ public interface AppOrBuilder extends
       getUpdatedBytes();
 
   /**
-   * <code>repeated .outland.Service services = 4;</code>
-   */
-  java.util.List<outland.feature.proto.Service> 
-      getServicesList();
-  /**
-   * <code>repeated .outland.Service services = 4;</code>
-   */
-  outland.feature.proto.Service getServices(int index);
-  /**
-   * <code>repeated .outland.Service services = 4;</code>
-   */
-  int getServicesCount();
-  /**
-   * <code>repeated .outland.Service services = 4;</code>
-   */
-  java.util.List<? extends outland.feature.proto.ServiceOrBuilder> 
-      getServicesOrBuilderList();
-  /**
-   * <code>repeated .outland.Service services = 4;</code>
-   */
-  outland.feature.proto.ServiceOrBuilder getServicesOrBuilder(
-      int index);
-
-  /**
    * <code>repeated .outland.Owner owners = 5;</code>
    */
   java.util.List<outland.feature.proto.Owner> 
@@ -106,12 +92,15 @@ public interface AppOrBuilder extends
       int index);
 
   /**
-   * <code>optional string type = 8;</code>
+   * <code>optional .outland.GrantCollection granted = 9;</code>
    */
-  java.lang.String getType();
+  boolean hasGranted();
   /**
-   * <code>optional string type = 8;</code>
+   * <code>optional .outland.GrantCollection granted = 9;</code>
    */
-  com.google.protobuf.ByteString
-      getTypeBytes();
+  outland.feature.proto.GrantCollection getGranted();
+  /**
+   * <code>optional .outland.GrantCollection granted = 9;</code>
+   */
+  outland.feature.proto.GrantCollectionOrBuilder getGrantedOrBuilder();
 }

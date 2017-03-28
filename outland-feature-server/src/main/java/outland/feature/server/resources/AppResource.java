@@ -24,8 +24,9 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 import outland.feature.proto.App;
+import outland.feature.proto.MemberGrant;
 import outland.feature.proto.Owner;
-import outland.feature.proto.Service;
+import outland.feature.proto.ServiceGrant;
 import outland.feature.server.Problem;
 import outland.feature.server.ServerConfiguration;
 import outland.feature.server.apps.AppService;
@@ -70,7 +71,7 @@ public class AppResource {
 
     final long start = System.currentTimeMillis();
 
-    accessControlSupport.throwUnlessMember(authPrincipal, app);
+    accessControlSupport.throwUnlessGrantedForApp(authPrincipal, app);
 
     URI loc = UriBuilder.fromUri(baseURI)
         .path(app.getKey())
@@ -104,7 +105,7 @@ public class AppResource {
     final Optional<App> maybe = appService.loadAppByKey(appKey);
 
     if (maybe.isPresent()) {
-      accessControlSupport.throwUnlessMember(authPrincipal, maybe.get());
+      accessControlSupport.throwUnlessGrantedForApp(authPrincipal, maybe.get());
       return headers.enrich(Response.ok(maybe.get()), start).build();
     }
 
@@ -126,23 +127,36 @@ public class AppResource {
   }
 
   @POST
-  @Path("/{app_key}/services")
+  @Path("/{app_key}/grants/services")
   @Produces(MediaType.APPLICATION_JSON)
   @PermitAll
   @Timed(name = "addService")
   public Response addService(
       @Auth AuthPrincipal authPrincipal,
       @PathParam("app_key") String appKey,
-      Service service
+      ServiceGrant grant
   ) throws AuthenticationException {
-    return postUpdate(authPrincipal, appKey, app -> appService.addToApp(app, service));
+    return postUpdate(authPrincipal, appKey, app -> appService.addToApp(app, grant));
+  }
+
+  @POST
+  @Path("/{app_key}/grants/members")
+  @Produces(MediaType.APPLICATION_JSON)
+  @PermitAll
+  @Timed(name = "addService")
+  public Response addService(
+      @Auth AuthPrincipal authPrincipal,
+      @PathParam("app_key") String appKey,
+      MemberGrant grant
+  ) throws AuthenticationException {
+    return postUpdate(authPrincipal, appKey, app -> appService.addToApp(app, grant));
   }
 
   @DELETE
-  @Path("/{app_key}/services/{service_key}")
+  @Path("/{app_key}/grants/services/{service_key}")
   @Produces(MediaType.APPLICATION_JSON)
   @PermitAll
-  @Timed(name = "removeService")
+  @Timed(name = "removeServiceGrant")
   public Response removeService(
       @Auth AuthPrincipal authPrincipal,
       @PathParam("app_key") String appKey,
@@ -154,8 +168,34 @@ public class AppResource {
 
     if (maybe.isPresent()) {
       final App app = maybe.get();
-      accessControlSupport.throwUnlessMember(authPrincipal, app);
-      final App updated = appService.removeService(app, serviceKey);
+      accessControlSupport.throwUnlessGrantedForApp(authPrincipal, app);
+      final App updated = appService.removeServiceGrant(app, serviceKey);
+
+      return headers.enrich(Response.ok(updated), start).build();
+    }
+
+    return headers.enrich(Response.status(404).entity(
+        Problem.clientProblem("app_not_found", "", 404)), start).build();
+  }
+
+  @DELETE
+  @Path("/{app_key}/grants/members/{member_key}")
+  @Produces(MediaType.APPLICATION_JSON)
+  @PermitAll
+  @Timed(name = "removeServiceGrant")
+  public Response removeMember(
+      @Auth AuthPrincipal authPrincipal,
+      @PathParam("app_key") String appKey,
+      @PathParam("member_key") String memberKey
+  ) throws AuthenticationException {
+    final long start = System.currentTimeMillis();
+
+    final Optional<App> maybe = appService.loadAppByKey(appKey);
+
+    if (maybe.isPresent()) {
+      final App app = maybe.get();
+      accessControlSupport.throwUnlessGrantedForApp(authPrincipal, app);
+      final App updated = appService.removeMemberGrant(app, memberKey);
 
       return headers.enrich(Response.ok(updated), start).build();
     }
@@ -181,7 +221,7 @@ public class AppResource {
 
     if (maybe.isPresent()) {
       final App app = maybe.get();
-      accessControlSupport.throwUnlessMember(authPrincipal, app);
+      accessControlSupport.throwUnlessGrantedForApp(authPrincipal, app);
       final App updated = appService.removeOwner(app, username, email);
       return headers.enrich(Response.ok(updated), start).build();
     }
@@ -200,22 +240,34 @@ public class AppResource {
       @QueryParam("app_key") String appKey,
       @QueryParam("username") String username,
       @QueryParam("email") String email,
-      @QueryParam("service_key") String serviceKey
+      @QueryParam("service_key") String serviceKey,
+      @QueryParam("relation") String relation
   ) throws AuthenticationException {
 
     final long start = System.currentTimeMillis();
 
     final Optional<App> maybe = appService.loadAppByKey(appKey);
     if (maybe.isPresent()) {
-      accessControlSupport.throwUnlessMember(authPrincipal, maybe.get());
+      accessControlSupport.throwUnlessGrantedForApp(authPrincipal, maybe.get());
 
-      boolean found;
-      if (!Strings.isNullOrEmpty(username)) {
-        found = appService.appHasOwner(appKey, username);
-      } else if (!Strings.isNullOrEmpty(email)) {
-        found = appService.appHasOwner(appKey, email);
-      } else {
-        found = appService.appHasService(appKey, serviceKey);
+      boolean found = false;
+
+      if(AppService.GRANT_RELATION.equals(relation)) {
+        if (!Strings.isNullOrEmpty(username)) {
+          found = appService.appHasMemberGrant(appKey, username);
+        } else if (!Strings.isNullOrEmpty(email)) {
+          found = appService.appHasMemberGrant(appKey, email);
+        } else {
+          found = appService.appHasServiceGrant(appKey, serviceKey);
+        }
+      }
+
+      if(AppService.OWNER_RELATION.equals(relation)) {
+        if (!Strings.isNullOrEmpty(username)) {
+          found = appService.appHasMemberGrant(appKey, username);
+        } else if (!Strings.isNullOrEmpty(email)) {
+          found = appService.appHasMemberGrant(appKey, email);
+        }
       }
 
       if (found) {
@@ -241,7 +293,7 @@ public class AppResource {
 
     if (maybe.isPresent()) {
       final App app = maybe.get();
-     accessControlSupport.throwUnlessMember(authPrincipal, app);
+     accessControlSupport.throwUnlessGrantedForApp(authPrincipal, app);
       final App updated = updater.apply(app);
       return headers.enrich(Response.ok(updated), start).build();
     }

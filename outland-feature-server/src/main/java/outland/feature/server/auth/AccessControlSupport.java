@@ -7,7 +7,6 @@ import javax.inject.Named;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import outland.feature.proto.App;
-import outland.feature.server.apps.AppAuthServiceViaPlanBServer;
 import outland.feature.server.apps.AppService;
 
 import static outland.feature.server.StructLog.kvp;
@@ -29,7 +28,7 @@ public class AccessControlSupport {
     logMultipleAppAccessGrants();
   }
 
-  public void throwUnlessMember(AuthPrincipal authPrincipal, App app)
+  public void throwUnlessGrantedForApp(AuthPrincipal authPrincipal, App app)
       throws AuthenticationException {
 
     if (multipleAppAccessList.contains(authPrincipal.identifier())) {
@@ -38,27 +37,21 @@ public class AccessControlSupport {
       return;
     }
 
-    boolean member;
-
-    if (authPrincipal.type().equals(AppService.OWNER)) {
-      member = app.getOwnersList().stream()
-          .anyMatch(owner ->
-              owner.getUsername().equals(authPrincipal.identifier())
-                  ||
-                  owner.getEmail().equals(authPrincipal.identifier()));
-    } else {
-      member = app.getServicesList().stream()
-          .anyMatch(service -> service.getKey().equals(authPrincipal.identifier()));
+    if (! AppService.MEMBER.equals(authPrincipal.type()) && ! AppService.SERVICE.equals(authPrincipal.type())) {
+      throw new AuthenticationException("Unknown grant type "+ authPrincipal.type());
     }
 
-    if (!member) {
-      throw new AuthenticationException("Membership not authenticated for request");
+    if (AppService.MEMBER.equals(authPrincipal.type()) && ! memberHasGrant(authPrincipal, app)) {
+      throw new AuthenticationException("Member grant not authenticated");
+    }
+
+    if(AppService.SERVICE.equals(authPrincipal.type()) && ! serviceHasGrant(authPrincipal, app)) {
+      throw new AuthenticationException("Service grant not authenticated");
     }
   }
 
-  public void throwUnlessMember(AuthPrincipal authPrincipal, String appKey)
+  public void throwUnlessGrantedForApp(AuthPrincipal authPrincipal, String appKey)
       throws AuthenticationException {
-
 
     if (multipleAppAccessList.contains(authPrincipal.identifier())) {
       logger.info(kvp("op", "member_access_check",
@@ -66,16 +59,40 @@ public class AccessControlSupport {
       return;
     }
 
-    boolean member;
-    if (authPrincipal.type().equals(AppService.OWNER)) {
-      member = appService.appHasOwner(appKey, authPrincipal.identifier());
-    } else {
-      member = appService.appHasService(appKey, authPrincipal.identifier());
+    if (! AppService.MEMBER.equals(authPrincipal.type()) && ! AppService.SERVICE.equals(authPrincipal.type())) {
+      throw new AuthenticationException("Unknown grant type "+ authPrincipal.type());
     }
 
-    if (!member) {
-      throw new AuthenticationException("Membership not authenticated for request");
+    if (AppService.MEMBER.equals(authPrincipal.type()) && !memberHasGrant(authPrincipal, appKey)) {
+      throw new AuthenticationException("Member grant not authenticated");
     }
+
+    if (AppService.SERVICE.equals(authPrincipal.type()) && !serviceHasGrant(authPrincipal, appKey)) {
+      throw new AuthenticationException("Service grant not authenticated");
+    }
+  }
+
+  private boolean serviceHasGrant(AuthPrincipal authPrincipal, String appKey) {
+    return appService.appHasServiceGrant(appKey, authPrincipal.identifier());
+  }
+
+  private boolean memberHasGrant(AuthPrincipal authPrincipal, String appKey) {
+    return appService.appHasMemberGrant(appKey, authPrincipal.identifier());
+  }
+
+  // todo: move these into appService
+
+  private boolean serviceHasGrant(AuthPrincipal authPrincipal, App app) {
+    return app.getGranted().getServicesList().stream()
+        .anyMatch(service -> service.getKey().equals(authPrincipal.identifier()));
+  }
+
+  private boolean memberHasGrant(AuthPrincipal authPrincipal, App app) {
+    return app.getOwnersList().stream()
+        .anyMatch(owner ->
+            owner.getUsername().equals(authPrincipal.identifier())
+                ||
+                owner.getEmail().equals(authPrincipal.identifier()));
   }
 
   private void logMultipleAppAccessGrants() {

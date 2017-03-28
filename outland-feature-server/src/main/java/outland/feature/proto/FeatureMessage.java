@@ -45,15 +45,25 @@ public final class FeatureMessage {
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_outland_FeatureCollection_fieldAccessorTable;
   static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_outland_ServiceGrant_descriptor;
+  static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_outland_ServiceGrant_fieldAccessorTable;
+  static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_outland_MemberGrant_descriptor;
+  static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_outland_MemberGrant_fieldAccessorTable;
+  static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_outland_GrantCollection_descriptor;
+  static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_outland_GrantCollection_fieldAccessorTable;
+  static final com.google.protobuf.Descriptors.Descriptor
     internal_static_outland_App_descriptor;
   static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_outland_App_fieldAccessorTable;
-  static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_outland_Service_descriptor;
-  static final 
-    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_outland_Service_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
@@ -84,15 +94,20 @@ public final class FeatureMessage {
       " \001(\t:\0028\001\"\"\n\005State\022\010\n\004none\020\000\022\007\n\003off\020\001\022\006\n\002" +
       "on\020\002\"R\n\021FeatureCollection\022\014\n\004type\030\001 \001(\t\022",
       "\016\n\006appkey\030\002 \001(\t\022\037\n\005items\030\003 \003(\0132\020.outland" +
-      ".Feature\"\240\001\n\003App\022\n\n\002id\030\001 \001(\t\022\013\n\003key\030\002 \001(" +
-      "\t\022\014\n\004name\030\003 \001(\t\022\017\n\007created\030\006 \001(\t\022\017\n\007upda" +
-      "ted\030\007 \001(\t\022\"\n\010services\030\004 \003(\0132\020.outland.Se" +
-      "rvice\022\036\n\006owners\030\005 \003(\0132\016.outland.Owner\022\014\n" +
-      "\004type\030\010 \001(\t\">\n\007Service\022\n\n\002id\030\001 \001(\t\022\013\n\003ke" +
-      "y\030\002 \001(\t\022\014\n\004name\030\003 \001(\t\022\014\n\004type\030\010 \001(\t* \n\nO" +
-      "ptionType\022\010\n\004flag\020\000\022\010\n\004bool\020\001B+\n\025outland" +
-      ".feature.protoB\016FeatureMessageH\001P\001b\006prot" +
-      "o3"
+      ".Feature\"C\n\014ServiceGrant\022\014\n\004type\030\001 \001(\t\022\n" +
+      "\n\002id\030\002 \001(\t\022\014\n\004name\030\n \001(\t\022\013\n\003key\030\013 \001(\t\"V\n" +
+      "\013MemberGrant\022\014\n\004type\030\001 \001(\t\022\n\n\002id\030\002 \001(\t\022\014" +
+      "\n\004name\030\n \001(\t\022\020\n\010username\030\013 \001(\t\022\r\n\005email\030" +
+      "\014 \001(\t\"o\n\017GrantCollection\022\014\n\004type\030\001 \001(\t\022\'" +
+      "\n\010services\030\n \003(\0132\025.outland.ServiceGrant\022" +
+      "%\n\007members\030\013 \003(\0132\024.outland.MemberGrant\"\247" +
+      "\001\n\003App\022\014\n\004type\030\010 \001(\t\022\n\n\002id\030\001 \001(\t\022\013\n\003key\030" +
+      "\002 \001(\t\022\014\n\004name\030\003 \001(\t\022\017\n\007created\030\006 \001(\t\022\017\n\007",
+      "updated\030\007 \001(\t\022\036\n\006owners\030\005 \003(\0132\016.outland." +
+      "Owner\022)\n\007granted\030\t \001(\0132\030.outland.GrantCo" +
+      "llection* \n\nOptionType\022\010\n\004flag\020\000\022\010\n\004bool" +
+      "\020\001B+\n\025outland.feature.protoB\016FeatureMess" +
+      "ageH\001P\001b\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -142,18 +157,30 @@ public final class FeatureMessage {
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_outland_FeatureCollection_descriptor,
         new java.lang.String[] { "Type", "Appkey", "Items", });
-    internal_static_outland_App_descriptor =
+    internal_static_outland_ServiceGrant_descriptor =
       getDescriptor().getMessageTypes().get(5);
+    internal_static_outland_ServiceGrant_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_outland_ServiceGrant_descriptor,
+        new java.lang.String[] { "Type", "Id", "Name", "Key", });
+    internal_static_outland_MemberGrant_descriptor =
+      getDescriptor().getMessageTypes().get(6);
+    internal_static_outland_MemberGrant_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_outland_MemberGrant_descriptor,
+        new java.lang.String[] { "Type", "Id", "Name", "Username", "Email", });
+    internal_static_outland_GrantCollection_descriptor =
+      getDescriptor().getMessageTypes().get(7);
+    internal_static_outland_GrantCollection_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_outland_GrantCollection_descriptor,
+        new java.lang.String[] { "Type", "Services", "Members", });
+    internal_static_outland_App_descriptor =
+      getDescriptor().getMessageTypes().get(8);
     internal_static_outland_App_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_outland_App_descriptor,
-        new java.lang.String[] { "Id", "Key", "Name", "Created", "Updated", "Services", "Owners", "Type", });
-    internal_static_outland_Service_descriptor =
-      getDescriptor().getMessageTypes().get(6);
-    internal_static_outland_Service_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_outland_Service_descriptor,
-        new java.lang.String[] { "Id", "Key", "Name", "Type", });
+        new java.lang.String[] { "Type", "Id", "Key", "Name", "Created", "Updated", "Owners", "Granted", });
   }
 
   // @@protoc_insertion_point(outer_class_scope)

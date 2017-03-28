@@ -15,14 +15,13 @@ public  final class App extends
     super(builder);
   }
   private App() {
+    type_ = "";
     id_ = "";
     key_ = "";
     name_ = "";
     created_ = "";
     updated_ = "";
-    services_ = java.util.Collections.emptyList();
     owners_ = java.util.Collections.emptyList();
-    type_ = "";
   }
 
   @java.lang.Override
@@ -68,15 +67,6 @@ public  final class App extends
             name_ = s;
             break;
           }
-          case 34: {
-            if (!((mutable_bitField0_ & 0x00000020) == 0x00000020)) {
-              services_ = new java.util.ArrayList<outland.feature.proto.Service>();
-              mutable_bitField0_ |= 0x00000020;
-            }
-            services_.add(
-                input.readMessage(outland.feature.proto.Service.parser(), extensionRegistry));
-            break;
-          }
           case 42: {
             if (!((mutable_bitField0_ & 0x00000040) == 0x00000040)) {
               owners_ = new java.util.ArrayList<outland.feature.proto.Owner>();
@@ -104,6 +94,19 @@ public  final class App extends
             type_ = s;
             break;
           }
+          case 74: {
+            outland.feature.proto.GrantCollection.Builder subBuilder = null;
+            if (granted_ != null) {
+              subBuilder = granted_.toBuilder();
+            }
+            granted_ = input.readMessage(outland.feature.proto.GrantCollection.parser(), extensionRegistry);
+            if (subBuilder != null) {
+              subBuilder.mergeFrom(granted_);
+              granted_ = subBuilder.buildPartial();
+            }
+
+            break;
+          }
         }
       }
     } catch (com.google.protobuf.InvalidProtocolBufferException e) {
@@ -112,9 +115,6 @@ public  final class App extends
       throw new com.google.protobuf.InvalidProtocolBufferException(
           e).setUnfinishedMessage(this);
     } finally {
-      if (((mutable_bitField0_ & 0x00000020) == 0x00000020)) {
-        services_ = java.util.Collections.unmodifiableList(services_);
-      }
       if (((mutable_bitField0_ & 0x00000040) == 0x00000040)) {
         owners_ = java.util.Collections.unmodifiableList(owners_);
       }
@@ -134,6 +134,40 @@ public  final class App extends
   }
 
   private int bitField0_;
+  public static final int TYPE_FIELD_NUMBER = 8;
+  private volatile java.lang.Object type_;
+  /**
+   * <code>optional string type = 8;</code>
+   */
+  public java.lang.String getType() {
+    java.lang.Object ref = type_;
+    if (ref instanceof java.lang.String) {
+      return (java.lang.String) ref;
+    } else {
+      com.google.protobuf.ByteString bs = 
+          (com.google.protobuf.ByteString) ref;
+      java.lang.String s = bs.toStringUtf8();
+      type_ = s;
+      return s;
+    }
+  }
+  /**
+   * <code>optional string type = 8;</code>
+   */
+  public com.google.protobuf.ByteString
+      getTypeBytes() {
+    java.lang.Object ref = type_;
+    if (ref instanceof java.lang.String) {
+      com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString.copyFromUtf8(
+              (java.lang.String) ref);
+      type_ = b;
+      return b;
+    } else {
+      return (com.google.protobuf.ByteString) ref;
+    }
+  }
+
   public static final int ID_FIELD_NUMBER = 1;
   private volatile java.lang.Object id_;
   /**
@@ -304,41 +338,6 @@ public  final class App extends
     }
   }
 
-  public static final int SERVICES_FIELD_NUMBER = 4;
-  private java.util.List<outland.feature.proto.Service> services_;
-  /**
-   * <code>repeated .outland.Service services = 4;</code>
-   */
-  public java.util.List<outland.feature.proto.Service> getServicesList() {
-    return services_;
-  }
-  /**
-   * <code>repeated .outland.Service services = 4;</code>
-   */
-  public java.util.List<? extends outland.feature.proto.ServiceOrBuilder> 
-      getServicesOrBuilderList() {
-    return services_;
-  }
-  /**
-   * <code>repeated .outland.Service services = 4;</code>
-   */
-  public int getServicesCount() {
-    return services_.size();
-  }
-  /**
-   * <code>repeated .outland.Service services = 4;</code>
-   */
-  public outland.feature.proto.Service getServices(int index) {
-    return services_.get(index);
-  }
-  /**
-   * <code>repeated .outland.Service services = 4;</code>
-   */
-  public outland.feature.proto.ServiceOrBuilder getServicesOrBuilder(
-      int index) {
-    return services_.get(index);
-  }
-
   public static final int OWNERS_FIELD_NUMBER = 5;
   private java.util.List<outland.feature.proto.Owner> owners_;
   /**
@@ -374,38 +373,25 @@ public  final class App extends
     return owners_.get(index);
   }
 
-  public static final int TYPE_FIELD_NUMBER = 8;
-  private volatile java.lang.Object type_;
+  public static final int GRANTED_FIELD_NUMBER = 9;
+  private outland.feature.proto.GrantCollection granted_;
   /**
-   * <code>optional string type = 8;</code>
+   * <code>optional .outland.GrantCollection granted = 9;</code>
    */
-  public java.lang.String getType() {
-    java.lang.Object ref = type_;
-    if (ref instanceof java.lang.String) {
-      return (java.lang.String) ref;
-    } else {
-      com.google.protobuf.ByteString bs = 
-          (com.google.protobuf.ByteString) ref;
-      java.lang.String s = bs.toStringUtf8();
-      type_ = s;
-      return s;
-    }
+  public boolean hasGranted() {
+    return granted_ != null;
   }
   /**
-   * <code>optional string type = 8;</code>
+   * <code>optional .outland.GrantCollection granted = 9;</code>
    */
-  public com.google.protobuf.ByteString
-      getTypeBytes() {
-    java.lang.Object ref = type_;
-    if (ref instanceof java.lang.String) {
-      com.google.protobuf.ByteString b = 
-          com.google.protobuf.ByteString.copyFromUtf8(
-              (java.lang.String) ref);
-      type_ = b;
-      return b;
-    } else {
-      return (com.google.protobuf.ByteString) ref;
-    }
+  public outland.feature.proto.GrantCollection getGranted() {
+    return granted_ == null ? outland.feature.proto.GrantCollection.getDefaultInstance() : granted_;
+  }
+  /**
+   * <code>optional .outland.GrantCollection granted = 9;</code>
+   */
+  public outland.feature.proto.GrantCollectionOrBuilder getGrantedOrBuilder() {
+    return getGranted();
   }
 
   private byte memoizedIsInitialized = -1;
@@ -429,9 +415,6 @@ public  final class App extends
     if (!getNameBytes().isEmpty()) {
       com.google.protobuf.GeneratedMessageV3.writeString(output, 3, name_);
     }
-    for (int i = 0; i < services_.size(); i++) {
-      output.writeMessage(4, services_.get(i));
-    }
     for (int i = 0; i < owners_.size(); i++) {
       output.writeMessage(5, owners_.get(i));
     }
@@ -443,6 +426,9 @@ public  final class App extends
     }
     if (!getTypeBytes().isEmpty()) {
       com.google.protobuf.GeneratedMessageV3.writeString(output, 8, type_);
+    }
+    if (granted_ != null) {
+      output.writeMessage(9, getGranted());
     }
   }
 
@@ -460,10 +446,6 @@ public  final class App extends
     if (!getNameBytes().isEmpty()) {
       size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, name_);
     }
-    for (int i = 0; i < services_.size(); i++) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeMessageSize(4, services_.get(i));
-    }
     for (int i = 0; i < owners_.size(); i++) {
       size += com.google.protobuf.CodedOutputStream
         .computeMessageSize(5, owners_.get(i));
@@ -476,6 +458,10 @@ public  final class App extends
     }
     if (!getTypeBytes().isEmpty()) {
       size += com.google.protobuf.GeneratedMessageV3.computeStringSize(8, type_);
+    }
+    if (granted_ != null) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeMessageSize(9, getGranted());
     }
     memoizedSize = size;
     return size;
@@ -493,6 +479,8 @@ public  final class App extends
     outland.feature.proto.App other = (outland.feature.proto.App) obj;
 
     boolean result = true;
+    result = result && getType()
+        .equals(other.getType());
     result = result && getId()
         .equals(other.getId());
     result = result && getKey()
@@ -503,12 +491,13 @@ public  final class App extends
         .equals(other.getCreated());
     result = result && getUpdated()
         .equals(other.getUpdated());
-    result = result && getServicesList()
-        .equals(other.getServicesList());
     result = result && getOwnersList()
         .equals(other.getOwnersList());
-    result = result && getType()
-        .equals(other.getType());
+    result = result && (hasGranted() == other.hasGranted());
+    if (hasGranted()) {
+      result = result && getGranted()
+          .equals(other.getGranted());
+    }
     return result;
   }
 
@@ -519,6 +508,8 @@ public  final class App extends
     }
     int hash = 41;
     hash = (19 * hash) + getDescriptorForType().hashCode();
+    hash = (37 * hash) + TYPE_FIELD_NUMBER;
+    hash = (53 * hash) + getType().hashCode();
     hash = (37 * hash) + ID_FIELD_NUMBER;
     hash = (53 * hash) + getId().hashCode();
     hash = (37 * hash) + KEY_FIELD_NUMBER;
@@ -529,16 +520,14 @@ public  final class App extends
     hash = (53 * hash) + getCreated().hashCode();
     hash = (37 * hash) + UPDATED_FIELD_NUMBER;
     hash = (53 * hash) + getUpdated().hashCode();
-    if (getServicesCount() > 0) {
-      hash = (37 * hash) + SERVICES_FIELD_NUMBER;
-      hash = (53 * hash) + getServicesList().hashCode();
-    }
     if (getOwnersCount() > 0) {
       hash = (37 * hash) + OWNERS_FIELD_NUMBER;
       hash = (53 * hash) + getOwnersList().hashCode();
     }
-    hash = (37 * hash) + TYPE_FIELD_NUMBER;
-    hash = (53 * hash) + getType().hashCode();
+    if (hasGranted()) {
+      hash = (37 * hash) + GRANTED_FIELD_NUMBER;
+      hash = (53 * hash) + getGranted().hashCode();
+    }
     hash = (29 * hash) + unknownFields.hashCode();
     memoizedHashCode = hash;
     return hash;
@@ -653,12 +642,13 @@ public  final class App extends
     private void maybeForceBuilderInitialization() {
       if (com.google.protobuf.GeneratedMessageV3
               .alwaysUseFieldBuilders) {
-        getServicesFieldBuilder();
         getOwnersFieldBuilder();
       }
     }
     public Builder clear() {
       super.clear();
+      type_ = "";
+
       id_ = "";
 
       key_ = "";
@@ -669,20 +659,18 @@ public  final class App extends
 
       updated_ = "";
 
-      if (servicesBuilder_ == null) {
-        services_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00000020);
-      } else {
-        servicesBuilder_.clear();
-      }
       if (ownersBuilder_ == null) {
         owners_ = java.util.Collections.emptyList();
         bitField0_ = (bitField0_ & ~0x00000040);
       } else {
         ownersBuilder_.clear();
       }
-      type_ = "";
-
+      if (grantedBuilder_ == null) {
+        granted_ = null;
+      } else {
+        granted_ = null;
+        grantedBuilder_ = null;
+      }
       return this;
     }
 
@@ -707,20 +695,12 @@ public  final class App extends
       outland.feature.proto.App result = new outland.feature.proto.App(this);
       int from_bitField0_ = bitField0_;
       int to_bitField0_ = 0;
+      result.type_ = type_;
       result.id_ = id_;
       result.key_ = key_;
       result.name_ = name_;
       result.created_ = created_;
       result.updated_ = updated_;
-      if (servicesBuilder_ == null) {
-        if (((bitField0_ & 0x00000020) == 0x00000020)) {
-          services_ = java.util.Collections.unmodifiableList(services_);
-          bitField0_ = (bitField0_ & ~0x00000020);
-        }
-        result.services_ = services_;
-      } else {
-        result.services_ = servicesBuilder_.build();
-      }
       if (ownersBuilder_ == null) {
         if (((bitField0_ & 0x00000040) == 0x00000040)) {
           owners_ = java.util.Collections.unmodifiableList(owners_);
@@ -730,7 +710,11 @@ public  final class App extends
       } else {
         result.owners_ = ownersBuilder_.build();
       }
-      result.type_ = type_;
+      if (grantedBuilder_ == null) {
+        result.granted_ = granted_;
+      } else {
+        result.granted_ = grantedBuilder_.build();
+      }
       result.bitField0_ = to_bitField0_;
       onBuilt();
       return result;
@@ -773,6 +757,10 @@ public  final class App extends
 
     public Builder mergeFrom(outland.feature.proto.App other) {
       if (other == outland.feature.proto.App.getDefaultInstance()) return this;
+      if (!other.getType().isEmpty()) {
+        type_ = other.type_;
+        onChanged();
+      }
       if (!other.getId().isEmpty()) {
         id_ = other.id_;
         onChanged();
@@ -792,32 +780,6 @@ public  final class App extends
       if (!other.getUpdated().isEmpty()) {
         updated_ = other.updated_;
         onChanged();
-      }
-      if (servicesBuilder_ == null) {
-        if (!other.services_.isEmpty()) {
-          if (services_.isEmpty()) {
-            services_ = other.services_;
-            bitField0_ = (bitField0_ & ~0x00000020);
-          } else {
-            ensureServicesIsMutable();
-            services_.addAll(other.services_);
-          }
-          onChanged();
-        }
-      } else {
-        if (!other.services_.isEmpty()) {
-          if (servicesBuilder_.isEmpty()) {
-            servicesBuilder_.dispose();
-            servicesBuilder_ = null;
-            services_ = other.services_;
-            bitField0_ = (bitField0_ & ~0x00000020);
-            servicesBuilder_ = 
-              com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders ?
-                 getServicesFieldBuilder() : null;
-          } else {
-            servicesBuilder_.addAllMessages(other.services_);
-          }
-        }
       }
       if (ownersBuilder_ == null) {
         if (!other.owners_.isEmpty()) {
@@ -845,9 +807,8 @@ public  final class App extends
           }
         }
       }
-      if (!other.getType().isEmpty()) {
-        type_ = other.type_;
-        onChanged();
+      if (other.hasGranted()) {
+        mergeGranted(other.getGranted());
       }
       onChanged();
       return this;
@@ -875,6 +836,75 @@ public  final class App extends
       return this;
     }
     private int bitField0_;
+
+    private java.lang.Object type_ = "";
+    /**
+     * <code>optional string type = 8;</code>
+     */
+    public java.lang.String getType() {
+      java.lang.Object ref = type_;
+      if (!(ref instanceof java.lang.String)) {
+        com.google.protobuf.ByteString bs =
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        type_ = s;
+        return s;
+      } else {
+        return (java.lang.String) ref;
+      }
+    }
+    /**
+     * <code>optional string type = 8;</code>
+     */
+    public com.google.protobuf.ByteString
+        getTypeBytes() {
+      java.lang.Object ref = type_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        type_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+    /**
+     * <code>optional string type = 8;</code>
+     */
+    public Builder setType(
+        java.lang.String value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  
+      type_ = value;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>optional string type = 8;</code>
+     */
+    public Builder clearType() {
+      
+      type_ = getDefaultInstance().getType();
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>optional string type = 8;</code>
+     */
+    public Builder setTypeBytes(
+        com.google.protobuf.ByteString value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+      
+      type_ = value;
+      onChanged();
+      return this;
+    }
 
     private java.lang.Object id_ = "";
     /**
@@ -1221,246 +1251,6 @@ public  final class App extends
       return this;
     }
 
-    private java.util.List<outland.feature.proto.Service> services_ =
-      java.util.Collections.emptyList();
-    private void ensureServicesIsMutable() {
-      if (!((bitField0_ & 0x00000020) == 0x00000020)) {
-        services_ = new java.util.ArrayList<outland.feature.proto.Service>(services_);
-        bitField0_ |= 0x00000020;
-       }
-    }
-
-    private com.google.protobuf.RepeatedFieldBuilderV3<
-        outland.feature.proto.Service, outland.feature.proto.Service.Builder, outland.feature.proto.ServiceOrBuilder> servicesBuilder_;
-
-    /**
-     * <code>repeated .outland.Service services = 4;</code>
-     */
-    public java.util.List<outland.feature.proto.Service> getServicesList() {
-      if (servicesBuilder_ == null) {
-        return java.util.Collections.unmodifiableList(services_);
-      } else {
-        return servicesBuilder_.getMessageList();
-      }
-    }
-    /**
-     * <code>repeated .outland.Service services = 4;</code>
-     */
-    public int getServicesCount() {
-      if (servicesBuilder_ == null) {
-        return services_.size();
-      } else {
-        return servicesBuilder_.getCount();
-      }
-    }
-    /**
-     * <code>repeated .outland.Service services = 4;</code>
-     */
-    public outland.feature.proto.Service getServices(int index) {
-      if (servicesBuilder_ == null) {
-        return services_.get(index);
-      } else {
-        return servicesBuilder_.getMessage(index);
-      }
-    }
-    /**
-     * <code>repeated .outland.Service services = 4;</code>
-     */
-    public Builder setServices(
-        int index, outland.feature.proto.Service value) {
-      if (servicesBuilder_ == null) {
-        if (value == null) {
-          throw new NullPointerException();
-        }
-        ensureServicesIsMutable();
-        services_.set(index, value);
-        onChanged();
-      } else {
-        servicesBuilder_.setMessage(index, value);
-      }
-      return this;
-    }
-    /**
-     * <code>repeated .outland.Service services = 4;</code>
-     */
-    public Builder setServices(
-        int index, outland.feature.proto.Service.Builder builderForValue) {
-      if (servicesBuilder_ == null) {
-        ensureServicesIsMutable();
-        services_.set(index, builderForValue.build());
-        onChanged();
-      } else {
-        servicesBuilder_.setMessage(index, builderForValue.build());
-      }
-      return this;
-    }
-    /**
-     * <code>repeated .outland.Service services = 4;</code>
-     */
-    public Builder addServices(outland.feature.proto.Service value) {
-      if (servicesBuilder_ == null) {
-        if (value == null) {
-          throw new NullPointerException();
-        }
-        ensureServicesIsMutable();
-        services_.add(value);
-        onChanged();
-      } else {
-        servicesBuilder_.addMessage(value);
-      }
-      return this;
-    }
-    /**
-     * <code>repeated .outland.Service services = 4;</code>
-     */
-    public Builder addServices(
-        int index, outland.feature.proto.Service value) {
-      if (servicesBuilder_ == null) {
-        if (value == null) {
-          throw new NullPointerException();
-        }
-        ensureServicesIsMutable();
-        services_.add(index, value);
-        onChanged();
-      } else {
-        servicesBuilder_.addMessage(index, value);
-      }
-      return this;
-    }
-    /**
-     * <code>repeated .outland.Service services = 4;</code>
-     */
-    public Builder addServices(
-        outland.feature.proto.Service.Builder builderForValue) {
-      if (servicesBuilder_ == null) {
-        ensureServicesIsMutable();
-        services_.add(builderForValue.build());
-        onChanged();
-      } else {
-        servicesBuilder_.addMessage(builderForValue.build());
-      }
-      return this;
-    }
-    /**
-     * <code>repeated .outland.Service services = 4;</code>
-     */
-    public Builder addServices(
-        int index, outland.feature.proto.Service.Builder builderForValue) {
-      if (servicesBuilder_ == null) {
-        ensureServicesIsMutable();
-        services_.add(index, builderForValue.build());
-        onChanged();
-      } else {
-        servicesBuilder_.addMessage(index, builderForValue.build());
-      }
-      return this;
-    }
-    /**
-     * <code>repeated .outland.Service services = 4;</code>
-     */
-    public Builder addAllServices(
-        java.lang.Iterable<? extends outland.feature.proto.Service> values) {
-      if (servicesBuilder_ == null) {
-        ensureServicesIsMutable();
-        com.google.protobuf.AbstractMessageLite.Builder.addAll(
-            values, services_);
-        onChanged();
-      } else {
-        servicesBuilder_.addAllMessages(values);
-      }
-      return this;
-    }
-    /**
-     * <code>repeated .outland.Service services = 4;</code>
-     */
-    public Builder clearServices() {
-      if (servicesBuilder_ == null) {
-        services_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00000020);
-        onChanged();
-      } else {
-        servicesBuilder_.clear();
-      }
-      return this;
-    }
-    /**
-     * <code>repeated .outland.Service services = 4;</code>
-     */
-    public Builder removeServices(int index) {
-      if (servicesBuilder_ == null) {
-        ensureServicesIsMutable();
-        services_.remove(index);
-        onChanged();
-      } else {
-        servicesBuilder_.remove(index);
-      }
-      return this;
-    }
-    /**
-     * <code>repeated .outland.Service services = 4;</code>
-     */
-    public outland.feature.proto.Service.Builder getServicesBuilder(
-        int index) {
-      return getServicesFieldBuilder().getBuilder(index);
-    }
-    /**
-     * <code>repeated .outland.Service services = 4;</code>
-     */
-    public outland.feature.proto.ServiceOrBuilder getServicesOrBuilder(
-        int index) {
-      if (servicesBuilder_ == null) {
-        return services_.get(index);  } else {
-        return servicesBuilder_.getMessageOrBuilder(index);
-      }
-    }
-    /**
-     * <code>repeated .outland.Service services = 4;</code>
-     */
-    public java.util.List<? extends outland.feature.proto.ServiceOrBuilder> 
-         getServicesOrBuilderList() {
-      if (servicesBuilder_ != null) {
-        return servicesBuilder_.getMessageOrBuilderList();
-      } else {
-        return java.util.Collections.unmodifiableList(services_);
-      }
-    }
-    /**
-     * <code>repeated .outland.Service services = 4;</code>
-     */
-    public outland.feature.proto.Service.Builder addServicesBuilder() {
-      return getServicesFieldBuilder().addBuilder(
-          outland.feature.proto.Service.getDefaultInstance());
-    }
-    /**
-     * <code>repeated .outland.Service services = 4;</code>
-     */
-    public outland.feature.proto.Service.Builder addServicesBuilder(
-        int index) {
-      return getServicesFieldBuilder().addBuilder(
-          index, outland.feature.proto.Service.getDefaultInstance());
-    }
-    /**
-     * <code>repeated .outland.Service services = 4;</code>
-     */
-    public java.util.List<outland.feature.proto.Service.Builder> 
-         getServicesBuilderList() {
-      return getServicesFieldBuilder().getBuilderList();
-    }
-    private com.google.protobuf.RepeatedFieldBuilderV3<
-        outland.feature.proto.Service, outland.feature.proto.Service.Builder, outland.feature.proto.ServiceOrBuilder> 
-        getServicesFieldBuilder() {
-      if (servicesBuilder_ == null) {
-        servicesBuilder_ = new com.google.protobuf.RepeatedFieldBuilderV3<
-            outland.feature.proto.Service, outland.feature.proto.Service.Builder, outland.feature.proto.ServiceOrBuilder>(
-                services_,
-                ((bitField0_ & 0x00000020) == 0x00000020),
-                getParentForChildren(),
-                isClean());
-        services_ = null;
-      }
-      return servicesBuilder_;
-    }
-
     private java.util.List<outland.feature.proto.Owner> owners_ =
       java.util.Collections.emptyList();
     private void ensureOwnersIsMutable() {
@@ -1701,73 +1491,121 @@ public  final class App extends
       return ownersBuilder_;
     }
 
-    private java.lang.Object type_ = "";
+    private outland.feature.proto.GrantCollection granted_ = null;
+    private com.google.protobuf.SingleFieldBuilderV3<
+        outland.feature.proto.GrantCollection, outland.feature.proto.GrantCollection.Builder, outland.feature.proto.GrantCollectionOrBuilder> grantedBuilder_;
     /**
-     * <code>optional string type = 8;</code>
+     * <code>optional .outland.GrantCollection granted = 9;</code>
      */
-    public java.lang.String getType() {
-      java.lang.Object ref = type_;
-      if (!(ref instanceof java.lang.String)) {
-        com.google.protobuf.ByteString bs =
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        type_ = s;
-        return s;
+    public boolean hasGranted() {
+      return grantedBuilder_ != null || granted_ != null;
+    }
+    /**
+     * <code>optional .outland.GrantCollection granted = 9;</code>
+     */
+    public outland.feature.proto.GrantCollection getGranted() {
+      if (grantedBuilder_ == null) {
+        return granted_ == null ? outland.feature.proto.GrantCollection.getDefaultInstance() : granted_;
       } else {
-        return (java.lang.String) ref;
+        return grantedBuilder_.getMessage();
       }
     }
     /**
-     * <code>optional string type = 8;</code>
+     * <code>optional .outland.GrantCollection granted = 9;</code>
      */
-    public com.google.protobuf.ByteString
-        getTypeBytes() {
-      java.lang.Object ref = type_;
-      if (ref instanceof String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        type_ = b;
-        return b;
+    public Builder setGranted(outland.feature.proto.GrantCollection value) {
+      if (grantedBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        granted_ = value;
+        onChanged();
       } else {
-        return (com.google.protobuf.ByteString) ref;
+        grantedBuilder_.setMessage(value);
+      }
+
+      return this;
+    }
+    /**
+     * <code>optional .outland.GrantCollection granted = 9;</code>
+     */
+    public Builder setGranted(
+        outland.feature.proto.GrantCollection.Builder builderForValue) {
+      if (grantedBuilder_ == null) {
+        granted_ = builderForValue.build();
+        onChanged();
+      } else {
+        grantedBuilder_.setMessage(builderForValue.build());
+      }
+
+      return this;
+    }
+    /**
+     * <code>optional .outland.GrantCollection granted = 9;</code>
+     */
+    public Builder mergeGranted(outland.feature.proto.GrantCollection value) {
+      if (grantedBuilder_ == null) {
+        if (granted_ != null) {
+          granted_ =
+            outland.feature.proto.GrantCollection.newBuilder(granted_).mergeFrom(value).buildPartial();
+        } else {
+          granted_ = value;
+        }
+        onChanged();
+      } else {
+        grantedBuilder_.mergeFrom(value);
+      }
+
+      return this;
+    }
+    /**
+     * <code>optional .outland.GrantCollection granted = 9;</code>
+     */
+    public Builder clearGranted() {
+      if (grantedBuilder_ == null) {
+        granted_ = null;
+        onChanged();
+      } else {
+        granted_ = null;
+        grantedBuilder_ = null;
+      }
+
+      return this;
+    }
+    /**
+     * <code>optional .outland.GrantCollection granted = 9;</code>
+     */
+    public outland.feature.proto.GrantCollection.Builder getGrantedBuilder() {
+      
+      onChanged();
+      return getGrantedFieldBuilder().getBuilder();
+    }
+    /**
+     * <code>optional .outland.GrantCollection granted = 9;</code>
+     */
+    public outland.feature.proto.GrantCollectionOrBuilder getGrantedOrBuilder() {
+      if (grantedBuilder_ != null) {
+        return grantedBuilder_.getMessageOrBuilder();
+      } else {
+        return granted_ == null ?
+            outland.feature.proto.GrantCollection.getDefaultInstance() : granted_;
       }
     }
     /**
-     * <code>optional string type = 8;</code>
+     * <code>optional .outland.GrantCollection granted = 9;</code>
      */
-    public Builder setType(
-        java.lang.String value) {
-      if (value == null) {
-    throw new NullPointerException();
-  }
-  
-      type_ = value;
-      onChanged();
-      return this;
-    }
-    /**
-     * <code>optional string type = 8;</code>
-     */
-    public Builder clearType() {
-      
-      type_ = getDefaultInstance().getType();
-      onChanged();
-      return this;
-    }
-    /**
-     * <code>optional string type = 8;</code>
-     */
-    public Builder setTypeBytes(
-        com.google.protobuf.ByteString value) {
-      if (value == null) {
-    throw new NullPointerException();
-  }
-  checkByteStringIsUtf8(value);
-      
-      type_ = value;
-      onChanged();
-      return this;
+    private com.google.protobuf.SingleFieldBuilderV3<
+        outland.feature.proto.GrantCollection, outland.feature.proto.GrantCollection.Builder, outland.feature.proto.GrantCollectionOrBuilder> 
+        getGrantedFieldBuilder() {
+      if (grantedBuilder_ == null) {
+        grantedBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+            outland.feature.proto.GrantCollection, outland.feature.proto.GrantCollection.Builder, outland.feature.proto.GrantCollectionOrBuilder>(
+                getGranted(),
+                getParentForChildren(),
+                isClean());
+        granted_ = null;
+      }
+      return grantedBuilder_;
     }
     public final Builder setUnknownFields(
         final com.google.protobuf.UnknownFieldSet unknownFields) {
