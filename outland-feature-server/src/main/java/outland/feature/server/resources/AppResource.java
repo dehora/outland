@@ -264,9 +264,9 @@ public class AppResource {
 
       if(AppService.OWNER_RELATION.equals(relation)) {
         if (!Strings.isNullOrEmpty(username)) {
-          found = appService.appHasMemberGrant(appKey, username);
+          found = appService.appHasOwner(appKey, username);
         } else if (!Strings.isNullOrEmpty(email)) {
-          found = appService.appHasMemberGrant(appKey, email);
+          found = appService.appHasOwner(appKey, email);
         }
       }
 
