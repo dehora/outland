@@ -59,14 +59,17 @@ public class DefaultFeatureStorage implements FeatureStorage {
     String key = feature.getKey();
     String id = feature.getId();
     String appKey = feature.getAppkey();
-
     String json = Protobuf3Support.toJsonString(feature);
+
     Map<String, String> owner = Maps.newHashMap();
 
     if (!Strings.isNullOrEmpty(feature.getOwner().getName())) {
       owner.put("name", feature.getOwner().getName());
     }
-    owner.put("email", feature.getOwner().getEmail());
+
+    if (!Strings.isNullOrEmpty(feature.getOwner().getEmail())) {
+      owner.put("email", feature.getOwner().getEmail());
+    }
 
     Item item = new Item()
         .withString("appkey", appKey)
