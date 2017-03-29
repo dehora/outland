@@ -76,6 +76,7 @@ public class FeatureResourceTest {
     appService.registerApp(
         App.newBuilder()
             .setKey(seedAppOneKey)
+            .setName("name")
             .addOwners(Owner.newBuilder().setUsername(seedOwnerOne))
             .setGranted(builder.buildPartial())
             .build()
@@ -88,6 +89,7 @@ public class FeatureResourceTest {
     appService.registerApp(
         App.newBuilder()
             .setKey(seedAppFooKey)
+            .setName("name")
             .addOwners(Owner.newBuilder().setUsername(seedOwnerFoo))
             .setGranted(builder.buildPartial())
             .build()
@@ -100,6 +102,7 @@ public class FeatureResourceTest {
     appService.registerApp(
         App.newBuilder()
             .setKey(seedAppBarKey)
+            .setName("name")
             .addOwners(Owner.newBuilder().setUsername(seedOwnerBar))
             .setGranted(builder.buildPartial())
             .build()
@@ -127,6 +130,8 @@ public class FeatureResourceTest {
     appService.registerApp(
         App.newBuilder()
             .setKey("testAuthFailures")
+            .setName("name")
+            .addOwners(Owner.newBuilder().setName("Jayne").setUsername("jayne"))
             .setGranted(grantBuilder.buildPartial())
             .build()
     );
@@ -365,6 +370,8 @@ public class FeatureResourceTest {
     instance.registerApp(
         App.newBuilder()
             .setKey(appKey)
+            .setName("name")
+            .addOwners(Owner.newBuilder().setName("Jayne").setUsername("jayne"))
             .setGranted(grantBuilder.buildPartial())
             .build()
     );
@@ -534,6 +541,8 @@ public class FeatureResourceTest {
     instance.registerApp(
         App.newBuilder()
             .setKey(appKey)
+            .setName("name")
+            .addOwners(Owner.newBuilder().setName("Jayne").setUsername("jayne"))
             .setGranted(grantBuilder.buildPartial())
             .build()
     );
