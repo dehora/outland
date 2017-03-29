@@ -79,50 +79,51 @@ evaluation depends on the kind of feature.
 The `Flag` is the simplest kind of feature and probably the one you're most familiar with. When a 
 flag is on it evaluates to true and you're good to go. 
   
-An `Option` has two stages. First it's `on` or `off` state is checked. If the state is `off` it's 
-skipped just like a Flag. If the state `on`, the feature's available options are evaluated and one 
-of them is selected. Each option has a _weight_ and the probability of an option being 
- selected is a function of its weight.
+An `Option` has two stages. First, the `on` or `off` state is checked, and if the state is `off` 
+it's skipped just like a Flag. Second, if the state `on`, the feature's available options are 
+evaluated and one of them is selected. Each option has a _weight_ and the probability of an option 
+being selected is a function of its weight.
  
-A Flag can be considered a base form of Option, where the weight of a flag is 100% set to its 
-state. But flags are such a common case we just deal with them using their state directly 
+A Flag can be considered a degenerate form of Option, where the weight of a Flag is wholly allocated 
+to its state. But flags are such a common case we just work with them using their state directly 
 and reserve the option form for more advanced scenarios. 
 
 Let's take a boolean feature option as an example. A boolean feature will have two options, "true" 
-and "false" - let's say  "false" had a weight of 90%, and "true" option had a weight of 10%. 
-Then:
+and "false". Now suppose  "false" had a weight of 90%, and "true" option had a weight of 10%. 
+Then the option is processed roughly like this:
 
 - If the state is `off`, it's skipped.
-- If the state is `on`, the "true" and "false" options are evaluated
-- 9 times out of 10 the evaluation will return "false"
-- 1 time out of 10 the evaluation will return "true"
+- If the state is `on`, the "true" and "false" options are evaluated.
+- 9 times out of 10 the evaluation will return "false".
+- 1 time out of 10 the evaluation will return "true".
 
 This makes the boolean option ideal for scenarios like canary rollouts where a controlled 
 percentage of traffic is sent to the new code. As we see things going well we can increase 
 the weight of the "true" option allowing more requests to hit it. If it's not working out we 
-can increase the "false" weight. Worst case if it's a bust we can back out completely by setting 
-the feature's state to `off` and disabling it altogether.
+can increase the "false" weight, biasing traffic away from the new feature. Worst case if it's a 
+bust we can back out by setting the feature's state to `off` and disabling it altogether.
   
 A boolean feature can only have true and false options, and this is the only option type available
-right now, but options are planned to have types other than boolean. For example a string feature 
+right now, but options are planned to have types other than boolean. For example a "String" feature 
 could have 3 options, "red", "green" and "blue", each with a weight, 10%, 20%, and 70%  which 
 biases the evaluation. One time in ten the "red" option will be returned, two times out of ten 
 it'll be "green", and seven times out of ten it'll be "blue". This gives us a path beyond on/off 
-toggles to for things like A/B testing and multi-armed bandit evaluation.
+toggles to things like A/B testing and multi-armed bandits.
 
 ### Apps
 
-An App is a collection of features. An App can be anything - it doesn't have to correspond to a 
-construct in your system like a specific service or a product. The main goal of an App is to allow 
-features to be observed by multiple systems. For example you might use an App to group features 
-together for an epic project such that it allows those features to span multiple microservices 
-owned by a few different teams. Or you may simply want to make some features available to your 
-backend servers and your single page webapp.  
+An App is a collection of features and every feature belongs to just one App. An App can be 
+anything - it doesn't have to correspond to a construct in your system like a specific service 
+or a product. The main goal of an App is to allow features to be observed by multiple systems. 
+For example you might use an App to group features together for an epic project such that it allows 
+those features to span multiple microservices owned by a few different teams. Or you may simply 
+want to make some features available to your backend servers and your single page webapp.  
 
-Our experience is that the thing you want to develop often has multiple parts and often will span 
-multiple systems. In fact we think it's inevitable some ambitious thing you want to build will cut 
-across whatever well-considered boundaries you have in place, be they social or technical. Apps 
-allow you to express that need. 
+Our experience is that the thing you want to develop often has multiple 
+parts and often will span multiple systems. In fact we think it's inevitable some ambitious thing 
+you want to build will cut across whatever boundaries you have in place however and well-considered, 
+be they social or technical. Apps allow you to express that need and deal with requirements that 
+are divergent. 
 
 Every App has one or more owners that can administrate the App and act as point of contact. Every 
 feature belonging to an App must have a unique key.
