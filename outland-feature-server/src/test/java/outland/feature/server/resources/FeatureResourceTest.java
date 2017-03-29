@@ -570,7 +570,7 @@ public class FeatureResourceTest {
     String jsonRes = response.readEntity(String.class);
     final Problem problem = gson.fromJson(jsonRes, Problem.class);
     assertTrue(problem.status() == 422);
-    assertTrue(problem.title().contains("owner_incomplete"));
+    assertTrue(problem.title().contains("no_owner_for_feature"));
     assertEquals(Problem.CLIENT_TYPE, problem.type());
   }
 

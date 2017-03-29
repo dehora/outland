@@ -22,8 +22,6 @@ import outland.feature.proto.FeatureOption;
 import outland.feature.proto.Owner;
 import outland.feature.proto.FeatureVersion;
 import outland.feature.proto.OptionType;
-import outland.feature.server.Problem;
-import outland.feature.server.ServiceException;
 
 import static outland.feature.server.StructLog.kvp;
 
@@ -73,6 +71,11 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
     logger.info("{} /feature[{}]", kvp("op", "registerFeature"),
         TextFormat.shortDebugString(registering));
 
+    FeatureValidator featureValidator = new FeatureValidator();
+
+    // catch bad input before merging
+    featureValidator.validateFeatureRegistrationThrowing(registering);
+
     OffsetDateTime now = OffsetDateTime.now();
     String id = "feat_" + Ulid.random(now.toInstant().toEpochMilli());
     String created = FeatureService.asString(now);
@@ -108,6 +111,11 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
     logger.info("{} /update_feature=[{}]",
         kvp("op", "updateFeature", "appkey", appKey, "feature_key", featureKey),
         TextFormat.shortDebugString(updates));
+
+    FeatureValidator featureValidator = new FeatureValidator();
+
+    // catch bad input before merging
+    featureValidator.validateFeatureUpdateThrowing(updates);
 
     String now = FeatureService.asString(OffsetDateTime.now());
     Optional<Feature> maybeFound =
@@ -155,6 +163,9 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
     }
 
     Feature updated = builder.build();
+
+    // post check everything
+    featureValidator.validateFeatureRegistrationThrowing(updated);
 
     timed(updateFeatureTimer, () -> featureStorage.updateFeature(updated));
 
@@ -311,10 +322,6 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
     }
 
     final List<FeatureOption> updatedOptionsList = updated.getOptionsList();
-    if (updatedOptionsList.size() != 2) {
-      throw new ServiceException(Problem.clientProblem("options_wrong_number",
-          "please submit both bool options for update.", 422));
-    }
 
     for (FeatureOption updateOption : updatedOptionsList) {
       final String updateId = updateOption.getId();
@@ -332,18 +339,6 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
       }
     }
 
-    int sum = 0;
-    for (FeatureOption result : results) {
-      validateOption(result);
-      sum += result.getWeight();
-    }
-
-    if (sum != 10_000) {
-      throw new ServiceException(
-          Problem.clientProblem("weights_wrong_total", "option weights must sum to 10000",
-              422));
-    }
-
     return results;
   }
 
@@ -357,26 +352,14 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
     if (feature.getOption().equals(OptionType.bool)) {
       if (feature.getOptionsCount() != 0) {
 
-        int sum = 0;
-
         final List<FeatureOption> options = feature.getOptionsList();
 
         for (FeatureOption option : options) {
-
-          validateOption(option);
-
           final FeatureOption.Builder optionBuilder = FeatureOption.newBuilder().mergeFrom(option);
           optionBuilder.setType("option");
           optionBuilder.setId("opt_" + Ulid.random());
           optionBuilder.setOption(OptionType.bool);
           builder.addOptions(optionBuilder);
-
-          sum += option.getWeight();
-        }
-
-        if (sum != 10_000) {
-          throw new ServiceException(Problem.clientProblem("weights_wrong_total",
-              "option weights must sum to 10000", 422));
         }
       } else {
         builder.addOptions(FeatureOption.newBuilder()
@@ -404,36 +387,9 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
 
   private void applyOwnerRegister(Feature registering, Feature.Builder builder) {
     final Owner owner = registering.getOwner();
-
-    if(Strings.isNullOrEmpty(owner.getUsername()) && Strings.isNullOrEmpty(owner.getEmail())) {
-      throw new ServiceException(Problem.clientProblem("owner_incomplete",
-          "owner has no email or username", 422));
-    }
-
     final Owner.Builder ownerBuilder = owner.toBuilder();
     ownerBuilder.setType("featureowner");
     builder.setOwner(ownerBuilder.buildPartial());
-  }
-
-  private void validateOption(FeatureOption option) {
-    if (option.getWeight() > 10_000 || option.getWeight() < 0) {
-      throw new ServiceException(Problem.clientProblem("weights_out_of_bounds",
-          "option weights must be between 0 and 10000", 422));
-    }
-
-    if (!"true".equalsIgnoreCase(option.getValue())
-        &&
-        !"false".equalsIgnoreCase(option.getValue())) {
-      throw new ServiceException(Problem.clientProblem("bad_option_value",
-          "option values must be true or false", 422));
-    }
-
-    if (!"true".equalsIgnoreCase(option.getName())
-        &&
-        !"false".equalsIgnoreCase(option.getName())) {
-      throw new ServiceException(Problem.clientProblem("bad_option_name",
-          "option names must be true or false", 422));
-    }
   }
 
   private void applyVersion(Feature registering, Feature.Builder builder) {
