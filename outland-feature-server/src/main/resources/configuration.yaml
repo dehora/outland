@@ -51,10 +51,8 @@ featureTable:
 auth:
   # basic exists mostly for dev, test and local docker. Prefer oauth for production.
   basicEnabled: ${OUTLAND_FEATURE_AUTH_BASIC_ENABLED:-true}
-  # set a comma separated list of keys via the DW_API_KEYS envar
+  # set a comma separated map of callers and api keys
   basicAuthenticationKeys: ${OUTLAND_FEATURE_AUTH_BASIC_API_KEYS}
-  # basic_disable_scope_check: ignore scope checks for api requests
-  basicScopePolicy: basic_disable_scope_check
   basicCacheCredentialSeconds: 30
 
   oauthEnabled: ${OUTLAND_FEATURE_AUTH_OAUTH_ENABLED:-false}

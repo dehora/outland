@@ -51,7 +51,6 @@ featureTable:
 auth:
   basicEnabled: ${OUTLAND_FEATURE_AUTH_BASIC_ENABLED:-true}
   basicAuthenticationKeys: "knownservice=topsecret,unknownMember=topsecret,testPostService=topsecret,whitelisted=topsecret,serviceOne=topsecret,serviceFoo=topsecret,serviceBar=topsecret,memberOne=topsecret,memberFoo=topsecret,memberBar=topsecret"
-  basicScopePolicy: basic_disable_scope_check
   basicCacheCredentialSeconds: 30
 
   oauthEnabled: ${OUTLAND_FEATURE_AUTH_OAUTH_ENABLED:-false}

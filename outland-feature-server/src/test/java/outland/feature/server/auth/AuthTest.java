@@ -47,7 +47,6 @@ public class AuthTest {
 
     authConfiguration.basicAuthenticationKeys = serviceKey + "=" + apiKey;
     authConfiguration.basicEnabled=true;
-    authConfiguration.basicScopePolicy = AuthConfiguration.SCOPE_BASIC_POLICY_DISABLED;
     authConfiguration.multipleAppAccessList = "acme.ui";
 
     final Injector injector = Guice.createInjector(
