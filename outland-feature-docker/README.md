@@ -23,7 +23,7 @@ The notable and somewhat essential settings are as follows:
 - `OUTLAND_FEATURE_AUTH_BASIC_API_KEYS`: A list of known "API Keys" the server knows about; if 
 you leave basic on, you'll want something in this.
 
-- `OUTLAND_FEATURE_MULTIPLE_APP_ACCESS_GRANT_LIST`: If you want to enable a whitelisted service 
+- `OUTLAND_FEATURE_ANY_APP_GRANT`: If you want to enable a whitelisted service 
 such as a UI that is granted access for any App's features. The service still has to authenticate.
 
 
@@ -43,7 +43,7 @@ unless you have a locked down network and a key rotation story (and even then it
 - `OUTLAND_FEATURE_AUTH_OAUTH_ENABLED`: ideally the OAuth token server option is enabled in 
 the real world.
 
-- `OUTLAND_FEATURE_MULTIPLE_APP_ACCESS_GRANT_LIST`: If you want to enable a whitelisted service 
+- `OUTLAND_FEATURE_ANY_APP_GRANT`: If you want to enable a whitelisted service 
 such as a UI that is granted access for any App's features. The service still has to authenticate.
 
 - `OUTLAND_FEATURE_REDIS_CACHE_HOST`, `OUTLAND_FEATURE_REDIS_IDEM_HOST`: If you want to control 
@@ -77,7 +77,7 @@ increase the `Xmx` and `Xms`.
 | OUTLAND_FEATURE_REMOTE_OAUTH_SERVER            | The remote OAuth server url used to confirm bearer tokens and return information about the principal.                       | "https://localhost/oauth2/tokeninfo" | high       |
 | OUTLAND_FEATURE_AUTH_OAUTH_CONNECT_TO_MILLIS   | How long to wait for a connection to the OAuth server.                                                                      | 3000 (millis)                        | low        |
 | OUTLAND_FEATURE_AUTH_OAUTH_READ_TO_MILLIS      | How long to wait for a read from the connected OAuth server.                                                                | 3000 (millis)                        | low        |
-| OUTLAND_FEATURE_MULTIPLE_APP_ACCESS_GRANT_LIST | A list of services or members that are granted access to all apps. Typically used for a console or UI client.               | empty                                | medium     |
+| OUTLAND_FEATURE_ANY_APP_GRANT | A list of services or members that are granted access to all apps. Typically used for a console or UI client.               | empty                                | medium     |
 | JAVA_OPTS                                      | JVM options.                                                                                                                | See the docker .env file             | medium     |
 | OUTLAND_FEATURE_REDIS_MAXCONN                  | The maximum number of redis cache connections used by Jedis internally.                                                     | 8                                    | low        |
 | OUTLAND_FEATURE_REDIS_CACHE_HOST               | Redis feature cache hostname.                                                                                               | "redis"                              | medium     |
