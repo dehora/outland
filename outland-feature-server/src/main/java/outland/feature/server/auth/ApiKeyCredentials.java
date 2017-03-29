@@ -3,13 +3,13 @@ package outland.feature.server.auth;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import javax.inject.Inject;
 
 public class ApiKeyCredentials {
 
-  private final List<String> apiKeys = Lists.newArrayList();
+  private Map<String, String> apiKeyMap;
 
   @Inject
   public ApiKeyCredentials(AuthConfiguration configuration) {
@@ -17,7 +17,7 @@ public class ApiKeyCredentials {
   }
 
   Optional<AuthPrincipal> authenticated(String apiKey, String identity, String kind) {
-    if (apiKeys.contains(apiKey)) {
+    if (apiKeyMap.containsKey(identity) && apiKeyMap.get(identity).equals(apiKey)) {
       final ArrayList<String> scopes = Lists.newArrayList(TokenAuthorizer.WILDCARD_SCOPE);
       final AuthPrincipal value = new AuthPrincipal(kind, identity, scopes);
       return Optional.of(value);
@@ -27,6 +27,8 @@ public class ApiKeyCredentials {
   }
 
   private void loadApiKeys(AuthConfiguration configuration) {
-    apiKeys.addAll(Splitter.on(",").splitToList(configuration.basicAuthenticationKeys));
+    apiKeyMap = Splitter.on(",")
+        .withKeyValueSeparator('=')
+        .split(configuration.basicAuthenticationKeys);
   }
 }

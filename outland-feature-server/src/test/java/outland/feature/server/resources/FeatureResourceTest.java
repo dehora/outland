@@ -67,7 +67,7 @@ public class FeatureResourceTest {
 
   @Before
   public void setUp() throws Exception {
-    basicPassword = APP.getConfiguration().auth.basicAuthenticationKeys;
+    basicPassword = "topsecret";
 
     GrantCollection.Builder builder = GrantCollection.newBuilder();
     builder.addServices(ServiceGrant.newBuilder().setKey(seedServiceOne).buildPartial());
@@ -193,7 +193,7 @@ public class FeatureResourceTest {
     String jsonRes = response.readEntity(String.class);
     final Problem problem = gson.fromJson(jsonRes, Problem.class);
     assertTrue(problem.status() == 401);
-    assertTrue(problem.title().contains("Service grant not authenticated"));
+    assertTrue(problem.title().contains("invalid_or_missing_credentials"));
     assertEquals(Problem.AUTH_TYPE, problem.type());
   }
 
@@ -511,7 +511,7 @@ public class FeatureResourceTest {
 
     String key = "testMissingAppThrows404";
     String appKey = Ulid.random();
-    String serviceCaller = Ulid.random(); // nb: we hit the missing app first
+    String serviceCaller = seedServiceBar;
 
     Feature feature = buildTestFeature(appKey, key);
     String jsonReq = Protobuf3Support.toJsonString(feature);
@@ -528,7 +528,7 @@ public class FeatureResourceTest {
   @Test
   public void testOwnerIncomplete422() throws Exception {
 
-    final String whitelisted = "own";
+    final String whitelisted = "whitelisted";
     final String appKey = "testOwnerIncomplete422App";
 
     final AppService instance = injector.getInstance(AppService.class);

@@ -11,7 +11,6 @@ public class BasicAuthenticator
     implements io.dropwizard.auth.Authenticator<BasicCredentials, AuthPrincipal> {
 
   private final ApiKeyCredentials apiKeyCredentials;
-  private final List<String> apiKeys = Lists.newArrayList();
 
   @Inject
   public BasicAuthenticator(ApiKeyCredentials apiKeyCredentials) {
