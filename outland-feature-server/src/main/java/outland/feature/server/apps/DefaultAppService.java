@@ -54,6 +54,7 @@ public class DefaultAppService implements AppService, MetricsTimer {
 
   @Override public Optional<App> registerApp(App app) {
     logger.info("{} /app[{}]", kvp("op", "registerApp"), TextFormat.shortDebugString(app));
+    new AppValidator().validateAppRegistrationThrowing(app);
     return processRegistration(app);
   }
 
@@ -84,7 +85,7 @@ public class DefaultAppService implements AppService, MetricsTimer {
             grants.add(prepareService(service));
           }
 
-          GrantCollection.Builder grantBuilder = GrantCollection.newBuilder();
+          GrantCollection.Builder grantBuilder = newGrantCollectionBuilder();
           grantBuilder.addAllServices(grants);
           grantBuilder.addAllMembers(granted.getMembersList());
           builder.setGranted(grantBuilder.buildPartial());
@@ -119,7 +120,7 @@ public class DefaultAppService implements AppService, MetricsTimer {
             grants.add(prepareMember(member));
           }
 
-          GrantCollection.Builder grantBuilder = GrantCollection.newBuilder();
+          GrantCollection.Builder grantBuilder = newGrantCollectionBuilder();
           grantBuilder.addAllMembers(grants);
           grantBuilder.addAllServices(granted.getServicesList());
           builder.setGranted(grantBuilder.buildPartial());
@@ -159,7 +160,7 @@ public class DefaultAppService implements AppService, MetricsTimer {
     final App.Builder builder = app.toBuilder();
     builder.clearGranted();
 
-    GrantCollection.Builder newBuilder= GrantCollection.newBuilder();
+    GrantCollection.Builder newBuilder = newGrantCollectionBuilder();
     newBuilder.addAllServices(wrapped);
     newBuilder.addAllMembers(app.getGranted().getMembersList());
 
@@ -206,7 +207,7 @@ public class DefaultAppService implements AppService, MetricsTimer {
 
     final App.Builder builder = app.toBuilder();
     builder.clearGranted();
-    GrantCollection.Builder newBuilder= GrantCollection.newBuilder();
+    GrantCollection.Builder newBuilder = newGrantCollectionBuilder();
     newBuilder.addAllMembers(wrapped);
     newBuilder.addAllServices(app.getGranted().getServicesList());
 
@@ -325,7 +326,7 @@ public class DefaultAppService implements AppService, MetricsTimer {
     app.getOwnersList().forEach(owner -> ownersReady.add(prepareOwner(owner)));
     appBuilder.clearOwners().addAllOwners(ownersReady);
 
-    GrantCollection.Builder grantCollectionBuilder = GrantCollection.newBuilder();
+    GrantCollection.Builder grantCollectionBuilder = newGrantCollectionBuilder();
 
     List<ServiceGrant> servicesReady = Lists.newArrayList();
     app.getGranted().getServicesList().forEach(service -> servicesReady.add(prepareService(service)));
@@ -347,6 +348,10 @@ public class DefaultAppService implements AppService, MetricsTimer {
     registerMembers(registered);
 
     return Optional.of(registered);
+  }
+
+  private GrantCollection.Builder newGrantCollectionBuilder() {
+    return GrantCollection.newBuilder().setType("grant.collection");
   }
 
   private App.Builder newAppBuilder(App app) {
