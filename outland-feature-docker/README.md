@@ -81,10 +81,10 @@ increase the `Xmx` and `Xms`.
 | OUTLAND_FEATURE_AUTH_OAUTH_READ_TO_MILLIS            | How long to wait for a read from the connected OAuth server.                                                                | 3000 (millis)                        | low        |
 | OUTLAND_FEATURE_MULTIPLE_APP_ACCESS_GRANT_LIST       | A list of services or members that are granted access to all apps. Typically used for a console or UI client.               | empty                                | medium     |
 | JAVA_OPTS                                            | JVM options.                                                                                                                | See the docker .env file             | medium     |
-| OUTLAND_FEATURE_REDIS_MAXCONN                        | The maximum number of redis cache connections used by Jedis internally.                                                     | 8                                    | low        |                                                                                                                | See the docker .env file             | medium     |
+| OUTLAND_FEATURE_REDIS_MAXCONN                        | The maximum number of redis cache connections used by Jedis internally.                                                     | 8                                    | low        |
 | OUTLAND_FEATURE_REDIS_CACHE_HOST                     | Redis feature cache hostname.                                                                                               | "redis"                              | medium     |
 | OUTLAND_FEATURE_REDIS_CACHE_PORT                     | Redis feature cache post.                                                                                                   | 6379                                 | medium     |
 | OUTLAND_FEATURE_REDIS_IDEM_HOST                      | Redis idempotency key hostname.                                                                                             | "redis"                              | medium     |
-| OUTLAND_FEATURE_REDIS_MAXCONN                        | Redis idempotency key post.                                                                                                 | 6379                                 | medium    |
+| OUTLAND_FEATURE_REDIS_MAXCONN                        | Redis idempotency key post.                                                                                                 | 6379                                 | medium     |
 
 
