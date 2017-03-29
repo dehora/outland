@@ -136,10 +136,6 @@ public class ServerMain extends GuiceApplication<ServerConfiguration> {
     if (configuration.basicEnabled) {
       logger.info("op=auth_configuration,mechanism=basic");
 
-      final Authorizer<AuthPrincipal> basicAppAuthorizer =
-          injector.getInstance(Key.get(new TypeLiteral<Authorizer<AuthPrincipal>>() {
-          }, Names.named("basicAppAuthorizer")));
-
       final Authenticator<BasicCredentials, AuthPrincipal> basicAppAuthenticator =
           injector.getInstance(Key.get(new TypeLiteral<Authenticator<BasicCredentials, AuthPrincipal>>() {
           }, Names.named("basicAppAuthenticator")));
@@ -154,7 +150,6 @@ public class ServerMain extends GuiceApplication<ServerConfiguration> {
           .setPrefix("Basic")
           .setRealm("outland_feature")
           .setAuthenticator(basicAppAuthenticator)
-          .setAuthorizer(basicAppAuthorizer)
           .setUnauthorizedHandler(unauthorizedHandler)
           .buildAuthFilter();
 

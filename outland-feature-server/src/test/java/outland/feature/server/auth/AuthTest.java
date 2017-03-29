@@ -90,15 +90,5 @@ public class AuthTest {
       e.printStackTrace();
       fail();
     }
-
-    final Authorizer<AuthPrincipal> authorizer =
-        injector.getInstance(Key.get(new TypeLiteral<Authorizer<AuthPrincipal>>() {
-        }, Names.named("basicAppAuthorizer")));
-
-    // scope checks are disabled
-    assertTrue(authorizer.authorize(new AuthPrincipal(
-        "service","foo", Lists.newArrayList()
-    ), "any"));
-
   }
 }

@@ -49,11 +49,6 @@ public class AuthModule extends AbstractModule {
         .annotatedWith(Names.named("basicAppAuthenticator"))
         .to(BasicAuthenticator.class);
 
-    bind(new TypeLiteral<Authorizer<AuthPrincipal>>() {
-    })
-        .annotatedWith(Names.named("basicAppAuthorizer"))
-        .to(BasicAuthorizer.class);
-
     List<String> multipleAppAccessList = Lists.newArrayList();
 
     multipleAppAccessList.addAll(
