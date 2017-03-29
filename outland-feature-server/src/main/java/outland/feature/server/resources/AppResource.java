@@ -71,7 +71,7 @@ public class AppResource {
 
     final long start = System.currentTimeMillis();
 
-    accessControlSupport.throwUnlessGrantedForApp(authPrincipal, app);
+    // no further acl check; if you are an authenticated AuthPrincipal, you can create apps
 
     URI loc = UriBuilder.fromUri(baseURI)
         .path(app.getKey())
