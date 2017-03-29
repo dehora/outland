@@ -28,6 +28,9 @@ import static org.junit.Assert.assertTrue;
 
 public class AuthTest {
 
+  private final String serviceKey = "foo";
+  private final String apiKey = "letmein";
+
   @Test
   public void testLoad() throws Exception {
 
@@ -42,7 +45,7 @@ public class AuthTest {
 
     authConfiguration.oauthEnabled=false; // turn off oauth for now
 
-    authConfiguration.basicAuthenticationKeys="letmein,secret";
+    authConfiguration.basicAuthenticationKeys = serviceKey + "=" + apiKey;
     authConfiguration.basicEnabled=true;
     authConfiguration.basicScopePolicy = AuthConfiguration.SCOPE_BASIC_POLICY_DISABLED;
     authConfiguration.multipleAppAccessList = "acme.ui";
@@ -72,7 +75,7 @@ public class AuthTest {
 
     try {
       final Optional<AuthPrincipal> authenticate =
-          authenticator.authenticate(new BasicCredentials("foo/owner", "letmein"));
+          authenticator.authenticate(new BasicCredentials(serviceKey + "/owner", apiKey));
       assertTrue(authenticate.isPresent());
 
     } catch (AuthenticationException e) {
@@ -82,7 +85,7 @@ public class AuthTest {
 
     try {
       final Optional<AuthPrincipal> authenticate =
-          authenticator.authenticate(new BasicCredentials("foo/owner", "badsecret"));
+          authenticator.authenticate(new BasicCredentials(serviceKey + "/owner", "badsecret"));
       assertFalse(authenticate.isPresent());
     } catch (AuthenticationException e) {
       e.printStackTrace();

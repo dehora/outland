@@ -14,8 +14,6 @@ public class AuthConfiguration {
   public static final String AUTHENTICATION_POLICY_OAUTH_BEARER_CHECK = "oauth_bearer_check";
   public static final String AUTHENTICATION_POLICY_OAUTH_BEARER_REFLECT = "oauth_bearer_reflect";
 
-  public static final String AUTHENTICATION_POLICY_BASIC_APP_USERNAME_PASSWORD_KEYS = "basic_app_username_password_keys";
-
   public static final String SCOPE_OAUTH_POLICY_DISABLED = "oauth_disable_scope_check";
   public static final String SCOPE_OAUTH_POLICY_ENFORCED = "oauth_enforce_scope_check";
   public static final String SCOPE_BASIC_POLICY_DISABLED = "basic_disable_scope_check";
@@ -27,10 +25,6 @@ public class AuthConfiguration {
 
   @JsonProperty
   public String basicAuthenticationKeys;
-
-  @NotEmpty
-  @JsonProperty
-  public String basicAuthenticationPolicy = AUTHENTICATION_POLICY_BASIC_APP_USERNAME_PASSWORD_KEYS;
 
   @NotEmpty
   @JsonProperty
