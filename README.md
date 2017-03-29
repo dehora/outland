@@ -96,7 +96,7 @@ and add the project declaration to `pom.xml`:
   <version>0.0.4</version>
 </dependency>
 ```
-### Gradle
+#### Gradle
 
 Add jcenter to the `repositories` block:
 
