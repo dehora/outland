@@ -157,7 +157,7 @@ public class AppResource {
   @Produces(MediaType.APPLICATION_JSON)
   @PermitAll
   @Timed(name = "removeServiceGrant")
-  public Response removeService(
+  public Response removeServiceGrant(
       @Auth AuthPrincipal authPrincipal,
       @PathParam("app_key") String appKey,
       @PathParam("service_key") String serviceKey
@@ -182,8 +182,8 @@ public class AppResource {
   @Path("/{app_key}/grants/members/{member_key}")
   @Produces(MediaType.APPLICATION_JSON)
   @PermitAll
-  @Timed(name = "removeServiceGrant")
-  public Response removeMember(
+  @Timed(name = "removeMemberGrant")
+  public Response removeMemberGrant(
       @Auth AuthPrincipal authPrincipal,
       @PathParam("app_key") String appKey,
       @PathParam("member_key") String memberKey
@@ -205,24 +205,29 @@ public class AppResource {
   }
 
   @DELETE
-  @Path("/{app_key}/owners")
+  @Path("/{app_key}/owners/{owner_key}")
   @Produces(MediaType.APPLICATION_JSON)
   @PermitAll
   @Timed(name = "removeOwner")
-  public Response removeService(
+  public Response removeOwner(
       @Auth AuthPrincipal authPrincipal,
       @PathParam("app_key") String appKey,
-      @QueryParam("username") String username,
-      @QueryParam("email") String email
+      @PathParam("owner_key") String ownerKey
   ) throws AuthenticationException {
     final long start = System.currentTimeMillis();
+
+    if(Strings.isNullOrEmpty(ownerKey)) {
+      return headers.enrich(Response.status(404).entity(
+          Problem.clientProblem("param_not_found", "", 404)), start).build();
+    }
 
     final Optional<App> maybe = appService.loadAppByKey(appKey);
 
     if (maybe.isPresent()) {
       final App app = maybe.get();
       accessControlSupport.throwUnlessGrantedForApp(authPrincipal, app);
-      final App updated = appService.removeOwner(app, username, email);
+
+      App updated = appService.removeOwner(app, ownerKey);
       return headers.enrich(Response.ok(updated), start).build();
     }
 

@@ -40,7 +40,7 @@ public interface AppService {
 
   App removeMemberGrant(App app, String memberKey);
 
-  App removeOwner(App app, String username, String email);
+  App removeOwner(App app, String ownerKey);
 
   boolean appHasOwner(String appKey, String usernameOrEmail);
 
