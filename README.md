@@ -24,6 +24,8 @@
 - [Installation](#installation)
   - [Server](#server)
     - [Docker](#docker)
+    - [Configuring the Server](#configuring-the-server)
+    - [Creating Tables in DynamoDB](#creating-tables-in-dynamodb)
   - [Client](#client)
     - [Maven](#maven)
     - [Gradle](#gradle)
@@ -73,6 +75,27 @@ See also:
 ### Server
 
 #### Docker
+
+The server is available on [docker hub](https://hub.docker.com/r/dehora/outland-feature-server/).
+
+The [examples/all-in-one](https://github.com/dehora/outland/tree/master/outland-feature-docker/examples/all-in-one) 
+project has a simple `docker-compose` file you can use to get started, which includes the 
+DynamoDB and Redis dependencies.
+
+#### Configuring the Server
+
+The docker image embeds its own Dropwizard configuration file to avoid requiring a mount and 
+the settings can be overridden by passing them to the environment. The full list of configuration 
+settings is available  [here](https://github.com/dehora/outland/blob/master/outland-feature-docker/README.md)
+
+#### Creating Tables in DynamoDB
+
+Once the server is up and running, for local development you can create the DynamoDB tables 
+used to store feature data via the Dropwizard admin port. Again, 
+the [examples/all-in-one](https://github.com/dehora/outland/tree/master/outland-feature-docker/examples/all-in-one)  
+has a script that will create the tables.
+
+For online or production use, you can create the tables via the AWS Console.
 
 ### Client
 
