@@ -32,6 +32,8 @@ public class AuthModule extends AbstractModule {
 
     bind(AuthConfiguration.class).toInstance(authConfiguration);
 
+    bind(ApiKeyCredentials.class).asEagerSingleton();
+
     bind(new TypeLiteral<Authenticator<String, AuthPrincipal>>() {
     })
         .annotatedWith(Names.named("oauthAppAuthenticator"))
