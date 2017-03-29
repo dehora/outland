@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 import org.glassfish.jersey.message.GZipEncoder;
 import org.glassfish.jersey.server.filter.EncodingFilter;
+import org.glassfish.jersey.server.filter.RolesAllowedDynamicFeature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import outland.feature.server.app.GuiceApplication;
@@ -166,6 +167,7 @@ public class ServerMain extends GuiceApplication<ServerConfiguration> {
 
     final ChainedAuthFilter chainedAuthFilter = new ChainedAuthFilter(filters);
     environment.jersey().register(new AuthDynamicFeature(chainedAuthFilter));
+    environment.jersey().register(RolesAllowedDynamicFeature.class);
     environment.jersey().register(new AuthValueFactoryProvider.Binder<>(AuthPrincipal.class));
   }
 }
