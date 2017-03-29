@@ -6,6 +6,8 @@ import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.google.protobuf.TextFormat;
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -17,6 +19,8 @@ import outland.feature.proto.GrantCollection;
 import outland.feature.proto.MemberGrant;
 import outland.feature.proto.Owner;
 import outland.feature.proto.ServiceGrant;
+import outland.feature.server.Problem;
+import outland.feature.server.ServiceException;
 import outland.feature.server.features.MetricsTimer;
 import outland.feature.server.features.Ulid;
 import outland.feature.server.features.VersionService;
@@ -64,7 +68,27 @@ public class DefaultAppService implements AppService, MetricsTimer {
         TextFormat.shortDebugString(app), TextFormat.shortDebugString(service));
 
     return processUpdate(app,
-        builder -> builder.getGranted().getServicesList().add(prepareService(service)));
+        builder -> {
+          final GrantCollection granted = app.getGranted();
+          List<ServiceGrant> grants = granted.getServicesList();
+          boolean found = false;
+          for (ServiceGrant grant : grants) {
+            if(grant.getKey().equals(service.getKey())) {
+              found = true;
+              break;
+            }
+          }
+
+          if (!found) {
+            grants = Lists.newArrayList(grants);
+            grants.add(prepareService(service));
+          }
+
+          GrantCollection.Builder grantBuilder = GrantCollection.newBuilder();
+          grantBuilder.addAllServices(grants);
+          grantBuilder.addAllMembers(granted.getMembersList());
+          builder.setGranted(grantBuilder.buildPartial());
+        });
   }
 
   @Override public App addToApp(App app, MemberGrant member) {
@@ -72,7 +96,34 @@ public class DefaultAppService implements AppService, MetricsTimer {
         TextFormat.shortDebugString(app), TextFormat.shortDebugString(member));
 
     return processUpdate(app,
-        builder -> builder.getGranted().getMembersList().add(prepareMember(member)));
+        builder -> {
+          final GrantCollection granted = app.getGranted();
+          List<MemberGrant> grants = granted.getMembersList();
+          boolean found = false;
+          for (MemberGrant grant : grants) {
+            final String username = grant.getUsername();
+            if (!Strings.isNullOrEmpty(username) && username.equals(member.getUsername())) {
+              found = true;
+              break;
+            }
+
+            final String email = grant.getEmail();
+            if (!Strings.isNullOrEmpty(email) && email.equals(member.getEmail())) {
+              found = true;
+              break;
+            }
+          }
+
+          if (!found) {
+            grants = Lists.newArrayList(grants);
+            grants.add(prepareMember(member));
+          }
+
+          GrantCollection.Builder grantBuilder = GrantCollection.newBuilder();
+          grantBuilder.addAllMembers(grants);
+          grantBuilder.addAllServices(granted.getServicesList());
+          builder.setGranted(grantBuilder.buildPartial());
+        });
   }
 
   @Override public App addToApp(App app, final Owner owner) {
@@ -88,13 +139,15 @@ public class DefaultAppService implements AppService, MetricsTimer {
       return  app;
     }
 
-    final App.Builder builder = app.toBuilder();
-    final List<ServiceGrant> list = builder.getGranted().getServicesList();
+    final List<ServiceGrant> servicesList = app.getGranted().getServicesList();
+    final ArrayList<ServiceGrant> wrapped = Lists.newArrayList(servicesList);
+    final Iterator<ServiceGrant> iterator = wrapped.iterator();
     ServiceGrant service = null;
-    for (int i = 0; i < list.size(); i++) {
-      if (serviceKey.equals(list.get(i).getKey())) {
-        builder.getGranted().getServicesList().remove(i);
-        service = list.get(i);
+    while (iterator.hasNext()) {
+      final ServiceGrant next = iterator.next();
+      if (serviceKey.equals(next.getKey())) {
+        service = next;
+        iterator.remove();
         break;
       }
     }
@@ -102,6 +155,15 @@ public class DefaultAppService implements AppService, MetricsTimer {
     if(service == null) {
       return app;
     }
+
+    final App.Builder builder = app.toBuilder();
+    builder.clearGranted();
+
+    GrantCollection.Builder newBuilder= GrantCollection.newBuilder();
+    newBuilder.addAllServices(wrapped);
+    newBuilder.addAllMembers(app.getGranted().getMembersList());
+
+    builder.setGranted(newBuilder.buildPartial());
 
     OffsetDateTime now = OffsetDateTime.now();
     String updateTime = AppService.asString(now);
@@ -118,22 +180,22 @@ public class DefaultAppService implements AppService, MetricsTimer {
       return  app;
     }
 
-    final App.Builder builder = app.toBuilder();
-
-    final List<MemberGrant> ownersList = builder.getGranted().getMembersList();
+    final List<MemberGrant> ownersList = app.getGranted().getMembersList();
+    final ArrayList<MemberGrant> wrapped = Lists.newArrayList(ownersList);
+    final Iterator<MemberGrant> iterator = wrapped.iterator();
     MemberGrant memberGrant = null;
-    for (int i = 0; i < ownersList.size(); i++) {
 
-      final MemberGrant ownerNext = ownersList.get(i);
-      if(memberKey.equals(ownerNext.getUsername())) {
-        builder.removeOwners(i);
-        memberGrant = ownerNext;
+    while (iterator.hasNext()) {
+      MemberGrant next = iterator.next();
+      if(memberKey.equals(next.getUsername())) {
+        memberGrant  = next;
+        iterator.remove();
         break;
       }
 
-      if(memberKey.equals(ownerNext.getEmail())) {
-        builder.removeOwners(i);
-        memberGrant = ownerNext;
+      if(memberKey.equals(next.getEmail())) {
+        memberGrant  = next;
+        iterator.remove();
         break;
       }
     }
@@ -141,6 +203,14 @@ public class DefaultAppService implements AppService, MetricsTimer {
     if(memberGrant == null) {
       return app;
     }
+
+    final App.Builder builder = app.toBuilder();
+    builder.clearGranted();
+    GrantCollection.Builder newBuilder= GrantCollection.newBuilder();
+    newBuilder.addAllMembers(wrapped);
+    newBuilder.addAllServices(app.getGranted().getServicesList());
+
+    builder.setGranted(newBuilder.buildPartial());
 
     OffsetDateTime now = OffsetDateTime.now();
     String updateTime = AppService.asString(now);
@@ -154,28 +224,33 @@ public class DefaultAppService implements AppService, MetricsTimer {
   }
 
   @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
-  @Override public App removeOwner(App app, String username, String email) {
+  @Override public App removeOwner(App app, String ownerKey) {
 
-    if(username == null && email == null) {
+    if(ownerKey == null) {
       return app;
     }
 
-    final App.Builder builder = app.toBuilder();
+    if(app.getOwnersCount() == 1) {
+      throw new ServiceException(Problem.clientProblem("at_least_one_owner",
+          "only one owner remaining, refusing to remove", 422));
+    }
 
-    final List<Owner> ownersList = builder.getOwnersList();
+    final List<Owner> ownersList = app.getOwnersList();
+    final ArrayList<Owner> wrapped = Lists.newArrayList(ownersList);
+    final Iterator<Owner> iterator = wrapped.iterator();
     Owner owner = null;
-    for (int i = 0; i < ownersList.size(); i++) {
 
-      final Owner ownerNext = ownersList.get(i);
-      if(username != null && username.equals(ownerNext.getUsername())) {
-        builder.removeOwners(i);
-        owner = ownerNext;
+    while (iterator.hasNext()) {
+      Owner next = iterator.next();
+      if(ownerKey.equals(next.getUsername())) {
+        owner  = next;
+        iterator.remove();
         break;
       }
 
-      if(email != null && email.equals(ownerNext.getEmail())) {
-        builder.removeOwners(i);
-        owner = ownerNext;
+      if(ownerKey.equals(next.getEmail())) {
+        owner  = next;
+        iterator.remove();
         break;
       }
     }
@@ -183,6 +258,10 @@ public class DefaultAppService implements AppService, MetricsTimer {
     if(owner == null) {
       return app;
     }
+
+    final App.Builder builder = app.toBuilder();
+    builder.clearOwners();
+    builder.addAllOwners(wrapped);
 
     OffsetDateTime now = OffsetDateTime.now();
     String updateTime = AppService.asString(now);
