@@ -11,9 +11,6 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 public class AuthConfiguration {
 
-  public static final String AUTHENTICATION_POLICY_OAUTH_BEARER_CHECK = "oauth_bearer_check";
-  public static final String AUTHENTICATION_POLICY_OAUTH_BEARER_REFLECT = "oauth_bearer_reflect";
-
   public static final String SCOPE_OAUTH_POLICY_DISABLED = "oauth_disable_scope_check";
   public static final String SCOPE_OAUTH_POLICY_ENFORCED = "oauth_enforce_scope_check";
 
@@ -32,10 +29,6 @@ public class AuthConfiguration {
   @NotNull
   @JsonProperty
   public Boolean oauthEnabled = true;
-
-  @NotEmpty
-  @JsonProperty
-  public String oauthAuthenticationPolicy = AUTHENTICATION_POLICY_OAUTH_BEARER_CHECK;
 
   @NotEmpty
   @JsonProperty

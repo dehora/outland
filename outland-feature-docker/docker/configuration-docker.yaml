@@ -56,8 +56,6 @@ auth:
   basicCacheCredentialSeconds: ${OUTLAND_FEATURE_AUTH_BASIC_CACHE_SECONDS:-30}
 
   oauthEnabled: ${OUTLAND_FEATURE_AUTH_OAUTH_ENABLED:-false}
-  # oauth_bearer_reflect: return the bearer token as the app id (for local testing with token services)
-  oauthAuthenticationPolicy: ${OUTLAND_FEATURE_AUTH_OAUTH_AUTH_POLICY:-oauth_bearer_reflect}
   # oauth_disable_scope_check: don't check scopes
   oauthScopePolicy: ${OUTLAND_FEATURE_AUTH_OAUTH_SCOPE_POLICY:-oauth_disable_scope_check}
   oauthCacheTokenSeconds: ${OUTLAND_FEATURE_AUTH_OAUTH_CACHE_SECONDS:-30}

@@ -54,7 +54,6 @@ auth:
   basicCacheCredentialSeconds: 30
 
   oauthEnabled: ${OUTLAND_FEATURE_AUTH_OAUTH_ENABLED:-false}
-  oauthAuthenticationPolicy: oauth_bearer_reflect
   oauthScopePolicy: oauth_disable_scope_check
   oauthCacheTokenSeconds: 30
   remoteOAuthServer:
