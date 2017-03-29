@@ -16,8 +16,6 @@ public class AuthConfiguration {
 
   public static final String SCOPE_OAUTH_POLICY_DISABLED = "oauth_disable_scope_check";
   public static final String SCOPE_OAUTH_POLICY_ENFORCED = "oauth_enforce_scope_check";
-  public static final String SCOPE_BASIC_POLICY_DISABLED = "basic_disable_scope_check";
-  public static final String SCOPE_BASIC_POLICY_ENFORCED = "basic_enforce_scope_check";
 
   @NotNull
   @JsonProperty
@@ -25,10 +23,6 @@ public class AuthConfiguration {
 
   @JsonProperty
   public String basicAuthenticationKeys;
-
-  @NotEmpty
-  @JsonProperty
-  public String basicScopePolicy = SCOPE_BASIC_POLICY_ENFORCED;
 
   @Min(1L)
   @Max(3600L)

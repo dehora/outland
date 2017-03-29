@@ -12,11 +12,6 @@ public class BasicAuthorizer implements io.dropwizard.auth.Authorizer<AuthPrinci
   }
 
   @Override public boolean authorize(AuthPrincipal principal, String role) {
-
-    if(AuthConfiguration.SCOPE_BASIC_POLICY_DISABLED.equals(authConfiguration.basicScopePolicy)) {
-      return true;
-    }
-
-    return false;
+    return true;
   }
 }

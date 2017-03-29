@@ -53,7 +53,6 @@ featureTable:
 auth:
   basicEnabled: ${OUTLAND_FEATURE_AUTH_BASIC_ENABLED:-true}
   basicAuthenticationKeys: ${OUTLAND_FEATURE_AUTH_BASIC_API_KEYS}
-  basicScopePolicy: ${OUTLAND_FEATURE_AUTH_BASIC_SCOPE_POLICY:-basic_disable_scope_check}
   basicCacheCredentialSeconds: ${OUTLAND_FEATURE_AUTH_BASIC_CACHE_CREDENTIALS_SECONDS:-30}
 
   oauthEnabled: ${OUTLAND_FEATURE_AUTH_OAUTH_ENABLED:-false}
