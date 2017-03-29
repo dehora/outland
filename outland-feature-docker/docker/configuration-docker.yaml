@@ -53,7 +53,7 @@ featureTable:
 auth:
   basicEnabled: ${OUTLAND_FEATURE_AUTH_BASIC_ENABLED:-true}
   basicAuthenticationKeys: ${OUTLAND_FEATURE_AUTH_BASIC_API_KEYS}
-  basicCacheCredentialSeconds: ${OUTLAND_FEATURE_AUTH_BASIC_CACHE_CREDENTIALS_SECONDS:-30}
+  basicCacheCredentialSeconds: ${OUTLAND_FEATURE_AUTH_BASIC_CACHE_SECONDS:-30}
 
   oauthEnabled: ${OUTLAND_FEATURE_AUTH_OAUTH_ENABLED:-false}
   # oauth_bearer_reflect: return the bearer token as the app id (for local testing with token services)
