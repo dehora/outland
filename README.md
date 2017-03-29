@@ -7,6 +7,8 @@
 - Source Release: [0.0.4](https://github.com/dehora/outland/releases/tag/0.0.4)
 - Contact: [maintainers](https://github.com/dehora/outland/blob/master/MAINTAINERS)
 
+# Outland
+
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
