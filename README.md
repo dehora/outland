@@ -26,6 +26,7 @@
     - [Docker](#docker)
     - [Configuring the Server](#configuring-the-server)
     - [Creating Tables in DynamoDB](#creating-tables-in-dynamodb)
+  - [Server API Authentication](#server-api-authentication)
   - [Client](#client)
     - [Maven](#maven)
     - [Gradle](#gradle)
@@ -84,9 +85,10 @@ DynamoDB and Redis dependencies.
 
 #### Configuring the Server
 
-The docker image embeds its own Dropwizard configuration file to avoid requiring a mount and 
-the settings can be overridden by passing them to the environment. The full list of configuration 
-settings is available  [here](https://github.com/dehora/outland/blob/master/outland-feature-docker/README.md)
+The docker image embeds its own Dropwizard configuration file to avoid requiring a mount. The 
+settings can be overridden by passing them to the environment. The full list of configuration 
+settings is available  [here](https://github.com/dehora/outland/blob/master/outland-feature-docker/README.md) 
+at minimum you'll want to set up authorization options.
 
 #### Creating Tables in DynamoDB
 
@@ -96,6 +98,24 @@ the [examples/all-in-one](https://github.com/dehora/outland/tree/master/outland-
 has a script that will create the tables.
 
 For online or production use, you can create the tables via the AWS Console.
+
+### Server API Authentication
+
+This is somewhere between not-great and terrible right now. There's two options for authentication: 
+
+- Basic Authentication: An "API Key" style model where callers have well known credentials sent 
+in the password part along with their identity. This is enabled by default but no keys are configured.
+
+- OAuth Bearer Authentication: Callers submit bearer tokens and those tokens are verified by a 
+remote OAuth server and exchanged for an OAuth token object that contains principal identity 
+and scopes. This is disabled by default.
+
+The options aren't mutually exclusive, you can enable both. 
+
+There's no way to turn authentication off, which is deliberate. Also, an unconfigured 
+Outland server will fail to authenticate requests, ie, it won't work out of the box unless you 
+either supply API Keys for the Basic option or enable access to an OAuth server to verify Bearer 
+tokens.
 
 ### Client
 
