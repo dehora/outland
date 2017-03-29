@@ -60,7 +60,7 @@ auth:
   oauthAuthenticationPolicy: ${OUTLAND_FEATURE_AUTH_OAUTH_AUTH_POLICY:-oauth_bearer_reflect}
   # oauth_disable_scope_check: don't check scopes
   oauthScopePolicy: ${OUTLAND_FEATURE_AUTH_OAUTH_SCOPE_POLICY:-oauth_disable_scope_check}
-  oauthCacheTokenSeconds: ${OUTLAND_FEATURE_AUTH_OAUTH_CACHE_TOKEN_SECONDS:-30}
+  oauthCacheTokenSeconds: ${OUTLAND_FEATURE_AUTH_OAUTH_CACHE_SECONDS:-30}
   remoteOAuthServer:
     tokenLookupURI: ${OUTLAND_FEATURE_REMOTE_OAUTH_SERVER:-https://localhost/oauth2/tokeninfo}
     connectTimeout: ${OUTLAND_FEATURE_AUTH_OAUTH_CONNECT_TO_MILLIS:-3000}
