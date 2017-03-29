@@ -49,9 +49,7 @@ featureTable:
   outlandAppGraphTable: dev_outland_app_graph
 
 auth:
-  # basic exists mostly for dev, test and local docker. Always enable oauth for production. The main
-  # scenario for enabling basic in prod is to allow a management ui to make requests for all apps via
-  # a shared secret.
+  # basic exists mostly for dev, test and local docker. Prefer oauth for production.
   basicEnabled: ${OUTLAND_FEATURE_AUTH_BASIC_ENABLED:-true}
   # basic_app_username_password_keys: use the values in basicAuthenticationKeys as global api keys
   basicAuthenticationPolicy: basic_app_username_password_keys
