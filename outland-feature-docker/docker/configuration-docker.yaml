@@ -16,12 +16,12 @@ server:
 redis:
   servers:
     - name: outland_feature_cache_redis
-      host: redis
-      port: 6379
+      host: ${OUTLAND_FEATURE_REDIS_CACHE_HOST:-redis}
+      port: ${OUTLAND_FEATURE_REDIS_CACHE_PORT:-6379}
       maxConnections: ${OUTLAND_FEATURE_REDIS_MAXCONN:-8}
     - name: outland_feature_idempotency_check_redis
-      host: redis
-      port: 6379
+      host: ${OUTLAND_FEATURE_REDIS_IDEM_HOST:-redis}
+      port: ${OUTLAND_FEATURE_REDIS_IDEM_PORT:-6379}
       maxConnections: ${OUTLAND_FEATURE_REDIS_MAXCONN:-8}
 
 logging:
