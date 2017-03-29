@@ -1,5 +1,41 @@
 ### Changes
 
+### 0.0.4
+
+**Server**
+
+- Changes App to have service and member grants to access features, replacing owners.
+
+- Renames appId to appkey across client and server to reflect what the field actually is.
+
+- Removes FeatureOwner in proto/api model replacing it with Owner.
+
+- Renames optionType to option in from proto/api model.
+
+- Adds type fields to the proto/api model.
+
+- Allows any authenticated principal to create an App via the API.
+
+- Adds an App validator checking minimum fields needed to create.
+
+- Adds a feature validator checking minimum fields and options for create/update.
+
+- Moves docker support to outland-feature-docker sub-project.
+
+- Publishes image to docker hub under dehora/outland-feature-server
+
+- Allows jvm opts to be passed to docker through the env.
+
+- Embeds configuration directly in image, removes previously needed docker mount.
+
+- Makes dropwizard conf items available to docker through the env.
+
+- Adds an example docker-compose file for dehora/outland-feature-server.
+
+**Client**:
+
+- Updates API to match server.
+
 ### 0.0.3
 
 **Server**
