@@ -16,12 +16,13 @@
 - [Welcome to Outland](#welcome-to-outland)
   - [Project Status](#project-status)
 - [Quickstart](#quickstart)
-  - [Install the Server with Docker](#install-the-server-with-docker)
-  - [Install the Client](#install-the-client)
+  - [Start a Server with Docker](#start-a-server-with-docker)
+  - [Add the client library](#add-the-client-library)
+  - [Enable a Feature](#enable-a-feature)
 - [Feature Flags and Modern Software Development](#feature-flags-and-modern-software-development)
   - [Rise of the Planet of the Flags](#rise-of-the-planet-of-the-flags)
   - [Why a Service?](#why-a-service)
-- [Understanding Outland Feature Flags](#understanding-outland-feature-flags)
+- [Outland Feature Flag Model](#outland-feature-flag-model)
   - [Features](#features)
   - [Feature Flags and Feature Options](#feature-flags-and-feature-options)
   - [Apps](#apps)
@@ -30,11 +31,10 @@
   - [Server](#server)
     - [Docker](#docker)
     - [Creating Tables in DynamoDB](#creating-tables-in-dynamodb)
-    - [Creating a sampple App and Features](#creating-a-sampple-app-and-features)
+    - [Creating a sample App and Features](#creating-a-sample-app-and-features)
     - [Configuring the Server](#configuring-the-server)
-  - [Server API](#server-api)
-  - [Server API Authentication](#server-api-authentication)
-  - [Client](#client)
+    - [Server API Authentication](#server-api-authentication)
+  - [Client Installation](#client-installation)
     - [Maven](#maven)
     - [Gradle](#gradle)
     - [SBT](#sbt)
@@ -45,7 +45,7 @@
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 
-## Welcome to Outland
+# Welcome to Outland
 
 Outland is distributed feature flag and event messaging system.
 
@@ -53,7 +53,7 @@ The reason Outland exists is the notion that feature flags are a first class eng
 
 Outland consists of an API server and a Java client, with the ambition to support an admin UI, clients in other languages, a decentralised cluster mode, a container sidecar, and more advanced evaluation and tracking options. 
 
-### Project Status
+## Project Status
 
 Outland is not production ready.
 
@@ -64,9 +64,9 @@ The client and server are pre 1.0.0, with the aim of getting to a usable state s
 - [Help Wanted](http://bit.ly/2ngXkxP) has a list of things that would be nice to have.
 
 
-## Quickstart
+# Quickstart
 
-### Install the Server with Docker
+## Start a Server with Docker
 
 You can use the docker setup in [examples/quickstart](https://github.com/dehora/outland/tree/master/outland-feature-docker/examples/quickstart) to get an outland feature server running.
 
@@ -90,7 +90,7 @@ As well as the App itself and its grants:
 curl -v http://localhost:8180/app/testapp -u testconsole/service:letmein
 ```
 
-### Install the Client
+## Add the client library
 
 The client is available via JCenter, see the [Client](#client) section for details. 
 
@@ -125,6 +125,8 @@ Now you can check one the features created by the seed script:
   }
 ```
 
+## Enable a Feature
+
 The feature will be off by default. You can enable it via the client or the API.
 
 From the client:
@@ -156,7 +158,7 @@ curl -i http://localhost:8180/features/testapp/test-flag-1 \
 '
 ```
 
-## Feature Flags and Modern Software Development
+# Feature Flags and Modern Software Development
 
 Traditionally feature flags are used to control code execution - if the flag is on new code is executed, if the flag is off, the code is skipped. Flags allow you to:
 
@@ -172,14 +174,14 @@ online literature around lean engineering practices than flag based development.
 
 So, they are pretty useful as an engineering mechanism, but there's a lot more to them.
 
-### Rise of the Planet of the Flags
+## Rise of the Planet of the Flags
 
 Over time how flags are used tends to evolve. They start 
 as an engineering control mechanism to increase safety and amortize risks with new code. Then they are used to articulate new features - literally "feature flags" becoming part of regular product development. As their product development use expands, features may need to be organised into groups and distributed across multiple services or tiers. Features eventually need more involved rollout options beyond on/off states - such as being on for staff for dogfooding, available to a defined group of users or cohort for testing and early access, or to a fixed percentage of all users as part of a "canary" rollout. 
 
 At this point feature flags move well beyond an engineering practice and become fundamental to the product development process. Going even further, to determine impact, teams will want to know what happened after a feature fired and which users were in scope, making feature flag settings relevant to the experiment and analysis mechanisms the company has in place.
 
-### Why a Service?
+## Why a Service?
 
 We can identify four reasons to make feature flagging a service:
 
@@ -192,7 +194,7 @@ to feature flags allows human operators to more easily intervene and control sys
 
 - **Incident management**: A point of flags is to allow features to be turned off quickly, faster than any rollback/rollforward mechanism you might have. If the flag system is a internal bolt-on to whatever the team happens to run, then first level oncall is going to have to delve into that to turn it off. The chances are I am not going to toggle an item directly in your ZooKeeper or Database thing _especially_ if it's being used for other functionality - you're getting paged to do that. I feel much better about a service interface that offers the least power needed to change the state. 
 
-## Understanding Outland Feature Flags
+# Outland Feature Flag Model
 
 In summary:
 
@@ -205,7 +207,7 @@ and a version.
 
 - Apps also hold a list of Grants to services and team members. A grant allows them to access the App's features from the server. 
 
-### Features
+## Features
 
 Features have a state, which can be `on` or `off` indicating whether the feature is enabled or 
 disabled. As well as its state, a feature has a key acting as an identifier that allows it to be 
@@ -224,7 +226,7 @@ A feature has also a description, an owner and a version. Features have an owner
 because we've found it helpful to be able to get in touch with someone about the feature, even 
 where there is a description for it. Versions are useful for tracking changes and in Outland version identifiers are also orderable.
 
-### Feature Flags and Feature Options
+## Feature Flags and Feature Options
 
 Features have two forms - _flags_ and _options_. Features which are `on` are _evaluated_ and 
 features which are `off` are considered disabled and short circuited. What happens during 
@@ -264,7 +266,7 @@ biases the evaluation. One time in ten the "red" option will be returned, two ti
 it'll be "green", and seven times out of ten it'll be "blue". This gives us a path beyond on/off 
 toggles to things like A/B testing and multi-armed bandits.
 
-### Apps
+## Apps
 
 An App is a collection of features and every feature belongs to just one App. An App can be 
 anything - it doesn't have to correspond to a construct in your system like a specific service 
@@ -286,7 +288,7 @@ Finally, the App construct enables multi-tenancy, allowing multiple teams to sha
 same Outland service. There's nothing to stop you running multiple Outland servers but it 
 can be nice to leverage shared infrastructure and reduce heavy lifting.
 
-### App Grants
+## App Grants
 
 As well as grouping features, an App can _grant_ access to one or more services 
 (typically running systems), or to one or members (typically individual or teams). We'll just 
@@ -300,11 +302,11 @@ Grants allow the App owner to declare which services can see the App's features.
 are distinct - owners are not automatically given grants and are not looked up during authentication. 
 
 
-## Installation
+# Installation
 
-### Server
+## Server
 
-#### Docker
+### Docker
 
 The server is available on [docker hub](https://hub.docker.com/r/dehora/outland-feature-server/).
 
@@ -312,7 +314,7 @@ The [examples/all-in-one](https://github.com/dehora/outland/tree/master/outland-
 project has a simple `docker-compose` file you can use to get started, which includes the 
 DynamoDB and Redis dependencies along with some dummy credentials (stored in the docker compose `.env` file).
 
-#### Creating Tables in DynamoDB
+### Creating Tables in DynamoDB
 
 Once the server is up and running, for local development you can create the DynamoDB tables 
 used to store feature data via the Dropwizard admin port. 
@@ -321,31 +323,29 @@ The `create_tables` script in the [examples/all-in-one](https://github.com/dehor
 
 For online or production use, you can create the tables via the AWS Console and choose to change their names as described [here](https://github.com/dehora/outland/blob/master/outland-feature-docker/README.md).
 
-#### Creating a sampple App and Features
+### Creating a sample App and Features
 
 The `create_seed_app` will create an App called `test-acme-app` with two example features. The script contains plain curl requests which you might find useful for seeing how to call the API. You can see the App's list of features via the API:
 
 ```sh
-curl -v http://localhost:8180/features/testapp -u testconsole/service:letmein
+curl -v http://localhost:8180/features/test-acme-app -u testconsole/service:letmein
 ```
 
 As well as the App itself and its grants:
 
 ```sh
-curl -v http://localhost:8180/app/testapp -u testconsole/service:letmein
+curl -v http://localhost:8180/app/test-acme-app -u testconsole/service:letmein
 ```
 
-#### Configuring the Server
+### Configuring the Server
 
 The docker image embeds its own Dropwizard configuration file to avoid requiring a mount. The 
 settings can be overridden by passing them to the environment. The full list of configuration 
 settings is available  [here](https://github.com/dehora/outland/blob/master/outland-feature-docker/README.md) - at minimum you'll want to set up authorization options for real world use as discussed there.
 
-### Server API
-
 ### Server API Authentication
 
-This is somewhere between not-great and terrible right now. There's two options for authentication: 
+There's two options for authentication: 
 
 - Basic Authentication: An "API Key" style model where callers have well known credentials sent 
 in the password part along with their identity. This is enabled by default but no keys are configured.
@@ -361,9 +361,9 @@ Outland server will fail to authenticate requests, ie, it won't work out of the 
 either supply API Keys for the Basic option or enable access to an OAuth server to verify Bearer 
 tokens.
 
-### Client
+## Client Installation
 
-#### Maven
+### Maven
 
 Add jcenter to the repositories element in `pom.xml` or `settings.xml`:
 
@@ -374,7 +374,7 @@ Add jcenter to the repositories element in `pom.xml` or `settings.xml`:
     <url>http://jcenter.bintray.com</url>
   </repository>
 </repositories>
-```  
+```
 
 and add the project declaration to `pom.xml`:
 
@@ -385,7 +385,8 @@ and add the project declaration to `pom.xml`:
   <version>0.0.4</version>
 </dependency>
 ```
-#### Gradle
+
+### Gradle
 
 Add jcenter to the `repositories` block:
 
@@ -403,7 +404,7 @@ dependencies {
 }  
 ```
 
-#### SBT
+### SBT
 
 Add jcenter to `resolvers` in `build.sbt`:
 
@@ -418,7 +419,7 @@ libraryDependencies += "net.dehora.outland" % "outland-feature-client" % "0.0.4"
 ```
 
 
-## Build and Development
+# Build and Development
 
 The project is built with [Gradle](http://gradle.org/) and uses the 
 [Netflix Nebula](https://nebula-plugins.github.io/) plugins. The `./gradlew` 
@@ -428,7 +429,7 @@ installed.
 The client and server jar files are build using the wonderful 
 [Shadow](https://github.com/johnrengelman/shadow) plugin.
 
-## Contributing
+# Contributing
 
 Please see the [issue tracker](http://bit.ly/2nLZNUT) 
 for things to work on. The [help-wanted](http://bit.ly/2ngXkxP) label  has a list of things 
@@ -444,7 +445,7 @@ for Java and Android projects.
 
 ----
 
-## License
+# License
 
 Apache License Version 2.0
 
