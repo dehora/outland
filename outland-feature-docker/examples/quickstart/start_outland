@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+docker-compose up -d dynamodb
+docker-compose up -d redis
+docker-compose up -d outland_server
+
+echo "Waiting for server to come up..."
+
+until $(curl --output /dev/null --silent --head --fail http://localhost:8181/healthcheck); do
+  printf '.'
+  sleep 3
+done
+
+echo "Server ready, creating tables..."
+
+./create_tables
+
+echo "Server tables done, creating seed app..."
+
+./create_seed_app
+

@@ -1,0 +1,81 @@
+#!/usr/bin/env bash
+
+# these are also set in the .env file given to the server on startup
+service="testconsole/service"
+api_key="letmein"
+
+ikey_app="idemkey_testapp"
+
+curl -i http://localhost:8180/apps \
+-u ${service}:${api_key} \
+-H "Content-type: application/json" \
+-H "Idempotency-Key: ${ikey_app}" \
+-d'
+{
+	"key": "testapp",
+	"name": "My App",
+	"owners": [{
+		"name": "Acme",
+		"username": "acme",
+		"email": "acme@example.org"
+	}],
+	"granted": {
+		"services": [{
+			"key": "testservice",
+			"name": "Test Service"
+		}],
+		"members": [{
+			"username": "testuser",
+			"name": "Test User"
+		}]
+	}
+}
+'
+
+echo "App done, creating some feature flags"
+
+ikey_f1="idemkey_testapp_f1"
+
+curl -i http://localhost:8180/features \
+-u ${service}:${api_key} \
+-H "Content-type: application/json" \
+-H "Idempotency-Key: ${ikey_f1}" \
+-d '
+{
+	"key": "test-flag-1",
+	"description": "A feature flag",
+	"appkey": "testapp",
+	"owner": {
+		"username": "acme",
+		"email": "acme@example.org"
+	}
+}
+'
+
+ikey_f2="idemkey_testapp_f2"
+
+curl -i http://localhost:8180/features \
+-u ${service}:${api_key} \
+-H "Content-type: application/json" \
+-H "Idempotency-Key: ${ikey_f2}" \
+-d'
+{
+	"key": "test-option-1",
+	"description": "A weighted feature",
+	"appkey": "testapp",
+	"option": "bool",
+	"options": [{
+		"name": "false",
+		"value": "false",
+		"weight": 9000
+	}, {
+		"name": "true",
+		"value": "true",
+		"weight": 1000
+	}],
+	"owner": {
+		"username": "acme",
+		"email": "acme@example.org"
+	}
+}
+'
