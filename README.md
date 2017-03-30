@@ -47,7 +47,7 @@
 
 Outland is distributed feature flag and event messaging system.
 
-The reason Outland exists is the notion that feature flags are a first class engineering and product development activity that let you work smaller, better, faster, and with less risk. Feature flagging shouldn't just be a technology bolt-on or an afterthought, as is often the case today.
+The reason Outland exists is the notion that feature flags are a first class engineering and product development activity that let you work smaller, better, faster, and with less risk. Feature flagging offers significant leverage and shouldn't just be a technology bolt-on or an afterthought, as is often the case today.
 
 Outland consists of a API server and a Java client, with the ambition to support an admin UI, clients in other languages, a decentralised cluster mode, a container sidecar, and more advanced evaluation and tracking options. 
 
@@ -80,7 +80,7 @@ So, they are pretty useful as an engineering mechanism, but there's a lot more t
 ### Rise of the Planet of the Flags
 
 Over time how flags are used tends to evolve. They start 
-as an engineering control mechanism to increase safety and amortize risk of new code. Then they are used to articulate new features - literally "feature flags" becoming part of regular product development. As their product development use expands, features may need to be organised into groups and distributed across multiple services or tiers. Features eventually need more involved rollout options beyond on/off states - such as being on for staff for dogfooding, available to a defined group of users or cohort for testing and early access, or to a fixed percentage of all users as part of a "canary" rollout. 
+as an engineering control mechanism to increase safety and amortize risks with new code. Then they are used to articulate new features - literally "feature flags" becoming part of regular product development. As their product development use expands, features may need to be organised into groups and distributed across multiple services or tiers. Features eventually need more involved rollout options beyond on/off states - such as being on for staff for dogfooding, available to a defined group of users or cohort for testing and early access, or to a fixed percentage of all users as part of a "canary" rollout. 
 
 At this point feature flags move well beyond an engineering practice and become fundamental to the product development process. Going even further, to determine impact, teams will want to know what happened after a feature fired and which users were in scope, making feature flag settings relevant to the experiment and analysis mechanisms the company has in place.
 
@@ -93,7 +93,7 @@ We can identify four reasons to make feature flagging a service:
 - **Support product development**: As described above, feature flags have a way of becoming instrinsic to product and service development processes over time. Having a first class service makes this evolution easier and simplifies coordination delivery across services and teams. Finally, the path to quantified product impact and measurable online experiments is less likely to get cut off. 
 
 - **Observability**: In a microservices world (and also for monolithic or monocentric systems) there's value in making flag state observable via a service. As a simple example you can correlate a state change with other metrics. Features can be made available to more than code - a service accessible flag can be used control/toggle infrastructure such as load balancers. Service access 
-of feature flags allows human operators to more easily intervene and control systems change.
+to feature flags allows human operators to more easily intervene and control systems change.
 
 - **Incident management**: A point of flags is to allow features to be turned off quickly, faster than any rollback/rollforward mechanism you might have. If the flag system is a internal bolt-on to whatever the team happens to run, then first level oncall is going to have to delve into that to turn it off. The chances are I am not going to toggle an item directly in your ZooKeeper or Database thing _especially_ if it's being used for other functionality - you're getting paged to do that. I feel much better about a service interface that offers the least power needed to change the state. 
 
@@ -101,13 +101,14 @@ of feature flags allows human operators to more easily intervene and control sys
 
 In summary:
 
-- A Feature is identified by a key, can be on or off, and may also be evaluated in the on state to return a particular option from a set of options. Every feature has an owner.
+- A Feature is identified by a key, and can be in an on or off state. Every feature has an owner
+and a version. 
 
-- Features that have options will also give each option a weight that biases the returned result.
+- As well as a state, Features may also have a set of options. These are evaluated in the on state to return a particular option. Each option has a weight that affects the chance if it being returned.
 
-- An App is a collection of features and identified by a key. Every App at least one owner.
+- An App is a collection of features and identified by a key. Every App at least one owner. A Feature always belongs to one App.
 
-- Apps also holds a list of Grants to services and team members, allowing them to access the App's features from the server. 
+- Apps also hold a list of Grants to services and team members. A grant allows them to access the App's features from the server. 
 
 ### Features
 
