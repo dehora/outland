@@ -14,13 +14,15 @@
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [Welcome to Outland](#welcome-to-outland)
-  - [About](#about)
-  - [Background](#background)
-  - [Status](#status)
-- [Understanding Feature Flags](#understanding-feature-flags)
+  - [Project Status](#project-status)
+- [Feature Flags and Modern Software Development](#feature-flags-and-modern-software-development)
+  - [Rise of the Planet of the Flags](#rise-of-the-planet-of-the-flags)
+  - [Why a Service?](#why-a-service)
+- [Understanding Outland Feature Flags](#understanding-outland-feature-flags)
   - [Features](#features)
+  - [Feature Flags and Feature Options](#feature-flags-and-feature-options)
   - [Apps](#apps)
-  - [Grants](#grants)
+  - [App Grants](#app-grants)
 - [Requirements and Getting Started](#requirements-and-getting-started)
   - [Client Usage](#client-usage)
   - [Server API](#server-api)
@@ -42,35 +44,91 @@
 
 
 ## Welcome to Outland
- 
-
-### About
 
 Outland is distributed feature flag and event messaging system.
 
-### Background
+The reason Outland exists is the notion that feature flags are a first class engineering and product development activity that let you work smaller, better, faster, and with less risk. Feature flagging shouldn't just be a technology bolt-on or an afterthought, as is often the case today.
 
+Outland consists of a API server and a Java client, with the ambition to support an admin UI, clients in other languages, a decentralised cluster mode, a container sidecar, and more advanced evaluation and tracking options. 
 
-### Status
+### Project Status
 
-The client and server are pre 1.0.0, with the aim of getting to 1.0.0 soon.
+Outland is not production ready.
 
-See also:
+The client and server are pre 1.0.0, with the aim of getting to a usable state soon (April 2017). The admin UI and decentralised modes are next in line. See also:
 
 - [Trello Roadmap](http://bit.ly/2nje8ou) is where the project direction is written down.
 - [Open Issues](http://bit.ly/2nLZNUT) section has a  list of bugs and things to get done. 
 - [Help Wanted](http://bit.ly/2ngXkxP) has a list of things that would be nice to have.
 
+## Feature Flags and Modern Software Development
 
-## Understanding Feature Flags
+Traditionally feature flags are used to control code execution - if the flag is on new code is executed, if the flag is off, the code is skipped. Flags allow you to:
+
+- Work safely by running new code in isolation, disabling or enabling as needed. Turning a dynamic flag off in production is faster than a rollback (assuming you [can in fact do a rollback](https://blog.skyliner.io/you-cant-have-a-rollback-button-83e914f420d9)). 
+
+- Ship larger scale functionality faster as a set of small steps. Flags let you iterate and [go round the loop faster](http://www.startuplessonslearned.com/2008/11/principles-of-lean-startups.html). 
+
+- Avoid long lived feature branches with their continuous merge and n-way integration test overhead. 
+
+Flags reinforce the benefits you get from shipping small changes and continuous delivery,  providing a flywheel effect for those practices. They but don't tend to get the attention the others practices do. Tooling and library support for flags isn't 
+close to the level of continuous build and delivery systems and there's far more 
+online literature around lean engineering practices than flag based development. 
+
+So, they are pretty useful as an engineering mechanism, but there's a lot more to them.
+
+### Rise of the Planet of the Flags
+
+Over time how flags are used tends to evolve. They start 
+as an engineering control mechanism to increase safety and amortize risk of new code. Then they are used to articulate new features - literally "feature flags" becoming part of regular product development. As their product development use expands, features may need to be organised into groups and distributed across multiple services or tiers. Features eventually need more involved rollout options beyond on/off states - such as being on for staff for dogfooding, available to a defined group of users or cohort for testing and early access, or to a fixed percentage of all users as part of a "canary" rollout. 
+
+At this point feature flags move well beyond an engineering practice and become fundamental to the product development process. Going even further, to determine impact, teams will want to know what happened after a feature fired and which users were in scope, making feature flag settings relevant to the experiment and analysis mechanisms the company has in place.
+
+### Why a Service?
+
+We can identify four reasons to make feature flagging a service:
+
+- **Everyone solves this differently**: Flag systems are built for local needs with what's to hand. ZooKeeper, Etcd, Consul, Databases, Redis/Memcached, discovery services, config files, Puppet/Chef, even DNS, all can and probably have at this point been hammered into a flag service. Highly localised approaches don't compose across team/service boundaries resulting in wasted engineering effort as each team puts something together. 
+
+- **Support product development**: As described above, feature flags have a way of becoming instrinsic to product and service development processes over time. Having a first class service makes this evolution easier and simplifies coordination delivery across services and teams. Finally, the path to quantified product impact and measurable online experiments is less likely to get cut off. 
+
+- **Observability**: In a microservices world (and also for monolithic or monocentric systems) there's value in making flag state observable via a service. As a simple example you can correlate a state change with other metrics. Features can be made available to more than code - a service accessible flag can be used control/toggle infrastructure such as load balancers. Service access 
+of feature flags allows human operators to more easily intervene and control systems change.
+
+- **Incident management**: A point of flags is to allow features to be turned off quickly, faster than any rollback/rollforward mechanism you might have. If the flag system is a internal bolt-on to whatever the team happens to run, then first level oncall is going to have to delve into that to turn it off. The chances are I am not going to toggle an item directly in your ZooKeeper or Database thing _especially_ if it's being used for other functionality - you're getting paged to do that. I feel much better about a service interface that offers the least power needed to change the state. 
+
+## Understanding Outland Feature Flags
+
+In summary:
+
+- A Feature is identified by a key, can be on or off, and may also be evaluated in the on state to return a particular option from a set of options. Every feature has an owner.
+
+- Features that have options will also give each option a weight that biases the returned result.
+
+- An App is a collection of features and identified by a key. Every App at least one owner.
+
+- Apps also holds a list of Grants to services and team members, allowing them to access the App's features from the server. 
 
 ### Features
 
-As well as its state, a feature has a key, a description and an owner. Keys are how clients call 
-to see if a feature is enabled. Features have an owner because we've found it helpful to be 
-able to get in touch with someone about the feature, even where there is a description for it. All
-features have a state, which can be `on` or `off` indicating whether the feature is enabled or 
-disabled.
+Features have a state, which can be `on` or `off` indicating whether the feature is enabled or 
+disabled. As well as its state, a feature has a key acting as an identifier that allows it to be 
+checked via the client, for example -
+
+```java
+String featureKey = "my-new-feature";
+if (features.enabled(featureKey)) {
+  System.out.println("New feature!");
+} else {
+  System.out.println("Old feature!");
+}
+```
+ 
+A feature has also a description, an owner and a version. Features have an owner 
+because we've found it helpful to be able to get in touch with someone about the feature, even 
+where there is a description for it. Versions are useful for tracking changes and in Outland version identifiers are also orderable.
+
+### Feature Flags and Feature Options
 
 Features have two forms - _flags_ and _options_. Features which are `on` are _evaluated_ and 
 features which are `off` are considered disabled and short circuited. What happens during 
@@ -132,7 +190,7 @@ Finally, the App construct enables multi-tenancy, allowing multiple teams to sha
 same Outland service. There's nothing to stop you running multiple Outland servers but it 
 can be nice to leverage shared infrastructure and reduce heavy lifting.
 
-### Grants
+### App Grants
 
 As well as grouping features, an App can _grant_ access to one or more services 
 (typically running systems), or to one or members (typically individual or teams). We'll just 
