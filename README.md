@@ -15,6 +15,9 @@
 
 - [Welcome to Outland](#welcome-to-outland)
   - [Project Status](#project-status)
+- [Quickstart](#quickstart)
+  - [Install the Server with Docker](#install-the-server-with-docker)
+  - [Install the Client](#install-the-client)
 - [Feature Flags and Modern Software Development](#feature-flags-and-modern-software-development)
   - [Rise of the Planet of the Flags](#rise-of-the-planet-of-the-flags)
   - [Why a Service?](#why-a-service)
@@ -23,14 +26,13 @@
   - [Feature Flags and Feature Options](#feature-flags-and-feature-options)
   - [Apps](#apps)
   - [App Grants](#app-grants)
-- [Requirements and Getting Started](#requirements-and-getting-started)
-  - [Client Usage](#client-usage)
-  - [Server API](#server-api)
 - [Installation](#installation)
   - [Server](#server)
     - [Docker](#docker)
-    - [Configuring the Server](#configuring-the-server)
     - [Creating Tables in DynamoDB](#creating-tables-in-dynamodb)
+    - [Creating a sampple App and Features](#creating-a-sampple-app-and-features)
+    - [Configuring the Server](#configuring-the-server)
+  - [Server API](#server-api)
   - [Server API Authentication](#server-api-authentication)
   - [Client](#client)
     - [Maven](#maven)
@@ -49,17 +51,110 @@ Outland is distributed feature flag and event messaging system.
 
 The reason Outland exists is the notion that feature flags are a first class engineering and product development activity that let you work smaller, better, faster, and with less risk. Feature flagging offers significant leverage and shouldn't just be a technology bolt-on or an afterthought, as is often the case today.
 
-Outland consists of a API server and a Java client, with the ambition to support an admin UI, clients in other languages, a decentralised cluster mode, a container sidecar, and more advanced evaluation and tracking options. 
+Outland consists of an API server and a Java client, with the ambition to support an admin UI, clients in other languages, a decentralised cluster mode, a container sidecar, and more advanced evaluation and tracking options. 
 
 ### Project Status
 
 Outland is not production ready.
 
-The client and server are pre 1.0.0, with the aim of getting to a usable state soon (April 2017). The admin UI and decentralised modes are next in line. See also:
+The client and server are pre 1.0.0, with the aim of getting to a usable state soon (April 2017). The admin UI and cluster mode are next in line. See also:
 
 - [Trello Roadmap](http://bit.ly/2nje8ou) is where the project direction is written down.
 - [Open Issues](http://bit.ly/2nLZNUT) section has a  list of bugs and things to get done. 
 - [Help Wanted](http://bit.ly/2ngXkxP) has a list of things that would be nice to have.
+
+
+## Quickstart
+
+### Install the Server with Docker
+
+You can use the docker setup in [examples/quickstart](https://github.com/dehora/outland/tree/master/outland-feature-docker/examples/quickstart) to get an outland feature server running.
+
+From the examples/quickstart directory, run the following:
+
+```sh
+./start_outland
+```
+
+This will start an Outland container on port 8180, create tables, and seed the server with an app called `testapp` that has two feature flags `test-flag-1` and `test-option-1`. Dummy credentials are setup as a convenience in the folder's `.env` file.
+
+You can see the app's list of features via the API:
+
+```sh
+curl -v http://localhost:8180/features/testapp -u testconsole/service:letmein
+```
+
+As well as the App itself and its grants:
+
+```sh
+curl -v http://localhost:8180/app/testapp -u testconsole/service:letmein
+```
+
+### Install the Client
+
+The client is available via JCenter, see the [Client](#client) section for details. 
+
+Once the client is setup up as a dependency you can configure it as follows:
+
+```java
+  final String appKey = "testapp";
+  ServerConfiguration conf = new ServerConfiguration()
+      .baseURI("http://localhost:8180")
+      .appKey(appKey);
+
+  FeatureClient client = FeatureClient.newBuilder()
+      .serverConfiguration(conf)
+      .authorizationProvider(
+          (p, s) -> Optional.of(new Authorization(Authorization.REALM_BASIC,
+              new String(Base64.getEncoder().encode(("testconsole/service:letmein").getBytes())))))
+      .build();
+
+  Runtime.getRuntime().addShutdownHook(new Thread(client::close));      
+```
+
+In a real world setting the `authorizationProvider` would not be hardcoded with credentials, but 
+this will do to connect to the local server. 
+
+Now you can check one the features created by the seed script:
+
+```java
+  if (client.enabled("test-flag-1")) {
+    System.out.println(featureKey+": enabled");
+  } else {
+    System.out.println(featureKey+": disabled");
+  }
+```
+
+The feature will be off by default. You can enable it via the client or the API.
+
+From the client:
+
+```java
+  FeatureResource features = client.resources().features();
+
+  Feature feature = Feature.newBuilder()
+      .setAppkey("testapp")
+      .setKey("test-flag-1")
+      .setState(Feature.State.on)
+      .build();
+
+  Feature updated = features.update(feature);
+  System.out.println("test-flag-1 state: " + updated.getState());
+```
+
+From the API:
+
+```sh
+curl -i http://localhost:8180/features/testapp/test-flag-1 \
+-u testconsole/service:letmein  \
+-H "Content-type: application/json" -d '
+{
+  "key": "test-flag-1",
+  "appkey": "testapp",
+  "state": "on"
+}
+'
+```
 
 ## Feature Flags and Modern Software Development
 
@@ -204,13 +299,6 @@ won't be authorised.
 Grants allow the App owner to declare which services can see the App's features. Owners and grants 
 are distinct - owners are not automatically given grants and are not looked up during authentication. 
 
-## Requirements and Getting Started
-
-### Client Usage
-
-
-### Server API
-
 
 ## Installation
 
@@ -222,23 +310,38 @@ The server is available on [docker hub](https://hub.docker.com/r/dehora/outland-
 
 The [examples/all-in-one](https://github.com/dehora/outland/tree/master/outland-feature-docker/examples/all-in-one) 
 project has a simple `docker-compose` file you can use to get started, which includes the 
-DynamoDB and Redis dependencies.
+DynamoDB and Redis dependencies along with some dummy credentials (stored in the docker compose `.env` file).
+
+#### Creating Tables in DynamoDB
+
+Once the server is up and running, for local development you can create the DynamoDB tables 
+used to store feature data via the Dropwizard admin port. 
+
+The `create_tables` script in the [examples/all-in-one](https://github.com/dehora/outland/tree/master/outland-feature-docker/examples/all-in-one) directory will create the DynamoDB tables used by the server (if you run this a second time, the tables will not be recreated and server will return 500 responses).
+
+For online or production use, you can create the tables via the AWS Console and choose to change their names as described [here](https://github.com/dehora/outland/blob/master/outland-feature-docker/README.md).
+
+#### Creating a sampple App and Features
+
+The `create_seed_app` will create an App called `test-acme-app` with two example features. The script contains plain curl requests which you might find useful for seeing how to call the API. You can see the App's list of features via the API:
+
+```sh
+curl -v http://localhost:8180/features/testapp -u testconsole/service:letmein
+```
+
+As well as the App itself and its grants:
+
+```sh
+curl -v http://localhost:8180/app/testapp -u testconsole/service:letmein
+```
 
 #### Configuring the Server
 
 The docker image embeds its own Dropwizard configuration file to avoid requiring a mount. The 
 settings can be overridden by passing them to the environment. The full list of configuration 
-settings is available  [here](https://github.com/dehora/outland/blob/master/outland-feature-docker/README.md) 
-at minimum you'll want to set up authorization options.
+settings is available  [here](https://github.com/dehora/outland/blob/master/outland-feature-docker/README.md) - at minimum you'll want to set up authorization options for real world use as discussed there.
 
-#### Creating Tables in DynamoDB
-
-Once the server is up and running, for local development you can create the DynamoDB tables 
-used to store feature data via the Dropwizard admin port. Again, 
-the [examples/all-in-one](https://github.com/dehora/outland/tree/master/outland-feature-docker/examples/all-in-one)  
-has a script that will create the tables.
-
-For online or production use, you can create the tables via the AWS Console.
+### Server API
 
 ### Server API Authentication
 
