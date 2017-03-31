@@ -2,6 +2,18 @@
 
 ### 0.0.5
 
+ - Defines an initial Open API file for the server.
+ 
+ - Adds a discovery resource for serving the Open API file.
+ 
+ - Updates readme: background, quickstart, docker, describes features, apps and grants.
+ 
+ - Males OAuth remote server check the only option.
+ 
+ - Cleans up basic auth option, remove scope check and redundant options.
+ 
+ - Replaces global API keys with per service/member keys.
+
 ### 0.0.4
 
 **Server**
