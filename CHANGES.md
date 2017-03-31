@@ -2,6 +2,8 @@
 
 ### 0.0.5
 
+#### Server
+
  - Defines an initial Open API file for the server.
  
  - Adds a discovery resource for serving the Open API file.
@@ -13,6 +15,10 @@
  - Cleans up basic auth option, remove scope check and redundant options.
  
  - Replaces global API keys with per service/member keys.
+
+#### Client
+
+ - Declared client dependencies are, SLF4J, RocksDB, and Metrics.
 
 ### 0.0.4
 
