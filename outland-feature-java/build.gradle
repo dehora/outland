@@ -5,7 +5,7 @@ buildscript {
     jcenter()
   }
   dependencies {
-    classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.0'
+    classpath "com.google.protobuf:protobuf-gradle-plugin:0.8.0"
   }
 }
 
@@ -35,16 +35,16 @@ dependencies {
 sourceSets {
   main {
     java {
-      srcDir 'src/main/resources'
+      srcDir "src/main/resources"
     }
     proto {
-      srcDir 'src/main/proto'
+      srcDir "src/main/proto"
     }
   }
 
   test {
     java {
-      srcDir 'src/test/resources'
+      srcDir "src/test/resources"
     }
   }
 }
@@ -82,20 +82,50 @@ sourceJar {
 * dependencies to cascade into
 */
 shadowJar {
-  baseName = 'outland-feature-java'
-  classifier = '' // remove the default all suffix to name it like a regular lib jar
+  baseName = "outland-feature-java"
 
-  relocate "rx", "outland.feature.shadow.rx"
-  relocate "okhttp3", "outland.shadow.okhttp3"
-  relocate "okio", "outland.shadow.okio"
+  classifier = "" // remove the default all suffix to name it like a regular lib jar
 
-  exclude 'net/dehora/outland/feature/spike/**'
-  exclude 'META-INF/maven/com.squareup.okhttp3/**'
-  exclude 'META-INF/maven/com.squareup.okio/**'
-  exclude 'META-INF/*.SF'
-  exclude 'META-INF/*.DSA'
-  exclude 'META-INF/*.RSA'
-  exclude 'rxjava.properties'
+  relocate "com.google.common", "shadow.com.google.common"
+  relocate "com.google.protobuf", "shadow.com.google.protobuf"
+  relocate "google.protobuf", "shadow.google.protobuf"
+  relocate "com.google.gson", "shadow.com.google.gson"
+  relocate "com.google.thirdparty", "shadow.com.google.thirdparty"
+  relocate "okhttp3", "shadow.okhttp3"
+  relocate "okio", "shadow.okio"
+  relocate "rx", "shadow.rx"
+
+  /*
+    todo: figure out how to shade rocksdb
+    Shading produces an UnsatisfiedLinkError including when rocks-jni regular is on the classpath
+    and the jar is shaded - removing the shaded jar lets the client work;
+    relocate "org.rocksdb", "shadow.org.rocksdb"
+ */
+  exclude "org/rocksdb/**"
+
+  /*
+  slf4j is a left asa dependency to let client users control logging. And it tends to be stable
+  so maybe worth taking a chance on.
+   */
+  exclude "org/slf4j/**"
+
+  /*
+  metrics is a left as a dependency as you can supply a MetricRegistry to the client. We might
+  be better off exporting a fixed set of metrics to get rid of this. Hard to say, metrics is
+  pretty stable.
+   */
+  exclude "com/codahale/**"
+
+  exclude "net/dehora/outland/feature/spike/**"
+  exclude "META-INF/maven/com.google.code.gson/**"
+  exclude "META-INF/maven/com.google.guava/**"
+  exclude "META-INF/maven/com.squareup.okhttp3/**"
+  exclude "META-INF/maven/com.squareup.okio/**"
+  exclude "META-INF/*.SF"
+  exclude "META-INF/*.DSA"
+  exclude "META-INF/*.RSA"
+  exclude "rxjava.properties"
+  exclude "HISTORY-JAVA.md"
 }
 
 /*
@@ -122,25 +152,25 @@ publishing {
  *
 */
 bintray {
-  user = project.hasProperty('bintray_user') ? project.property('bintray_user') :
+  user = project.hasProperty("bintray_user") ? project.property("bintray_user") :
     System.getenv('BINTRAY_USER')
-  key = project.hasProperty('bintray_key') ? project.property('bintray_key') :
-    System.getenv('BINTRAY_KEY')
+  key = project.hasProperty("bintray_key") ? project.property("bintray_key") :
+    System.getenv("BINTRAY_KEY")
 
-  publications = ['shadowedJar']
+  publications = ["shadowedJar"]
   dryRun = false
   publish = true
 
   pkg {
-    repo = 'maven'
-    userOrg = 'dehora'
-    name = 'outland-feature-java'
-    desc = 'Java client for Outland Features'
-    websiteUrl = 'https://dehora.github.io/outland/'
-    issueTrackerUrl = 'https://github.com/dehora/outland/issues'
-    vcsUrl = 'https://github.com/dehora/outland.git'
-    licenses = ['Apache-2.0']
-    labels = ['outland', 'java', 'api']
+    repo = "maven"
+    userOrg = "dehora"
+    name = "outland-feature-java"
+    desc = "Java client for Outland Features"
+    websiteUrl = "https://dehora.github.io/outland/"
+    issueTrackerUrl = "https://github.com/dehora/outland/issues"
+    vcsUrl = "https://github.com/dehora/outland.git"
+    licenses = ["Apache-2.0"]
+    labels = ["outland", "java", "api"]
     publicDownloadNumbers = true
 
     //noinspection GroovyAssignabilityCheck
@@ -151,8 +181,8 @@ bintray {
       gpg {
         //noinspection GroovyAssignabilityCheck
         sign = true
-        passphrase = project.hasProperty('bintray_gpg_passphrase') ?
-          project.property('bintray_gpg_passphrase') : System.getenv('BINTRAY_GPG_PASSPHRASE')
+        passphrase = project.hasProperty("bintray_gpg_passphrase") ?
+          project.property("bintray_gpg_passphrase") : System.getenv("BINTRAY_GPG_PASSPHRASE")
       }
     }
   }
