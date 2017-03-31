@@ -1,0 +1,1010 @@
+swagger: '2.0'
+info:
+  title: Outland Feature API
+  description: |
+    Outland is a feature flag and messaging service.
+    This documents the Outland API.
+  version: '0.0.5'
+schemes:
+  - https
+  - http
+consumes:
+  - application/json
+  - application/protobuf
+produces:
+  - application/json
+  - application/protobuf
+
+securityDefinitions:
+  token:
+    type: oauth2
+    flow: implicit
+    authorizationUrl: "https://example.com/oauth2/tokeninfo"
+    scopes:
+      outland-apps-write: create or modify apps
+      outland-apps-read: read apps
+      outland-feature-write: create or modify features
+      outland-feature-read: read features
+  basicAuth:
+    type: basic
+
+paths:
+  "/apps":
+    post:
+      parameters:
+        - name: "app"
+          in: body
+          schema:
+            $ref: '#/definitions/AppCreate'
+        - name: "Idempotency-Key"
+          type: string
+          in: header
+          description: |
+            Optional. Allows retrys with the same value to assure the request is processed once.
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/App'
+          headers:
+            "Location":
+              type: string
+              description: |
+                The location of the created App. Always an absolute URI.
+            "Idempotency-Key-Trace":
+              type: string
+              description: |
+                Returned if the request is a duplicate based on the Idempotency-Key
+        "422":
+          description: returned if the App is invalid
+          schema:
+            $ref: '#/definitions/Problem'
+  "/apps/{appkey}":
+    get:
+      parameters:
+        - name: "appkey"
+          in: path
+          type: string
+          required: true
+      responses:
+        "200":
+          description: Ok
+          schema:
+            $ref: '#/definitions/App'
+           
+  "/apps/{appkey}/grants/members":
+    post:
+      parameters:
+        - name: "appkey"
+          in: path
+          type: string
+          required: true
+        - name: "member"
+          in: body
+          schema:
+            $ref: '#/definitions/MemberGrantCreate'
+        - name: "Idempotency-Key"
+          type: string
+          in: header
+          description: |
+            Optional. Allows retrys with the same value to assure the request is processed once.
+      responses:
+        "200":
+          description: Ok
+          schema:
+            $ref: '#/definitions/App'
+          headers:
+            "Idempotency-Key-Trace":
+              type: string
+              description: |
+                Returned if the request is a duplicate based on the Idempotency-Key
+
+  "/apps/{appkey}/grants/members/{member_key_or_email}":
+    delete:
+      parameters:
+        - name: "appkey"
+          in: path
+          type: string
+          required: true
+        - name: "member_key_or_email"
+          in: path
+          type: string
+          required: true
+          description: |
+            The member's email or key.
+      responses:
+        "200":
+          description: Ok
+          schema:
+            $ref: '#/definitions/App'
+    
+  "/apps/{appkey}/grants/services":
+    post:
+      parameters:
+        - name: "appkey"
+          in: path
+          type: string
+          required: true
+        - name: "service"
+          in: body
+          schema:
+            $ref: '#/definitions/ServiceGrantCreate'
+        - name: "Idempotency-Key"
+          type: string
+          in: header
+          description: |
+            Optional. Allows retrys with the same value to assure the request is processed once.
+      responses:
+        "200":
+          description: Ok
+          schema:
+            $ref: '#/definitions/App'    
+          headers:
+            "Idempotency-Key-Trace":
+              type: string
+              description: |
+                Returned if the request is a duplicate based on the Idempotency-Key
+
+  "/apps/{appkey}/grants/services/{service_key}":
+    delete:
+      parameters:
+        - name: "appkey"
+          in: path
+          type: string
+          required: true
+        - name: "service_key"
+          in: path
+          type: string
+          required: true
+      responses:
+        "200":
+          description: Ok
+          schema:
+            $ref: '#/definitions/App'
+ 
+  "/apps/{appkey}/owners":
+    post:
+      parameters:
+        - name: "appkey"
+          in: path
+          type: string
+          required: true
+        - name: "owner"
+          in: body
+          schema:
+            $ref: '#/definitions/OwnerCreate'
+        - name: "Idempotency-Key"
+          type: string
+          in: header
+          description: |
+            Optional. Allows retrys with the same value to assure the request is processed once.
+      responses:
+        "200":
+          description: Ok
+          schema:
+            $ref: '#/definitions/App'
+          headers:
+            "Idempotency-Key-Trace":
+              type: string
+              description: |
+                Returned if the request is a duplicate based on the Idempotency-Key
+        "409":
+          description: |
+            Returned if there would be no owners left after the delete
+          schema:
+            $ref: '#/definitions/Problem'
+
+  "/apps/{appkey}/owners/{owner_username_or_email}":
+    delete:
+      parameters:
+        - name: "appkey"
+          in: path
+          type: string
+          required: true
+        - name: "owner_username_or_email"
+          in: path
+          type: string
+          required: true
+          description: |
+            The owner's email or username.
+      responses:
+        "200":
+          description: Ok
+          schema:
+            $ref: '#/definitions/App'    
+
+  "/features/{appkey}":
+    get:
+      parameters:
+        - name: "appkey"
+          in: path
+          type: string
+          required: true
+      responses:
+        "200":
+          description: Ok
+          schema:
+            $ref: '#/definitions/FeatureCollection'
+        
+  "/features/{appkey}/feed":
+    get:
+      parameters:
+        - name: "appkey"
+          in: path
+          type: string
+          required: true
+        - name: "since"
+          in: query
+          type: integer
+          format: int64
+          required: false
+          description: |
+            A UNIX timestamp stating the point to fetch changes from. Always treated as UTC.
+      responses:
+        "200":
+          description: Ok
+          schema:
+            $ref: '#/definitions/FeatureCollection'
+
+  "/features/{appkey}/{feature_key}":
+    get:
+      parameters:
+        - name: "appkey"
+          in: path
+          type: string
+          required: true
+        - name: "feature_key"
+          in: path
+          type: string
+          required: true
+      responses:
+        "200":
+          description: Ok
+          schema:
+            $ref: '#/definitions/Feature'
+
+  "/features/{appkey}":
+    post:
+      description: |
+        Add a feature to the app.
+      parameters:
+        - name: "appkey"
+          in: path
+          type: string
+          required: true
+        - name: "feature"
+          in: body
+          schema:
+            $ref: '#/definitions/FeatureCreate'
+        - name: "Idempotency-Key"
+          type: string
+          in: header
+          description: |
+            Optional. Allows retrys with the same value to assure the request is processed once.
+      responses:
+        "200":
+          description: Ok
+          schema:
+            $ref: '#/definitions/Feature'
+          headers:
+            "Idempotency-Key-Trace":
+              type: string
+              description: |
+                Returned if the request is a duplicate based on the Idempotency-Key
+
+
+  "/features/{appkey}/{feature_key}":
+    post:
+      description: |
+        Update a feature in the app.
+      parameters:
+        - name: "appkey"
+          in: path
+          type: string
+          required: true
+        - name: "feature_key"
+          in: path
+          type: string
+          required: true
+        - name: "feature"
+          in: body
+          schema:
+            $ref: '#/definitions/FeatureCreate'
+        - name: "Idempotency-Key"
+          type: string
+          in: header
+          description: |
+            Optional. Allows retrys with the same value to assure the request is processed once.
+      responses:
+        "200":
+          description: Ok
+          schema:
+            $ref: '#/definitions/Feature'
+          headers:
+            "Idempotency-Key-Trace":
+              type: string
+              description: |
+                Returned if the request is a duplicate based on the Idempotency-Key
+
+definitions:
+  App:
+    type: object
+    description: |
+      An app houses a collection of features and who is granted access to them.
+
+      This representation corresponds the following protocol buffer:
+
+      ```
+        message App {
+          string type = 8;
+          string id = 1;
+          string key = 2;
+          string name = 3;
+          string created = 6;
+          string updated = 7;
+          repeated Owner owners = 5;
+          GrantCollection granted = 9;
+        }
+      ```
+    properties:
+      type:
+        type: string
+      id:
+        type: string
+        description: |
+          The server's unique identifier for an App. However, clients typically use the key
+          to interact with an App.
+      key:
+        type: string
+        description: |
+          A client defined key for the App. Note that even though every App is given a unqiue
+          id, two Apps can't have the same key as the key is the idiomatic way owners access and
+          call Apps.
+      name:
+        type: string
+        description: |
+          The name of the App.
+      created:
+        type: string
+        format: date-time
+        description: |
+          The server assigned create time.
+      updated:
+        type: string
+        format: date-time
+        description: |
+          The server assigned update time.
+      owners:
+        type: array
+        items:
+          type: object
+          $ref: '#/definitions/Owner'
+        description: |
+          The owners of the App. Note the server tries to ensure every App has at least one owner.
+      granted:
+        type: object
+        $ref: '#/definitions/GrantCollection'
+        description: |
+          Which authenticated services and users are allowed to access the App's features. See
+          GrantCollection for more details.
+    required:
+      - type
+      - id
+      - key
+      - name
+      - created
+      - updated
+      - owners
+      - granted
+
+  AppCreate:
+    type: object
+    description: |
+      An abbreviated form of App documenting the client defined fields to send.
+    properties:
+      key:
+        type: string
+      name:
+        type: string
+      owners:
+        type: array
+        items:
+          type: object
+          $ref: '#/definitions/Owner'
+      granted:
+        type: object
+        $ref: '#/definitions/GrantCollection'
+    required:
+      - key
+      - name
+      - owners
+
+  Owner:
+    type: object
+    description: |
+      An owner is the responsible contact for a feature or app.
+      This representation corresponds the following protocol buffer:
+
+      ```
+        message Owner {
+            string id = 1;
+            string name = 2;
+            string username = 3;
+            string email = 4;
+            string type = 7;
+        }
+      ```
+    properties:
+      type:
+        type: string
+      id:
+        type: string
+        description: |
+          The server's unique identifier for an Owner. Owners are currently unique per App and
+           not neccessarily globally unique.
+      name:
+        type: string
+        description: |
+          A name for the owner.
+      username:
+        type: string
+        description: |
+          The username of the owner or team.
+      email:
+        type: string
+        description: |
+          The email of the owner or team.
+    required:
+      - type
+      - id
+      - name
+      - email
+      - username
+
+  OwnerCreate:
+    type: object
+    description: |
+      An abbreviated form of Owner documenting the client defined fields to send.
+    properties:
+      name:
+        type: string
+      email:
+        type: string
+      username:
+        type: string
+    required:
+      - name
+      - email
+      - username
+
+  GrantCollection:
+    type: object
+    description: |
+      A collection of member and service grants for an app.
+      This representation corresponds the following protocol buffer:
+
+      ```
+        message GrantCollection {
+            string type = 1;
+            repeated ServiceGrant services = 10;
+            repeated MemberGrant members = 11;
+        }
+      ```
+
+      Services are typically just that, services or some runtime component of a system. Members
+      typically represent people such as an employee or team member, but a member can also be a
+      group or a team.
+
+      When making requests to see features, the service or member must present their credentials
+      and be authenticated against the server (for example via an OAuth Bearer token). Once they
+      are authenticated they are checked to see if they have a grant entry for the App. If they
+      do, the request is honored. If they don't the request is rejected.
+
+      The reason to support both services and members is that it's common for individuals to
+      want to work with features during development and for companies to issue tokens to
+      servcies and people separately. Allowng "people" grants avoids the need to do things like
+      create fake services for individuals. Also, operationally Outland supports the notion
+      of individuals examining features for operational or other reasons.
+
+      Grants are best thought of as a basic grouping mechanism to allow owners a level
+      of control over which services and people can access which features. This lets the server
+      provide a basic level of multitenancy. Grants do not provide strong security by themselves
+      - that will be acheived via the mechanisms you use to issue tokens and credentials to users
+      and systems to authenticate the named grantees, which is outside the scope of the Outland
+      API and project.
+    properties:
+      type:
+        type: string
+      services:
+        type: array
+        items:
+          type: object
+          $ref: '#/definitions/ServiceGrant'
+        description: |
+          The list of services who can use this app's features
+      members:
+        type: array
+        items:
+          type: object
+          $ref: '#/definitions/MemberGrant'
+        description: |
+          The list of members who can use this app's features
+    required:
+      - type
+      - services
+      - members
+
+  ServiceGrant:
+    type: object
+    description: |
+      A service that is allowed to access an App's features..
+      This representation corresponds the following protocol buffer:
+
+      ```
+        message ServiceGrant {
+            string type = 1;
+            string id = 2;
+            string name = 10;
+            string key = 11;
+        }
+      ```
+    properties:
+      type:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+        description: |
+          A name for the service
+      key:
+        type: string
+        description: |
+          A key identifiying the service
+    required:
+      - type
+      - id
+      - name
+      - key
+
+  ServiceGrantCreate:
+    type: object
+    description: |
+      An abbreviated form of ServiceGrant documenting the client defined fields to send.
+    properties:
+      name:
+        type: string
+      key:
+        type: string
+    required:
+      - name
+      - key
+
+  MemberGrant:
+    type: object
+    description: |
+      A member (person or team) that is allowed to access an App's features..
+      This representation corresponds the following protocol buffer:
+
+      ```
+        message MemberGrant {
+            string type = 1;
+            string id = 2;
+            string name = 10;
+            string username = 11;
+            string email = 12;
+        }
+      ```
+    properties:
+      type:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+        description: |
+          A name for the member.
+      username:
+        type: string
+        description: |
+          The username of the person or team
+      email:
+        type: string
+        description: |
+          The email of the person or team
+    required:
+      - type
+      - id
+      - name
+      - username
+      - email
+
+  MemberGrantCreate:
+    type: object
+    description: |
+      An abbreviated form of MemberGrant documenting the client defined fields to send.
+    properties:
+      name:
+        type: string
+        description: |
+          A name for the member.
+      username:
+        type: string
+        description: |
+          The username of the person or team
+      email:
+        type: string
+        description: |
+          The email of the person or team
+    required:
+      - name
+      - username
+      - email
+
+  Feature:
+    type: object
+    description: |
+      A feature.
+      This representation corresponds the following protocol buffer:
+
+      ```
+        message Feature {
+            string id = 1;
+            string key = 2;
+            string appkey = 3;
+            enum State {
+                none = 0;
+                off = 1;
+                on = 2;
+            }
+            State state = 4;
+            string description = 5;
+            string created = 6;
+            string updated = 7;
+            Owner owner = 8;
+            map<string, string> properties = 9;
+            OptionType option = 10;
+            repeated FeatureOption options = 11;
+            FeatureVersion version = 12;
+            string type = 13;
+        }
+      ```
+    properties:
+      type:
+        type: string
+      id:
+        type: string
+        description: |
+          The server assigned id for the feature. Clients can use the key directly for identity.
+      key:
+        type: string
+        description: |
+          The client assigned key for the feature. This must be unique for a given App. Features
+          cannot have their keys changed once created.
+      appkey:
+        type: string
+        description: |
+          The App's key identifier. Features cannot have their app key changed once created.
+      state:
+        type: string
+        enum:
+          - "on"
+          - "off"
+          - "none"
+        description: |
+          The feature state. The enumeration is closed by design, but clients may treat unknown
+          states as being the 'off' type.
+
+          Features cannot be created with a starting state of on, they always start in the none
+          state (operationally none is treated the same as off) but none is used to indicate the
+          initial starting state. This means to turn on a feature, the client must send a subsequent
+          request. Clients may then change the feature state to on or off as needed, but can not
+          change the state back to none.
+      description:
+        type: string
+        description: |
+          A description for the field. The server may choose to strip, escape or reject any
+          embedded markup.
+      created:
+        type: string
+        format: date-time
+        description: |
+          The server assigned create time.
+      updated:
+        type: string
+        format: date-time
+        description: |
+          The server assigned update time.
+      owner:
+        type: object
+        $ref: "#/definitions/Owner"
+        description: |
+          The owner of the feature, useful for getting in touch.
+      properties:
+        type: object
+        $ref: "#/definitions/FeatureProperties"
+        description: |
+          Client defined properties. The server may choose to strip, escape or reject any
+          embedded markup found in the names or values.
+      option:
+        type: string
+        description: |
+          The kind of feature. These are the known values currently:
+
+            - "flag": indicates a vanilla feature flag that has no follow on options, just state.
+            - "bool": indicates a feature flag that has two fixed options, "true" and "false".
+            - "string": indicates a feature flag that has n string valued options.
+            - "long": indicates a feature flag that has n long valued (format int64) options.
+            - "double": indicates a feature flag that has n double valued (format double) options.
+
+          This set may be extended in the future and should not be represented as a closed enum.
+      options:
+        type: array
+        description: |
+          The list of options for this feature. Note a "flag" option will have an empty array.
+        items:
+          type: object
+          $ref: "#/definitions/FeatureOption"
+      version:
+        type: object
+        $ref: "#/definitions/FeatureVersion"
+        description: |
+          The version of the feature. This is updated each time the feature is changed.
+    required:
+      - type
+      - id
+      - key
+      - appkey
+      - state
+      - description
+      - created
+      - updated
+      - owner
+      - properties
+      - option
+      - options
+      - version
+
+  FeatureCreate:
+    type: object
+    description: |
+      An abbreviated form of Feature documenting the client defined fields to send.
+    properties:
+      key:
+        type: string
+      appkey:
+        type: string
+      state:
+        type: string
+        enum:
+          - "on"
+          - "off"
+          - "none"
+        description: |
+          The feature state. The enumaration is closed by design, but clients may treat unknown
+          states as being the 'none' type.
+      description:
+        type: string
+      owner:
+        type: object
+        $ref: "#/definitions/Owner"
+      properties:
+        type: object
+        $ref: "#/definitions/FeatureProperties"
+      option:
+        type: string
+        description: |
+          The kind of feature. These are the known values currently:
+
+            - "flag": indicates a vanilla feature flag that has no follow on options, just state.
+            - "bool": indicates a feature flag that has two fixed options, "true" and "false".
+            - "string": indicates a feature flag that has n string valued options.
+            - "long": indicates a feature flag that has n long valued (format int64) options.
+            - "double": indicates a feature flag that has n double valued (format double) options.
+
+          This set may be extended in the future and should not be represented as a closed enum.
+      options:
+        type: array
+        description: |
+          The list of options for this feature. Note a "flag" option will have an empty array.
+        items:
+          type: object
+          $ref: "#/definitions/FeatureOption"
+    required:
+      - key
+      - appkey
+      - state
+      - description
+      - owner
+      - option
+      - options
+
+  FeatureProperties:
+    type: object
+    additionalProperties:
+      type: string
+
+  FeatureOption:
+    type: object
+    description: |
+      Indicates an option type of the feature.
+      This representation corresponds the following protocol buffer:
+
+      ```
+        message FeatureOption {
+            string id = 1;
+            OptionType option = 2;
+            string name = 3;
+            string value = 4;
+            int32 weight = 5;
+            string type = 6;
+        }
+      ```
+    properties:
+      type:
+        type: string
+      id:
+        type: string
+        description: |
+          The server assigned id for the feature option. Clients please note:
+
+            - the id is not required when creating a feature; if sent it will be replaced
+            - the id must be sent thereafter when adjusting the weights
+      option:
+        type: string
+        description: |
+          The kind of feature. These are the known values currently:
+
+            - "flag": indicates a vanilla feature flag that has no follow on options, just state.
+            - "bool": indicates a feature flag that has two fixed options, "true" and "false".
+            - "string": indicates a feature flag that has n string valued options.
+            - "long": indicates a feature flag that has n long valued (format int64) options.
+            - "double": indicates a feature flag that has n double valued (format double) options.
+
+          This set may be extended in the future and should not be represented as a closed enum.
+      name:
+        type: string
+        description: |
+          The name of the option. Note that for a bool option this must be either "true" or
+          "false". Other values cause a 422 response.
+      value:
+        type: string
+        description: |
+          The value of the feature. Clients may parse the string value as follows based on the
+          kind of option:
+
+            - "bool": the literal value is one of "true" or "false" (OAI format boolean)
+            - "string": the literal value is a string
+            - "long": the literal value may be treated as an int64 signed long (OAI format int64)
+            - "double": the literal value may be treated as a double  (OAI format double)
+
+          This set may be extended in the future and should not be represented as a closed enum.
+
+          Note that for a bool option this must be either "true" or "false". Other values
+          cause a 422 response. This value must correspond to the value of the name field. If
+          it doesn't that will cause a 422 response.
+      weight:
+        type: integer
+        format: int32
+        description: |
+          A number between 0 and 1000. Larger or smaller numbers will cause a 422 response. The
+          total sum of the weights across all options for a feature must equal 10000; if they
+          don't the  response will be a 422.
+    required:
+      - type
+      - id
+      - option
+      - name
+      - value
+      - weight
+
+  FeatureVersion:
+    type: object
+    description: |
+      Indicates the version of the feature. Versions are structured objects instead of strings
+      or numeric values as this allows them to be used in a fully distributed setting. In
+      other words, this API does not assume it is the only source of versions.
+
+      Versions are based on Hybrid Logical Clocks, which use a physical timestamp component
+      along with a logical counter. See "Logical Physical Clocks and Consistent Snapshots
+      in Globally Distributed Databases" by Kulkarni et al,
+      https://www.cse.buffalo.edu/tech-reports/2014-04.pdf, for more details on the model.
+
+      As a convenience an id string value is also sent with the timestamp and counter and
+      represents the same version information. The id value is lexically comparable for
+      version order - ids are based ULIDs with the difference that they are always lowercase.
+      See https://github.com/alizain/ulid for more details on ULIDs.
+
+      This representation corresponds the following protocol buffer:
+
+      ```
+        message FeatureVersion {
+            string id = 1;
+            int64 timestamp = 2;
+            int64 counter = 3;
+            string type = 4;
+        }
+      ```
+    properties:
+      type:
+        type: string
+      timestamp:
+        type: integer
+        format: int64
+        description: |
+          The physical timestamp for the version
+      counter:
+        type: integer
+        format: int32
+        description: |
+          The logical counter for the version
+      id:
+        type: string
+        pattern: "ver_[0-9abcdefghjkmnopqrstuvwxyz]{26}"
+        description: |
+          The physical timestamp for the version
+    required:
+      - type
+      - timestamp
+      - counter
+      - id
+
+
+  FeatureCollection:
+    type: object
+    description: |
+      A collection of features belonging to an App.
+      This representation corresponds the following protocol buffer:
+
+      ```
+        message FeatureCollection {
+            string type = 1;
+            string appkey = 2;
+            repeated Feature items = 3;
+        }
+      ```
+    properties:
+      type:
+        type: string
+      appkey:
+        type: string
+      items:
+        type: array
+        items:
+          type: object
+          $ref: '#/definitions/Feature'
+    required:
+      - type
+      - appkey
+      - items
+
+  Problem:
+    type: object
+    properties:
+      type:
+        type: string
+        format: uri
+        description: |
+          A URI that identifies the problem type.
+      title:
+        type: string
+        description: |
+          A short, summary of the problem type.
+      status:
+        type: integer
+        format: int32
+        description: |
+          The HTTP status code returned with this problem.
+      detail:
+        type: string
+        description: |
+          A human readable explanation of the problem.
+      instance:
+        type: string
+        format: uri
+        description: |
+          An absolute URI that identifies the specific occurrence of the problem.
+    required:
+      - type
+      - title
+      - status
