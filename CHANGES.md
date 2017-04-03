@@ -2,6 +2,11 @@
 
 ### 0.0.6
 
+#### Server
+
+- Wraps feature options in a collection object.
+
+- Validates option ids match on update
 
 ### 0.0.5
 
