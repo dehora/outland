@@ -4,6 +4,7 @@ import java.util.function.Consumer;
 import org.junit.Test;
 import outland.feature.proto.Feature;
 import outland.feature.proto.FeatureOption;
+import outland.feature.proto.OptionCollection;
 import outland.feature.proto.OptionType;
 import outland.feature.proto.Owner;
 import outland.feature.server.ServiceException;
@@ -31,12 +32,16 @@ public class FeatureValidatorTest {
   @Test
   public void validateFeatureThrowingBoolOptionOk() {
     Feature.Builder builder = Feature.newBuilder();
+
+    OptionCollection.Builder collectionBuilder = OptionCollection.newBuilder()
+        .setOption(OptionType.bool)
+        .addItems(FeatureOption.newBuilder().setValue("true").setName("true").setWeight(5500))
+        .addItems(FeatureOption.newBuilder().setValue("false").setName("false").setWeight(4500));
+
     builder.setOwner(Owner.newBuilder().setName("Jayne").setUsername("jayne"))
         .setKey("key1")
         .setAppkey("app1")
-        .setOption(OptionType.bool)
-        .addOptions(FeatureOption.newBuilder().setValue("true").setName("true").setWeight(5500))
-        .addOptions(FeatureOption.newBuilder().setValue("false").setName("false").setWeight(4500))
+        .setOptions(collectionBuilder)
     ;
 
     try {
@@ -49,21 +54,16 @@ public class FeatureValidatorTest {
   @Test
   public void validateFeatureThrowingBoolOptionUpdateOk() {
     Feature.Builder builder = Feature.newBuilder();
+
+    OptionCollection.Builder collectionBuilder = OptionCollection.newBuilder()
+        .setOption(OptionType.bool)
+        .addItems(FeatureOption.newBuilder().setValue("true").setName("true").setWeight(5500).setId("a"))
+        .addItems(FeatureOption.newBuilder().setValue("false").setName("false").setWeight(4500).setId("b"));
+
     builder.setOwner(Owner.newBuilder().setName("Jayne").setUsername("jayne"))
         .setKey("key1")
         .setAppkey("app1")
-        .setOption(OptionType.bool)
-        .addOptions(
-            FeatureOption.newBuilder()
-                .setValue("true")
-                .setName("true")
-                .setWeight(5500)
-                .setId("a"))
-        .addOptions(FeatureOption.newBuilder()
-            .setValue("false")
-            .setName("false")
-            .setWeight(4500)
-            .setId("b"))
+        .setOptions(collectionBuilder)
     ;
 
     try {
@@ -85,7 +85,7 @@ public class FeatureValidatorTest {
     Feature.Builder builder = Feature.newBuilder();
     builder.setOwner(Owner.newBuilder().setName("Jayne"));
 
-    callValidate(builder, "incomplete_owner_for_app", 422);
+    callValidate(builder, "incomplete_owner", 422);
   }
 
   @Test
@@ -108,11 +108,17 @@ public class FeatureValidatorTest {
   @Test
   public void validateFeatureThrowingBoolWrongOptions() {
     Feature.Builder builder = Feature.newBuilder();
+
+    OptionCollection.Builder collectionBuilder = OptionCollection.newBuilder()
+        .setOption(OptionType.bool)
+        .addItems(FeatureOption.newBuilder().setValue("true").setName("true"))
+        ;
+
     builder.setOwner(Owner.newBuilder().setName("Jayne").setUsername("jayne"))
         .setKey("key1")
         .setAppkey("app1")
-        .setOption(OptionType.bool)
-        .addOptions(FeatureOption.newBuilder().setValue("true").setName("true"));
+        .setOptions(collectionBuilder)
+        ;
 
     callValidate(builder, "wrong_options_for_bool_feature", 422);
   }
@@ -120,12 +126,17 @@ public class FeatureValidatorTest {
   @Test
   public void validateFeatureThrowingBoolWrongNames() {
     Feature.Builder builder = Feature.newBuilder();
+
+    OptionCollection.Builder collectionBuilder = OptionCollection.newBuilder()
+        .setOption(OptionType.bool)
+        .addItems(FeatureOption.newBuilder().setValue("true").setName("true"))
+        .addItems(FeatureOption.newBuilder().setValue("false").setName("alse"))
+        ;
+
     builder.setOwner(Owner.newBuilder().setName("Jayne").setUsername("jayne"))
         .setKey("key1")
         .setAppkey("app1")
-        .setOption(OptionType.bool)
-        .addOptions(FeatureOption.newBuilder().setValue("true").setName("true"))
-        .addOptions(FeatureOption.newBuilder().setValue("false").setName("alse"))
+        .setOptions(collectionBuilder)
     ;
 
     callValidate(builder, "wrong_name_for_bool_feature", 422);
@@ -134,12 +145,16 @@ public class FeatureValidatorTest {
   @Test
   public void validateFeatureThrowingBoolWrongValues() {
     Feature.Builder builder = Feature.newBuilder();
+
+    OptionCollection.Builder collectionBuilder = OptionCollection.newBuilder()
+        .setOption(OptionType.bool)
+        .addItems(FeatureOption.newBuilder().setValue("rue").setName("true"))
+        .addItems(FeatureOption.newBuilder().setValue("false").setName("false"));
+
     builder.setOwner(Owner.newBuilder().setName("Jayne").setUsername("jayne"))
         .setKey("key1")
         .setAppkey("app1")
-        .setOption(OptionType.bool)
-        .addOptions(FeatureOption.newBuilder().setValue("rue").setName("true"))
-        .addOptions(FeatureOption.newBuilder().setValue("false").setName("false"))
+        .setOptions(collectionBuilder)
     ;
 
     callValidate(builder, "wrong_value_for_bool_feature", 422);
@@ -148,23 +163,31 @@ public class FeatureValidatorTest {
   @Test
   public void validateFeatureThrowingBoolMismatchedValues() {
     Feature.Builder builder = Feature.newBuilder();
+
+    OptionCollection.Builder collectionBuilder = OptionCollection.newBuilder()
+        .setOption(OptionType.bool)
+        .addItems(FeatureOption.newBuilder().setValue("true").setName("false"))
+        .addItems(FeatureOption.newBuilder().setValue("false").setName("false"));
+
     builder.setOwner(Owner.newBuilder().setName("Jayne").setUsername("jayne"))
         .setKey("key1")
         .setAppkey("app1")
-        .setOption(OptionType.bool)
-        .addOptions(FeatureOption.newBuilder().setValue("true").setName("false"))
-        .addOptions(FeatureOption.newBuilder().setValue("false").setName("false"))
+        .setOptions(collectionBuilder)
     ;
 
     callValidate(builder, "mismatched_name_value_for_bool_feature", 422);
 
     builder = Feature.newBuilder();
+
+    collectionBuilder = OptionCollection.newBuilder()
+        .setOption(OptionType.bool)
+        .addItems(FeatureOption.newBuilder().setValue("true").setName("true"))
+        .addItems(FeatureOption.newBuilder().setValue("false").setName("true"));
+
     builder.setOwner(Owner.newBuilder().setName("Jayne").setUsername("jayne"))
         .setKey("key1")
         .setAppkey("app1")
-        .setOption(OptionType.bool)
-        .addOptions(FeatureOption.newBuilder().setValue("true").setName("true"))
-        .addOptions(FeatureOption.newBuilder().setValue("false").setName("true"))
+        .setOptions(collectionBuilder)
     ;
 
     callValidate(builder, "mismatched_name_value_for_bool_feature", 422);
@@ -173,12 +196,16 @@ public class FeatureValidatorTest {
   @Test
   public void validateFeatureThrowingBoolWrongWeights() {
     Feature.Builder builder = Feature.newBuilder();
+
+    OptionCollection.Builder collectionBuilder = OptionCollection.newBuilder()
+        .setOption(OptionType.bool)
+        .addItems(FeatureOption.newBuilder().setValue("true").setName("true"))
+        .addItems(FeatureOption.newBuilder().setValue("false").setName("false"));
+
     builder.setOwner(Owner.newBuilder().setName("Jayne").setUsername("jayne"))
         .setKey("key1")
         .setAppkey("app1")
-        .setOption(OptionType.bool)
-        .addOptions(FeatureOption.newBuilder().setValue("true").setName("true"))
-        .addOptions(FeatureOption.newBuilder().setValue("false").setName("false"))
+        .setOptions(collectionBuilder)
     ;
 
     // weights are 0 and 0
@@ -189,12 +216,16 @@ public class FeatureValidatorTest {
   @Test
   public void validateFeatureThrowingBoolWeightsOutOfBounds() {
     Feature.Builder builder = Feature.newBuilder();
+
+    OptionCollection.Builder collectionBuilder = OptionCollection.newBuilder()
+        .setOption(OptionType.bool)
+        .addItems(FeatureOption.newBuilder().setValue("true").setName("true"))
+        .addItems(FeatureOption.newBuilder().setValue("false").setName("false").setWeight(-1));
+
     builder.setOwner(Owner.newBuilder().setName("Jayne").setUsername("jayne"))
         .setKey("key1")
         .setAppkey("app1")
-        .setOption(OptionType.bool)
-        .addOptions(FeatureOption.newBuilder().setValue("true").setName("true"))
-        .addOptions(FeatureOption.newBuilder().setValue("false").setName("false").setWeight(-1))
+        .setOptions(collectionBuilder)
     ;
 
     // weights are 0 and -1
@@ -203,12 +234,14 @@ public class FeatureValidatorTest {
 
 
     builder = Feature.newBuilder();
+    collectionBuilder = OptionCollection.newBuilder()
+        .setOption(OptionType.bool)
+        .addItems(FeatureOption.newBuilder().setValue("true").setName("true"))
+        .addItems(FeatureOption.newBuilder().setValue("false").setName("false").setWeight(10_001));
     builder.setOwner(Owner.newBuilder().setName("Jayne").setUsername("jayne"))
         .setKey("key1")
         .setAppkey("app1")
-        .setOption(OptionType.bool)
-        .addOptions(FeatureOption.newBuilder().setValue("true").setName("true"))
-        .addOptions(FeatureOption.newBuilder().setValue("false").setName("false").setWeight(10_001))
+        .setOptions(collectionBuilder)
     ;
 
     // weights are 0 and 10001
@@ -219,12 +252,15 @@ public class FeatureValidatorTest {
   @Test
   public void validateFeatureThrowingBoolWeightsOutOfTotalBounds() {
     Feature.Builder builder = Feature.newBuilder();
+    OptionCollection.Builder collectionBuilder = OptionCollection.newBuilder()
+        .setOption(OptionType.bool)
+        .addItems(FeatureOption.newBuilder().setValue("true").setName("true").setWeight(5000))
+        .addItems(FeatureOption.newBuilder().setValue("false").setName("false").setWeight(5001));
+
     builder.setOwner(Owner.newBuilder().setName("Jayne").setUsername("jayne"))
         .setKey("key1")
         .setAppkey("app1")
-        .setOption(OptionType.bool)
-        .addOptions(FeatureOption.newBuilder().setValue("true").setName("true").setWeight(5000))
-        .addOptions(FeatureOption.newBuilder().setValue("false").setName("false").setWeight(5001))
+        .setOptions(collectionBuilder)
     ;
 
     // weights are 5000 and 5001
@@ -235,20 +271,15 @@ public class FeatureValidatorTest {
   @Test
   public void validateFeatureThrowingBoolOptionUpdateNoIds() {
     Feature.Builder builder = Feature.newBuilder();
+    OptionCollection.Builder collectionBuilder = OptionCollection.newBuilder()
+        .setOption(OptionType.bool)
+        .addItems(FeatureOption.newBuilder().setValue("true").setName("true").setWeight(5500))  // no id here
+        .addItems(FeatureOption.newBuilder().setValue("false").setName("false").setWeight(5001).setId("b"));
+
     builder.setOwner(Owner.newBuilder().setName("Jayne").setUsername("jayne"))
         .setKey("key1")
         .setAppkey("app1")
-        .setOption(OptionType.bool)
-        .addOptions(
-            FeatureOption.newBuilder()
-                .setValue("true")
-                .setName("true")
-                .setWeight(5500)) // no id here
-        .addOptions(FeatureOption.newBuilder()
-            .setValue("false")
-            .setName("false")
-            .setWeight(4500)
-            .setId("b"))
+        .setOptions(collectionBuilder)
     ;
 
     callValidateUpdate(builder, "missing_id_for_option", 422);

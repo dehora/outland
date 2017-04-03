@@ -19,9 +19,10 @@ import org.slf4j.LoggerFactory;
 import outland.feature.proto.Feature;
 import outland.feature.proto.FeatureCollection;
 import outland.feature.proto.FeatureOption;
-import outland.feature.proto.Owner;
 import outland.feature.proto.FeatureVersion;
+import outland.feature.proto.OptionCollection;
 import outland.feature.proto.OptionType;
+import outland.feature.proto.Owner;
 
 import static outland.feature.server.StructLog.kvp;
 
@@ -36,6 +37,7 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
       return dtRight.compareTo(dtLeft);
     }
   };
+  public static final int DEFAULT_MAXWEIGHT = 10_000;
 
   private final FeatureStorage featureStorage;
   private final FeatureCache featureCache;
@@ -128,41 +130,56 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
 
     Feature found = maybeFound.get();
 
+    featureValidator.validateOptionIds(found.getOptions(), updates.getOptions());
+
     logger.info("{} /found_feature=[{}]",
         kvp("op", "updateFeature", "appkey", appKey, "feature_key", featureKey),
         TextFormat.shortDebugString(found));
 
-    Feature.Builder builder = found.toBuilder()
+    Feature.Builder wipBuilder = found.toBuilder()
         .mergeFrom(updates)
         .setUpdated(now);
 
+
     // can't change some values in update
-    builder.setType("feature");
-    builder.setOption(found.getOption());
-    builder.setCreated(found.getCreated());
-    builder.setId(found.getId());
-    builder.setAppkey(found.getAppkey());
-    builder.setKey(found.getKey());
+    wipBuilder.setType("feature");
+    wipBuilder.setCreated(found.getCreated());
+    wipBuilder.setId(found.getId());
+    wipBuilder.setAppkey(found.getAppkey());
+    wipBuilder.setKey(found.getKey());
 
-    applyVersion(updates, builder);
+    applyVersion(updates, wipBuilder);
 
-    if (builder.getOption().equals(OptionType.bool) && builder.getOptionsCount() != 0) {
+    // process options if we received some
+    if (updates.getOptions().getOption().equals(OptionType.bool) && updates.getOptions().getItemsCount() != 0) {
+
+      // clear out options, we can rebuild them
+      wipBuilder.clearOptions();
+      final OptionCollection.Builder wipOptionsBuilder = OptionCollection.newBuilder();
+
       List<FeatureOption> options = applyOptionsUpdate(updates, found);
-      builder.clearOptions();
-      builder.addAllOptions(options);
+      wipOptionsBuilder.addAllItems(options);
+
+      // can't change some values in update
+      wipOptionsBuilder.setOption(found.getOptions().getOption());
+      wipOptionsBuilder.setType("options.collection");
+      wipOptionsBuilder.setMaxweight(DEFAULT_MAXWEIGHT);
+
+      wipBuilder.setOptions(wipOptionsBuilder);
     }
 
     if(updates.hasOwner()) {
-      builder.clearOwner();
-      applyOwnerUpdate(updates, builder);
+      Owner foundOwner = found.getOwner();
+      wipBuilder.clearOwner();
+      applyOwnerUpdate(updates, foundOwner, wipBuilder);
     }
 
     // a value other than none indicates the client sent something
     if (!updates.getState().equals(Feature.State.none)) {
-      builder.setState(updates.getState());
+      wipBuilder.setState(updates.getState());
     }
 
-    Feature updated = builder.build();
+    Feature updated = wipBuilder.build();
 
     // post check everything
     featureValidator.validateFeatureRegistrationThrowing(updated);
@@ -316,17 +333,16 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
     final ArrayList<FeatureOption> results = Lists.newArrayList();
 
     // nothing in the update, return what we have
-    if(updated.getOptionsCount() == 0) {
-      results.addAll(found.getOptionsList());
+    if(updated.getOptions().getItemsCount() == 0) {
+      results.addAll(found.getOptions().getItemsList());
       return results;
     }
 
-    final List<FeatureOption> updatedOptionsList = updated.getOptionsList();
+    final List<FeatureOption> updatedOptionsList = updated.getOptions().getItemsList();
+    final List<FeatureOption> foundOptionsList = found.getOptions().getItemsList();
 
     for (FeatureOption updateOption : updatedOptionsList) {
       final String updateId = updateOption.getId();
-
-      final List<FeatureOption> foundOptionsList = found.getOptionsList();
 
       for (FeatureOption foundOption : foundOptionsList) {
         final FeatureOption.Builder builder = foundOption.toBuilder();
@@ -344,25 +360,35 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
 
   private void applyOptionsRegister(Feature feature, Feature.Builder builder) {
 
-    if (feature.getOption().equals(OptionType.flag)) {
+    if (feature.getOptions().getOption().equals(OptionType.flag)) {
       // flags don't have weighted options
       return;
     }
 
-    if (feature.getOption().equals(OptionType.bool)) {
-      if (feature.getOptionsCount() != 0) {
+    OptionCollection.Builder collectionBuilder = OptionCollection.newBuilder();
+    collectionBuilder.setMaxweight(DEFAULT_MAXWEIGHT);
+    collectionBuilder.setType("options.collection");
+    collectionBuilder.setOption(feature.getOptions().getOption());
 
-        final List<FeatureOption> options = feature.getOptionsList();
+    if (feature.getOptions().getOption().equals(OptionType.bool)) {
+      if (feature.getOptions().getItemsCount() != 0) {
+
+        final List<FeatureOption> options = feature.getOptions().getItemsList();
 
         for (FeatureOption option : options) {
           final FeatureOption.Builder optionBuilder = FeatureOption.newBuilder().mergeFrom(option);
           optionBuilder.setType("option");
           optionBuilder.setId("opt_" + Ulid.random());
           optionBuilder.setOption(OptionType.bool);
-          builder.addOptions(optionBuilder);
+          collectionBuilder.addItems(optionBuilder);
         }
+
+        builder.setOptions(collectionBuilder);
+
+
       } else {
-        builder.addOptions(FeatureOption.newBuilder()
+
+        collectionBuilder.addItems(FeatureOption.newBuilder()
             .setType("option")
             .setId("opt_" + Ulid.random())
             .setName("false")
@@ -370,25 +396,49 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
             .setOption(OptionType.bool)
             .setWeight(5_000));
 
-        builder.addOptions(FeatureOption.newBuilder()
+        collectionBuilder.addItems(FeatureOption.newBuilder()
             .setType("option")
             .setId("opt_" + Ulid.random())
             .setName("true")
             .setValue("true")
             .setOption(OptionType.bool)
             .setWeight(5_000));
+
+        builder.setOptions(collectionBuilder);
       }
     }
   }
 
-  private void applyOwnerUpdate(Feature registering, Feature.Builder builder) {
-    applyOwnerRegister(registering, builder);
+  private void applyOwnerUpdate(Feature updates, Owner foundOwner, Feature.Builder builder) {
+    final Owner updateOwner = updates.getOwner();
+    new FeatureValidator().validateOwner(updateOwner);
+
+    if ((!Strings.isNullOrEmpty(updateOwner.getEmail())
+        && !updateOwner.getEmail().equals(foundOwner.getEmail()))
+        &&
+        (!Strings.isNullOrEmpty(updateOwner.getUsername())
+            && !updateOwner.getUsername().equals(foundOwner.getEmail()))) {
+      // treat as new owner
+      final Owner.Builder replacementOwnerBuilder = updateOwner.toBuilder();
+      replacementOwnerBuilder.setType("featureowner");
+      replacementOwnerBuilder.setId("own_" + Ulid.random());
+      builder.setOwner(replacementOwnerBuilder.buildPartial());
+    } else {
+
+      final Owner.Builder wipOwnerBuilder = foundOwner.toBuilder().mergeFrom(updateOwner);
+      // some fields can't be changed
+      wipOwnerBuilder.setType("featureowner");
+      wipOwnerBuilder.setId(foundOwner.getId());
+
+      builder.setOwner(wipOwnerBuilder.buildPartial());
+    }
   }
 
   private void applyOwnerRegister(Feature registering, Feature.Builder builder) {
     final Owner owner = registering.getOwner();
     final Owner.Builder ownerBuilder = owner.toBuilder();
     ownerBuilder.setType("featureowner");
+    ownerBuilder.setId("own_" + Ulid.random());
     builder.setOwner(ownerBuilder.buildPartial());
   }
 

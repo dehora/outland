@@ -44,6 +44,13 @@ message FeatureOption {
     string type = 6;
 }
 
+message OptionCollection {
+    string type = 1;
+    OptionType option = 2;
+    int32 maxweight = 3;
+    repeated FeatureOption items = 4;
+}
+
 message Feature {
     string id = 1;
     string key = 2;
@@ -59,9 +66,7 @@ message Feature {
     string updated = 7;
     Owner owner = 8;
     map<string, string> properties = 9;
-
-    OptionType option = 10;
-    repeated FeatureOption options = 11;
+    OptionCollection options = 10;
     FeatureVersion version = 12;
     string type = 13;
 }
