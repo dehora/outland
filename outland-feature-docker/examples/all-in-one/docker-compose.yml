@@ -25,6 +25,7 @@ services:
       - JAVA_OPTS
       - AWS_ACCESS_KEY_ID
       - AWS_SECRET_ACCESS_KEY
+      - OUTLAND_FEATURE_AWS_AUTHMODE
     ports:
      - "8180:8180"
      - "8181:8181"

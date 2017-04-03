@@ -38,6 +38,7 @@ logging:
       timeZone: UTC
 
 aws:
+  authMode: ${OUTLAND_FEATURE_AWS_AUTHMODE:-chain}
   dynamoDbUrl: ${OUTLAND_FEATURE_DYNAMODB_URL:-http://dynamodb:8000}
   signingRegion: ${OUTLAND_FEATURE_DYNAMODB_REGION:-eu-central-1}
 
