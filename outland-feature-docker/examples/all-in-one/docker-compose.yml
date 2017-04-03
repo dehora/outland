@@ -4,12 +4,9 @@ services:
   outland_server:
     image: dehora/outland-feature-server
     environment:
-      - OUTLAND_FEATURE_ENV
       - OUTLAND_FEATURE_BASE_URI
       - OUTLAND_FEATURE_API_IDLE_TO
       - OUTLAND_FEATURE_REDIS_MAXCONN
-      - OUTLAND_FEATURE_AWS_KEY
-      - OUTLAND_FEATURE_AWS_SECRET
       - OUTLAND_FEATURE_DYNAMODB_URL
       - OUTLAND_FEATURE_DYNAMODB_REGION
       - OUTLAND_FEATURE_TABLE_FEATURES
@@ -26,6 +23,8 @@ services:
       - OUTLAND_FEATURE_AUTH_OAUTH_READ_TO
       - OUTLAND_FEATURE_ANY_APP_GRANT
       - JAVA_OPTS
+      - AWS_ACCESS_KEY_ID
+      - AWS_SECRET_ACCESS_KEY
     ports:
      - "8180:8180"
      - "8181:8181"

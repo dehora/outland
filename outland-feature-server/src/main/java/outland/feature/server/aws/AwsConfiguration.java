@@ -7,13 +7,7 @@ public class AwsConfiguration {
 
   @NotEmpty
   @JsonProperty
-  public String environment;
-
-  @JsonProperty
-  public String accessKey;
-
-  @JsonProperty
-  public String secretKey;
+  public String authMode;
 
   @NotEmpty
   @JsonProperty

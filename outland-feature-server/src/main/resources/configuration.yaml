@@ -1,5 +1,4 @@
 serviceName: Outland Feature Service
-environment: development
 
 baseURI: http://localhost:8280
 
@@ -37,9 +36,8 @@ logging:
       timeZone: UTC
 
 aws:
-  environment: test
-  accessKey: AWS_KEY
-  secretKey: AWS_SECRET
+  # 'chain' uses the chained lookup option; 'iam' for just iam, or, 'local' for local dynamodb
+  authMode: local
   dynamoDbUrl: http://localhost:8000
   signingRegion: eu-central-1
 

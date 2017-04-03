@@ -1,5 +1,4 @@
 serviceName: Outland Feature Service Docker
-environment: ${OUTLAND_FEATURE_ENV:-docker}
 
 baseURI: ${OUTLAND_FEATURE_BASE_URI:-http://localhost:8180}
 
@@ -39,9 +38,6 @@ logging:
       timeZone: UTC
 
 aws:
-  environment: ${OUTLAND_FEATURE_ENV:-docker}
-  accessKey: ${OUTLAND_FEATURE_AWS_KEY:-AWS_KEY}
-  secretKey: ${OUTLAND_FEATURE_AWS_SECRET:-AWS_SECRET}
   dynamoDbUrl: ${OUTLAND_FEATURE_DYNAMODB_URL:-http://dynamodb:8000}
   signingRegion: ${OUTLAND_FEATURE_DYNAMODB_REGION:-eu-central-1}
 

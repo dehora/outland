@@ -32,8 +32,6 @@ such as a UI that is granted access for any App's features. The service still ha
 
 **production/online**
 
-- `OUTLAND_FEATURE_ENV`: Set to "production" to trigger IAM.
-
 - `OUTLAND_FEATURE_BASE_URI`: Set to your domain.
 
 - `OUTLAND_FEATURE_DYNAMODB_REGION`: Set to your AWS region.
@@ -60,11 +58,8 @@ increase the `Xmx` and `Xms`.
 
 | Name                                           | Description                                                                                                                 | Default                              | Importance |
 | ---------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- | ------------------------------------ | ---------- |
-| OUTLAND_FEATURE_ENV                            | The working environment. Setting this to "production" tells AWS to use IAM to source credentials                            | "docker"                             | medium     |
 | OUTLAND_FEATURE_BASE_URI                       | The URI used by the server to generate links. This affects Location header results in the API.                              | http://localhost:8180                | medium     |
 | OUTLAND_FEATURE_API_IDLE_TO                    | How long the server will wait on idle connections. Note this is a literal string, eg "30 seconds".                          | "10 seconds"                         | low        |
-| OUTLAND_FEATURE_AWS_KEY                        | The access key used to source non-IAM credentials. If the env is "production" IAM is used instead.                          | "AWS_KEY"                            | low        |
-| OUTLAND_FEATURE_AWS_SECRET                     | The access key used to source non-IAM credentials. If the env is "production" IAM is used instead.                          | "AWS_SECRET"                         | low        |
 | OUTLAND_FEATURE_DYNAMODB_URL                   | The DynamoDB URL used by the AWS client. The default relies on docker-compose running ddb local.                            | "http://dynamodb:8000"               | high       |
 | OUTLAND_FEATURE_DYNAMODB_REGION                | The signing region used by the AWS client.                                                                                  | "eu-central-1"                       | high       |
 | OUTLAND_FEATURE_TABLE_FEATURES                 | The name of the DynamoDB features table. This table stores feature data.                                                    | "dev_outland_features"               | medium     |
@@ -86,5 +81,11 @@ increase the `Xmx` and `Xms`.
 | OUTLAND_FEATURE_REDIS_CACHE_PORT               | Redis feature cache post.                                                                                                   | 6379                                 | medium     |
 | OUTLAND_FEATURE_REDIS_IDEM_HOST                | Redis idempotency key hostname.                                                                                             | "redis"                              | medium     |
 | OUTLAND_FEATURE_REDIS_MAXCONN                  | Redis idempotency key post.                                                                                                 | 6379                                 | medium     |
+| AWS_ACCESS_KEY_ID                              | Standard AWS client envar.                                                                                                  | 6379                                 | medium     |
+| AWS_SECRET_ACCESS_KEY                          | Standard AWS client envar. .                                                                                                 | 6379                                 | medium     |
+                                                                                              
+                                                                                              
+                                                                                                    - AWS_ACCESS_KEY_ID
+                                                                                                    - AWS_SECRET_ACCESS_KEY| 6379                                 | medium     |
 
 
