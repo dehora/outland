@@ -21,10 +21,11 @@ The notable and somewhat essential settings are as follows:
 
 **local/docker**:
 
-- `OUTLAND_FEATURE_AUTH_BASIC_ENABLED`: This can be handy for local dev. There's no way by design to disable auth.
+- `OUTLAND_FEATURE_AUTH_BASIC_ENABLED`: This can be handy for local dev. There's no way by
+design to disable auth.
 
-- `OUTLAND_FEATURE_AUTH_BASIC_API_KEYS`: A list of known "API Keys" the server knows about; if 
-you leave basic on, you'll want something in this.
+- `OUTLAND_FEATURE_AUTH_BASIC_API_KEYS`: A list of known services and their "API Keys" the server 
+knows about. If you leave basic on, you'll want something in this.
 
 - `OUTLAND_FEATURE_ANY_APP_GRANT`: If you want to enable a whitelisted service 
 such as a UI that is granted access for any App's features. The service still has to authenticate.
@@ -58,24 +59,24 @@ increase the `Xmx` and `Xms`.
 
 | Name                                           | Description                                                                                                                 | Default                              | Importance |
 | ---------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- | ------------------------------------ | ---------- |
+| JAVA_OPTS                                      | JVM options.                                                                                                                | See the docker .env file             | medium     |
 | OUTLAND_FEATURE_BASE_URI                       | The URI used by the server to generate links. This affects Location header results in the API.                              | http://localhost:8180                | medium     |
-| OUTLAND_FEATURE_API_IDLE_TO                    | How long the server will wait on idle connections. Note this is a literal string, eg "30 seconds".                          | "10 seconds"                         | low        |
 | OUTLAND_FEATURE_DYNAMODB_URL                   | The DynamoDB URL used by the AWS client. The default relies on docker-compose running ddb local.                            | "http://dynamodb:8000"               | high       |
 | OUTLAND_FEATURE_DYNAMODB_REGION                | The signing region used by the AWS client.                                                                                  | "eu-central-1"                       | high       |
-| OUTLAND_FEATURE_TABLE_FEATURES                 | The name of the DynamoDB features table. This table stores feature data.                                                    | "dev_outland_features"               | medium     |
-| OUTLAND_FEATURE_TABLE_GRAPHS                   | The name of the DynamoDB graphs table. This table stores associations between apps, owners and grants.                      | "dev_outland_app_graph"              | medium     |
-| OUTLAND_FEATURE_TABLE_APPS                     | The name of the DynamoDB apps table. This table stores app data.                                                            | "dev_outland_apps"                   | medium     |
 | OUTLAND_FEATURE_AUTH_BASIC_ENABLED             | Determines if basic auth API key option is enabled. This is useful for local work without an OAuth server.                  | true (enabled)                       | high       |
 | OUTLAND_FEATURE_AUTH_BASIC_API_KEYS            | The list of shared API keys accepted by the server for basic auth. Leaving this empty causes basic auth to reject requests. | empty list                           | high       |
 | OUTLAND_FEATURE_AUTH_BASIC_CACHE_SECONDS       | How long to cache authenticated credentials received via basic auth.                                                        | 30                                   | low        |
 | OUTLAND_FEATURE_AUTH_OAUTH_ENABLED             | Determines if OAuth authentication is enabled. This is recommended for production/online environments over basic auth.      | false (disabled)                     | high       |
 | OUTLAND_FEATURE_AUTH_OAUTH_SCOPE_POLICY        | Determines whether scopes are checked after the bearer is authenticated. Disabled by default.                               | "oauth_disable_scope_check"          | medium     |
-| OUTLAND_FEATURE_AUTH_OAUTH_CACHE_SECONDS       | How long to cache authenticated credentials received via Oauth.                                                             | 30                                   | low        |
 | OUTLAND_FEATURE_REMOTE_OAUTH_SERVER            | The remote OAuth server url used to confirm bearer tokens and return information about the principal.                       | "https://localhost/oauth2/tokeninfo" | high       |
+| OUTLAND_FEATURE_ANY_APP_GRANT | A list of services or members that are granted access to all apps. Typically used for a console or UI client.               | empty                                | medium     |
 | OUTLAND_FEATURE_AUTH_OAUTH_CONN_TO   | How long to wait for a connection to the OAuth server.                                                                      | 3000 (millis)                        | low        |
 | OUTLAND_FEATURE_AUTH_OAUTH_READ_TO      | How long to wait for a read from the connected OAuth server.                                                                | 3000 (millis)                        | low        |
-| OUTLAND_FEATURE_ANY_APP_GRANT | A list of services or members that are granted access to all apps. Typically used for a console or UI client.               | empty                                | medium     |
-| JAVA_OPTS                                      | JVM options.                                                                                                                | See the docker .env file             | medium     |
+| OUTLAND_FEATURE_AUTH_OAUTH_CACHE_SECONDS       | How long to cache authenticated credentials received via Oauth.                                                             | 30                                   | low        |
+| OUTLAND_FEATURE_API_IDLE_TO                    | How long the server will wait on idle connections. Note this is a literal string, eg "30 seconds".                          | "10 seconds"                         | low        |
+| OUTLAND_FEATURE_TABLE_FEATURES                 | The name of the DynamoDB features table. This table stores feature data.                                                    | "dev_outland_features"               | medium     |
+| OUTLAND_FEATURE_TABLE_GRAPHS                   | The name of the DynamoDB graphs table. This table stores associations between apps, owners and grants.                      | "dev_outland_app_graph"              | medium     |
+| OUTLAND_FEATURE_TABLE_APPS                     | The name of the DynamoDB apps table. This table stores app data.                                                            | "dev_outland_apps"                   | medium     |
 | OUTLAND_FEATURE_REDIS_MAXCONN                  | The maximum number of redis cache connections used by Jedis internally.                                                     | 8                                    | low        |
 | OUTLAND_FEATURE_REDIS_CACHE_HOST               | Redis feature cache hostname.                                                                                               | "redis"                              | medium     |
 | OUTLAND_FEATURE_REDIS_CACHE_PORT               | Redis feature cache post.                                                                                                   | 6379                                 | medium     |
