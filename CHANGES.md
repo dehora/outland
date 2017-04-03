@@ -16,6 +16,12 @@
  
  - Replaces global API keys with per service/member keys.
 
+ - Simplifies AWS client configuration.
+ 
+#### Client 
+ 
+ - Reduces declared client deps to SLF4J, RocksDB, and Metrics.
+
 #### Client
 
  - Declared client dependencies are, SLF4J, RocksDB, and Metrics.
