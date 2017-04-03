@@ -15,6 +15,8 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import outland.feature.server.Problem;
+import outland.feature.server.ServiceException;
 
 import static outland.feature.server.StructLog.kvp;
 
@@ -45,36 +47,43 @@ public class DynamoDbProvider implements Provider<AmazonDynamoDB> {
           "region", configuration.signingRegion
       ));
 
-      if ("production".equals(configuration.environment)) {
-        logger.info(kvp("op", "configure_ddb",
-            "environment", configuration.environment,
-            "auth", "iam"
-        ));
+      AwsClientBuilder.EndpointConfiguration endpointConfiguration =
+          new AwsClientBuilder.EndpointConfiguration(configuration.dynamoDbUrl,
+              configuration.signingRegion);
 
-        AwsClientBuilder.EndpointConfiguration endpointConfiguration =
-            new AwsClientBuilder.EndpointConfiguration(configuration.dynamoDbUrl,
-                configuration.signingRegion);
-        amazonDynamoDB = AmazonDynamoDBClientBuilder
-            .standard()
-            .withClientConfiguration(clientConfiguration)
-            .withEndpointConfiguration(endpointConfiguration)
-            .withCredentials(InstanceProfileCredentialsProvider.getInstance())
-            .build();
-      } else {
-        logger.info(kvp("op", "configure_ddb",
-            "environment", configuration.environment,
-            "auth", "key_and_secret"
-        ));
+      final AmazonDynamoDBClientBuilder builder = AmazonDynamoDBClientBuilder
+          .standard()
+          .withClientConfiguration(clientConfiguration)
+          .withEndpointConfiguration(endpointConfiguration);
 
-        // check the env or fallback to conf
+      if ("iam".equals(configuration.authMode)) {
+        // bypass the chain and use InstanceProfileCredentials directly
+        builder.withCredentials(InstanceProfileCredentialsProvider.getInstance());
+        amazonDynamoDB = builder.build();
+        logger.info(kvp("op", "configure_ddb", "msg", "using_instance_profile"));
+      } else if ("chain".equals(configuration.authMode)) {
+        // delegates withCredentials to DefaultAWSCredentialsProviderChain
+        logger.info(kvp("op", "configure_ddb", "msg", "using_credentials_chain"));
+        amazonDynamoDB = builder.build();
+      } else if ("local".equals(configuration.authMode)) {
+        logger.info(kvp("op", "configure_ddb", "msg", "using_local_with_envar_or_fake_creds"));
+        /*
+         convenience for working with ddb local without having to set the
+         envars through docker every time;
+
+         local ddb just needs any pair of values set so echo back the envars as the envar values
+         to keep it happy with fake creds, in case they are not set.
+          */
         final Map<String, String> envMap = System.getenv();
-        final String accessKeyEnv = configuration.accessKey;
-        final String secretKeyEnv = configuration.secretKey;
+        final String accessKeyEnv = "AWS_ACCESS_KEY_ID";
+        final String secretKeyEnv = "AWS_SECRET_ACCESS_KEY";
         final String key = Optional.ofNullable(envMap.get(accessKeyEnv)).orElse(accessKeyEnv);
         final String secret = Optional.ofNullable(envMap.get(secretKeyEnv)).orElse(secretKeyEnv);
         amazonDynamoDB =
             new AmazonDynamoDBClient(new BasicAWSCredentials(key, secret), clientConfiguration);
         amazonDynamoDB.setEndpoint(configuration.dynamoDbUrl);
+      } else {
+        throw new ServiceException(Problem.argProblem("unknown_aws_auth_mode", ""));
       }
     }
   }

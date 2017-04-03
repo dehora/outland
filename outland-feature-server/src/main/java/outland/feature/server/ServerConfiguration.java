@@ -17,10 +17,6 @@ public class ServerConfiguration extends Configuration {
   @JsonProperty
   public String serviceName;
 
-  @NotEmpty
-  @JsonProperty
-  public String environment;
-
   @NotNull
   @JsonProperty
   public URI baseURI;
