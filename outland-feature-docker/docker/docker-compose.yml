@@ -32,6 +32,7 @@ services:
       # aws client env if you're using the "credentials" option
       - AWS_ACCESS_KEY_ID
       - AWS_SECRET_ACCESS_KEY
+      - OUTLAND_FEATURE_AWS_AUTHMODE
 
     ports:
      - "8180:8180"
