@@ -1,5 +1,4 @@
 serviceName: Outland Feature Service
-environment: development
 
 baseURI: http://localhost:8280
 
@@ -37,9 +36,7 @@ redis:
       maxConnections: 8
 
 aws:
-  environment: test
-  accessKey: AWS_KEY
-  secretKey: AWS_SECRET
+  authMode: local
   dynamoDbUrl: http://localhost:8001
   signingRegion: eu-central-1
 

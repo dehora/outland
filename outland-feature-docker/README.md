@@ -82,10 +82,6 @@ increase the `Xmx` and `Xms`.
 | OUTLAND_FEATURE_REDIS_IDEM_HOST                | Redis idempotency key hostname.                                                                                             | "redis"                              | medium     |
 | OUTLAND_FEATURE_REDIS_MAXCONN                  | Redis idempotency key post.                                                                                                 | 6379                                 | medium     |
 | AWS_ACCESS_KEY_ID                              | Standard AWS client envar.                                                                                                  | 6379                                 | medium     |
-| AWS_SECRET_ACCESS_KEY                          | Standard AWS client envar. .                                                                                                 | 6379                                 | medium     |
-                                                                                              
-                                                                                              
-                                                                                                    - AWS_ACCESS_KEY_ID
-                                                                                                    - AWS_SECRET_ACCESS_KEY| 6379                                 | medium     |
+| AWS_SECRET_ACCESS_KEY                          | Standard AWS client envar.                                                                                                  | 6379                                 | medium     |
 
 
