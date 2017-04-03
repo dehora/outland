@@ -124,37 +124,17 @@ public interface FeatureOrBuilder extends
       java.lang.String key);
 
   /**
-   * <code>optional .outland.OptionType option = 10;</code>
+   * <code>optional .outland.OptionCollection options = 10;</code>
    */
-  int getOptionValue();
+  boolean hasOptions();
   /**
-   * <code>optional .outland.OptionType option = 10;</code>
+   * <code>optional .outland.OptionCollection options = 10;</code>
    */
-  outland.feature.proto.OptionType getOption();
-
+  outland.feature.proto.OptionCollection getOptions();
   /**
-   * <code>repeated .outland.FeatureOption options = 11;</code>
+   * <code>optional .outland.OptionCollection options = 10;</code>
    */
-  java.util.List<outland.feature.proto.FeatureOption> 
-      getOptionsList();
-  /**
-   * <code>repeated .outland.FeatureOption options = 11;</code>
-   */
-  outland.feature.proto.FeatureOption getOptions(int index);
-  /**
-   * <code>repeated .outland.FeatureOption options = 11;</code>
-   */
-  int getOptionsCount();
-  /**
-   * <code>repeated .outland.FeatureOption options = 11;</code>
-   */
-  java.util.List<? extends outland.feature.proto.FeatureOptionOrBuilder> 
-      getOptionsOrBuilderList();
-  /**
-   * <code>repeated .outland.FeatureOption options = 11;</code>
-   */
-  outland.feature.proto.FeatureOptionOrBuilder getOptionsOrBuilder(
-      int index);
+  outland.feature.proto.OptionCollectionOrBuilder getOptionsOrBuilder();
 
   /**
    * <code>optional .outland.FeatureVersion version = 12;</code>

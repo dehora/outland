@@ -1,9 +1,13 @@
 package outland.feature.server.features;
 
 import com.google.common.base.Strings;
+import java.util.Set;
+import java.util.stream.Collectors;
 import outland.feature.proto.Feature;
 import outland.feature.proto.FeatureOption;
+import outland.feature.proto.OptionCollection;
 import outland.feature.proto.OptionType;
+import outland.feature.proto.Owner;
 import outland.feature.server.Problem;
 import outland.feature.server.ServiceException;
 
@@ -11,7 +15,7 @@ class FeatureValidator {
 
   void validateFeatureUpdateThrowing(Feature feature) throws ServiceException {
 
-    if(OptionType.flag != feature.getOption()) {
+    if(OptionType.flag != feature.getOptions().getOption()) {
       validateOptionsHaveIdsThrowing(feature);
     }
     validateKeysThrowing(feature);
@@ -26,22 +30,22 @@ class FeatureValidator {
   }
 
   private void validateOptionsThrowing(Feature feature) {
-    if (OptionType.bool == feature.getOption()) {
+    if (OptionType.bool == feature.getOptions().getOption()) {
       validateBooleanOptionsThrowing(feature);
     }
 
-    if(OptionType.flag != feature.getOption()) {
+    if(OptionType.flag != feature.getOptions().getOption()) {
       validateWeightsThrowing(feature);
     }
   }
 
   void validateBooleanOptionsThrowing(Feature feature) {
-    if(feature.getOptionsCount() != 2) {
+    if(feature.getOptions().getItemsCount() != 2) {
       throw new ServiceException(Problem.clientProblem("wrong_options_for_bool_feature",
           "A bool option must have two options", 422));
     }
 
-    feature.getOptionsList().forEach(option -> {
+    feature.getOptions().getItemsList().forEach(option -> {
       final String name = option.getName();
       if(!"true".equals(name) && !"false".equals(name)) {
         throw new ServiceException(Problem.clientProblem("wrong_name_for_bool_feature",
@@ -67,6 +71,28 @@ class FeatureValidator {
     });
   }
 
+  void validateOwner(Owner owner) {
+    if (Strings.isNullOrEmpty(owner.getEmail()) && Strings.isNullOrEmpty(
+        owner.getUsername())) {
+      throw new ServiceException(Problem.clientProblem("incomplete_owner",
+          "An owner must have an email or a username", 422));
+    }
+  }
+
+  void validateOptionIds(OptionCollection first, OptionCollection second) {
+
+    final Set<String> firstSet =
+        first.getItemsList().stream().map(FeatureOption::getId).collect(Collectors.toSet());
+    final Set<String> secondSet =
+        second.getItemsList().stream().map(FeatureOption::getId).collect(Collectors.toSet());
+
+    if(! firstSet.equals(secondSet)) {
+      throw new ServiceException(
+          Problem.clientProblem("option_ids_mismatch", "option ids must be the same",
+              422));
+    }
+  }
+
   private void validateKeysThrowing(Feature feature) {
     validateFeatureKeyThrowing(feature.getKey(), Problem.clientProblem("no_key_for_feature",
         "A feature must have a key", 422));
@@ -87,16 +113,14 @@ class FeatureValidator {
           "A feature must have an owner", 422));
     }
 
-    if (Strings.isNullOrEmpty(feature.getOwner().getEmail()) && Strings.isNullOrEmpty(feature.getOwner().getUsername())) {
-      throw new ServiceException(Problem.clientProblem("incomplete_owner_for_app",
-          "An app owner must have an email or a username", 422));
-    }
+    final Owner owner = feature.getOwner();
+    validateOwner(owner);
   }
 
   private void validateWeightsThrowing(Feature feature) {
 
     int sum = 0;
-    for (FeatureOption option : feature.getOptionsList()) {
+    for (FeatureOption option : feature.getOptions().getItemsList()) {
       if (option.getWeight() > 10_000 || option.getWeight() < 0) {
         throw new ServiceException(Problem.clientProblem("weights_out_of_bounds",
             "option weights must be between 0 and 10000", 422));
@@ -112,7 +136,7 @@ class FeatureValidator {
   }
 
   private void validateOptionsHaveIdsThrowing(Feature feature) {
-    feature.getOptionsList().forEach(option -> {
+    feature.getOptions().getItemsList().forEach(option -> {
       validateFeatureKeyThrowing(option.getId(), Problem.clientProblem("missing_id_for_option",
           "A feature update must have ids for its options", 422));
     });

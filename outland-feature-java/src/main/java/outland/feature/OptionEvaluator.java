@@ -11,7 +11,7 @@ class OptionEvaluator {
 
   boolean evaluateBooleanOptions(Feature feature) {
 
-    if (!feature.getOption().equals(OptionType.bool)) {
+    if (!feature.getOptions().getOption().equals(OptionType.bool)) {
       return false; // todo: throw this?
     }
 
@@ -19,7 +19,7 @@ class OptionEvaluator {
       return false; // todo: replace with a fallback when we add fallbacks for options
     }
 
-    final List<FeatureOption> optionsList = feature.getOptionsList();
+    final List<FeatureOption> optionsList = feature.getOptions().getItemsList();
 
     // only two options for a flag type
     final FeatureOption option1 = optionsList.get(0);

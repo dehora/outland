@@ -22,8 +22,6 @@ public  final class Feature extends
     description_ = "";
     created_ = "";
     updated_ = "";
-    option_ = 0;
-    options_ = java.util.Collections.emptyList();
     type_ = "";
   }
 
@@ -119,19 +117,17 @@ public  final class Feature extends
             properties_.getMutableMap().put(properties.getKey(), properties.getValue());
             break;
           }
-          case 80: {
-            int rawValue = input.readEnum();
-
-            option_ = rawValue;
-            break;
-          }
-          case 90: {
-            if (!((mutable_bitField0_ & 0x00000400) == 0x00000400)) {
-              options_ = new java.util.ArrayList<outland.feature.proto.FeatureOption>();
-              mutable_bitField0_ |= 0x00000400;
+          case 82: {
+            outland.feature.proto.OptionCollection.Builder subBuilder = null;
+            if (options_ != null) {
+              subBuilder = options_.toBuilder();
             }
-            options_.add(
-                input.readMessage(outland.feature.proto.FeatureOption.parser(), extensionRegistry));
+            options_ = input.readMessage(outland.feature.proto.OptionCollection.parser(), extensionRegistry);
+            if (subBuilder != null) {
+              subBuilder.mergeFrom(options_);
+              options_ = subBuilder.buildPartial();
+            }
+
             break;
           }
           case 98: {
@@ -161,9 +157,6 @@ public  final class Feature extends
       throw new com.google.protobuf.InvalidProtocolBufferException(
           e).setUnfinishedMessage(this);
     } finally {
-      if (((mutable_bitField0_ & 0x00000400) == 0x00000400)) {
-        options_ = java.util.Collections.unmodifiableList(options_);
-      }
       makeExtensionsImmutable();
     }
   }
@@ -615,55 +608,25 @@ public  final class Feature extends
     return map.get(key);
   }
 
-  public static final int OPTION_FIELD_NUMBER = 10;
-  private int option_;
+  public static final int OPTIONS_FIELD_NUMBER = 10;
+  private outland.feature.proto.OptionCollection options_;
   /**
-   * <code>optional .outland.OptionType option = 10;</code>
+   * <code>optional .outland.OptionCollection options = 10;</code>
    */
-  public int getOptionValue() {
-    return option_;
+  public boolean hasOptions() {
+    return options_ != null;
   }
   /**
-   * <code>optional .outland.OptionType option = 10;</code>
+   * <code>optional .outland.OptionCollection options = 10;</code>
    */
-  public outland.feature.proto.OptionType getOption() {
-    outland.feature.proto.OptionType result = outland.feature.proto.OptionType.valueOf(option_);
-    return result == null ? outland.feature.proto.OptionType.UNRECOGNIZED : result;
-  }
-
-  public static final int OPTIONS_FIELD_NUMBER = 11;
-  private java.util.List<outland.feature.proto.FeatureOption> options_;
-  /**
-   * <code>repeated .outland.FeatureOption options = 11;</code>
-   */
-  public java.util.List<outland.feature.proto.FeatureOption> getOptionsList() {
-    return options_;
+  public outland.feature.proto.OptionCollection getOptions() {
+    return options_ == null ? outland.feature.proto.OptionCollection.getDefaultInstance() : options_;
   }
   /**
-   * <code>repeated .outland.FeatureOption options = 11;</code>
+   * <code>optional .outland.OptionCollection options = 10;</code>
    */
-  public java.util.List<? extends outland.feature.proto.FeatureOptionOrBuilder> 
-      getOptionsOrBuilderList() {
-    return options_;
-  }
-  /**
-   * <code>repeated .outland.FeatureOption options = 11;</code>
-   */
-  public int getOptionsCount() {
-    return options_.size();
-  }
-  /**
-   * <code>repeated .outland.FeatureOption options = 11;</code>
-   */
-  public outland.feature.proto.FeatureOption getOptions(int index) {
-    return options_.get(index);
-  }
-  /**
-   * <code>repeated .outland.FeatureOption options = 11;</code>
-   */
-  public outland.feature.proto.FeatureOptionOrBuilder getOptionsOrBuilder(
-      int index) {
-    return options_.get(index);
+  public outland.feature.proto.OptionCollectionOrBuilder getOptionsOrBuilder() {
+    return getOptions();
   }
 
   public static final int VERSION_FIELD_NUMBER = 12;
@@ -766,11 +729,8 @@ public  final class Feature extends
           .build();
       output.writeMessage(9, properties);
     }
-    if (option_ != outland.feature.proto.OptionType.flag.getNumber()) {
-      output.writeEnum(10, option_);
-    }
-    for (int i = 0; i < options_.size(); i++) {
-      output.writeMessage(11, options_.get(i));
+    if (options_ != null) {
+      output.writeMessage(10, getOptions());
     }
     if (version_ != null) {
       output.writeMessage(12, getVersion());
@@ -821,13 +781,9 @@ public  final class Feature extends
       size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(9, properties);
     }
-    if (option_ != outland.feature.proto.OptionType.flag.getNumber()) {
+    if (options_ != null) {
       size += com.google.protobuf.CodedOutputStream
-        .computeEnumSize(10, option_);
-    }
-    for (int i = 0; i < options_.size(); i++) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeMessageSize(11, options_.get(i));
+        .computeMessageSize(10, getOptions());
     }
     if (version_ != null) {
       size += com.google.protobuf.CodedOutputStream
@@ -872,9 +828,11 @@ public  final class Feature extends
     }
     result = result && internalGetProperties().equals(
         other.internalGetProperties());
-    result = result && option_ == other.option_;
-    result = result && getOptionsList()
-        .equals(other.getOptionsList());
+    result = result && (hasOptions() == other.hasOptions());
+    if (hasOptions()) {
+      result = result && getOptions()
+          .equals(other.getOptions());
+    }
     result = result && (hasVersion() == other.hasVersion());
     if (hasVersion()) {
       result = result && getVersion()
@@ -914,11 +872,9 @@ public  final class Feature extends
       hash = (37 * hash) + PROPERTIES_FIELD_NUMBER;
       hash = (53 * hash) + internalGetProperties().hashCode();
     }
-    hash = (37 * hash) + OPTION_FIELD_NUMBER;
-    hash = (53 * hash) + option_;
-    if (getOptionsCount() > 0) {
+    if (hasOptions()) {
       hash = (37 * hash) + OPTIONS_FIELD_NUMBER;
-      hash = (53 * hash) + getOptionsList().hashCode();
+      hash = (53 * hash) + getOptions().hashCode();
     }
     if (hasVersion()) {
       hash = (37 * hash) + VERSION_FIELD_NUMBER;
@@ -1062,7 +1018,6 @@ public  final class Feature extends
     private void maybeForceBuilderInitialization() {
       if (com.google.protobuf.GeneratedMessageV3
               .alwaysUseFieldBuilders) {
-        getOptionsFieldBuilder();
       }
     }
     public Builder clear() {
@@ -1088,13 +1043,11 @@ public  final class Feature extends
         ownerBuilder_ = null;
       }
       internalGetMutableProperties().clear();
-      option_ = 0;
-
       if (optionsBuilder_ == null) {
-        options_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00000400);
+        options_ = null;
       } else {
-        optionsBuilder_.clear();
+        options_ = null;
+        optionsBuilder_ = null;
       }
       if (versionBuilder_ == null) {
         version_ = null;
@@ -1142,12 +1095,7 @@ public  final class Feature extends
       }
       result.properties_ = internalGetProperties();
       result.properties_.makeImmutable();
-      result.option_ = option_;
       if (optionsBuilder_ == null) {
-        if (((bitField0_ & 0x00000400) == 0x00000400)) {
-          options_ = java.util.Collections.unmodifiableList(options_);
-          bitField0_ = (bitField0_ & ~0x00000400);
-        }
         result.options_ = options_;
       } else {
         result.options_ = optionsBuilder_.build();
@@ -1232,34 +1180,8 @@ public  final class Feature extends
       }
       internalGetMutableProperties().mergeFrom(
           other.internalGetProperties());
-      if (other.option_ != 0) {
-        setOptionValue(other.getOptionValue());
-      }
-      if (optionsBuilder_ == null) {
-        if (!other.options_.isEmpty()) {
-          if (options_.isEmpty()) {
-            options_ = other.options_;
-            bitField0_ = (bitField0_ & ~0x00000400);
-          } else {
-            ensureOptionsIsMutable();
-            options_.addAll(other.options_);
-          }
-          onChanged();
-        }
-      } else {
-        if (!other.options_.isEmpty()) {
-          if (optionsBuilder_.isEmpty()) {
-            optionsBuilder_.dispose();
-            optionsBuilder_ = null;
-            options_ = other.options_;
-            bitField0_ = (bitField0_ & ~0x00000400);
-            optionsBuilder_ = 
-              com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders ?
-                 getOptionsFieldBuilder() : null;
-          } else {
-            optionsBuilder_.addAllMessages(other.options_);
-          }
-        }
+      if (other.hasOptions()) {
+        mergeOptions(other.getOptions());
       }
       if (other.hasVersion()) {
         mergeVersion(other.getVersion());
@@ -1989,283 +1911,116 @@ public  final class Feature extends
       return this;
     }
 
-    private int option_ = 0;
+    private outland.feature.proto.OptionCollection options_ = null;
+    private com.google.protobuf.SingleFieldBuilderV3<
+        outland.feature.proto.OptionCollection, outland.feature.proto.OptionCollection.Builder, outland.feature.proto.OptionCollectionOrBuilder> optionsBuilder_;
     /**
-     * <code>optional .outland.OptionType option = 10;</code>
+     * <code>optional .outland.OptionCollection options = 10;</code>
      */
-    public int getOptionValue() {
-      return option_;
+    public boolean hasOptions() {
+      return optionsBuilder_ != null || options_ != null;
     }
     /**
-     * <code>optional .outland.OptionType option = 10;</code>
+     * <code>optional .outland.OptionCollection options = 10;</code>
      */
-    public Builder setOptionValue(int value) {
-      option_ = value;
-      onChanged();
+    public outland.feature.proto.OptionCollection getOptions() {
+      if (optionsBuilder_ == null) {
+        return options_ == null ? outland.feature.proto.OptionCollection.getDefaultInstance() : options_;
+      } else {
+        return optionsBuilder_.getMessage();
+      }
+    }
+    /**
+     * <code>optional .outland.OptionCollection options = 10;</code>
+     */
+    public Builder setOptions(outland.feature.proto.OptionCollection value) {
+      if (optionsBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        options_ = value;
+        onChanged();
+      } else {
+        optionsBuilder_.setMessage(value);
+      }
+
       return this;
     }
     /**
-     * <code>optional .outland.OptionType option = 10;</code>
-     */
-    public outland.feature.proto.OptionType getOption() {
-      outland.feature.proto.OptionType result = outland.feature.proto.OptionType.valueOf(option_);
-      return result == null ? outland.feature.proto.OptionType.UNRECOGNIZED : result;
-    }
-    /**
-     * <code>optional .outland.OptionType option = 10;</code>
-     */
-    public Builder setOption(outland.feature.proto.OptionType value) {
-      if (value == null) {
-        throw new NullPointerException();
-      }
-      
-      option_ = value.getNumber();
-      onChanged();
-      return this;
-    }
-    /**
-     * <code>optional .outland.OptionType option = 10;</code>
-     */
-    public Builder clearOption() {
-      
-      option_ = 0;
-      onChanged();
-      return this;
-    }
-
-    private java.util.List<outland.feature.proto.FeatureOption> options_ =
-      java.util.Collections.emptyList();
-    private void ensureOptionsIsMutable() {
-      if (!((bitField0_ & 0x00000400) == 0x00000400)) {
-        options_ = new java.util.ArrayList<outland.feature.proto.FeatureOption>(options_);
-        bitField0_ |= 0x00000400;
-       }
-    }
-
-    private com.google.protobuf.RepeatedFieldBuilderV3<
-        outland.feature.proto.FeatureOption, outland.feature.proto.FeatureOption.Builder, outland.feature.proto.FeatureOptionOrBuilder> optionsBuilder_;
-
-    /**
-     * <code>repeated .outland.FeatureOption options = 11;</code>
-     */
-    public java.util.List<outland.feature.proto.FeatureOption> getOptionsList() {
-      if (optionsBuilder_ == null) {
-        return java.util.Collections.unmodifiableList(options_);
-      } else {
-        return optionsBuilder_.getMessageList();
-      }
-    }
-    /**
-     * <code>repeated .outland.FeatureOption options = 11;</code>
-     */
-    public int getOptionsCount() {
-      if (optionsBuilder_ == null) {
-        return options_.size();
-      } else {
-        return optionsBuilder_.getCount();
-      }
-    }
-    /**
-     * <code>repeated .outland.FeatureOption options = 11;</code>
-     */
-    public outland.feature.proto.FeatureOption getOptions(int index) {
-      if (optionsBuilder_ == null) {
-        return options_.get(index);
-      } else {
-        return optionsBuilder_.getMessage(index);
-      }
-    }
-    /**
-     * <code>repeated .outland.FeatureOption options = 11;</code>
+     * <code>optional .outland.OptionCollection options = 10;</code>
      */
     public Builder setOptions(
-        int index, outland.feature.proto.FeatureOption value) {
+        outland.feature.proto.OptionCollection.Builder builderForValue) {
       if (optionsBuilder_ == null) {
-        if (value == null) {
-          throw new NullPointerException();
+        options_ = builderForValue.build();
+        onChanged();
+      } else {
+        optionsBuilder_.setMessage(builderForValue.build());
+      }
+
+      return this;
+    }
+    /**
+     * <code>optional .outland.OptionCollection options = 10;</code>
+     */
+    public Builder mergeOptions(outland.feature.proto.OptionCollection value) {
+      if (optionsBuilder_ == null) {
+        if (options_ != null) {
+          options_ =
+            outland.feature.proto.OptionCollection.newBuilder(options_).mergeFrom(value).buildPartial();
+        } else {
+          options_ = value;
         }
-        ensureOptionsIsMutable();
-        options_.set(index, value);
         onChanged();
       } else {
-        optionsBuilder_.setMessage(index, value);
+        optionsBuilder_.mergeFrom(value);
       }
+
       return this;
     }
     /**
-     * <code>repeated .outland.FeatureOption options = 11;</code>
-     */
-    public Builder setOptions(
-        int index, outland.feature.proto.FeatureOption.Builder builderForValue) {
-      if (optionsBuilder_ == null) {
-        ensureOptionsIsMutable();
-        options_.set(index, builderForValue.build());
-        onChanged();
-      } else {
-        optionsBuilder_.setMessage(index, builderForValue.build());
-      }
-      return this;
-    }
-    /**
-     * <code>repeated .outland.FeatureOption options = 11;</code>
-     */
-    public Builder addOptions(outland.feature.proto.FeatureOption value) {
-      if (optionsBuilder_ == null) {
-        if (value == null) {
-          throw new NullPointerException();
-        }
-        ensureOptionsIsMutable();
-        options_.add(value);
-        onChanged();
-      } else {
-        optionsBuilder_.addMessage(value);
-      }
-      return this;
-    }
-    /**
-     * <code>repeated .outland.FeatureOption options = 11;</code>
-     */
-    public Builder addOptions(
-        int index, outland.feature.proto.FeatureOption value) {
-      if (optionsBuilder_ == null) {
-        if (value == null) {
-          throw new NullPointerException();
-        }
-        ensureOptionsIsMutable();
-        options_.add(index, value);
-        onChanged();
-      } else {
-        optionsBuilder_.addMessage(index, value);
-      }
-      return this;
-    }
-    /**
-     * <code>repeated .outland.FeatureOption options = 11;</code>
-     */
-    public Builder addOptions(
-        outland.feature.proto.FeatureOption.Builder builderForValue) {
-      if (optionsBuilder_ == null) {
-        ensureOptionsIsMutable();
-        options_.add(builderForValue.build());
-        onChanged();
-      } else {
-        optionsBuilder_.addMessage(builderForValue.build());
-      }
-      return this;
-    }
-    /**
-     * <code>repeated .outland.FeatureOption options = 11;</code>
-     */
-    public Builder addOptions(
-        int index, outland.feature.proto.FeatureOption.Builder builderForValue) {
-      if (optionsBuilder_ == null) {
-        ensureOptionsIsMutable();
-        options_.add(index, builderForValue.build());
-        onChanged();
-      } else {
-        optionsBuilder_.addMessage(index, builderForValue.build());
-      }
-      return this;
-    }
-    /**
-     * <code>repeated .outland.FeatureOption options = 11;</code>
-     */
-    public Builder addAllOptions(
-        java.lang.Iterable<? extends outland.feature.proto.FeatureOption> values) {
-      if (optionsBuilder_ == null) {
-        ensureOptionsIsMutable();
-        com.google.protobuf.AbstractMessageLite.Builder.addAll(
-            values, options_);
-        onChanged();
-      } else {
-        optionsBuilder_.addAllMessages(values);
-      }
-      return this;
-    }
-    /**
-     * <code>repeated .outland.FeatureOption options = 11;</code>
+     * <code>optional .outland.OptionCollection options = 10;</code>
      */
     public Builder clearOptions() {
       if (optionsBuilder_ == null) {
-        options_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00000400);
+        options_ = null;
         onChanged();
       } else {
-        optionsBuilder_.clear();
+        options_ = null;
+        optionsBuilder_ = null;
       }
+
       return this;
     }
     /**
-     * <code>repeated .outland.FeatureOption options = 11;</code>
+     * <code>optional .outland.OptionCollection options = 10;</code>
      */
-    public Builder removeOptions(int index) {
-      if (optionsBuilder_ == null) {
-        ensureOptionsIsMutable();
-        options_.remove(index);
-        onChanged();
-      } else {
-        optionsBuilder_.remove(index);
-      }
-      return this;
+    public outland.feature.proto.OptionCollection.Builder getOptionsBuilder() {
+      
+      onChanged();
+      return getOptionsFieldBuilder().getBuilder();
     }
     /**
-     * <code>repeated .outland.FeatureOption options = 11;</code>
+     * <code>optional .outland.OptionCollection options = 10;</code>
      */
-    public outland.feature.proto.FeatureOption.Builder getOptionsBuilder(
-        int index) {
-      return getOptionsFieldBuilder().getBuilder(index);
-    }
-    /**
-     * <code>repeated .outland.FeatureOption options = 11;</code>
-     */
-    public outland.feature.proto.FeatureOptionOrBuilder getOptionsOrBuilder(
-        int index) {
-      if (optionsBuilder_ == null) {
-        return options_.get(index);  } else {
-        return optionsBuilder_.getMessageOrBuilder(index);
-      }
-    }
-    /**
-     * <code>repeated .outland.FeatureOption options = 11;</code>
-     */
-    public java.util.List<? extends outland.feature.proto.FeatureOptionOrBuilder> 
-         getOptionsOrBuilderList() {
+    public outland.feature.proto.OptionCollectionOrBuilder getOptionsOrBuilder() {
       if (optionsBuilder_ != null) {
-        return optionsBuilder_.getMessageOrBuilderList();
+        return optionsBuilder_.getMessageOrBuilder();
       } else {
-        return java.util.Collections.unmodifiableList(options_);
+        return options_ == null ?
+            outland.feature.proto.OptionCollection.getDefaultInstance() : options_;
       }
     }
     /**
-     * <code>repeated .outland.FeatureOption options = 11;</code>
+     * <code>optional .outland.OptionCollection options = 10;</code>
      */
-    public outland.feature.proto.FeatureOption.Builder addOptionsBuilder() {
-      return getOptionsFieldBuilder().addBuilder(
-          outland.feature.proto.FeatureOption.getDefaultInstance());
-    }
-    /**
-     * <code>repeated .outland.FeatureOption options = 11;</code>
-     */
-    public outland.feature.proto.FeatureOption.Builder addOptionsBuilder(
-        int index) {
-      return getOptionsFieldBuilder().addBuilder(
-          index, outland.feature.proto.FeatureOption.getDefaultInstance());
-    }
-    /**
-     * <code>repeated .outland.FeatureOption options = 11;</code>
-     */
-    public java.util.List<outland.feature.proto.FeatureOption.Builder> 
-         getOptionsBuilderList() {
-      return getOptionsFieldBuilder().getBuilderList();
-    }
-    private com.google.protobuf.RepeatedFieldBuilderV3<
-        outland.feature.proto.FeatureOption, outland.feature.proto.FeatureOption.Builder, outland.feature.proto.FeatureOptionOrBuilder> 
+    private com.google.protobuf.SingleFieldBuilderV3<
+        outland.feature.proto.OptionCollection, outland.feature.proto.OptionCollection.Builder, outland.feature.proto.OptionCollectionOrBuilder> 
         getOptionsFieldBuilder() {
       if (optionsBuilder_ == null) {
-        optionsBuilder_ = new com.google.protobuf.RepeatedFieldBuilderV3<
-            outland.feature.proto.FeatureOption, outland.feature.proto.FeatureOption.Builder, outland.feature.proto.FeatureOptionOrBuilder>(
-                options_,
-                ((bitField0_ & 0x00000400) == 0x00000400),
+        optionsBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+            outland.feature.proto.OptionCollection, outland.feature.proto.OptionCollection.Builder, outland.feature.proto.OptionCollectionOrBuilder>(
+                getOptions(),
                 getParentForChildren(),
                 isClean());
         options_ = null;
