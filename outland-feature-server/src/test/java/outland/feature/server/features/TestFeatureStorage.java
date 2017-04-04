@@ -12,15 +12,19 @@ public class TestFeatureStorage implements FeatureStorage {
 
   static Map<String, Feature> features = Maps.newHashMap();
 
-  @Override public Void saveFeature(Feature feature) {
+  @Override public Void createFeature(Feature feature) {
 
-    features.put(feature.getId(), feature);
+    if(features.containsKey(feature.getKey())) {
+      throwConflictAlreadyExists(feature);
+    }
+
+    features.put(feature.getKey(), feature);
     return null;
   }
 
   @Override public Void updateFeature(Feature feature) {
 
-    features.put(feature.getId(), feature);
+    features.put(feature.getKey(), feature);
     return null;
   }
 

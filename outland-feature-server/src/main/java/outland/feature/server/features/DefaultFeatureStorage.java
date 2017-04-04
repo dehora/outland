@@ -8,8 +8,11 @@ import com.amazonaws.services.dynamodbv2.document.Page;
 import com.amazonaws.services.dynamodbv2.document.PutItemOutcome;
 import com.amazonaws.services.dynamodbv2.document.QueryOutcome;
 import com.amazonaws.services.dynamodbv2.document.Table;
+import com.amazonaws.services.dynamodbv2.document.spec.PutItemSpec;
 import com.amazonaws.services.dynamodbv2.document.spec.QuerySpec;
+import com.amazonaws.services.dynamodbv2.document.utils.NameMap;
 import com.amazonaws.services.dynamodbv2.document.utils.ValueMap;
+import com.amazonaws.services.dynamodbv2.model.ConditionalCheckFailedException;
 import com.codahale.metrics.MetricRegistry;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
@@ -17,6 +20,7 @@ import com.google.common.collect.Maps;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Supplier;
 import javax.inject.Inject;
 import javax.inject.Named;
 import org.slf4j.Logger;
@@ -54,7 +58,7 @@ public class DefaultFeatureStorage implements FeatureStorage {
     this.metrics = metrics;
   }
 
-  @Override public Void saveFeature(Feature feature) {
+  @Override public Void createFeature(Feature feature) {
 
     String key = feature.getKey();
     String id = feature.getId();
@@ -92,10 +96,25 @@ public class DefaultFeatureStorage implements FeatureStorage {
 
     Table table = dynamoDB.getTable(featureTableName);
 
-    DynamoDbCommand<PutItemOutcome> cmd = new DynamoDbCommand<>("saveFeature",
-        () -> table.putItem(item),
+    PutItemSpec putItemSpec = new PutItemSpec()
+        .withItem(item)
+        .withConditionExpression("attribute_not_exists(#featurekey)")
+        .withNameMap(new NameMap().with("#featurekey", "feature_key"));
+
+    final Supplier<PutItemOutcome> putItemOutcomeSupplier = () -> {
+      try {
+        return table.putItem(putItemSpec);
+      } catch (ConditionalCheckFailedException e) {
+        logger.error("err=conflict_feature_already_exists appkey={} {}", feature.getKey(), e.getMessage());
+        throwConflictAlreadyExists(feature);
+        return null;
+      }
+    };
+
+    DynamoDbCommand<PutItemOutcome> cmd = new DynamoDbCommand<>("createFeature",
+        putItemOutcomeSupplier,
         () -> {
-          throw new RuntimeException("saveFeature");
+          throw new RuntimeException("createFeature");
         },
         hystrixWriteConfiguration,
         metrics);
@@ -103,7 +122,7 @@ public class DefaultFeatureStorage implements FeatureStorage {
     PutItemOutcome outcome = cmd.execute();
 
     logger.info("{} /dynamodb_put_item_result=[{}]",
-        kvp("op", "saveFeature", "appkey", appKey, "feature_key", key, "result", "ok"),
+        kvp("op", "createFeature", "appkey", appKey, "feature_key", key, "result", "ok"),
         outcome.getPutItemResult().toString());
 
     return null;
@@ -112,7 +131,7 @@ public class DefaultFeatureStorage implements FeatureStorage {
   @Override public Void updateFeature(Feature feature) {
     logger.info("{}",
         kvp("op", "updateFeature", "appkey", feature.getAppkey(), "feature_key", feature.getKey()));
-    saveFeature(feature);
+    createFeature(feature);
     return null;
   }
 
