@@ -155,10 +155,10 @@ curl -v http://localhost:8180/features \
 -H "Content-type: application/json" \
 -u testconsole/service:letmein -d'
 {
-  "key": "testfeature-1",
-  "description": "A test feature flag",
-  "appkey": "testapp-1",
-  "options": {
+  "key": "testfeature-1"
+  ,"description": "A test feature flag"
+  ,"appkey": "testapp-1"
+  ,"options": {
     "option": "flag"
   },
   "owner": {
@@ -215,9 +215,9 @@ curl -v -XPOST  http://localhost:8180/features/testapp-1/testfeature-1 \
 -H "Content-type: application/json" \
 -u testconsole/service:letmein -d'
 {
-  "key": "testfeature-1",
-  "appkey": "testapp-1",
-  "state": "on"
+  "key": "testfeature-1"
+  ,"appkey": "testapp-1"
+  ,"state": "on"
 }  
 '
 ```
