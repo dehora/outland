@@ -381,7 +381,7 @@ public class DefaultAppService implements AppService, MetricsTimer {
   }
 
   private void registerAppInner(App registered) {
-    timed(saveAppTimer, () -> appStorage.saveApp(registered));
+    timed(saveAppTimer, () -> appStorage.createApp(registered));
   }
 
   private void registerServices(App app) {

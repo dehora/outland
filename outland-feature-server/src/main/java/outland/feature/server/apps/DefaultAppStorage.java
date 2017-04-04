@@ -10,15 +10,21 @@ import com.amazonaws.services.dynamodbv2.document.PutItemOutcome;
 import com.amazonaws.services.dynamodbv2.document.QueryOutcome;
 import com.amazonaws.services.dynamodbv2.document.Table;
 import com.amazonaws.services.dynamodbv2.document.internal.IteratorSupport;
+import com.amazonaws.services.dynamodbv2.document.spec.PutItemSpec;
 import com.amazonaws.services.dynamodbv2.document.spec.QuerySpec;
+import com.amazonaws.services.dynamodbv2.document.utils.NameMap;
 import com.amazonaws.services.dynamodbv2.document.utils.ValueMap;
+import com.amazonaws.services.dynamodbv2.model.ConditionalCheckFailedException;
 import com.codahale.metrics.MetricRegistry;
 import java.util.Optional;
+import java.util.function.Supplier;
 import javax.inject.Inject;
 import javax.inject.Named;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import outland.feature.proto.App;
+import outland.feature.server.Problem;
+import outland.feature.server.ServiceException;
 import outland.feature.server.app.AppSupport;
 import outland.feature.server.features.DynamoDbCommand;
 import outland.feature.server.features.TableConfiguration;
@@ -30,6 +36,7 @@ import static outland.feature.server.StructLog.kvp;
 public class DefaultAppStorage implements AppStorage {
 
   private static final Logger logger = LoggerFactory.getLogger(DefaultAppStorage.class);
+  private static final String HASH_KEY = "app_key";
 
   private final DynamoDB dynamoDB;
   private final String appsTableName;
@@ -59,23 +66,50 @@ public class DefaultAppStorage implements AppStorage {
     this.metrics = metrics;
   }
 
-  @Override public Void saveApp(App app) {
+  @Override public Void createApp(App app) {
+    Item item = preparePutItem(app);
 
+    PutItemSpec putItemSpec = new PutItemSpec()
+        .withItem(item)
+        .withConditionExpression("attribute_not_exists(#appkey)")
+        .withNameMap(new NameMap().with("#appkey", HASH_KEY));
+
+    Table table = dynamoDB.getTable(appsTableName);
+    final Supplier<PutItemOutcome> putItemOutcomeSupplier = () -> {
+      try {
+        return table.putItem(putItemSpec);
+      } catch (ConditionalCheckFailedException e) {
+        logger.error("err=conflict_app_already_exists appkey={} {}", app.getKey(), e.getMessage());
+        throwConflictAlreadyExists(app);
+        return null;
+      }
+    };
+    return putItem(app, putItemOutcomeSupplier);
+  }
+
+  @Override public Void saveApp(App app) {
+    Item item = preparePutItem(app);
+    Table table = dynamoDB.getTable(appsTableName);
+    final Supplier<PutItemOutcome> putItemOutcomeSupplier = () -> table.putItem(item);
+    return putItem(app, putItemOutcomeSupplier);
+  }
+
+  private Item preparePutItem(App app) {
     String json = Protobuf3Support.toJsonString(app);
 
-    Item item = new Item()
+    return new Item()
         .withString("id", app.getId())
-        .withString("app_key", app.getKey())
+        .withString(HASH_KEY, app.getKey())
         .withString("name", app.getName())
         .withString("json", json)
         .withString("v", "1")
         .withString("created", app.getCreated())
         .withString("updated", app.getUpdated());
+  }
 
-    Table table = dynamoDB.getTable(appsTableName);
-
+  private Void putItem(App app, Supplier<PutItemOutcome> putItemOutcomeSupplier) {
     DynamoDbCommand<PutItemOutcome> cmd = new DynamoDbCommand<>("saveApp",
-        () -> table.putItem(item),
+        putItemOutcomeSupplier,
         () -> {
           throw new RuntimeException("saveApp");
         },
@@ -86,8 +120,8 @@ public class DefaultAppStorage implements AppStorage {
 
     logger.info("{} /dynamodb_put_item_result=[{}]",
         kvp("op", "saveApp",
-            "appkey", app.getId(),
-            "app_key", app.getKey(),
+            "appid", app.getId(),
+            HASH_KEY, app.getKey(),
             "result", "ok"),
         outcome.getPutItemResult().toString());
 
@@ -183,7 +217,7 @@ public class DefaultAppStorage implements AppStorage {
     Table table = dynamoDB.getTable(this.appsTableName);
 
     QuerySpec querySpec = new QuerySpec()
-        .withKeyConditionExpression("app_key = :k_app_key")
+        .withKeyConditionExpression(HASH_KEY+" = :k_app_key")
         .withValueMap(new ValueMap()
             .withString(":k_app_key", appKey)
         )
