@@ -52,7 +52,7 @@ curl -i http://localhost:8180/features \
 }
 '
 
-ikey_f2="idemkey_testapp_f2"
+ikey_f2="idemkey_testapp_f21"
 
 curl -i http://localhost:8180/features \
 -u ${service}:${api_key} \
@@ -63,16 +63,18 @@ curl -i http://localhost:8180/features \
 	"key": "test-option-1",
 	"description": "A weighted feature",
 	"appkey": "testapp",
-	"option": "bool",
-	"options": [{
+	"options": {
+	  "option": "bool",
+	  "items": [{
 		"name": "false",
 		"value": "false",
 		"weight": 9000
-	}, {
-		"name": "true",
-		"value": "true",
-		"weight": 1000
-	}],
+    }, {
+      "name": "true",
+      "value": "true",
+      "weight": 1000
+    }]
+	},
 	"owner": {
 		"username": "acme",
 		"email": "acme@example.org"
