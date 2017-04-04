@@ -16,11 +16,14 @@
 - [Welcome to Outland](#welcome-to-outland)
   - [Project Status](#project-status)
 - [Quickstart](#quickstart)
-  - [Start a Server with Docker](#start-a-server-with-docker)
-  - [Create an App and some Features via the API](#create-an-app-and-some-features-via-the-api)
-  - [Enable a Feature](#enable-a-feature)
-  - [Add the client library](#add-the-client-library)
-  - [Enable a Feature](#enable-a-feature-1)
+  - [Server](#server)
+    - [Start a Server with Docker](#start-a-server-with-docker)
+    - [Create an App and some Features via the API](#create-an-app-and-some-features-via-the-api)
+    - [Enable a Feature](#enable-a-feature)
+  - [Client](#client)
+    - [Add the client library](#add-the-client-library)
+    - [Evaluate a Feature](#evaluate-a-feature)
+    - [Enable a Feature](#enable-a-feature-1)
 - [Feature Flags and Modern Software Development](#feature-flags-and-modern-software-development)
   - [Why a Service?](#why-a-service)
 - [Outland Feature Flag Model](#outland-feature-flag-model)
@@ -29,7 +32,7 @@
   - [Apps](#apps)
   - [App Grants](#app-grants)
 - [Installation](#installation)
-  - [Server](#server)
+  - [Server](#server-1)
     - [Docker](#docker)
     - [Creating Tables in DynamoDB](#creating-tables-in-dynamodb)
     - [Creating a sample App and Features](#creating-a-sample-app-and-features)
@@ -68,7 +71,9 @@ The admin UI and cluster mode are next in line. See also:
 
 # Quickstart
 
-## Start a Server with Docker
+## Server
+
+### Start a Server with Docker
 
 You can use the docker setup in [examples/quickstart](https://github.com/dehora/outland/tree/master/outland-feature-docker/examples/quickstart) 
 to get an outland feature server running.
@@ -103,7 +108,7 @@ curl -v http://localhost:8180/apps/testapp -u testconsole/service:letmein
 Dummy credentials are setup as a convenience in the folder's `.env` file, this is how the 
 `testconsole` service is given access (all API calls require authentication). 
 
-## Create an App and some Features via the API
+### Create an App and some Features via the API
 
 An _app_ is used to group features together and store information about which services are 
 granted accessed the app's features. Grants can be given to _services_ or _members_ (such as an 
@@ -200,7 +205,7 @@ curl -v http://localhost:8180/features \
 '
 ```
 
-## Enable a Feature
+### Enable a Feature
 
 Features are off by default. Let's enable the first feature `testfeature-1` by setting its state 
 to on:
@@ -217,8 +222,9 @@ curl -v -XPOST  http://localhost:8180/features/testapp-1/testfeature-1 \
 '
 ```
 
+## Client
 
-## Add the client library
+### Add the client library
 
 The client is available via JCenter, see the [Client](#client) section for details. 
 
@@ -243,6 +249,8 @@ Once the client is setup up as a dependency you can configure it as follows:
 In a real world setting the `authorizationProvider` would not be hardcoded with credentials, but 
 this will do to connect to the local server. 
 
+### Evaluate a Feature
+
 Now you can check one the features created by the seed script:
 
 ```java
@@ -253,7 +261,7 @@ Now you can check one the features created by the seed script:
   }
 ```
 
-## Enable a Feature
+### Enable a Feature
 
 The feature will be off by default. You can enable it via the client or the API.
 
