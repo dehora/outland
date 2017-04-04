@@ -71,6 +71,12 @@ The admin UI and cluster mode are next in line. See also:
 
 # Quickstart
 
+Clone the project from github:
+ 
+```bash
+git clone git@github.com:dehora/outland.git
+```
+
 ## Server
 
 ### Start a Server with Docker
@@ -78,9 +84,15 @@ The admin UI and cluster mode are next in line. See also:
 You can use the docker setup in [examples/quickstart](https://github.com/dehora/outland/tree/master/outland-feature-docker/examples/quickstart) 
 to get an outland feature server running.
 
-From the examples/quickstart directory, run the following:
+Go to the `examples/quickstart` directory, 
 
-```sh
+```bash
+cd outland/outland-feature-docker/examples/quickstart
+```
+
+run the `start_outland` script:
+
+```bash
 ./start_outland
 ```
 
@@ -95,13 +107,13 @@ This will:
  
 You can see the app's list of features via the API:
 
-```sh
+```bash
 curl -v http://localhost:8180/features/testapp -u testconsole/service:letmein
 ```
 
 As well as the App itself and its grants:
 
-```sh
+```bash
 curl -v http://localhost:8180/apps/testapp -u testconsole/service:letmein
 ```
 
