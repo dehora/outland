@@ -586,6 +586,56 @@ public class FeatureResourceTest {
     assertEquals(Problem.CLIENT_TYPE, problem.type());
   }
 
+  @Test
+  public void testDoubleCreatePostCauses409() throws Exception {
+
+    final AppService instance = injector.getInstance(AppService.class);
+    final String appKey = "testDoubleCreatePostCauses409AppKey";
+    final String serviceKey = "testDoubleCreatePostCauses409Service";
+
+    final GrantCollection.Builder grantBuilder = GrantCollection.newBuilder();
+    final ArrayList<ServiceGrant> services = Lists.newArrayList();
+    services.add(ServiceGrant.newBuilder().setKey(serviceKey).buildPartial());
+    grantBuilder.addAllServices(services);
+
+    instance.registerApp(
+        App.newBuilder()
+            .setKey(appKey)
+            .setName("name")
+            .addOwners(Owner.newBuilder().setName("Jayne").setUsername("jayne"))
+            .setGranted(grantBuilder.buildPartial())
+            .build()
+    );
+
+    final String url = createFeatureUrl();
+    final JerseyClient client = createClient();
+
+    final String key = "testDoubleCreatePostCauses409FeatureKey";
+    final Feature feature = buildTestFeature(appKey, key);
+    final String jsonReq = Protobuf3Support.toJsonString(feature);
+
+    final Response post = client.target(url)
+        .request()
+        .property(HTTP_AUTHENTICATION_BASIC_USERNAME, "whitelisted/service")
+        .property(HTTP_AUTHENTICATION_BASIC_PASSWORD, basicPassword)
+        .post(Entity.entity(jsonReq, MediaType.APPLICATION_JSON_TYPE));
+
+    assertTrue(post.getStatus() == 201);
+    assertTrue(post.getHeaderString("Location") != null);
+
+    Response postAgain = client.target(url)
+        .request()
+        .property(HTTP_AUTHENTICATION_BASIC_USERNAME, "whitelisted/service")
+        .property(HTTP_AUTHENTICATION_BASIC_PASSWORD, basicPassword)
+        .post(Entity.entity(jsonReq, MediaType.APPLICATION_JSON_TYPE));
+
+    assertTrue(postAgain.getStatus() == 409);
+    final String jsonRes = postAgain.readEntity(String.class);
+    final Problem problem = gson.fromJson(jsonRes, Problem.class);
+    assertTrue(problem.status() == 409);
+    assertTrue(problem.title().contains("conflict_feature_already_exists"));
+  }
+
   private String createFeatureUrl() {
     return "http://localhost:" + APP.getLocalPort() + "/features";
   }

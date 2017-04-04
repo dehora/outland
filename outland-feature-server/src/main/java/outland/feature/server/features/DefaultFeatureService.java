@@ -98,7 +98,7 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
 
     Feature feature = builder.build();
 
-    timed(saveFeatureTimer, () -> featureStorage.saveFeature(feature));
+    timed(saveFeatureTimer, () -> featureStorage.createFeature(feature));
 
     logger.info("{} /feature=[{}]", kvp("op", "registerFeature", "result", "ok"),
         TextFormat.shortDebugString(feature));

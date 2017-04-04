@@ -57,17 +57,17 @@ auth:
     tokenLookupURI: ${OUTLAND_FEATURE_REMOTE_OAUTH_SERVER:-https://localhost/oauth2/tokeninfo}
     connectTimeout: 3000
     readTimeout: 3000
-  multipleAppAccessList: ${OUTLAND_FEATURE_ANY_APP_GRANT}
+  multipleAppAccessList: ${OUTLAND_FEATURE_ANY_APP_GRANT:-whitelisted}
 
 redisFeatureCacheHystrix:
   hystrixCommandGroupKey: redisFeatureCacheHystrix
-  executionTimeoutInMilliseconds: 500
+  executionTimeoutInMilliseconds: 30000
   threadpool:
     coreSize: 8
 
 dynamodbFeatureWriteHystrix:
   hystrixCommandGroupKey: dynamodbFeatureWriteHystrix
-  executionTimeoutInMilliseconds: 3000
+  executionTimeoutInMilliseconds: 30000
   threadpool:
     coreSize: 8
 
@@ -79,18 +79,18 @@ dynamodbFeatureReadHystrix:
 
 dynamodbAppGraphWriteHystrix:
   hystrixCommandGroupKey: dynamodbAppGraphWriteHystrix
-  executionTimeoutInMilliseconds: 3000
+  executionTimeoutInMilliseconds: 30000
   threadpool:
     coreSize: 8
 
 dynamodbAppWriteHystrix:
   hystrixCommandGroupKey: dynamodbAppWriteHystrix
-  executionTimeoutInMilliseconds: 3000
+  executionTimeoutInMilliseconds: 30000
   threadpool:
     coreSize: 8
 
 dynamodbAppGraphQueryHystrix:
   hystrixCommandGroupKey: dynamodbAppGraphQueryHystrix
-  executionTimeoutInMilliseconds: 3000
+  executionTimeoutInMilliseconds: 30000
   threadpool:
     coreSize: 8
