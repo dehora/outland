@@ -1,5 +1,6 @@
 package outland.feature.server;
 
+import com.netflix.hystrix.exception.HystrixRuntimeException;
 import io.dropwizard.auth.AuthenticationException;
 import java.util.concurrent.ThreadLocalRandom;
 import javax.inject.Singleton;
@@ -14,24 +15,29 @@ import org.slf4j.LoggerFactory;
 @Provider
 @Singleton
 // HK2 doesn't resolve ServiceExceptionMapper<E extends ServiceException>
-public class ServiceExceptionMapper implements ExceptionMapper<Exception> {
+public class ServiceExceptionMapper implements ExceptionMapper<Throwable> {
 
   private static final Logger logger = LoggerFactory.getLogger(ServiceExceptionMapper.class);
 
-  @Override public Response toResponse(Exception e) {
+  @Override public Response toResponse(Throwable t) {
 
     final long grepCode = grepCode();
     final String formattedGrepCode = String.format("%016x", grepCode);
-    logger.error(e.getMessage() + " trace_id=" + formattedGrepCode, e);
+    logger.error(t.getMessage() + " trace_id=" + formattedGrepCode, t);
     if(logger.isDebugEnabled()) {
-      logger.error(e.getMessage() + " trace_id=" + formattedGrepCode, e);
+      logger.error(t.getMessage() + " trace_id=" + formattedGrepCode, t);
     } else {
-      logger.error(e.getMessage() + " trace_id=" + formattedGrepCode);
+      logger.error(t.getMessage() + " trace_id=" + formattedGrepCode);
     }
 
-    if (ServiceException.class.isAssignableFrom(e.getClass())) {
+    // unpack our underlying failure from hystrix and work with it directly
+    if(HystrixRuntimeException.class.isAssignableFrom(t.getClass())) {
+      t = t.getCause();
+    }
 
-      ServiceException se = (ServiceException) e;
+    if (ServiceException.class.isAssignableFrom(t.getClass())) {
+
+      ServiceException se = (ServiceException) t;
       final Problem problem = se.problem();
 
       //noinspection unchecked
@@ -44,9 +50,9 @@ public class ServiceExceptionMapper implements ExceptionMapper<Exception> {
           .build();
     }
 
-    if (AuthenticationException.class.isAssignableFrom(e.getClass())) {
+    if (AuthenticationException.class.isAssignableFrom(t.getClass())) {
 
-      AuthenticationException ae = (AuthenticationException) e;
+      AuthenticationException ae = (AuthenticationException) t;
       final Problem problem = Problem.authProblem(ae.getMessage(), "").status(401);
 
       //noinspection unchecked
@@ -59,9 +65,9 @@ public class ServiceExceptionMapper implements ExceptionMapper<Exception> {
           .build();
     }
 
-    if (WebApplicationException.class.isAssignableFrom(e.getClass())) {
+    if (WebApplicationException.class.isAssignableFrom(t.getClass())) {
 
-      WebApplicationException wae = (WebApplicationException) e;
+      WebApplicationException wae = (WebApplicationException) t;
       final int status = wae.getResponse().getStatus();
       final Problem problem = Problem.unspecifiedProblem(wae.getMessage(), "").status(status);
 
@@ -75,7 +81,7 @@ public class ServiceExceptionMapper implements ExceptionMapper<Exception> {
           .build();
     }
 
-    final Problem problem = Problem.unspecifiedProblem("Unidentified error", e.getMessage());
+    final Problem problem = Problem.unspecifiedProblem("Unidentified error", t.getMessage());
 
     //noinspection unchecked
     problem.data().put("trace_id", formattedGrepCode);
