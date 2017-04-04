@@ -57,7 +57,8 @@ Outland consists of an API server and a Java client, with the ambition to suppor
 
 Outland is not production ready.
 
-The client and server are pre 1.0.0, with the aim of getting to a usable state soon (April 2017). The admin UI and cluster mode are next in line. See also:
+The client and server are pre 1.0.0, with the aim of getting to a usable state soon (April 2017). 
+The admin UI and cluster mode are next in line. See also:
 
 - [Trello Roadmap](http://bit.ly/2nje8ou) is where the project direction is written down.
 - [Open Issues](http://bit.ly/2nLZNUT) section has a  list of bugs and things to get done. 
@@ -68,7 +69,8 @@ The client and server are pre 1.0.0, with the aim of getting to a usable state s
 
 ## Start a Server with Docker
 
-You can use the docker setup in [examples/quickstart](https://github.com/dehora/outland/tree/master/outland-feature-docker/examples/quickstart) to get an outland feature server running.
+You can use the docker setup in [examples/quickstart](https://github.com/dehora/outland/tree/master/outland-feature-docker/examples/quickstart) 
+to get an outland feature server running.
 
 From the examples/quickstart directory, run the following:
 
@@ -76,8 +78,15 @@ From the examples/quickstart directory, run the following:
 ./start_outland
 ```
 
-This will start an Outland container on port 8180, create tables, and seed the server with an app called `testapp` that has two feature flags `test-flag-1` and `test-option-1`. Dummy credentials are setup as a convenience in the folder's `.env` file.
+This will:
 
+ - Add the redis and dynamodb-local images and start them.
+ - Start an Outland container on port 8180.
+ - Create the dynamodb tables used by docker.
+ - Seed the server with an app called `testapp`.
+ - Add two feature flags to the app, `test-flag-1` and `test-option-1`. 
+ 
+ 
 You can see the app's list of features via the API:
 
 ```sh
@@ -87,8 +96,125 @@ curl -v http://localhost:8180/features/testapp -u testconsole/service:letmein
 As well as the App itself and its grants:
 
 ```sh
-curl -v http://localhost:8180/app/testapp -u testconsole/service:letmein
+curl -v http://localhost:8180/apps/testapp -u testconsole/service:letmein
 ```
+
+Dummy credentials are setup as a convenience in the folder's `.env` file, this is how the 
+`testconsole` service is given access (all API calls require authentication). 
+
+## Create an App and some Features via the API
+
+An _app_ is used to group features together and store information about which services are 
+granted accessed the app's features. Grants can be given to _services_ or _members_ (such as an 
+individual or team account). Every app also has one or more _owners_.
+
+The example below creates an app called testapp-1 with two grants and an owner. The grants are 
+given to  a service called testservice-1 and one to a user called testuser-1. The owner is 
+also testuser-1 - owners are just owners, and are not granted access to an app's features by 
+default. 
+
+```bash
+curl -v -XPOST http://localhost:8180/apps   \
+-H "Content-type: application/json" \
+-u testconsole/service:letmein  -d'
+{
+  "key": "testapp-1"
+  ,"name": "Test App One"
+  ,"owners":[
+  {
+    "name": "Test User One"
+    ,"username": "testuser-1"
+    ,"email": "testuser-1@example.org"
+    }
+  ]
+  ,"granted" : {
+    "services":[{
+      "key": "testservice-1"
+      ,"name": "Test Service One"
+    }]
+    ,"members":[{
+      "username": "testuser-1"
+      ,"name": "Test User One"
+    }]
+  }
+}
+'
+```
+
+Let's add a _feature_ to the app by posting the feature JSON to the server associating it with 
+the app's `key`. This one is a simple on/off flag:
+
+```bash
+curl -v http://localhost:8180/features \
+-H "Content-type: application/json" \
+-u testconsole/service:letmein -d'
+{
+  "key": "testfeature-1",
+  "description": "A test feature flag",
+  "appkey": "testapp-1",
+  "options": {
+    "option": "flag"
+  },
+  "owner": {
+    "name": "Test User One"
+    ,"username": "testuser-1"
+  }
+}
+'
+```
+
+We can also add a feature _option_. These are features that give each possible result a weight, 
+allowing you to fire a feature to just a percentage of requests. This is useful for canary  
+deployments. This example creates a `bool` feature which has just two options, true and false. The 
+options are weighted so that the feature is false 95% of the time.
+
+```bash
+curl -v http://localhost:8180/features \
+-H "Content-type: application/json" \
+-u testconsole/service:letmein -d'
+{
+  "key": "testfeature-2",
+  "description": "A test feature flag",
+  "appkey": "testapp-1",
+  "options": {
+    "option": "bool"
+    ,"items": [
+      {
+        "name": "false"
+        ,"value": "false"
+        ,"weight": 9000
+      }, {
+        "name": "true"
+        ,"value": "true"
+        ,"weight": 1000
+      } 
+    ]
+  },
+  "owner": {
+    "name": "Test User One"
+    ,"username": "testuser-1"
+  }
+}
+'
+```
+
+## Enable a Feature
+
+Features are off by default. Let's enable the first feature `testfeature-1` by setting its state 
+to on:
+
+```bash
+curl -v -XPOST  http://localhost:8180/features/testapp-1/testfeature-1 \
+-H "Content-type: application/json" \
+-u testconsole/service:letmein -d'
+{
+  "key": "testfeature-1",
+  "appkey": "testapp-1",
+  "state": "on"
+}  
+'
+```
+
 
 ## Add the client library
 
@@ -172,14 +298,6 @@ Flags reinforce the benefits you get from shipping small changes and continuous 
 close to the level of continuous build and delivery systems and there's far more 
 online literature around lean engineering practices than flag based development. 
 
-So, they are pretty useful as an engineering mechanism, but there's a lot more to them.
-
-## Rise of the Planet of the Flags
-
-Over time how flags are used tends to evolve. They start 
-as an engineering control mechanism to increase safety and amortize risks with new code. Then they are used to articulate new features - literally "feature flags" becoming part of regular product development. As their product development use expands, features may need to be organised into groups and distributed across multiple services or tiers. Features eventually need more involved rollout options beyond on/off states - such as being on for staff for dogfooding, available to a defined group of users or cohort for testing and early access, or to a fixed percentage of all users as part of a "canary" rollout. 
-
-At this point feature flags move well beyond an engineering practice and become fundamental to the product development process. Going even further, to determine impact, teams will want to know what happened after a feature fired and which users were in scope, making feature flag settings relevant to the experiment and analysis mechanisms the company has in place.
 
 ## Why a Service?
 
@@ -192,7 +310,11 @@ We can identify four reasons to make feature flagging a service:
 - **Observability**: In a microservices world (and also for monolithic or monocentric systems) there's value in making flag state observable via a service. As a simple example you can correlate a state change with other metrics. Features can be made available to more than code - a service accessible flag can be used control/toggle infrastructure such as load balancers. Service access 
 to feature flags allows human operators to more easily intervene and control systems change.
 
-- **Incident management**: A point of flags is to allow features to be turned off quickly, faster than any rollback/rollforward mechanism you might have. If the flag system is a internal bolt-on to whatever the team happens to run, then first level oncall is going to have to delve into that to turn it off. The chances are I am not going to toggle an item directly in your ZooKeeper or Database thing _especially_ if it's being used for other functionality - you're getting paged to do that. I feel much better about a service interface that offers the least power needed to change the state. 
+- **Incident management**: A point of flags is to allow features to be turned off quickly, 
+faster than any rollback/rollforward mechanism you might have. If the flag system is a 
+internal bolt-on to whatever the team happens to run, then  oncall is going to have 
+to delve into that to turn it off. A service interface that offers the least power needed to 
+change the state is a safer option. 
 
 # Outland Feature Flag Model
 
@@ -201,11 +323,15 @@ In summary:
 - A Feature is identified by a key, and can be in an on or off state. Every feature has an owner
 and a version. 
 
-- As well as a state, Features may also have a set of options. These are evaluated in the on state to return a particular option. Each option has a weight that affects the chance if it being returned.
+- As well as a state, Features may also have a set of options. These are evaluated in the on 
+state to return a particular option. Each option has a weight that affects the chance if it 
+being returned.
 
-- An App is a collection of features and identified by a key. Every App at least one owner. A Feature always belongs to one App.
+- An App is a collection of features and identified by a key. Every App at least one owner. A 
+Feature always belongs to one App.
 
-- Apps also hold a list of Grants to services and team members. A grant allows them to access the App's features from the server. 
+- Apps also hold a list of Grants to services and team members. A grant allows them to access 
+the App's features from the server. 
 
 ## Features
 
