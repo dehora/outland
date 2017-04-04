@@ -15,7 +15,7 @@ gradle-app.setting
 
 .DS_Store
 .idea/
-*/**/Spike*
+*/**/*Spike*
 outland-spike
 target/
 out
