@@ -1,6 +1,8 @@
 package outland.feature.server;
 
-public class ServiceException extends RuntimeException {
+import com.netflix.hystrix.exception.ExceptionNotWrappedByHystrix;
+
+public class ServiceException extends RuntimeException implements ExceptionNotWrappedByHystrix {
 
   /**
    * Throw an IllegalArgumentException if the argument is null.
