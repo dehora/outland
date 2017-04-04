@@ -63,16 +63,18 @@ curl -i http://localhost:8180/features \
 	"key": "test-option-1",
 	"description": "A weighted feature",
 	"appkey": "test-acme-app",
-	"option": "bool",
-	"options": [{
+	"options": {
+	  "option": "bool",
+	  "items": [{
 		"name": "false",
 		"value": "false",
 		"weight": 9000
-	}, {
-		"name": "true",
-		"value": "true",
-		"weight": 1000
-	}],
+    }, {
+      "name": "true",
+      "value": "true",
+      "weight": 1000
+    }]
+	},
 	"owner": {
 		"username": "acme",
 		"email": "acme@example.org"
