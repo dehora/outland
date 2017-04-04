@@ -5,6 +5,7 @@ import com.google.inject.Injector;
 import com.google.protobuf.util.JsonFormat;
 import io.dropwizard.testing.junit.DropwizardAppRule;
 import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ws.rs.client.Entity;
@@ -15,6 +16,7 @@ import org.glassfish.jersey.client.JerseyClient;
 import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
 import org.glassfish.jersey.logging.LoggingFeature;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Test;
 import outland.feature.proto.App;
@@ -41,34 +43,44 @@ import static org.junit.Assert.assertNotNull;
 public class FeatureResourceTest {
 
   @ClassRule public static final DropwizardAppRule<ServerConfiguration> APP = ServerSuite.APP;
-  private String basicPassword;
-  private final Injector injector = ((ServerMain) APP.getApplication()).injector();
-  private final AppService appService = injector.getInstance(AppService.class);
-  private final Gson gson;
+  private static AtomicBoolean setup = new AtomicBoolean(false);
+  private String basicPassword = "topsecret";
+  private Gson gson;
 
-  private String seedAppOneKey = "appOne";
+  private final String seedAppOneKey = "appOne";
   private final String seedOwnerOne = "ownerOne";
   private final String seedServiceOne = "serviceOne";
   private final String seedMemberOne = "memberOne";
 
-  private String seedAppFooKey = "appFoo";
+  private final String seedAppFooKey = "appFoo";
   private final String seedOwnerFoo = "ownerFoo";
   private final String seedServiceFoo = "serviceFoo";
   private final String seedMemberFoo = "memberFoo";
 
-  private String seedAppBarKey = "appBar";
+  private final String seedAppBarKey = "appBar";
   private final String seedOwnerBar = "ownerBar";
   private final String seedServiceBar = "serviceBar";
   private final String seedMemberBar = "memberBar";
 
+  private Injector injector;
+  private AppService appService;
+
   public FeatureResourceTest() {
     gson = new Gson();
+    ServerMain application = APP.getApplication();
+    injector = application.injector();
+    appService = injector.getInstance(AppService.class);
+
+    /*
+    create our seeds just once. we're not using a before class because we need APP to be
+    fully instantiated before calling its injector above.
+     */
+    if(setup.compareAndSet(false, true)) {
+      setUp();
+    }
   }
 
-  @Before
-  public void setUp() throws Exception {
-    basicPassword = "topsecret";
-
+  public void setUp() {
     GrantCollection.Builder builder = GrantCollection.newBuilder();
     builder.addServices(ServiceGrant.newBuilder().setKey(seedServiceOne).buildPartial());
     builder.addMembers(MemberGrant.newBuilder().setUsername(seedMemberOne).buildPartial());
@@ -385,7 +397,7 @@ public class FeatureResourceTest {
 
     Response post = client.target(url)
         .request()
-        .property(HTTP_AUTHENTICATION_BASIC_USERNAME, serviceKey + "/service")
+        .property(HTTP_AUTHENTICATION_BASIC_USERNAME, "testPostService/service")
         .property(HTTP_AUTHENTICATION_BASIC_PASSWORD, basicPassword)
         .post(Entity.entity(jsonReq, MediaType.APPLICATION_JSON_TYPE));
 
