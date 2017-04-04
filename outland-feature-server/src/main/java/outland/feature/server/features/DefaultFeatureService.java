@@ -130,7 +130,7 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
 
     Feature found = maybeFound.get();
 
-    featureValidator.validateOptionIds(found.getOptions(), updates.getOptions());
+    featureValidator.validateOptionIdsForUpdate(found.getOptions(), updates.getOptions());
 
     logger.info("{} /found_feature=[{}]",
         kvp("op", "updateFeature", "appkey", appKey, "feature_key", featureKey),

@@ -19,7 +19,12 @@ class FeatureValidator {
       validateOptionsHaveIdsThrowing(feature);
     }
     validateKeysThrowing(feature);
-    validateOptionsThrowing(feature);
+
+    if (OptionType.flag != feature.getOptions().getOption()
+        && feature.getOptions().getItemsCount() != 0) {
+      // only validate options if they're sent and we're not a flag type
+      validateOptionsThrowing(feature);
+    }
   }
 
   void validateFeatureRegistrationThrowing(Feature feature) throws ServiceException {
@@ -79,12 +84,17 @@ class FeatureValidator {
     }
   }
 
-  void validateOptionIds(OptionCollection first, OptionCollection second) {
+  void validateOptionIdsForUpdate(OptionCollection existing, OptionCollection update) {
+
+    if (update.getItemsCount() == 0) {
+      // no options sent in update, skip
+      return;
+    }
 
     final Set<String> firstSet =
-        first.getItemsList().stream().map(FeatureOption::getId).collect(Collectors.toSet());
+        existing.getItemsList().stream().map(FeatureOption::getId).collect(Collectors.toSet());
     final Set<String> secondSet =
-        second.getItemsList().stream().map(FeatureOption::getId).collect(Collectors.toSet());
+        update.getItemsList().stream().map(FeatureOption::getId).collect(Collectors.toSet());
 
     if(! firstSet.equals(secondSet)) {
       throw new ServiceException(

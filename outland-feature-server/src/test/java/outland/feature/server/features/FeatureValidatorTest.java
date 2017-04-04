@@ -285,6 +285,46 @@ public class FeatureValidatorTest {
     callValidateUpdate(builder, "missing_id_for_option", 422);
   }
 
+  @Test
+  public void validateFeatureThrowingBoolNoUpdateOptionsOk() {
+
+    OptionCollection.Builder existing = OptionCollection.newBuilder()
+        .setOption(OptionType.bool)
+        .addItems(FeatureOption.newBuilder().setValue("true").setName("true"))
+        .addItems(FeatureOption.newBuilder().setValue("false").setName("false"));
+
+    OptionCollection.Builder update = OptionCollection.newBuilder();
+
+    try {
+      new FeatureValidator().validateOptionIdsForUpdate(existing.build(), update.build());
+    } catch (ServiceException e) {
+      fail("an update without options should validate");
+    }
+  }
+
+  @Test
+  public void validateFeatureThrowingBoolMismatchedOptionIds() {
+
+    OptionCollection.Builder existing = OptionCollection.newBuilder()
+        .setOption(OptionType.bool)
+        .addItems(FeatureOption.newBuilder().setValue("true").setName("true").setId("1"))
+        .addItems(FeatureOption.newBuilder().setValue("false").setName("false").setId("2"));
+
+    OptionCollection.Builder update = OptionCollection.newBuilder()
+        .setOption(OptionType.bool)
+        .addItems(FeatureOption.newBuilder().setValue("true").setName("true").setId("1"))
+        // option id 3 is not already existing
+        .addItems(FeatureOption.newBuilder().setValue("false").setName("false").setId("3"));
+
+    try {
+      new FeatureValidator().validateOptionIdsForUpdate(existing.build(), update.build());
+      fail();
+    } catch (ServiceException e) {
+      assertEquals(422, e.problem().status());
+      assertSame("option_ids_mismatch", e.problem().title());
+    }
+  }
+
   private void callValidateUpdate(Feature.Builder builder, String expectedTitle, int expectedCode) {
     callValidator(builder, expectedTitle, expectedCode,
         feature -> new FeatureValidator().validateFeatureUpdateThrowing(feature));
