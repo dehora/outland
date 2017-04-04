@@ -164,9 +164,10 @@ curl -v http://localhost:8180/features \
 ```
 
 We can also add a feature _option_. These are features that give each possible result a weight, 
-allowing you to fire a feature to just a percentage of requests. This is useful for canary  
-deployments. This example creates a `bool` feature which has just two options, true and false. The 
-options are weighted so that the feature is false 95% of the time.
+allowing you to fire a feature to just a percentage of requests. This is useful for canary deployments. 
+
+This example creates a `bool` feature which has just two options, true and false. 
+The options are weighted so that the feature is false 95% of the time.
 
 ```bash
 curl -v http://localhost:8180/features \
@@ -182,11 +183,11 @@ curl -v http://localhost:8180/features \
       {
         "name": "false"
         ,"value": "false"
-        ,"weight": 9000
+        ,"weight": 9500
       }, {
         "name": "true"
         ,"value": "true"
-        ,"weight": 1000
+        ,"weight": 500
       } 
     ]
   },
