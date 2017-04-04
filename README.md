@@ -88,7 +88,7 @@ This will:
 
  - Add the redis and dynamodb-local images and start them.
  - Start an Outland container on port 8180.
- - Create the dynamodb tables used by docker.
+ - Create the dynamodb tables used by the server.
  - Seed the server with an app called `testapp`.
  - Add two feature flags to the app, `test-flag-1` and `test-option-1`. 
  
