@@ -102,7 +102,7 @@ public class FeatureValidatorTest {
     builder.setOwner(Owner.newBuilder().setName("Jayne").setUsername("jayne"))
         .setKey("key1");
 
-    callValidate(builder, "no_appkey_for_feature", 422);
+    callValidate(builder, "no_nskey_for_feature", 422);
   }
 
   @Test

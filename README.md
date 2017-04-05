@@ -114,7 +114,7 @@ curl -v http://localhost:8180/features/testapp -u testconsole/service:letmein
 As well as the App itself and its grants:
 
 ```bash
-curl -v http://localhost:8180/apps/testapp -u testconsole/service:letmein
+curl -v http://localhost:8180/namespaces/testapp -u testconsole/service:letmein
 ```
 
 Dummy credentials are setup as a convenience in the folder's `.env` file, this is how the 
@@ -132,7 +132,7 @@ also testuser-1 - owners are just owners, and are not granted access to an app's
 default. 
 
 ```bash
-curl -v -XPOST http://localhost:8180/apps   \
+curl -v -XPOST http://localhost:8180/namespaces   \
 -H "Content-type: application/json" \
 -u testconsole/service:letmein  -d'
 {

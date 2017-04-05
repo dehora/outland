@@ -25,6 +25,9 @@ import outland.feature.server.features.TableConfiguration;
 public class DynamoCreateFeatureTableTask extends Task {
 
   private static final Logger logger = LoggerFactory.getLogger(DynamoCreateFeatureTableTask.class);
+  public static final String HASH_KEY = "ns_key";
+  public static final String RANGE_KEY = "feature_key";
+  public static final String ATTR_ID = "id";
 
   private final AmazonDynamoDB amazonDynamoDB;
   private final String tableName;
@@ -46,26 +49,26 @@ public class DynamoCreateFeatureTableTask extends Task {
 
   public void createTable() {
 
-    final AttributeDefinition appKey =
-        new AttributeDefinition().withAttributeName("appkey").withAttributeType(
+    final AttributeDefinition nsKey =
+        new AttributeDefinition().withAttributeName(HASH_KEY).withAttributeType(
             ScalarAttributeType.S);
 
     final AttributeDefinition featureKey =
-        new AttributeDefinition().withAttributeName("feature_key")
+        new AttributeDefinition().withAttributeName(RANGE_KEY)
             .withAttributeType(ScalarAttributeType.S);
 
     final AttributeDefinition id =
-        new AttributeDefinition().withAttributeName("id")
+        new AttributeDefinition().withAttributeName(ATTR_ID)
             .withAttributeType(ScalarAttributeType.S);
 
     final ArrayList<AttributeDefinition>
-        tableAttributeDefinitions = Lists.newArrayList(appKey, featureKey, id);
+        tableAttributeDefinitions = Lists.newArrayList(nsKey, featureKey, id);
     final ArrayList<KeySchemaElement> tableKeySchema = Lists.newArrayList();
 
     tableKeySchema.add(
-        new KeySchemaElement().withAttributeName("appkey").withKeyType(KeyType.HASH));
+        new KeySchemaElement().withAttributeName(HASH_KEY).withKeyType(KeyType.HASH));
     tableKeySchema.add(
-        new KeySchemaElement().withAttributeName("feature_key").withKeyType(KeyType.RANGE));
+        new KeySchemaElement().withAttributeName(RANGE_KEY).withKeyType(KeyType.RANGE));
 
     final ProvisionedThroughput tableProvisionedThroughput =
         new ProvisionedThroughput()
@@ -74,8 +77,8 @@ public class DynamoCreateFeatureTableTask extends Task {
 
     final ArrayList<KeySchemaElement> indexKeySchema = new ArrayList<>();
     indexKeySchema.add(
-        new KeySchemaElement().withAttributeName("appkey").withKeyType(KeyType.HASH));
-    indexKeySchema.add(new KeySchemaElement().withAttributeName("id").withKeyType(KeyType.RANGE));
+        new KeySchemaElement().withAttributeName(HASH_KEY).withKeyType(KeyType.HASH));
+    indexKeySchema.add(new KeySchemaElement().withAttributeName(ATTR_ID).withKeyType(KeyType.RANGE));
 
     final Projection projection = new Projection().withProjectionType(ProjectionType.INCLUDE);
     final ArrayList<String> indexColumns = new ArrayList<>();
@@ -84,7 +87,7 @@ public class DynamoCreateFeatureTableTask extends Task {
     projection.setNonKeyAttributes(indexColumns);
 
     final LocalSecondaryIndex localSecondaryIndex = new LocalSecondaryIndex()
-        .withIndexName("feature_by_appkey_and_id_lsi_idx")
+        .withIndexName("feature_by_ns_key_and_id_lsi_idx")
         .withKeySchema(indexKeySchema)
         .withProjection(projection);
 
