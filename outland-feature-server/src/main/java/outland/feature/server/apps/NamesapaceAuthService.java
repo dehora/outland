@@ -3,7 +3,7 @@ package outland.feature.server.apps;
 import java.util.Optional;
 import outland.feature.server.auth.AuthPrincipal;
 
-public interface AppAuthService {
+public interface NamesapaceAuthService {
 
   String BEARER = "Bearer";
 
