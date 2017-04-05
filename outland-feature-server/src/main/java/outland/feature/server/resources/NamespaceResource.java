@@ -92,17 +92,17 @@ public class NamespaceResource {
   }
 
   @GET
-  @Path("/{ns_key}")
+  @Path("/{namespace}")
   @Produces(MediaType.APPLICATION_JSON)
   @PermitAll
   @Timed(name = "getNamespaceByKey")
   public Response getNamespaceByKey(
       @Auth AuthPrincipal authPrincipal,
-      @PathParam("ns_key") String nsKey
+      @PathParam("namespace") String namespace
   ) throws AuthenticationException {
 
     final long start = System.currentTimeMillis();
-    final Optional<Namespace> maybe = namespaceService.loadNamespaceByKey(nsKey);
+    final Optional<Namespace> maybe = namespaceService.loadNamespaceByKey(namespace);
 
     if (maybe.isPresent()) {
       accessControlSupport.throwUnlessGrantedForNamespace(authPrincipal, maybe.get());
@@ -110,61 +110,61 @@ public class NamespaceResource {
     }
 
     return headers.enrich(Response.status(404).entity(
-        Problem.clientProblem("app_not_found", "", 404)), start).build();
+        Problem.clientProblem("namespace_not_found", "", 404)), start).build();
   }
 
   @POST
-  @Path("/{ns_key}/owners")
+  @Path("/{namespace}/owners")
   @Produces(MediaType.APPLICATION_JSON)
   @PermitAll
   @Timed(name = "addOwner")
   public Response addOwner(
       @Auth AuthPrincipal authPrincipal,
-      @PathParam("ns_key") String nsKey,
+      @PathParam("namespace") String namespace,
       Owner owner
   ) throws AuthenticationException {
-    return postUpdate(authPrincipal, nsKey, namespace -> namespaceService.addToNamespace(namespace, owner));
+    return postUpdate(authPrincipal, namespace, ns -> namespaceService.addToNamespace(ns, owner));
   }
 
   @POST
-  @Path("/{ns_key}/access/services")
+  @Path("/{namespace}/access/services")
   @Produces(MediaType.APPLICATION_JSON)
   @PermitAll
   @Timed(name = "addService")
   public Response addService(
       @Auth AuthPrincipal authPrincipal,
-      @PathParam("ns_key") String nsKey,
+      @PathParam("namespace") String namespace,
       ServiceAccess serviceAccess
   ) throws AuthenticationException {
-    return postUpdate(authPrincipal, nsKey, namespace -> namespaceService.addToNamespace(namespace, serviceAccess));
+    return postUpdate(authPrincipal, namespace, ns -> namespaceService.addToNamespace(ns, serviceAccess));
   }
 
   @POST
-  @Path("/{ns_key}/access/members")
+  @Path("/{namespace}/access/members")
   @Produces(MediaType.APPLICATION_JSON)
   @PermitAll
   @Timed(name = "addService")
   public Response addService(
       @Auth AuthPrincipal authPrincipal,
-      @PathParam("ns_key") String nsKey,
+      @PathParam("namespace") String namespace,
       MemberAccess memberAccess
   ) throws AuthenticationException {
-    return postUpdate(authPrincipal, nsKey, namespace -> namespaceService.addToNamespace(namespace, memberAccess));
+    return postUpdate(authPrincipal, namespace, ns -> namespaceService.addToNamespace(ns, memberAccess));
   }
 
   @DELETE
-  @Path("/{ns_key}/access/services/{service_key}")
+  @Path("/{namespace}/access/services/{service_key}")
   @Produces(MediaType.APPLICATION_JSON)
   @PermitAll
   @Timed(name = "removeService")
   public Response removeService(
       @Auth AuthPrincipal authPrincipal,
-      @PathParam("ns_key") String nsKey,
+      @PathParam("namespace") String namespaceKey,
       @PathParam("service_key") String serviceKey
   ) throws AuthenticationException {
     final long start = System.currentTimeMillis();
 
-    final Optional<Namespace> maybe = namespaceService.loadNamespaceByKey(nsKey);
+    final Optional<Namespace> maybe = namespaceService.loadNamespaceByKey(namespaceKey);
 
     if (maybe.isPresent()) {
       final Namespace namespace = maybe.get();
@@ -175,22 +175,22 @@ public class NamespaceResource {
     }
 
     return headers.enrich(Response.status(404).entity(
-        Problem.clientProblem("app_not_found", "", 404)), start).build();
+        Problem.clientProblem("namespace_not_found", "", 404)), start).build();
   }
 
   @DELETE
-  @Path("/{app_key}/access/members/{member_key}")
+  @Path("/{namespace}/access/members/{member_key}")
   @Produces(MediaType.APPLICATION_JSON)
   @PermitAll
   @Timed(name = "removeMember")
   public Response removeMember(
       @Auth AuthPrincipal authPrincipal,
-      @PathParam("app_key") String appKey,
+      @PathParam("namespace") String namespaceKey,
       @PathParam("member_key") String memberKey
   ) throws AuthenticationException {
     final long start = System.currentTimeMillis();
 
-    final Optional<Namespace> maybe = namespaceService.loadNamespaceByKey(appKey);
+    final Optional<Namespace> maybe = namespaceService.loadNamespaceByKey(namespaceKey);
 
     if (maybe.isPresent()) {
       final Namespace namespace = maybe.get();
@@ -201,17 +201,17 @@ public class NamespaceResource {
     }
 
     return headers.enrich(Response.status(404).entity(
-        Problem.clientProblem("app_not_found", "", 404)), start).build();
+        Problem.clientProblem("namespace_not_found", "", 404)), start).build();
   }
 
   @DELETE
-  @Path("/{app_key}/owners/{owner_key}")
+  @Path("/{namespace}/owners/{owner_key}")
   @Produces(MediaType.APPLICATION_JSON)
   @PermitAll
   @Timed(name = "removeOwner")
   public Response removeOwner(
       @Auth AuthPrincipal authPrincipal,
-      @PathParam("app_key") String appKey,
+      @PathParam("namespace") String namespaceKey,
       @PathParam("owner_key") String ownerKey
   ) throws AuthenticationException {
     final long start = System.currentTimeMillis();
@@ -221,7 +221,7 @@ public class NamespaceResource {
           Problem.clientProblem("param_not_found", "", 404)), start).build();
     }
 
-    final Optional<Namespace> maybe = namespaceService.loadNamespaceByKey(appKey);
+    final Optional<Namespace> maybe = namespaceService.loadNamespaceByKey(namespaceKey);
 
     if (maybe.isPresent()) {
       final Namespace namespace = maybe.get();
@@ -232,7 +232,7 @@ public class NamespaceResource {
     }
 
     return headers.enrich(Response.status(404).entity(
-        Problem.clientProblem("app_not_found", "", 404)), start).build();
+        Problem.clientProblem("namespace_not_found", "", 404)), start).build();
   }
 
   /*
@@ -242,7 +242,7 @@ public class NamespaceResource {
   @Path("graph")
   public Response belongsTo(
       @Auth AuthPrincipal authPrincipal,
-      @QueryParam("app_key") String appKey,
+      @QueryParam("namespace") String namespace,
       @QueryParam("username") String username,
       @QueryParam("email") String email,
       @QueryParam("service_key") String serviceKey,
@@ -251,7 +251,7 @@ public class NamespaceResource {
 
     final long start = System.currentTimeMillis();
 
-    final Optional<Namespace> maybe = namespaceService.loadNamespaceByKey(appKey);
+    final Optional<Namespace> maybe = namespaceService.loadNamespaceByKey(namespace);
     if (maybe.isPresent()) {
       accessControlSupport.throwUnlessGrantedForNamespace(authPrincipal, maybe.get());
 
@@ -259,19 +259,19 @@ public class NamespaceResource {
 
       if(NamespaceService.ACCESS_RELATION.equals(relation)) {
         if (!Strings.isNullOrEmpty(username)) {
-          found = namespaceService.hasMemberAccess(appKey, username);
+          found = namespaceService.hasMemberAccess(namespace, username);
         } else if (!Strings.isNullOrEmpty(email)) {
-          found = namespaceService.hasMemberAccess(appKey, email);
+          found = namespaceService.hasMemberAccess(namespace, email);
         } else {
-          found = namespaceService.hasServiceAccess(appKey, serviceKey);
+          found = namespaceService.hasServiceAccess(namespace, serviceKey);
         }
       }
 
       if(NamespaceService.OWNER_RELATION.equals(relation)) {
         if (!Strings.isNullOrEmpty(username)) {
-          found = namespaceService.hasOwner(appKey, username);
+          found = namespaceService.hasOwner(namespace, username);
         } else if (!Strings.isNullOrEmpty(email)) {
-          found = namespaceService.hasOwner(appKey, email);
+          found = namespaceService.hasOwner(namespace, email);
         }
       }
 
@@ -283,18 +283,18 @@ public class NamespaceResource {
     }
 
     return headers.enrich(Response.status(404).entity(
-        Problem.clientProblem("app_not_found", "", 404)), start).build();
+        Problem.clientProblem("namespace_not_found", "", 404)), start).build();
 
   }
 
   private Response postUpdate(
       AuthPrincipal authPrincipal,
-      String appKey,
+      String namespaceKey,
       Function<Namespace, Namespace> updater
   ) throws AuthenticationException {
 
     final long start = System.currentTimeMillis();
-    final Optional<Namespace> maybe = namespaceService.loadNamespaceByKey(appKey);
+    final Optional<Namespace> maybe = namespaceService.loadNamespaceByKey(namespaceKey);
 
     if (maybe.isPresent()) {
       final Namespace namespace = maybe.get();
@@ -304,6 +304,6 @@ public class NamespaceResource {
     }
 
     return headers.enrich(Response.status(404).entity(
-        Problem.clientProblem("app_not_found", "", 404)), start).build();
+        Problem.clientProblem("namespace_not_found", "", 404)), start).build();
   }
 }

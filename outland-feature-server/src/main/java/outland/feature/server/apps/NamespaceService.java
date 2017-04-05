@@ -13,8 +13,8 @@ public interface NamespaceService {
   String OWNER = "owner";
   String SERVICE = "service";
   String MEMBER = "member";
-  public static final String ACCESS_RELATION = "has_access";
-  public static final String OWNER_RELATION = "has_owner";
+  String ACCESS_RELATION = "has_access";
+  String OWNER_RELATION = "has_owner";
 
   DateTimeFormatter ISO = DateTimeFormatter.ISO_OFFSET_DATE_TIME;
 
@@ -26,27 +26,27 @@ public interface NamespaceService {
     return ISO.parse(raw, OffsetDateTime::from);
   }
 
-  Optional<Namespace> registerNamespace(Namespace Namespace);
+  Optional<Namespace> registerNamespace(Namespace namespace);
 
-  Namespace updateNamespace(Namespace Namespace);
+  Namespace updateNamespace(Namespace namespace);
 
-  Namespace addToNamespace(Namespace Namespace, ServiceAccess service);
+  Namespace addToNamespace(Namespace namespace, ServiceAccess service);
 
-  Namespace addToNamespace(Namespace Namespace, MemberAccess member);
+  Namespace addToNamespace(Namespace namespace, MemberAccess member);
 
-  Namespace addToNamespace(Namespace Namespace, Owner owner);
+  Namespace addToNamespace(Namespace namespace, Owner owner);
 
-  Namespace removeServiceAccess(Namespace Namespace, String serviceKey);
+  Namespace removeServiceAccess(Namespace namespace, String serviceKey);
 
-  Namespace removeMemberAccess(Namespace Namespace, String memberKey);
+  Namespace removeMemberAccess(Namespace namespace, String memberKey);
 
-  Namespace removeOwner(Namespace Namespace, String ownerKey);
+  Namespace removeOwner(Namespace namespace, String ownerKey);
 
-  boolean hasOwner(String nsKey, String usernameOrEmail);
+  boolean hasOwner(String namespace, String usernameOrEmail);
 
-  boolean hasServiceAccess(String nsKey, String serviceKey);
+  boolean hasServiceAccess(String namespace, String serviceKey);
 
-  boolean hasMemberAccess(String nsKey, String usernameOrEmail);
+  boolean hasMemberAccess(String namespace, String usernameOrEmail);
 
-  Optional<Namespace> loadNamespaceByKey(String nsKey);
+  Optional<Namespace> loadNamespaceByKey(String namespace);
 }
