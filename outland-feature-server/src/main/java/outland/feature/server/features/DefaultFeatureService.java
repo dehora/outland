@@ -139,8 +139,7 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
     Feature.Builder wipBuilder = found.toBuilder()
         .mergeFrom(updates)
         .setUpdated(now);
-
-
+    
     // can't change some values in update
     wipBuilder.setType("feature");
     wipBuilder.setCreated(found.getCreated());
@@ -148,6 +147,7 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
     wipBuilder.setAppkey(found.getAppkey());
     wipBuilder.setKey(found.getKey());
 
+    final FeatureVersion foundVersion = found.getVersion();
     applyVersion(updates, wipBuilder);
 
     // process options if we received some
@@ -184,7 +184,7 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
     // post check everything
     featureValidator.validateFeatureRegistrationThrowing(updated);
 
-    timed(updateFeatureTimer, () -> featureStorage.updateFeature(updated));
+    timed(updateFeatureTimer, () -> featureStorage.updateFeature(updated, foundVersion));
 
     logger.info("{} /updated_feature=[{}]",
         kvp("op", "updateFeature", "appkey", appKey, "feature_key", featureKey),
