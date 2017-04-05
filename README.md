@@ -4,7 +4,7 @@
 - Build: [![CircleCI](https://circleci.com/gh/dehora/outland.svg?style=svg)](https://circleci.com/gh/dehora/outland)
 - Client Download: [ ![Download](https://api.bintray.com/packages/dehora/maven/outland-feature-java/images/download.svg) ](https://bintray.com/dehora/maven/outland-feature-java/_latestVersion)
 - Server Download: [ ![Download](https://api.bintray.com/packages/dehora/maven/outland-feature-server/images/download.svg) ](https://bintray.com/dehora/maven/outland-feature-server/_latestVersion)
-- Source Release: [0.0.4](https://github.com/dehora/outland/releases/tag/0.0.4)
+- Source Release: [0.0.8](https://github.com/dehora/outland/releases/tag/0.0.8)
 - Contact: [maintainers](https://github.com/dehora/outland/blob/master/MAINTAINERS)
 
 # Outland

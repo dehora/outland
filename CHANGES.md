@@ -2,6 +2,14 @@
 
 ### 0.0.8
 
+- Renames App to Namespace.
+
+- Renames grants to access.
+
+- Moves app owners into a collection.
+
+- Fixes updates of features.
+
 - Rejects re-creation of Features with a 422.
 
 - Rejects re-creation of Apps with a 422.

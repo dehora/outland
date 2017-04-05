@@ -2,7 +2,7 @@ version: '2'
 services:
 
   outland_server:
-    image: dehora/outland-feature-server:0.0.7
+    image: dehora/outland-feature-server:0.0.8
     environment:
       - OUTLAND_FEATURE_BASE_URI
       - OUTLAND_FEATURE_API_IDLE_TO
