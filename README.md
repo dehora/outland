@@ -138,13 +138,14 @@ curl -v -XPOST http://localhost:8180/namespaces   \
 {
   "key": "testapp-1"
   ,"name": "Test App One"
-  ,"owners":[
-  {
-    "name": "Test User One"
-    ,"username": "testuser-1"
-    ,"email": "testuser-1@example.org"
-    }
-  ]
+  ,"owners": {
+    "items":[{
+      "name": "Test User One"
+      ,"username": "testuser-1"
+      ,"email": "testuser-1@example.org"
+      }
+     ]
+   }
   ,"granted" : {
     "services":[{
       "key": "testservice-1"
