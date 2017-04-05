@@ -7,6 +7,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import outland.feature.proto.Feature;
+import outland.feature.proto.FeatureVersion;
 
 public class TestFeatureStorage implements FeatureStorage {
 
@@ -22,7 +23,7 @@ public class TestFeatureStorage implements FeatureStorage {
     return null;
   }
 
-  @Override public Void updateFeature(Feature feature) {
+  @Override public Void updateFeature(Feature feature, FeatureVersion foundVersion) {
 
     features.put(feature.getKey(), feature);
     return null;

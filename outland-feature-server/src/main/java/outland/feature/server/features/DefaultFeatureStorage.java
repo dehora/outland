@@ -2,6 +2,7 @@ package outland.feature.server.features;
 
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.document.DynamoDB;
+import com.amazonaws.services.dynamodbv2.document.Expected;
 import com.amazonaws.services.dynamodbv2.document.Item;
 import com.amazonaws.services.dynamodbv2.document.ItemCollection;
 import com.amazonaws.services.dynamodbv2.document.Page;
@@ -26,6 +27,7 @@ import javax.inject.Named;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import outland.feature.proto.Feature;
+import outland.feature.proto.FeatureVersion;
 import outland.feature.server.hystrix.HystrixConfiguration;
 import outland.feature.server.protobuf.Protobuf3Support;
 
@@ -60,50 +62,18 @@ public class DefaultFeatureStorage implements FeatureStorage {
 
   @Override public Void createFeature(Feature feature) {
 
-    String key = feature.getKey();
-    String id = feature.getId();
-    String appKey = feature.getAppkey();
-    String json = Protobuf3Support.toJsonString(feature);
+    final String key = feature.getKey();
+    final String appKey = feature.getAppkey();
+    final Item item = preparePutItem(feature);
 
-    Map<String, String> owner = Maps.newHashMap();
-
-    if (!Strings.isNullOrEmpty(feature.getOwner().getName())) {
-      owner.put("name", feature.getOwner().getName());
-    }
-
-    if (!Strings.isNullOrEmpty(feature.getOwner().getEmail())) {
-      owner.put("email", feature.getOwner().getEmail());
-    }
-
-    if (!Strings.isNullOrEmpty(feature.getOwner().getUsername())) {
-      owner.put("username", feature.getOwner().getUsername());
-    }
-
-    Item item = new Item()
-        .withString("appkey", appKey)
-        .withString("feature_key", key)
-        .withString("id", id)
-        .withString("state", feature.getState().name())
-        .withString("json", json)
-        .withString("v", "1")
-        .withString("created", feature.getCreated())
-        .withString("updated", feature.getUpdated())
-        .withMap("owner", owner);
-
-    if (!Strings.isNullOrEmpty(feature.getDescription())) {
-      item.withString("desc", feature.getDescription());
-    }
-
-    Table table = dynamoDB.getTable(featureTableName);
-
-    PutItemSpec putItemSpec = new PutItemSpec()
+    final PutItemSpec putItemSpec = new PutItemSpec()
         .withItem(item)
         .withConditionExpression("attribute_not_exists(#featurekey)")
         .withNameMap(new NameMap().with("#featurekey", "feature_key"));
 
     final Supplier<PutItemOutcome> putItemOutcomeSupplier = () -> {
       try {
-        return table.putItem(putItemSpec);
+        return dynamoDB.getTable(featureTableName).putItem(putItemSpec);
       } catch (ConditionalCheckFailedException e) {
         logger.error("err=conflict_feature_already_exists appkey={} {}", feature.getKey(), e.getMessage());
         throwConflictAlreadyExists(feature);
@@ -111,7 +81,7 @@ public class DefaultFeatureStorage implements FeatureStorage {
       }
     };
 
-    DynamoDbCommand<PutItemOutcome> cmd = new DynamoDbCommand<>("createFeature",
+    final DynamoDbCommand<PutItemOutcome> cmd = new DynamoDbCommand<>("createFeature",
         putItemOutcomeSupplier,
         () -> {
           throw new RuntimeException("createFeature");
@@ -119,7 +89,7 @@ public class DefaultFeatureStorage implements FeatureStorage {
         hystrixWriteConfiguration,
         metrics);
 
-    PutItemOutcome outcome = cmd.execute();
+    final PutItemOutcome outcome = cmd.execute();
 
     logger.info("{} /dynamodb_put_item_result=[{}]",
         kvp("op", "createFeature", "appkey", appKey, "feature_key", key, "result", "ok"),
@@ -128,10 +98,43 @@ public class DefaultFeatureStorage implements FeatureStorage {
     return null;
   }
 
-  @Override public Void updateFeature(Feature feature) {
+  @Override public Void
+  updateFeature(Feature feature, FeatureVersion previousVersion) {
     logger.info("{}",
         kvp("op", "updateFeature", "appkey", feature.getAppkey(), "feature_key", feature.getKey()));
-    createFeature(feature);
+
+    final String key = feature.getKey();
+    final String appKey = feature.getAppkey();
+    final Item item = preparePutItem(feature);
+
+    final PutItemSpec putItemSpec = new PutItemSpec()
+        .withItem(item)
+        .withExpected(new Expected("version_id").eq(previousVersion.getId()));
+
+    final Supplier<PutItemOutcome> putItemOutcomeSupplier = () -> {
+      try {
+        return dynamoDB.getTable(featureTableName).putItem(putItemSpec);
+      } catch (ConditionalCheckFailedException e) {
+        logger.error("err=conflict_feature_version_mismatch appkey={} {}", feature.getKey(), e.getMessage());
+        throwConflictVersionMismatch(feature);
+        return null;
+      }
+    };
+
+    final DynamoDbCommand<PutItemOutcome> cmd = new DynamoDbCommand<>("updateFeature",
+        putItemOutcomeSupplier,
+        () -> {
+          throw new RuntimeException("updateFeature");
+        },
+        hystrixWriteConfiguration,
+        metrics);
+
+    final PutItemOutcome outcome = cmd.execute();
+
+    logger.info("{} /dynamodb_update_item_result=[{}]",
+        kvp("op", "updateFeature", "appkey", appKey, "feature_key", key, "result", "ok"),
+        outcome.getPutItemResult().toString());
+
     return null;
   }
 
@@ -153,6 +156,46 @@ public class DefaultFeatureStorage implements FeatureStorage {
       return Optional.empty();
     }
     return Optional.of(FeatureSupport.toFeature(item.getString("json")));
+  }
+
+  private Item preparePutItem(Feature feature) {
+    final String key = feature.getKey();
+    final String id = feature.getId();
+    final String appKey = feature.getAppkey();
+    final String json = Protobuf3Support.toJsonString(feature);
+
+    final Map<String, String> owner = Maps.newHashMap();
+
+    if (!Strings.isNullOrEmpty(feature.getOwner().getName())) {
+      owner.put("name", feature.getOwner().getName());
+    }
+
+    if (!Strings.isNullOrEmpty(feature.getOwner().getEmail())) {
+      owner.put("email", feature.getOwner().getEmail());
+    }
+
+    if (!Strings.isNullOrEmpty(feature.getOwner().getUsername())) {
+      owner.put("username", feature.getOwner().getUsername());
+    }
+
+    final Item item = new Item()
+        .withString("appkey", appKey)
+        .withString("version_id", feature.getVersion().getId())
+        .withNumber("version_timestamp", feature.getVersion().getTimestamp())
+        .withNumber("version_counter", feature.getVersion().getCounter())
+        .withString("feature_key", key)
+        .withString("id", id)
+        .withString("state", feature.getState().name())
+        .withString("json", json)
+        .withString("v", "1")
+        .withString("created", feature.getCreated())
+        .withString("updated", feature.getUpdated())
+        .withMap("owner", owner);
+
+    if (!Strings.isNullOrEmpty(feature.getDescription())) {
+      item.withString("desc", feature.getDescription());
+    }
+    return item;
   }
 
   private Item getItem(String appKey, String key, Table table) {
