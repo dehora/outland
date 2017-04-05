@@ -29,7 +29,7 @@ securityDefinitions:
     type: basic
 
 paths:
-  "/apps":
+  "/namespaces":
     post:
       parameters:
         - name: "app"
@@ -59,7 +59,7 @@ paths:
           description: returned if the App is invalid
           schema:
             $ref: '#/definitions/Problem'
-  "/apps/{appkey}":
+  "/namespaces/{appkey}":
     get:
       parameters:
         - name: "appkey"
@@ -72,7 +72,7 @@ paths:
           schema:
             $ref: '#/definitions/App'
            
-  "/apps/{appkey}/access/members":
+  "/namespaces/{appkey}/access/members":
     post:
       parameters:
         - name: "appkey"
@@ -99,7 +99,7 @@ paths:
               description: |
                 Returned if the request is a duplicate based on the Idempotency-Key
 
-  "/apps/{appkey}/access/members/{member_key_or_email}":
+  "/namespaces/{appkey}/access/members/{member_key_or_email}":
     delete:
       parameters:
         - name: "appkey"
@@ -118,7 +118,7 @@ paths:
           schema:
             $ref: '#/definitions/App'
     
-  "/apps/{appkey}/access/services":
+  "/namespaces/{appkey}/access/services":
     post:
       parameters:
         - name: "appkey"
@@ -145,7 +145,7 @@ paths:
               description: |
                 Returned if the request is a duplicate based on the Idempotency-Key
 
-  "/apps/{appkey}/access/services/{service_key}":
+  "/namespaces/{appkey}/access/services/{service_key}":
     delete:
       parameters:
         - name: "appkey"
@@ -162,7 +162,7 @@ paths:
           schema:
             $ref: '#/definitions/App'
  
-  "/apps/{appkey}/owners":
+  "/namespaces/{appkey}/owners":
     post:
       parameters:
         - name: "appkey"
@@ -194,7 +194,7 @@ paths:
           schema:
             $ref: '#/definitions/Problem'
 
-  "/apps/{appkey}/owners/{owner_username_or_email}":
+  "/namespaces/{appkey}/owners/{owner_username_or_email}":
     delete:
       parameters:
         - name: "appkey"

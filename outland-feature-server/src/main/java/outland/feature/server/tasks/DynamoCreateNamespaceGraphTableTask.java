@@ -20,20 +20,20 @@ import org.slf4j.LoggerFactory;
 import outland.feature.server.apps.NamespaceStorage;
 import outland.feature.server.features.TableConfiguration;
 
-public class DynamoCreateAppGraphTableTask extends Task {
+public class DynamoCreateNamespaceGraphTableTask extends Task {
 
   private static final Logger logger =
-      LoggerFactory.getLogger(DynamoCreateAppGraphTableTask.class);
+      LoggerFactory.getLogger(DynamoCreateNamespaceGraphTableTask.class);
 
   private final AmazonDynamoDB dynamoDB;
   private final TableConfiguration tableConfiguration;
 
   @Inject
-  public DynamoCreateAppGraphTableTask(
+  public DynamoCreateNamespaceGraphTableTask(
       AmazonDynamoDB dynamoDB,
       TableConfiguration tableConfiguration
   ) {
-    super("DynamoCreateAppGraphTableTask");
+    super("DynamoCreateNamespaceGraphTableTask");
     this.dynamoDB = dynamoDB;
     this.tableConfiguration = tableConfiguration;
   }

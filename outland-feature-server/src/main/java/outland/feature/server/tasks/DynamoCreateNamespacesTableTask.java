@@ -6,9 +6,6 @@ import com.amazonaws.services.dynamodbv2.model.CreateTableRequest;
 import com.amazonaws.services.dynamodbv2.model.DescribeTableRequest;
 import com.amazonaws.services.dynamodbv2.model.KeySchemaElement;
 import com.amazonaws.services.dynamodbv2.model.KeyType;
-import com.amazonaws.services.dynamodbv2.model.LocalSecondaryIndex;
-import com.amazonaws.services.dynamodbv2.model.Projection;
-import com.amazonaws.services.dynamodbv2.model.ProjectionType;
 import com.amazonaws.services.dynamodbv2.model.ProvisionedThroughput;
 import com.amazonaws.services.dynamodbv2.model.ScalarAttributeType;
 import com.amazonaws.services.dynamodbv2.model.TableDescription;
@@ -22,19 +19,20 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import outland.feature.server.features.TableConfiguration;
 
-public class DynamoCreateAppsTableTask extends Task {
+public class DynamoCreateNamespacesTableTask extends Task {
 
-  private static final Logger logger = LoggerFactory.getLogger(DynamoCreateAppsTableTask.class);
+  private static final Logger logger = LoggerFactory.getLogger(DynamoCreateNamespacesTableTask.class);
+  public static final String HASH_KEY = "ns_key";
 
   private final AmazonDynamoDB amazonDynamoDB;
   private final TableConfiguration tableConfiguration;
 
   @Inject
-  public DynamoCreateAppsTableTask(
+  public DynamoCreateNamespacesTableTask(
       AmazonDynamoDB amazonDynamoDB,
       TableConfiguration tableConfiguration
   ) {
-    super("DynamoCreateAppsTableTask");
+    super("DynamoCreateNamespacesTableTask");
     this.amazonDynamoDB = amazonDynamoDB;
     this.tableConfiguration = tableConfiguration;
   }
@@ -46,7 +44,7 @@ public class DynamoCreateAppsTableTask extends Task {
 
   private void createAppsTable(String tableName) {
     final AttributeDefinition appKey =
-        new AttributeDefinition().withAttributeName("app_key").withAttributeType(
+        new AttributeDefinition().withAttributeName(HASH_KEY).withAttributeType(
             ScalarAttributeType.S);
 
     final ArrayList<AttributeDefinition>
@@ -54,7 +52,7 @@ public class DynamoCreateAppsTableTask extends Task {
 
     final ArrayList<KeySchemaElement> tableKeySchema = Lists.newArrayList();
     tableKeySchema.add(
-        new KeySchemaElement().withAttributeName("app_key").withKeyType(KeyType.HASH));
+        new KeySchemaElement().withAttributeName(HASH_KEY).withKeyType(KeyType.HASH));
 
     final ProvisionedThroughput tableProvisionedThroughput =
         new ProvisionedThroughput()

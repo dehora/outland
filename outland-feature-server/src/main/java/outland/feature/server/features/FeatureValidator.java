@@ -107,8 +107,8 @@ class FeatureValidator {
     validateFeatureKeyThrowing(feature.getKey(), Problem.clientProblem("no_key_for_feature",
         "A feature must have a key", 422));
 
-    validateFeatureKeyThrowing(feature.getAppkey(), Problem.clientProblem("no_appkey_for_feature",
-        "A feature must have an appkey", 422));
+    validateFeatureKeyThrowing(feature.getAppkey(), Problem.clientProblem("no_nskey_for_feature",
+        "A feature must have a namespace key", 422));
   }
 
   private void validateFeatureKeyThrowing(String key, Problem no_key_for_feature) {
