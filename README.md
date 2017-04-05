@@ -18,7 +18,7 @@
 - [Quickstart](#quickstart)
   - [Server](#server)
     - [Start a Server with Docker](#start-a-server-with-docker)
-    - [Create an App and some Features via the API](#create-an-app-and-some-features-via-the-api)
+    - [Create a Namespace and some Features via the API](#create-a-namespace-and-some-features-via-the-api)
     - [Enable a Feature](#enable-a-feature)
   - [Client](#client)
     - [Add the client library](#add-the-client-library)
@@ -29,13 +29,13 @@
 - [Outland Feature Flag Model](#outland-feature-flag-model)
   - [Features](#features)
   - [Feature Flags and Feature Options](#feature-flags-and-feature-options)
-  - [Apps](#apps)
-  - [App Grants](#app-grants)
+  - [Namespace](#namespace)
+  - [Namespace Access](#namespace-access)
 - [Installation](#installation)
   - [Server](#server-1)
     - [Docker](#docker)
     - [Creating Tables in DynamoDB](#creating-tables-in-dynamodb)
-    - [Creating a sample App and Features](#creating-a-sample-app-and-features)
+    - [Creating a sample Namespace and Features](#creating-a-sample-namespace-and-features)
     - [Configuring the Server](#configuring-the-server)
     - [Server API Authentication](#server-api-authentication)
   - [Client Installation](#client-installation)
@@ -101,34 +101,34 @@ This will:
  - Add the redis and dynamodb-local images and start them.
  - Start an Outland container on port 8180.
  - Create the dynamodb tables used by the server.
- - Seed the server with an app called `testapp`.
- - Add two feature flags to the app, `test-flag-1` and `test-option-1`. 
+ - Seed the server with a namespace called `testnamespace`.
+ - Add two feature flags to the namespace, `test-flag-1` and `test-option-1`. 
  
  
-You can see the app's list of features via the API:
+You can see the namespace's list of features via the API:
 
 ```bash
-curl -v http://localhost:8180/features/testapp -u testconsole/service:letmein
+curl -v http://localhost:8180/features/testnamespace -u testconsole/service:letmein
 ```
 
-As well as the App itself and its grants:
+As well as the Namespace itself and its grants:
 
 ```bash
-curl -v http://localhost:8180/namespaces/testapp -u testconsole/service:letmein
+curl -v http://localhost:8180/namespaces/testnamespace -u testconsole/service:letmein
 ```
 
 Dummy credentials are setup as a convenience in the folder's `.env` file, this is how the 
 `testconsole` service is given access (all API calls require authentication). 
 
-### Create an App and some Features via the API
+### Create a Namespace and some Features via the API
 
-An _app_ is used to group features together and store information about which services are 
-granted accessed the app's features. Grants can be given to _services_ or _members_ (such as an 
-individual or team account). Every app also has one or more _owners_.
+A _namespace_ is used to group features together and store information about which services are 
+granted accessed the namespace's features. Grants can be given to _services_ or _members_ (such as an 
+individual or team account). Every namespace also has one or more _owners_.
 
-The example below creates an app called testapp-1 with two grants and an owner. The grants are 
+The example below creates an namespace called testnamespace-1 with two grants and an owner. The grants are 
 given to  a service called testservice-1 and one to a user called testuser-1. The owner is 
-also testuser-1 - owners are just owners, and are not granted access to an app's features by 
+also testuser-1 - owners are just owners, and are not granted access to an namespace's features by 
 default. 
 
 ```bash
@@ -136,8 +136,8 @@ curl -v -XPOST http://localhost:8180/namespaces   \
 -H "Content-type: application/json" \
 -u testconsole/service:letmein  -d'
 {
-  "key": "testapp-1"
-  ,"name": "Test App One"
+  "key": "testnamespace-1"
+  ,"name": "Test Namespace One"
   ,"owners": {
     "items":[{
       "name": "Test User One"
@@ -160,8 +160,8 @@ curl -v -XPOST http://localhost:8180/namespaces   \
 '
 ```
 
-Let's add a _feature_ to the app by posting the feature JSON to the server associating it with 
-the app's `key`. This one is a simple on/off flag:
+Let's add a _feature_ to the namespace by posting the feature JSON to the server associating it with 
+the namespace's `key`. This one is a simple on/off flag:
 
 ```bash
 curl -v http://localhost:8180/features \
@@ -170,7 +170,7 @@ curl -v http://localhost:8180/features \
 {
   "key": "testfeature-1"
   ,"description": "A test feature flag"
-  ,"appkey": "testapp-1"
+  ,"namespace": "testnamespace-1"
   ,"options": {
     "option": "flag"
   },
@@ -195,7 +195,7 @@ curl -v http://localhost:8180/features \
 {
   "key": "testfeature-2"
   ,"description": "A test feature flag"
-  ,"appkey": "testapp-1"
+  ,"namespace": "testnamespace-1"
   ,"options": {
     "option": "bool",
     "items":[
@@ -225,12 +225,12 @@ Features are off by default. Let's enable the first feature `testfeature-1` by s
 to on:
 
 ```bash
-curl -v -XPOST  http://localhost:8180/features/testapp-1/testfeature-1 \
+curl -v -XPOST  http://localhost:8180/features/testnamespace-1/testfeature-1 \
 -H "Content-type: application/json" \
 -u testconsole/service:letmein -d'
 {
   "key": "testfeature-1"
-  ,"appkey": "testapp-1"
+  ,"namespace": "testnamespace-1"
   ,"state": "on"
 }  
 '
@@ -245,10 +245,10 @@ The client is available via JCenter, see the [Client](#client) section for detai
 Once the client is setup up as a dependency you can configure it as follows:
 
 ```java
-  final String nsKey = "testapp";
+  final String namespace = "testnamespace";
   ServerConfiguration conf = new ServerConfiguration()
       .baseURI("http://localhost:8180")
-      .nsKey(nsKey);
+      .nsKey(namespace);
 
   FeatureClient client = FeatureClient.newBuilder()
       .serverConfiguration(conf)
@@ -285,7 +285,7 @@ From the client:
   FeatureResource features = client.resources().features();
 
   Feature feature = Feature.newBuilder()
-      .setNamespace("testapp")
+      .setNamespace("testnamespace")
       .setKey("test-flag-1")
       .setState(Feature.State.on)
       .build();
@@ -297,12 +297,12 @@ From the client:
 From the API:
 
 ```sh
-curl -i http://localhost:8180/features/testapp/test-flag-1 \
+curl -i http://localhost:8180/features/testnamespace/test-flag-1 \
 -u testconsole/service:letmein  \
 -H "Content-type: application/json" -d '
 {
   "key": "test-flag-1",
-  "appkey": "testapp",
+  "namespace": "testnamespace",
   "state": "on"
 }
 '
@@ -351,11 +351,11 @@ and a version.
 state to return a particular option. Each option has a weight that affects the chance if it 
 being returned.
 
-- An App is a collection of features and identified by a key. Every App at least one owner. A 
-Feature always belongs to one App.
+- A Namespace is a collection of features and identified by a key. Every Namespace at least one owner. A 
+Feature always belongs to one Namespace.
 
-- Apps also hold a list of Grants to services and team members. A grant allows them to access 
-the App's features from the server. 
+- Namespaces also hold a list of Grants to services and team members. A grant allows them to access 
+the Namespace's features from the server. 
 
 ## Features
 
@@ -416,39 +416,39 @@ biases the evaluation. One time in ten the "red" option will be returned, two ti
 it'll be "green", and seven times out of ten it'll be "blue". This gives us a path beyond on/off 
 toggles to things like A/B testing and multi-armed bandits.
 
-## Apps
+## Namespace
 
-An App is a collection of features and every feature belongs to just one App. An App can be 
+A Namespace is a collection of features and every feature belongs to just one Namespace. A Namespace can be 
 anything - it doesn't have to correspond to a construct in your system like a specific service 
-or a product. The main goal of an App is to allow features to be observed by multiple systems. 
-For example you might use an App to group features together for an epic project such that it allows 
+or a product. The main goal of a Namespace is to allow features to be observed by multiple systems. 
+For example you might use a Namespace to group features together for an epic project such that it allows 
 those features to span multiple microservices owned by a few different teams. Or you may simply 
 want to make some features available to your backend server and your single page webapp.  
 
 Our experience is that the thing you want to develop often has multiple 
 parts and often will span multiple systems. In fact we think it's inevitable some ambitious thing 
 you want to build will cut across whatever boundaries you have in place, however well-considered, 
-be they social or technical. Apps allow you to express that need and deal with requirements that 
+be they social or technical. Namespaces allow you to express that need and deal with requirements that 
 are naturally divergent. 
 
-Every App has one or more owners that can administrate the App and act as point of contact. Every 
-feature belonging to an App must have a unique key within the App.
+Every Namespace has one or more owners that can administrate the Namespace and act as point of contact. Every 
+feature belonging to a Namespace must have a unique key within the Namespace.
  
-Finally, the App construct enables multi-tenancy, allowing multiple teams to share the 
+Finally, the Namespace construct enables multi-tenancy, allowing multiple teams to share the 
 same Outland service. There's nothing to stop you running multiple Outland servers but it 
 can be nice to leverage shared infrastructure and reduce heavy lifting.
 
-## App Grants
+## Namespace Access
 
-As well as grouping features, an App can _grant_ access to one or more services 
+As well as grouping features, an Namespace can _grant_ access to one or more services 
 (typically running systems), or to one or members (typically individual or teams). We'll just 
 refer to both kinds as services for now but they are handled separetely. 
 
-Once the service requesting access to a feature or app is authenticated it is checked to see 
-if it's in the grant list for the App. If it is it has access to the feature state, otherwise it 
+Once the service requesting access to a feature or namespace is authenticated it is checked to see 
+if it's in the grant list for the Namespace. If it is it has access to the feature state, otherwise it 
 won't be authorised. 
 
-Grants allow the App owner to declare which services can see the App's features. Owners and grants 
+Grants allow the Namespace owner to declare which services can see the Namespace's features. Owners and grants 
 are distinct - owners are not automatically given grants and are not looked up during authentication. 
 
 
@@ -473,18 +473,18 @@ The `create_tables` script in the [examples/all-in-one](https://github.com/dehor
 
 For online or production use, you can create the tables via the AWS Console and choose to change their names as described [here](https://github.com/dehora/outland/blob/master/outland-feature-docker/README.md).
 
-### Creating a sample App and Features
+### Creating a sample Namespace and Features
 
-The `create_seed_app` will create an App called `test-acme-app` with two example features. The script contains plain curl requests which you might find useful for seeing how to call the API. You can see the App's list of features via the API:
+The `create_seed_namespace` will create a Namespace called `test-acme-namespace` with two example features. The script contains plain curl requests which you might find useful for seeing how to call the API. You can see the Namespace's list of features via the API:
 
 ```sh
-curl -v http://localhost:8180/features/test-acme-app -u testconsole/service:letmein
+curl -v http://localhost:8180/features/test-acme-namespace -u testconsole/service:letmein
 ```
 
-As well as the App itself and its grants:
+As well as the Namespace itself and its grants:
 
 ```sh
-curl -v http://localhost:8180/app/test-acme-app -u testconsole/service:letmein
+curl -v http://localhost:8180/namespaces/test-acme-namespace -u testconsole/service:letmein
 ```
 
 ### Configuring the Server
