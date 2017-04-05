@@ -1,23 +1,22 @@
 package outland.feature.server.auth;
 
-import com.google.common.collect.Lists;
 import io.dropwizard.auth.AuthenticationException;
 import java.util.Optional;
 import javax.inject.Inject;
-import outland.feature.server.apps.AppAuthService;
+import outland.feature.server.apps.NamesapaceAuthService;
 
 public class TokenOAuthAuthenticator implements io.dropwizard.auth.Authenticator<String, AuthPrincipal> {
 
-  private final AppAuthService appAuthService;
+  private final NamesapaceAuthService namesapaceAuthService;
 
   @Inject
   public TokenOAuthAuthenticator(
-      AppAuthService appAuthService
+      NamesapaceAuthService namesapaceAuthService
   ) {
-    this.appAuthService = appAuthService;
+    this.namesapaceAuthService = namesapaceAuthService;
   }
 
   @Override public Optional<AuthPrincipal> authenticate(String credentials) throws AuthenticationException {
-    return appAuthService.authenticate(credentials, AppAuthService.BEARER);
+    return namesapaceAuthService.authenticate(credentials, NamesapaceAuthService.BEARER);
   }
 }

@@ -33,7 +33,7 @@ import org.glassfish.jersey.server.filter.RolesAllowedDynamicFeature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import outland.feature.server.app.GuiceApplication;
-import outland.feature.server.apps.AppAuthService;
+import outland.feature.server.apps.NamesapaceAuthService;
 import outland.feature.server.apps.AppModule;
 import outland.feature.server.auth.AuthPrincipal;
 import outland.feature.server.auth.AuthConfiguration;
@@ -123,7 +123,7 @@ public class ServerMain extends GuiceApplication<ServerConfiguration> {
               .expireAfterWrite(configuration.oauthCacheTokenSeconds, TimeUnit.SECONDS));
 
       final AuthFilter oauthFilter = new OAuthCredentialAuthFilter.Builder<AuthPrincipal>()
-          .setPrefix(AppAuthService.BEARER)
+          .setPrefix(NamesapaceAuthService.BEARER)
           .setRealm("outland_feature")
           .setAuthenticator(cached)
           .setAuthorizer(oauthAppAuthorizer)

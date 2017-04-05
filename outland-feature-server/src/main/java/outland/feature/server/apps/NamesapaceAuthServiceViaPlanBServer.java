@@ -24,9 +24,9 @@ import outland.feature.server.auth.AuthPrincipal;
 
 import static outland.feature.server.StructLog.kvp;
 
-public class AppAuthServiceViaPlanBServer implements AppAuthService {
+public class NamesapaceAuthServiceViaPlanBServer implements NamesapaceAuthService {
 
-  private static final Logger logger = LoggerFactory.getLogger(AppAuthServiceViaPlanBServer.class);
+  private static final Logger logger = LoggerFactory.getLogger(NamesapaceAuthServiceViaPlanBServer.class);
 
   private static Gson gson() {
     return GsonHolder.INSTANCE;
@@ -46,7 +46,7 @@ public class AppAuthServiceViaPlanBServer implements AppAuthService {
   private final URI tokenLookupUri;
 
   @Inject
-  public AppAuthServiceViaPlanBServer(
+  public NamesapaceAuthServiceViaPlanBServer(
       @Named("OAuthServiceClient") OkHttpClient client,
       @Named("OAuthServiceTokenLookupUri") URI tokenLookupUri) {
     this.client = client;

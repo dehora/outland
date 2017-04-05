@@ -15,8 +15,8 @@ import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 import org.junit.Test;
-import outland.feature.server.apps.AppAuthService;
-import outland.feature.server.apps.AppAuthServiceViaPlanBServer;
+import outland.feature.server.apps.NamesapaceAuthService;
+import outland.feature.server.apps.NamesapaceAuthServiceViaPlanBServer;
 import outland.feature.server.apps.TestAppModule;
 import outland.feature.server.features.VersionService;
 import outland.feature.server.features.Versions;
@@ -54,7 +54,7 @@ public class AuthTest {
         new AbstractModule(){
           @Override protected void configure() {
             bind(VersionService.class).to(Versions.class).asEagerSingleton();
-            bind(AppAuthService.class).to(AppAuthServiceViaPlanBServer.class).asEagerSingleton();
+            bind(NamesapaceAuthService.class).to(NamesapaceAuthServiceViaPlanBServer.class).asEagerSingleton();
             List<String> multipleNamespaceAccessList = Lists.newArrayList();
             multipleNamespaceAccessList.addAll(
                 Splitter.on(",").splitToList(authConfiguration.multipleNamespaceAccessList));
