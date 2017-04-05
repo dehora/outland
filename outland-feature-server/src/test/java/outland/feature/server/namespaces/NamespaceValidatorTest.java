@@ -1,4 +1,4 @@
-package outland.feature.server.apps;
+package outland.feature.server.namespaces;
 
 import org.junit.Test;
 import outland.feature.proto.Namespace;

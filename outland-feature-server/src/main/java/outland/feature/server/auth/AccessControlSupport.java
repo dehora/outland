@@ -7,7 +7,7 @@ import javax.inject.Named;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import outland.feature.proto.Namespace;
-import outland.feature.server.apps.NamespaceService;
+import outland.feature.server.namespaces.NamespaceService;
 
 import static outland.feature.server.StructLog.kvp;
 

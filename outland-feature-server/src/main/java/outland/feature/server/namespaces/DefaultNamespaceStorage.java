@@ -1,4 +1,4 @@
-package outland.feature.server.apps;
+package outland.feature.server.namespaces;
 
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.document.DeleteItemOutcome;

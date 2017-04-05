@@ -15,9 +15,9 @@ import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 import org.junit.Test;
-import outland.feature.server.apps.NamesapaceAuthService;
-import outland.feature.server.apps.NamesapaceAuthServiceViaPlanBServer;
-import outland.feature.server.apps.TestAppModule;
+import outland.feature.server.namespaces.NamesapaceAuthService;
+import outland.feature.server.namespaces.NamesapaceAuthServiceViaPlanBServer;
+import outland.feature.server.namespaces.TestAppModule;
 import outland.feature.server.features.VersionService;
 import outland.feature.server.features.Versions;
 

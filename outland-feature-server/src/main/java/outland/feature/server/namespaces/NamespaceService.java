@@ -1,4 +1,4 @@
-package outland.feature.server.apps;
+package outland.feature.server.namespaces;
 
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
