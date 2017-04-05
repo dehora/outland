@@ -11,10 +11,10 @@ import outland.feature.proto.OwnerCollection;
 import outland.feature.proto.ServiceAccess;
 import outland.feature.server.features.Ulid;
 
-class AppUpdateProcessor {
+class NamespaceUpdateProcessor {
 
-  List<ServiceAccess> mergeServices(Namespace app, ServiceAccess incoming) {
-    final AccessCollection existingGrants = app.getGranted();
+  List<ServiceAccess> mergeServices(Namespace namespace, ServiceAccess incoming) {
+    final AccessCollection existingGrants = namespace.getGranted();
     final List<ServiceAccess> existingGrantsList = existingGrants.getServicesList();
     final List<ServiceAccess> updateGrantList = Lists.newArrayList();
     boolean found = false;
@@ -33,8 +33,8 @@ class AppUpdateProcessor {
     return updateGrantList;
   }
 
-  List<MemberAccess> mergeMembers(Namespace app, MemberAccess incoming) {
-    final AccessCollection existingGrants = app.getGranted();
+  List<MemberAccess> mergeMembers(Namespace namespace, MemberAccess incoming) {
+    final AccessCollection existingGrants = namespace.getGranted();
     final List<MemberAccess> existingGrantsList = existingGrants.getMembersList();
     final List<MemberAccess> updateGrantList = Lists.newArrayList();
     boolean found = false;
@@ -53,8 +53,8 @@ class AppUpdateProcessor {
     return updateGrantList;
   }
 
-  List<Owner> mergeOwners(Namespace app, Owner incoming) {
-    final OwnerCollection existingOwners = app.getOwners();
+  List<Owner> mergeOwners(Namespace namespace, Owner incoming) {
+    final OwnerCollection existingOwners = namespace.getOwners();
     final List<Owner> existingOwnerList = existingOwners.getItemsList();
     final List<Owner> updateOwnerList = Lists.newArrayList();
     boolean found = false;

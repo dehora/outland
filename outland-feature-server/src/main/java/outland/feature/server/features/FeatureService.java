@@ -20,11 +20,11 @@ public interface FeatureService {
 
   Optional<Feature> registerFeature(Feature feature);
 
-  Optional<Feature> updateFeature(String appKey, String featureKey, Feature feature);
+  Optional<Feature> updateFeature(String namespace, String featureKey, Feature feature);
 
-  Optional<Feature> loadFeatureByKey(String appKey, String featureKey);
+  Optional<Feature> loadFeatureByKey(String namespace, String featureKey);
 
-  FeatureCollection loadFeatures(String appKey);
+  FeatureCollection loadFeatures(String namespace);
 
-  FeatureCollection loadFeaturesChangedSince(String appKey, OffsetDateTime since);
+  FeatureCollection loadFeaturesChangedSince(String namespace, OffsetDateTime since);
 }

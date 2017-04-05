@@ -106,14 +106,14 @@ public class FeatureResource {
   }
 
   @POST
-  @Path("/{ns_key}/{feature_key}")
+  @Path("/{namespace}/{feature_key}")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
   @PermitAll
   @Timed(name = "updateFeature")
   public Response updateFeature(
       @Auth AuthPrincipal authPrincipal,
-      @PathParam("ns_key") String nsKey,
+      @PathParam("namespace") String nsKey,
       @PathParam("feature_key") String featureKey,
       Feature feature,
       @Context HttpHeaders httpHeaders
@@ -141,13 +141,13 @@ public class FeatureResource {
   }
 
   @GET
-  @Path("/{ns_key}/{feature_key}")
+  @Path("/{namespace}/{feature_key}")
   @Produces(MediaType.APPLICATION_JSON)
   @PermitAll
   @Timed(name = "getFeatureByKey")
   public Response getFeatureByKey(
       @Auth AuthPrincipal authPrincipal,
-      @PathParam("ns_key") String nsKey,
+      @PathParam("namespace") String nsKey,
       @PathParam("feature_key") String featureKey
   ) throws AuthenticationException {
 
@@ -166,14 +166,14 @@ public class FeatureResource {
   }
 
   @GET
-  @Path("/{ns_key}")
+  @Path("/{namespace}")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
   @PermitAll
   @Timed(name = "getFeatures")
   public Response getFeatures(
       @Auth AuthPrincipal authPrincipal,
-      @PathParam("ns_key") String nsKey
+      @PathParam("namespace") String nsKey
   ) throws AuthenticationException {
 
     final long start = System.currentTimeMillis();
@@ -185,14 +185,14 @@ public class FeatureResource {
   }
 
   @GET
-  @Path("/{ns_key}/feed")
+  @Path("/{namespace}/feed")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
   @PermitAll
   @Timed(name = "getFeaturesSince")
   public Response getFeaturesSince(
       @Auth AuthPrincipal authPrincipal,
-      @PathParam("ns_key") String nsKey,
+      @PathParam("namespace") String nsKey,
       @QueryParam("since") long since
   ) throws AuthenticationException {
 
