@@ -4,17 +4,17 @@
 package outland.feature.proto;
 
 /**
- * Protobuf type {@code outland.App}
+ * Protobuf type {@code outland.Namespace}
  */
-public  final class App extends
+public  final class Namespace extends
     com.google.protobuf.GeneratedMessageV3 implements
-    // @@protoc_insertion_point(message_implements:outland.App)
-    AppOrBuilder {
-  // Use App.newBuilder() to construct.
-  private App(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+    // @@protoc_insertion_point(message_implements:outland.Namespace)
+    NamespaceOrBuilder {
+  // Use Namespace.newBuilder() to construct.
+  private Namespace(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
     super(builder);
   }
-  private App() {
+  private Namespace() {
     type_ = "";
     id_ = "";
     key_ = "";
@@ -28,7 +28,7 @@ public  final class App extends
   getUnknownFields() {
     return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
   }
-  private App(
+  private Namespace(
       com.google.protobuf.CodedInputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
@@ -123,14 +123,14 @@ public  final class App extends
   }
   public static final com.google.protobuf.Descriptors.Descriptor
       getDescriptor() {
-    return outland.feature.proto.FeatureMessage.internal_static_outland_App_descriptor;
+    return outland.feature.proto.FeatureMessage.internal_static_outland_Namespace_descriptor;
   }
 
   protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internalGetFieldAccessorTable() {
-    return outland.feature.proto.FeatureMessage.internal_static_outland_App_fieldAccessorTable
+    return outland.feature.proto.FeatureMessage.internal_static_outland_Namespace_fieldAccessorTable
         .ensureFieldAccessorsInitialized(
-            outland.feature.proto.App.class, outland.feature.proto.App.Builder.class);
+            outland.feature.proto.Namespace.class, outland.feature.proto.Namespace.Builder.class);
   }
 
   public static final int TYPE_FIELD_NUMBER = 8;
@@ -458,10 +458,10 @@ public  final class App extends
     if (obj == this) {
      return true;
     }
-    if (!(obj instanceof outland.feature.proto.App)) {
+    if (!(obj instanceof outland.feature.proto.Namespace)) {
       return super.equals(obj);
     }
-    outland.feature.proto.App other = (outland.feature.proto.App) obj;
+    outland.feature.proto.Namespace other = (outland.feature.proto.Namespace) obj;
 
     boolean result = true;
     result = result && getType()
@@ -521,58 +521,58 @@ public  final class App extends
     return hash;
   }
 
-  public static outland.feature.proto.App parseFrom(
+  public static outland.feature.proto.Namespace parseFrom(
       com.google.protobuf.ByteString data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static outland.feature.proto.App parseFrom(
+  public static outland.feature.proto.Namespace parseFrom(
       com.google.protobuf.ByteString data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static outland.feature.proto.App parseFrom(byte[] data)
+  public static outland.feature.proto.Namespace parseFrom(byte[] data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static outland.feature.proto.App parseFrom(
+  public static outland.feature.proto.Namespace parseFrom(
       byte[] data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static outland.feature.proto.App parseFrom(java.io.InputStream input)
+  public static outland.feature.proto.Namespace parseFrom(java.io.InputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input);
   }
-  public static outland.feature.proto.App parseFrom(
+  public static outland.feature.proto.Namespace parseFrom(
       java.io.InputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input, extensionRegistry);
   }
-  public static outland.feature.proto.App parseDelimitedFrom(java.io.InputStream input)
+  public static outland.feature.proto.Namespace parseDelimitedFrom(java.io.InputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseDelimitedWithIOException(PARSER, input);
   }
-  public static outland.feature.proto.App parseDelimitedFrom(
+  public static outland.feature.proto.Namespace parseDelimitedFrom(
       java.io.InputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
   }
-  public static outland.feature.proto.App parseFrom(
+  public static outland.feature.proto.Namespace parseFrom(
       com.google.protobuf.CodedInputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input);
   }
-  public static outland.feature.proto.App parseFrom(
+  public static outland.feature.proto.Namespace parseFrom(
       com.google.protobuf.CodedInputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
@@ -584,7 +584,7 @@ public  final class App extends
   public static Builder newBuilder() {
     return DEFAULT_INSTANCE.toBuilder();
   }
-  public static Builder newBuilder(outland.feature.proto.App prototype) {
+  public static Builder newBuilder(outland.feature.proto.Namespace prototype) {
     return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
   }
   public Builder toBuilder() {
@@ -599,25 +599,25 @@ public  final class App extends
     return builder;
   }
   /**
-   * Protobuf type {@code outland.App}
+   * Protobuf type {@code outland.Namespace}
    */
   public static final class Builder extends
       com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-      // @@protoc_insertion_point(builder_implements:outland.App)
-      outland.feature.proto.AppOrBuilder {
+      // @@protoc_insertion_point(builder_implements:outland.Namespace)
+      outland.feature.proto.NamespaceOrBuilder {
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return outland.feature.proto.FeatureMessage.internal_static_outland_App_descriptor;
+      return outland.feature.proto.FeatureMessage.internal_static_outland_Namespace_descriptor;
     }
 
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return outland.feature.proto.FeatureMessage.internal_static_outland_App_fieldAccessorTable
+      return outland.feature.proto.FeatureMessage.internal_static_outland_Namespace_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              outland.feature.proto.App.class, outland.feature.proto.App.Builder.class);
+              outland.feature.proto.Namespace.class, outland.feature.proto.Namespace.Builder.class);
     }
 
-    // Construct using outland.feature.proto.App.newBuilder()
+    // Construct using outland.feature.proto.Namespace.newBuilder()
     private Builder() {
       maybeForceBuilderInitialization();
     }
@@ -663,23 +663,23 @@ public  final class App extends
 
     public com.google.protobuf.Descriptors.Descriptor
         getDescriptorForType() {
-      return outland.feature.proto.FeatureMessage.internal_static_outland_App_descriptor;
+      return outland.feature.proto.FeatureMessage.internal_static_outland_Namespace_descriptor;
     }
 
-    public outland.feature.proto.App getDefaultInstanceForType() {
-      return outland.feature.proto.App.getDefaultInstance();
+    public outland.feature.proto.Namespace getDefaultInstanceForType() {
+      return outland.feature.proto.Namespace.getDefaultInstance();
     }
 
-    public outland.feature.proto.App build() {
-      outland.feature.proto.App result = buildPartial();
+    public outland.feature.proto.Namespace build() {
+      outland.feature.proto.Namespace result = buildPartial();
       if (!result.isInitialized()) {
         throw newUninitializedMessageException(result);
       }
       return result;
     }
 
-    public outland.feature.proto.App buildPartial() {
-      outland.feature.proto.App result = new outland.feature.proto.App(this);
+    public outland.feature.proto.Namespace buildPartial() {
+      outland.feature.proto.Namespace result = new outland.feature.proto.Namespace(this);
       result.type_ = type_;
       result.id_ = id_;
       result.key_ = key_;
@@ -727,16 +727,16 @@ public  final class App extends
       return (Builder) super.addRepeatedField(field, value);
     }
     public Builder mergeFrom(com.google.protobuf.Message other) {
-      if (other instanceof outland.feature.proto.App) {
-        return mergeFrom((outland.feature.proto.App)other);
+      if (other instanceof outland.feature.proto.Namespace) {
+        return mergeFrom((outland.feature.proto.Namespace)other);
       } else {
         super.mergeFrom(other);
         return this;
       }
     }
 
-    public Builder mergeFrom(outland.feature.proto.App other) {
-      if (other == outland.feature.proto.App.getDefaultInstance()) return this;
+    public Builder mergeFrom(outland.feature.proto.Namespace other) {
+      if (other == outland.feature.proto.Namespace.getDefaultInstance()) return this;
       if (!other.getType().isEmpty()) {
         type_ = other.type_;
         onChanged();
@@ -779,11 +779,11 @@ public  final class App extends
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      outland.feature.proto.App parsedMessage = null;
+      outland.feature.proto.Namespace parsedMessage = null;
       try {
         parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        parsedMessage = (outland.feature.proto.App) e.getUnfinishedMessage();
+        parsedMessage = (outland.feature.proto.Namespace) e.getUnfinishedMessage();
         throw e.unwrapIOException();
       } finally {
         if (parsedMessage != null) {
@@ -1451,39 +1451,39 @@ public  final class App extends
     }
 
 
-    // @@protoc_insertion_point(builder_scope:outland.App)
+    // @@protoc_insertion_point(builder_scope:outland.Namespace)
   }
 
-  // @@protoc_insertion_point(class_scope:outland.App)
-  private static final outland.feature.proto.App DEFAULT_INSTANCE;
+  // @@protoc_insertion_point(class_scope:outland.Namespace)
+  private static final outland.feature.proto.Namespace DEFAULT_INSTANCE;
   static {
-    DEFAULT_INSTANCE = new outland.feature.proto.App();
+    DEFAULT_INSTANCE = new outland.feature.proto.Namespace();
   }
 
-  public static outland.feature.proto.App getDefaultInstance() {
+  public static outland.feature.proto.Namespace getDefaultInstance() {
     return DEFAULT_INSTANCE;
   }
 
-  private static final com.google.protobuf.Parser<App>
-      PARSER = new com.google.protobuf.AbstractParser<App>() {
-    public App parsePartialFrom(
+  private static final com.google.protobuf.Parser<Namespace>
+      PARSER = new com.google.protobuf.AbstractParser<Namespace>() {
+    public Namespace parsePartialFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-        return new App(input, extensionRegistry);
+        return new Namespace(input, extensionRegistry);
     }
   };
 
-  public static com.google.protobuf.Parser<App> parser() {
+  public static com.google.protobuf.Parser<Namespace> parser() {
     return PARSER;
   }
 
   @java.lang.Override
-  public com.google.protobuf.Parser<App> getParserForType() {
+  public com.google.protobuf.Parser<Namespace> getParserForType() {
     return PARSER;
   }
 
-  public outland.feature.proto.App getDefaultInstanceForType() {
+  public outland.feature.proto.Namespace getDefaultInstanceForType() {
     return DEFAULT_INSTANCE;
   }
 

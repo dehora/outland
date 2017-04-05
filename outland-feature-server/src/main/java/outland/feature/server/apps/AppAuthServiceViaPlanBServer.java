@@ -38,8 +38,8 @@ public class AppAuthServiceViaPlanBServer implements AppAuthService {
   private static final String PLANB_FIELD_REALM = "realm";
 
   static {
-    PLANB_REALMS.put("/employees", AppService.OWNER);
-    PLANB_REALMS.put("/services", AppService.SERVICE);
+    PLANB_REALMS.put("/employees", NamespaceService.OWNER);
+    PLANB_REALMS.put("/services", NamespaceService.SERVICE);
   }
 
   private final OkHttpClient client;
@@ -99,7 +99,7 @@ public class AppAuthServiceViaPlanBServer implements AppAuthService {
       return null;
     }
 
-    String type = AppService.SERVICE;
+    String type = NamespaceService.SERVICE;
 
     final Object realm = tokenInfo.get(PLANB_FIELD_REALM);
     if (realm != null) {

@@ -22,10 +22,8 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import outland.feature.proto.App;
-import outland.feature.server.Problem;
-import outland.feature.server.ServiceException;
-import outland.feature.server.app.AppSupport;
+import outland.feature.proto.Namespace;
+import outland.feature.server.app.NamespaceSupport;
 import outland.feature.server.features.DynamoDbCommand;
 import outland.feature.server.features.TableConfiguration;
 import outland.feature.server.hystrix.HystrixConfiguration;
@@ -33,9 +31,9 @@ import outland.feature.server.protobuf.Protobuf3Support;
 
 import static outland.feature.server.StructLog.kvp;
 
-public class DefaultAppStorage implements AppStorage {
+public class DefaultNamespaceStorage implements NamespaceStorage {
 
-  private static final Logger logger = LoggerFactory.getLogger(DefaultAppStorage.class);
+  private static final Logger logger = LoggerFactory.getLogger(DefaultNamespaceStorage.class);
   private static final String HASH_KEY = "app_key";
 
   private final DynamoDB dynamoDB;
@@ -48,7 +46,7 @@ public class DefaultAppStorage implements AppStorage {
   private final AmazonDynamoDB amazonDynamoDB;
 
   @Inject
-  public DefaultAppStorage(
+  public DefaultNamespaceStorage(
       AmazonDynamoDB amazonDynamoDB,
       TableConfiguration tableConfiguration,
       @Named("dynamodbAppWriteHystrix") HystrixConfiguration dynamodbAppWriteHystrix,
@@ -66,8 +64,8 @@ public class DefaultAppStorage implements AppStorage {
     this.metrics = metrics;
   }
 
-  @Override public Void createApp(App app) {
-    Item item = preparePutItem(app);
+  @Override public Void createNamespace(Namespace namespace) {
+    Item item = preparePutItem(namespace);
 
     PutItemSpec putItemSpec = new PutItemSpec()
         .withItem(item)
@@ -79,22 +77,22 @@ public class DefaultAppStorage implements AppStorage {
       try {
         return table.putItem(putItemSpec);
       } catch (ConditionalCheckFailedException e) {
-        logger.error("err=conflict_app_already_exists appkey={} {}", app.getKey(), e.getMessage());
-        throwConflictAlreadyExists(app);
+        logger.error("err=conflict_app_already_exists appkey={} {}", namespace.getKey(), e.getMessage());
+        throwConflictAlreadyExists(namespace);
         return null;
       }
     };
-    return putItem(app, putItemOutcomeSupplier);
+    return putItem(namespace, putItemOutcomeSupplier);
   }
 
-  @Override public Void saveApp(App app) {
-    Item item = preparePutItem(app);
+  @Override public Void saveNamespace(Namespace namespace) {
+    Item item = preparePutItem(namespace);
     Table table = dynamoDB.getTable(appsTableName);
     final Supplier<PutItemOutcome> putItemOutcomeSupplier = () -> table.putItem(item);
-    return putItem(app, putItemOutcomeSupplier);
+    return putItem(namespace, putItemOutcomeSupplier);
   }
 
-  private Item preparePutItem(App app) {
+  private Item preparePutItem(Namespace app) {
     String json = Protobuf3Support.toJsonString(app);
 
     return new Item()
@@ -107,11 +105,11 @@ public class DefaultAppStorage implements AppStorage {
         .withString("updated", app.getUpdated());
   }
 
-  private Void putItem(App app, Supplier<PutItemOutcome> putItemOutcomeSupplier) {
-    DynamoDbCommand<PutItemOutcome> cmd = new DynamoDbCommand<>("saveApp",
+  private Void putItem(Namespace app, Supplier<PutItemOutcome> putItemOutcomeSupplier) {
+    DynamoDbCommand<PutItemOutcome> cmd = new DynamoDbCommand<>("saveNamespace",
         putItemOutcomeSupplier,
         () -> {
-          throw new RuntimeException("saveApp");
+          throw new RuntimeException("saveNamespace");
         },
         dynamodbAppWriteHystrix,
         metrics);
@@ -119,7 +117,7 @@ public class DefaultAppStorage implements AppStorage {
     PutItemOutcome outcome = cmd.execute();
 
     logger.info("{} /dynamodb_put_item_result=[{}]",
-        kvp("op", "saveApp",
+        kvp("op", "saveNamespace",
             "appid", app.getId(),
             HASH_KEY, app.getKey(),
             "result", "ok"),
@@ -128,11 +126,11 @@ public class DefaultAppStorage implements AppStorage {
     return null;
   }
 
-  @Override public Void saveRelation(App app, String relationHashKey, String relationRangeKey) {
+  @Override public Void saveRelation(Namespace namespace, String relationHashKey, String relationRangeKey) {
 
     Item item = new Item()
-        .withString(AppStorage.SUBJECT_KEY, relationHashKey)
-        .withString(AppStorage.OBJECT_RELATION_KEY, relationRangeKey);
+        .withString(NamespaceStorage.SUBJECT_KEY, relationHashKey)
+        .withString(NamespaceStorage.OBJECT_RELATION_KEY, relationRangeKey);
 
     Table table = dynamoDB.getTable(appsGraphTableName);
 
@@ -148,7 +146,7 @@ public class DefaultAppStorage implements AppStorage {
 
     logger.info("{} /dynamodb_put_item_result=[{}]",
         kvp("op", "saveRelation",
-            "appkey", app.getKey(),
+            "appkey", namespace.getKey(),
             "hash_key", relationHashKey,
             "range_key", relationRangeKey,
             "result", "ok"),
@@ -158,13 +156,13 @@ public class DefaultAppStorage implements AppStorage {
     return null;
   }
 
-  @Override public Void removeRelation(App app, String relationHashKey, String relationRangeKey) {
+  @Override public Void removeRelation(Namespace namespace, String relationHashKey, String relationRangeKey) {
 
     Table table = dynamoDB.getTable(appsGraphTableName);
 
     final PrimaryKey key = new PrimaryKey(
-        AppStorage.SUBJECT_KEY, relationHashKey,
-        AppStorage.OBJECT_RELATION_KEY, relationRangeKey
+        NamespaceStorage.SUBJECT_KEY, relationHashKey,
+        NamespaceStorage.OBJECT_RELATION_KEY, relationRangeKey
     );
 
     DynamoDbCommand<DeleteItemOutcome> cmd = new DynamoDbCommand<>("removeRelation",
@@ -179,7 +177,7 @@ public class DefaultAppStorage implements AppStorage {
 
     logger.info("{} /dynamodb_remove_item_result=[{}]",
         kvp("op", "removeRelation",
-            "appkey", app.getKey(),
+            "appkey", namespace.getKey(),
             "hash_key", relationHashKey,
             "range_key", relationRangeKey,
             "result", "ok"),
@@ -213,21 +211,21 @@ public class DefaultAppStorage implements AppStorage {
       return cmd.execute().iterator().hasNext();
   }
 
-  @Override public Optional<App> loadAppByKey(String appKey) {
+  @Override public Optional<Namespace> loadNamespaceByKey(String nsKey) {
     Table table = dynamoDB.getTable(this.appsTableName);
 
     QuerySpec querySpec = new QuerySpec()
         .withKeyConditionExpression(HASH_KEY+" = :k_app_key")
         .withValueMap(new ValueMap()
-            .withString(":k_app_key", appKey)
+            .withString(":k_app_key", nsKey)
         )
         .withMaxResultSize(1)
         .withConsistentRead(true);
 
-    DynamoDbCommand<ItemCollection<QueryOutcome>> cmd = new DynamoDbCommand<>("loadAppByKey",
+    DynamoDbCommand<ItemCollection<QueryOutcome>> cmd = new DynamoDbCommand<>("loadNamespaceByKey",
         () -> queryTable(table, querySpec),
         () -> {
-          throw new RuntimeException("loadAppByKey");
+          throw new RuntimeException("loadNamespaceByKey");
         },
         dynamodbAppGraphQueryHystrix,
         metrics);
@@ -235,7 +233,7 @@ public class DefaultAppStorage implements AppStorage {
     final ItemCollection<QueryOutcome> items = cmd.execute();
     final IteratorSupport<Item, QueryOutcome> iterator = items.iterator();
     if (iterator.hasNext()) {
-      return Optional.of(AppSupport.toApp(iterator.next().getString("json")));
+      return Optional.of(NamespaceSupport.toApp(iterator.next().getString("json")));
     }
 
     return Optional.empty();

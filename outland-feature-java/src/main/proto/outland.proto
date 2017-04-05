@@ -103,7 +103,7 @@ message AccessCollection {
     repeated MemberAccess members = 11;
 }
 
-message App {
+message Namespace {
     string type = 8;
     string id = 1;
     string key = 2;

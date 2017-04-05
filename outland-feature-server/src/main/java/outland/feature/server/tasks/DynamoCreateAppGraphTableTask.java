@@ -17,7 +17,7 @@ import java.util.List;
 import javax.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import outland.feature.server.apps.AppStorage;
+import outland.feature.server.apps.NamespaceStorage;
 import outland.feature.server.features.TableConfiguration;
 
 public class DynamoCreateAppGraphTableTask extends Task {
@@ -45,8 +45,8 @@ public class DynamoCreateAppGraphTableTask extends Task {
 
   private void createAppGraphTable(String tableName) {
 
-    final String subjectKey = AppStorage.SUBJECT_KEY;
-    final String objectRelationKey = AppStorage.OBJECT_RELATION_KEY;
+    final String subjectKey = NamespaceStorage.SUBJECT_KEY;
+    final String objectRelationKey = NamespaceStorage.OBJECT_RELATION_KEY;
 
     final AttributeDefinition subjectDefn =
         new AttributeDefinition().withAttributeName(subjectKey)

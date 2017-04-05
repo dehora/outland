@@ -2,15 +2,14 @@ package outland.feature.server.app;
 
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.util.JsonFormat;
-import outland.feature.proto.App;
-import outland.feature.proto.Feature;
+import outland.feature.proto.Namespace;
 
-public class AppSupport {
+public class NamespaceSupport {
 
-  public static App toApp(String json) {
+  public static Namespace toApp(String json) {
 
     try {
-      App.Builder builder = App.newBuilder();
+      Namespace.Builder builder = Namespace.newBuilder();
       JsonFormat.parser().ignoringUnknownFields().merge(json, builder);
       return builder.build();
     } catch (InvalidProtocolBufferException e) {

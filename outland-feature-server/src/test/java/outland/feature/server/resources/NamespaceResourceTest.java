@@ -15,7 +15,7 @@ import org.glassfish.jersey.logging.LoggingFeature;
 import org.junit.ClassRule;
 import org.junit.Test;
 import outland.feature.proto.AccessCollection;
-import outland.feature.proto.App;
+import outland.feature.proto.Namespace;
 import outland.feature.proto.Owner;
 import outland.feature.proto.OwnerCollection;
 import outland.feature.proto.ServiceAccess;
@@ -27,7 +27,7 @@ import static junit.framework.TestCase.assertTrue;
 import static org.glassfish.jersey.client.authentication.HttpAuthenticationFeature.HTTP_AUTHENTICATION_BASIC_PASSWORD;
 import static org.glassfish.jersey.client.authentication.HttpAuthenticationFeature.HTTP_AUTHENTICATION_BASIC_USERNAME;
 
-public class AppResourceTest {
+public class NamespaceResourceTest {
 
   @ClassRule public static final DropwizardAppRule<ServerConfiguration> APP = ServerSuite.APP;
 
@@ -36,7 +36,7 @@ public class AppResourceTest {
 
   private final static Gson gson = new Gson();
 
-  public AppResourceTest() {
+  public NamespaceResourceTest() {
   }
 
   @Test
@@ -52,7 +52,7 @@ public class AppResourceTest {
     OwnerCollection.Builder oc = OwnerCollection.newBuilder()
         .setType("owner.collection")
         .addItems(Owner.newBuilder().setName("Jayne").setUsername("jayne"));
-    final App app = App.newBuilder()
+    final Namespace namespace = Namespace.newBuilder()
         .setKey(appKey)
         .setName("name")
         .setOwners(oc)
@@ -62,7 +62,7 @@ public class AppResourceTest {
     final String url = createAppUrl();
     final JerseyClient client = createClient();
 
-    final String jsonReq = Protobuf3Support.toJsonString(app);
+    final String jsonReq = Protobuf3Support.toJsonString(namespace);
 
     final Response post = client.target(url)
         .request()

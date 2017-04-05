@@ -6,8 +6,8 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import outland.feature.proto.App;
-import outland.feature.server.apps.AppService;
+import outland.feature.proto.Namespace;
+import outland.feature.server.apps.NamespaceService;
 
 import static outland.feature.server.StructLog.kvp;
 
@@ -15,79 +15,79 @@ public class AccessControlSupport {
 
   private static final Logger logger = LoggerFactory.getLogger(AccessControlSupport.class);
 
-  private final AppService appService;
-  private final List<String> multipleAppAccessList;
+  private final NamespaceService namespaceService;
+  private final List<String> multipleNamespaceAccessList;
 
   @Inject
   public AccessControlSupport(
-      AppService appService,
-      @Named("multipleAppAccessList") List<String> multipleAppAccessList
+      NamespaceService namespaceService,
+      @Named("multipleNamespaceAccessList") List<String> multipleNamespaceAccessList
   ) {
-    this.appService = appService;
-    this.multipleAppAccessList = multipleAppAccessList;
+    this.namespaceService = namespaceService;
+    this.multipleNamespaceAccessList = multipleNamespaceAccessList;
     logMultipleAppAccessGrants();
   }
 
-  public void throwUnlessGrantedForApp(AuthPrincipal authPrincipal, App app)
+  public void throwUnlessGrantedForNamespace(AuthPrincipal authPrincipal, Namespace namespace)
       throws AuthenticationException {
 
-    if (multipleAppAccessList.contains(authPrincipal.identifier())) {
+    if (multipleNamespaceAccessList.contains(authPrincipal.identifier())) {
       logger.info(kvp("op", "member_access_check",
-          "multiple_app_access_granted", authPrincipal.identifier()));
+          "multiple_namespace_access_granted", authPrincipal.identifier()));
       return;
     }
 
-    if (! AppService.MEMBER.equals(authPrincipal.type()) && ! AppService.SERVICE.equals(authPrincipal.type())) {
+    if (! NamespaceService.MEMBER.equals(authPrincipal.type()) && ! NamespaceService.SERVICE.equals(authPrincipal.type())) {
       throw new AuthenticationException("Unknown type "+ authPrincipal.type());
     }
 
-    if (AppService.MEMBER.equals(authPrincipal.type()) && ! memberHasGrant(authPrincipal, app)) {
+    if (NamespaceService.MEMBER.equals(authPrincipal.type()) && ! memberHasGrant(authPrincipal, namespace)) {
       throw new AuthenticationException("Member not authenticated");
     }
 
-    if(AppService.SERVICE.equals(authPrincipal.type()) && ! serviceHasGrant(authPrincipal, app)) {
+    if(NamespaceService.SERVICE.equals(authPrincipal.type()) && ! serviceHasGrant(authPrincipal, namespace)) {
       throw new AuthenticationException("Service not authenticated");
     }
   }
 
-  public void throwUnlessGrantedForApp(AuthPrincipal authPrincipal, String appKey)
+  public void throwUnlessGrantedForNamespace(AuthPrincipal authPrincipal, String appKey)
       throws AuthenticationException {
 
-    if (multipleAppAccessList.contains(authPrincipal.identifier())) {
+    if (multipleNamespaceAccessList.contains(authPrincipal.identifier())) {
       logger.info(kvp("op", "member_access_check",
-          "multiple_app_access_granted", authPrincipal.identifier()));
+          "multiple_namespace_access_granted", authPrincipal.identifier()));
       return;
     }
 
-    if (! AppService.MEMBER.equals(authPrincipal.type()) && ! AppService.SERVICE.equals(authPrincipal.type())) {
+    if (! NamespaceService.MEMBER.equals(authPrincipal.type()) && ! NamespaceService.SERVICE.equals(authPrincipal.type())) {
       throw new AuthenticationException("Unknown access type "+ authPrincipal.type());
     }
 
-    if (AppService.MEMBER.equals(authPrincipal.type()) && !memberHasGrant(authPrincipal, appKey)) {
+    if (NamespaceService.MEMBER.equals(authPrincipal.type()) && !memberHasGrant(authPrincipal, appKey)) {
       throw new AuthenticationException("Member not authenticated");
     }
 
-    if (AppService.SERVICE.equals(authPrincipal.type()) && !serviceHasGrant(authPrincipal, appKey)) {
+    if (NamespaceService.SERVICE.equals(authPrincipal.type()) && !serviceHasGrant(authPrincipal, appKey)) {
       throw new AuthenticationException("Service not authenticated");
     }
   }
 
   private boolean serviceHasGrant(AuthPrincipal authPrincipal, String appKey) {
-    return appService.appHasServiceGrant(appKey, authPrincipal.identifier());
+    return namespaceService.hasServiceAccess(appKey, authPrincipal.identifier());
   }
 
   private boolean memberHasGrant(AuthPrincipal authPrincipal, String appKey) {
-    return appService.appHasMemberGrant(appKey, authPrincipal.identifier());
+    return namespaceService.hasMemberAccess(appKey, authPrincipal.identifier());
   }
 
-  // todo: move these into appService
+  // todo: move these into namespaceService
 
-  private boolean serviceHasGrant(AuthPrincipal authPrincipal, App app) {
+  private boolean serviceHasGrant(AuthPrincipal authPrincipal, Namespace app) {
     return app.getGranted().getServicesList().stream()
         .anyMatch(service -> service.getKey().equals(authPrincipal.identifier()));
   }
 
-  private boolean memberHasGrant(AuthPrincipal authPrincipal, App app) {
+  private boolean memberHasGrant(AuthPrincipal authPrincipal, Namespace app) {
     return app.getOwners().getItemsList().stream()
         .anyMatch(owner ->
             owner.getUsername().equals(authPrincipal.identifier())
@@ -96,7 +96,7 @@ public class AccessControlSupport {
   }
 
   private void logMultipleAppAccessGrants() {
-    multipleAppAccessList.forEach(serviceName -> logger.info(
+    multipleNamespaceAccessList.forEach(serviceName -> logger.info(
         kvp("op", "configure_access_control",
             "multiple_app_access_granted", serviceName
         ))

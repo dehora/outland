@@ -70,10 +70,10 @@ public final class FeatureMessage {
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_outland_AccessCollection_fieldAccessorTable;
   static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_outland_App_descriptor;
+    internal_static_outland_Namespace_descriptor;
   static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_outland_App_fieldAccessorTable;
+      internal_static_outland_Namespace_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
@@ -115,13 +115,13 @@ public final class FeatureMessage {
       "\030\014 \001(\t\"r\n\020AccessCollection\022\014\n\004type\030\001 \001(\t",
       "\022(\n\010services\030\n \003(\0132\026.outland.ServiceAcce" +
       "ss\022&\n\007members\030\013 \003(\0132\025.outland.MemberAcce" +
-      "ss\"\262\001\n\003App\022\014\n\004type\030\010 \001(\t\022\n\n\002id\030\001 \001(\t\022\013\n\003" +
-      "key\030\002 \001(\t\022\014\n\004name\030\003 \001(\t\022\017\n\007created\030\006 \001(\t" +
-      "\022\017\n\007updated\030\007 \001(\t\022(\n\006owners\030\005 \001(\0132\030.outl" +
-      "and.OwnerCollection\022*\n\007granted\030\t \001(\0132\031.o" +
-      "utland.AccessCollection* \n\nOptionType\022\010\n" +
-      "\004flag\020\000\022\010\n\004bool\020\001B+\n\025outland.feature.pro" +
-      "toB\016FeatureMessageH\001P\001b\006proto3"
+      "ss\"\270\001\n\tNamespace\022\014\n\004type\030\010 \001(\t\022\n\n\002id\030\001 \001" +
+      "(\t\022\013\n\003key\030\002 \001(\t\022\014\n\004name\030\003 \001(\t\022\017\n\007created" +
+      "\030\006 \001(\t\022\017\n\007updated\030\007 \001(\t\022(\n\006owners\030\005 \001(\0132" +
+      "\030.outland.OwnerCollection\022*\n\007granted\030\t \001" +
+      "(\0132\031.outland.AccessCollection* \n\nOptionT" +
+      "ype\022\010\n\004flag\020\000\022\010\n\004bool\020\001B+\n\025outland.featu" +
+      "re.protoB\016FeatureMessageH\001P\001b\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -201,11 +201,11 @@ public final class FeatureMessage {
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_outland_AccessCollection_descriptor,
         new java.lang.String[] { "Type", "Services", "Members", });
-    internal_static_outland_App_descriptor =
+    internal_static_outland_Namespace_descriptor =
       getDescriptor().getMessageTypes().get(10);
-    internal_static_outland_App_fieldAccessorTable = new
+    internal_static_outland_Namespace_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_outland_App_descriptor,
+        internal_static_outland_Namespace_descriptor,
         new java.lang.String[] { "Type", "Id", "Key", "Name", "Created", "Updated", "Owners", "Granted", });
   }
 
