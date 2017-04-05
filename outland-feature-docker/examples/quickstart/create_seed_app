@@ -12,13 +12,16 @@ curl -i http://localhost:8180/namespaces \
 -H "Idempotency-Key: ${ikey_app}" \
 -d'
 {
-	"key": "testapp",
-	"name": "My App",
-	"owners": [{
-		"name": "Acme",
-		"username": "acme",
-		"email": "acme@example.org"
-	}],
+	"key": "testnamespace",
+	"name": "My Namespace",
+	"owners": {
+	  "items":[{
+		  "name": "Acme",
+		  "username": "acme",
+		  "email": "acme@example.org"
+	  }
+	  ]
+	},
 	"granted": {
 		"services": [{
 			"key": "testservice",
@@ -32,9 +35,9 @@ curl -i http://localhost:8180/namespaces \
 }
 '
 
-echo "App done, creating some feature flags"
+echo "Namespace created, adding some feature flags"
 
-ikey_f1="idemkey_testapp_f1"
+ikey_f1="idemkey_testnamespace_f1"
 
 curl -i http://localhost:8180/features \
 -u ${service}:${api_key} \
@@ -44,7 +47,7 @@ curl -i http://localhost:8180/features \
 {
 	"key": "test-flag-1",
 	"description": "A feature flag",
-	"appkey": "testapp",
+	"namespace": "testnamespace",
 	"owner": {
 		"username": "acme",
 		"email": "acme@example.org"
@@ -52,7 +55,7 @@ curl -i http://localhost:8180/features \
 }
 '
 
-ikey_f2="idemkey_testapp_f21"
+ikey_f2="idemkey_testnamespace_f21"
 
 curl -i http://localhost:8180/features \
 -u ${service}:${api_key} \
@@ -62,7 +65,7 @@ curl -i http://localhost:8180/features \
 {
 	"key": "test-option-1",
 	"description": "A weighted feature",
-	"appkey": "testapp",
+	"namespace": "testnamespace",
 	"options": {
 	  "option": "bool",
 	  "items": [{
