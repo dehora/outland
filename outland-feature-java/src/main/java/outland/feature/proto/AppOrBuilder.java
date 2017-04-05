@@ -68,28 +68,17 @@ public interface AppOrBuilder extends
       getUpdatedBytes();
 
   /**
-   * <code>repeated .outland.Owner owners = 5;</code>
+   * <code>optional .outland.OwnerCollection owners = 5;</code>
    */
-  java.util.List<outland.feature.proto.Owner> 
-      getOwnersList();
+  boolean hasOwners();
   /**
-   * <code>repeated .outland.Owner owners = 5;</code>
+   * <code>optional .outland.OwnerCollection owners = 5;</code>
    */
-  outland.feature.proto.Owner getOwners(int index);
+  outland.feature.proto.OwnerCollection getOwners();
   /**
-   * <code>repeated .outland.Owner owners = 5;</code>
+   * <code>optional .outland.OwnerCollection owners = 5;</code>
    */
-  int getOwnersCount();
-  /**
-   * <code>repeated .outland.Owner owners = 5;</code>
-   */
-  java.util.List<? extends outland.feature.proto.OwnerOrBuilder> 
-      getOwnersOrBuilderList();
-  /**
-   * <code>repeated .outland.Owner owners = 5;</code>
-   */
-  outland.feature.proto.OwnerOrBuilder getOwnersOrBuilder(
-      int index);
+  outland.feature.proto.OwnerCollectionOrBuilder getOwnersOrBuilder();
 
   /**
    * <code>optional .outland.GrantCollection granted = 9;</code>

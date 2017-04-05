@@ -88,7 +88,7 @@ public class AccessControlSupport {
   }
 
   private boolean memberHasGrant(AuthPrincipal authPrincipal, App app) {
-    return app.getOwnersList().stream()
+    return app.getOwners().getItemsList().stream()
         .anyMatch(owner ->
             owner.getUsername().equals(authPrincipal.identifier())
                 ||

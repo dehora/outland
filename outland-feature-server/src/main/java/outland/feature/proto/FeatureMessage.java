@@ -20,6 +20,11 @@ public final class FeatureMessage {
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_outland_Owner_fieldAccessorTable;
   static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_outland_OwnerCollection_descriptor;
+  static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_outland_OwnerCollection_fieldAccessorTable;
+  static final com.google.protobuf.Descriptors.Descriptor
     internal_static_outland_FeatureVersion_descriptor;
   static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
@@ -80,41 +85,43 @@ public final class FeatureMessage {
     java.lang.String[] descriptorData = {
       "\n\routland.proto\022\007outland\"P\n\005Owner\022\n\n\002id\030" +
       "\001 \001(\t\022\014\n\004name\030\002 \001(\t\022\020\n\010username\030\003 \001(\t\022\r\n" +
-      "\005email\030\004 \001(\t\022\014\n\004type\030\007 \001(\t\"N\n\016FeatureVer" +
-      "sion\022\n\n\002id\030\001 \001(\t\022\021\n\ttimestamp\030\002 \001(\003\022\017\n\007c" +
-      "ounter\030\003 \001(\003\022\014\n\004type\030\004 \001(\t\"{\n\rFeatureOpt" +
-      "ion\022\n\n\002id\030\001 \001(\t\022#\n\006option\030\002 \001(\0162\023.outlan" +
-      "d.OptionType\022\014\n\004name\030\003 \001(\t\022\r\n\005value\030\004 \001(" +
-      "\t\022\016\n\006weight\030\005 \001(\005\022\014\n\004type\030\006 \001(\t\"\177\n\020Optio" +
-      "nCollection\022\014\n\004type\030\001 \001(\t\022#\n\006option\030\002 \001(" +
-      "\0162\023.outland.OptionType\022\021\n\tmaxweight\030\003 \001(",
-      "\005\022%\n\005items\030\004 \003(\0132\026.outland.FeatureOption" +
-      "\"\240\003\n\007Feature\022\n\n\002id\030\001 \001(\t\022\013\n\003key\030\002 \001(\t\022\016\n" +
-      "\006appkey\030\003 \001(\t\022%\n\005state\030\004 \001(\0162\026.outland.F" +
-      "eature.State\022\023\n\013description\030\005 \001(\t\022\017\n\007cre" +
-      "ated\030\006 \001(\t\022\017\n\007updated\030\007 \001(\t\022\035\n\005owner\030\010 \001" +
-      "(\0132\016.outland.Owner\0224\n\nproperties\030\t \003(\0132 " +
-      ".outland.Feature.PropertiesEntry\022*\n\007opti" +
-      "ons\030\n \001(\0132\031.outland.OptionCollection\022(\n\007" +
-      "version\030\014 \001(\0132\027.outland.FeatureVersion\022\014" +
-      "\n\004type\030\r \001(\t\0321\n\017PropertiesEntry\022\013\n\003key\030\001",
-      " \001(\t\022\r\n\005value\030\002 \001(\t:\0028\001\"\"\n\005State\022\010\n\004none" +
-      "\020\000\022\007\n\003off\020\001\022\006\n\002on\020\002\"R\n\021FeatureCollection" +
-      "\022\014\n\004type\030\001 \001(\t\022\016\n\006appkey\030\002 \001(\t\022\037\n\005items\030" +
-      "\003 \003(\0132\020.outland.Feature\"C\n\014ServiceGrant\022" +
-      "\014\n\004type\030\001 \001(\t\022\n\n\002id\030\002 \001(\t\022\014\n\004name\030\n \001(\t\022" +
-      "\013\n\003key\030\013 \001(\t\"V\n\013MemberGrant\022\014\n\004type\030\001 \001(" +
-      "\t\022\n\n\002id\030\002 \001(\t\022\014\n\004name\030\n \001(\t\022\020\n\010username\030" +
-      "\013 \001(\t\022\r\n\005email\030\014 \001(\t\"o\n\017GrantCollection\022" +
-      "\014\n\004type\030\001 \001(\t\022\'\n\010services\030\n \003(\0132\025.outlan" +
-      "d.ServiceGrant\022%\n\007members\030\013 \003(\0132\024.outlan",
-      "d.MemberGrant\"\247\001\n\003App\022\014\n\004type\030\010 \001(\t\022\n\n\002i" +
-      "d\030\001 \001(\t\022\013\n\003key\030\002 \001(\t\022\014\n\004name\030\003 \001(\t\022\017\n\007cr" +
-      "eated\030\006 \001(\t\022\017\n\007updated\030\007 \001(\t\022\036\n\006owners\030\005" +
-      " \003(\0132\016.outland.Owner\022)\n\007granted\030\t \001(\0132\030." +
-      "outland.GrantCollection* \n\nOptionType\022\010\n" +
-      "\004flag\020\000\022\010\n\004bool\020\001B+\n\025outland.feature.pro" +
-      "toB\016FeatureMessageH\001P\001b\006proto3"
+      "\005email\030\004 \001(\t\022\014\n\004type\030\007 \001(\t\">\n\017OwnerColle" +
+      "ction\022\014\n\004type\030\001 \001(\t\022\035\n\005items\030\013 \003(\0132\016.out" +
+      "land.Owner\"N\n\016FeatureVersion\022\n\n\002id\030\001 \001(\t" +
+      "\022\021\n\ttimestamp\030\002 \001(\003\022\017\n\007counter\030\003 \001(\003\022\014\n\004" +
+      "type\030\004 \001(\t\"{\n\rFeatureOption\022\n\n\002id\030\001 \001(\t\022" +
+      "#\n\006option\030\002 \001(\0162\023.outland.OptionType\022\014\n\004" +
+      "name\030\003 \001(\t\022\r\n\005value\030\004 \001(\t\022\016\n\006weight\030\005 \001(" +
+      "\005\022\014\n\004type\030\006 \001(\t\"\177\n\020OptionCollection\022\014\n\004t",
+      "ype\030\001 \001(\t\022#\n\006option\030\002 \001(\0162\023.outland.Opti" +
+      "onType\022\021\n\tmaxweight\030\003 \001(\005\022%\n\005items\030\004 \003(\013" +
+      "2\026.outland.FeatureOption\"\240\003\n\007Feature\022\n\n\002" +
+      "id\030\001 \001(\t\022\013\n\003key\030\002 \001(\t\022\016\n\006appkey\030\003 \001(\t\022%\n" +
+      "\005state\030\004 \001(\0162\026.outland.Feature.State\022\023\n\013" +
+      "description\030\005 \001(\t\022\017\n\007created\030\006 \001(\t\022\017\n\007up" +
+      "dated\030\007 \001(\t\022\035\n\005owner\030\010 \001(\0132\016.outland.Own" +
+      "er\0224\n\nproperties\030\t \003(\0132 .outland.Feature" +
+      ".PropertiesEntry\022*\n\007options\030\n \001(\0132\031.outl" +
+      "and.OptionCollection\022(\n\007version\030\014 \001(\0132\027.",
+      "outland.FeatureVersion\022\014\n\004type\030\r \001(\t\0321\n\017" +
+      "PropertiesEntry\022\013\n\003key\030\001 \001(\t\022\r\n\005value\030\002 " +
+      "\001(\t:\0028\001\"\"\n\005State\022\010\n\004none\020\000\022\007\n\003off\020\001\022\006\n\002o" +
+      "n\020\002\"R\n\021FeatureCollection\022\014\n\004type\030\001 \001(\t\022\016" +
+      "\n\006appkey\030\002 \001(\t\022\037\n\005items\030\003 \003(\0132\020.outland." +
+      "Feature\"C\n\014ServiceGrant\022\014\n\004type\030\001 \001(\t\022\n\n" +
+      "\002id\030\002 \001(\t\022\014\n\004name\030\n \001(\t\022\013\n\003key\030\013 \001(\t\"V\n\013" +
+      "MemberGrant\022\014\n\004type\030\001 \001(\t\022\n\n\002id\030\002 \001(\t\022\014\n" +
+      "\004name\030\n \001(\t\022\020\n\010username\030\013 \001(\t\022\r\n\005email\030\014" +
+      " \001(\t\"o\n\017GrantCollection\022\014\n\004type\030\001 \001(\t\022\'\n",
+      "\010services\030\n \003(\0132\025.outland.ServiceGrant\022%" +
+      "\n\007members\030\013 \003(\0132\024.outland.MemberGrant\"\261\001" +
+      "\n\003App\022\014\n\004type\030\010 \001(\t\022\n\n\002id\030\001 \001(\t\022\013\n\003key\030\002" +
+      " \001(\t\022\014\n\004name\030\003 \001(\t\022\017\n\007created\030\006 \001(\t\022\017\n\007u" +
+      "pdated\030\007 \001(\t\022(\n\006owners\030\005 \001(\0132\030.outland.O" +
+      "wnerCollection\022)\n\007granted\030\t \001(\0132\030.outlan" +
+      "d.GrantCollection* \n\nOptionType\022\010\n\004flag\020" +
+      "\000\022\010\n\004bool\020\001B+\n\025outland.feature.protoB\016Fe" +
+      "atureMessageH\001P\001b\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -134,26 +141,32 @@ public final class FeatureMessage {
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_outland_Owner_descriptor,
         new java.lang.String[] { "Id", "Name", "Username", "Email", "Type", });
-    internal_static_outland_FeatureVersion_descriptor =
+    internal_static_outland_OwnerCollection_descriptor =
       getDescriptor().getMessageTypes().get(1);
+    internal_static_outland_OwnerCollection_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_outland_OwnerCollection_descriptor,
+        new java.lang.String[] { "Type", "Items", });
+    internal_static_outland_FeatureVersion_descriptor =
+      getDescriptor().getMessageTypes().get(2);
     internal_static_outland_FeatureVersion_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_outland_FeatureVersion_descriptor,
         new java.lang.String[] { "Id", "Timestamp", "Counter", "Type", });
     internal_static_outland_FeatureOption_descriptor =
-      getDescriptor().getMessageTypes().get(2);
+      getDescriptor().getMessageTypes().get(3);
     internal_static_outland_FeatureOption_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_outland_FeatureOption_descriptor,
         new java.lang.String[] { "Id", "Option", "Name", "Value", "Weight", "Type", });
     internal_static_outland_OptionCollection_descriptor =
-      getDescriptor().getMessageTypes().get(3);
+      getDescriptor().getMessageTypes().get(4);
     internal_static_outland_OptionCollection_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_outland_OptionCollection_descriptor,
         new java.lang.String[] { "Type", "Option", "Maxweight", "Items", });
     internal_static_outland_Feature_descriptor =
-      getDescriptor().getMessageTypes().get(4);
+      getDescriptor().getMessageTypes().get(5);
     internal_static_outland_Feature_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_outland_Feature_descriptor,
@@ -165,31 +178,31 @@ public final class FeatureMessage {
         internal_static_outland_Feature_PropertiesEntry_descriptor,
         new java.lang.String[] { "Key", "Value", });
     internal_static_outland_FeatureCollection_descriptor =
-      getDescriptor().getMessageTypes().get(5);
+      getDescriptor().getMessageTypes().get(6);
     internal_static_outland_FeatureCollection_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_outland_FeatureCollection_descriptor,
         new java.lang.String[] { "Type", "Appkey", "Items", });
     internal_static_outland_ServiceGrant_descriptor =
-      getDescriptor().getMessageTypes().get(6);
+      getDescriptor().getMessageTypes().get(7);
     internal_static_outland_ServiceGrant_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_outland_ServiceGrant_descriptor,
         new java.lang.String[] { "Type", "Id", "Name", "Key", });
     internal_static_outland_MemberGrant_descriptor =
-      getDescriptor().getMessageTypes().get(7);
+      getDescriptor().getMessageTypes().get(8);
     internal_static_outland_MemberGrant_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_outland_MemberGrant_descriptor,
         new java.lang.String[] { "Type", "Id", "Name", "Username", "Email", });
     internal_static_outland_GrantCollection_descriptor =
-      getDescriptor().getMessageTypes().get(8);
+      getDescriptor().getMessageTypes().get(9);
     internal_static_outland_GrantCollection_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_outland_GrantCollection_descriptor,
         new java.lang.String[] { "Type", "Services", "Members", });
     internal_static_outland_App_descriptor =
-      getDescriptor().getMessageTypes().get(9);
+      getDescriptor().getMessageTypes().get(10);
     internal_static_outland_App_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_outland_App_descriptor,

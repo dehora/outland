@@ -8,12 +8,12 @@ import outland.feature.server.ServiceException;
 class AppValidator {
 
   void validateAppRegistrationThrowing(App app) throws ServiceException {
-    if (app.getOwnersCount() == 0) {
+    if (app.getOwners().getItemsCount() == 0) {
       throw new ServiceException(Problem.clientProblem("no_owner_for_app",
           "An app must have at least one one owner", 422));
     }
 
-    app.getOwnersList().forEach(owner -> {
+    app.getOwners().getItemsList().forEach(owner -> {
       if (Strings.isNullOrEmpty(owner.getEmail()) && Strings.isNullOrEmpty(owner.getUsername())) {
         throw new ServiceException(Problem.clientProblem("incomplete_owner_for_app",
             "An app owner must have an email or a username", 422));
