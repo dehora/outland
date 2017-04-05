@@ -127,10 +127,10 @@ public class FeatureStoreRocksDb implements FeatureStoreLocal, MeterTimer {
       return null;
     }
 
-    final String storageKey = FeatureStoreKeys.storageKey(feature.getAppkey(), feature.getKey());
+    final String storageKey = FeatureStoreKeys.storageKey(feature.getNamespace(), feature.getKey());
 
     logger.info("op=put, storage=rocks, appkey={}, feature_key={}, storage_key={}",
-        feature.getAppkey(), feature.getKey(), storageKey);
+        feature.getNamespace(), feature.getKey(), storageKey);
 
     return metric(putTimer, putMeter, () -> putInner(storageKey, feature));
   }
@@ -225,7 +225,7 @@ public class FeatureStoreRocksDb implements FeatureStoreLocal, MeterTimer {
           iterator.next()) {
         final Feature feature = Feature.newBuilder().mergeFrom(iterator.value()).build();
         logger.info("op=loadAll, storage=rocks, appkey={}, feature_key={}",
-            feature.getAppkey(), feature.getKey());
+            feature.getNamespace(), feature.getKey());
         builder.addItems(feature);
       }
     } catch (Exception e) {

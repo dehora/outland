@@ -589,7 +589,7 @@ public class FeatureResourceTest {
     Feature feature = Feature.newBuilder()
         .setKey(key)
         .setDescription("desc")
-        .setAppkey(nsKey)
+        .setNamespace(nsKey)
         .build();
     ;
     String jsonReq = Protobuf3Support.toJsonString(feature);
@@ -673,7 +673,7 @@ public class FeatureResourceTest {
     return Feature.newBuilder()
         .setKey(key)
         .setDescription("desc")
-        .setAppkey(nsKey)
+        .setNamespace(nsKey)
         .setOwner(owner)
         .build();
   }

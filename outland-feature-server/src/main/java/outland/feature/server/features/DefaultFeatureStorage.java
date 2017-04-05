@@ -63,7 +63,7 @@ public class DefaultFeatureStorage implements FeatureStorage {
   @Override public Void createFeature(Feature feature) {
 
     final String key = feature.getKey();
-    final String nsKey = feature.getAppkey();
+    final String nsKey = feature.getNamespace();
     final Item item = preparePutItem(feature);
 
     final PutItemSpec putItemSpec = new PutItemSpec()
@@ -101,10 +101,10 @@ public class DefaultFeatureStorage implements FeatureStorage {
   @Override public Void
   updateFeature(Feature feature, FeatureVersion previousVersion) {
     logger.info("{}",
-        kvp("op", "updateFeature", "nskey", feature.getAppkey(), "feature_key", feature.getKey()));
+        kvp("op", "updateFeature", "nskey", feature.getNamespace(), "feature_key", feature.getKey()));
 
     final String key = feature.getKey();
-    final String nskey = feature.getAppkey();
+    final String nskey = feature.getNamespace();
     final Item item = preparePutItem(feature);
 
     final PutItemSpec putItemSpec = new PutItemSpec()
@@ -161,7 +161,7 @@ public class DefaultFeatureStorage implements FeatureStorage {
   private Item preparePutItem(Feature feature) {
     final String key = feature.getKey();
     final String id = feature.getId();
-    final String nskey = feature.getAppkey();
+    final String nskey = feature.getNamespace();
     final String json = Protobuf3Support.toJsonString(feature);
 
     final Map<String, String> owner = Maps.newHashMap();

@@ -96,33 +96,33 @@ public final class FeatureMessage {
       "ype\030\006 \001(\t\"\177\n\020OptionCollection\022\014\n\004type\030\001 " +
       "\001(\t\022#\n\006option\030\002 \001(\0162\023.outland.OptionType" +
       "\022\021\n\tmaxweight\030\003 \001(\005\022%\n\005items\030\004 \003(\0132\026.out" +
-      "land.FeatureOption\"\240\003\n\007Feature\022\n\n\002id\030\001 \001" +
-      "(\t\022\013\n\003key\030\002 \001(\t\022\016\n\006appkey\030\003 \001(\t\022%\n\005state" +
-      "\030\004 \001(\0162\026.outland.Feature.State\022\023\n\013descri" +
-      "ption\030\005 \001(\t\022\017\n\007created\030\006 \001(\t\022\017\n\007updated\030" +
-      "\007 \001(\t\022\035\n\005owner\030\010 \001(\0132\016.outland.Owner\0224\n\n" +
-      "properties\030\t \003(\0132 .outland.Feature.Prope" +
-      "rtiesEntry\022*\n\007options\030\n \001(\0132\031.outland.Op",
-      "tionCollection\022(\n\007version\030\014 \001(\0132\027.outlan" +
-      "d.FeatureVersion\022\014\n\004type\030\r \001(\t\0321\n\017Proper" +
-      "tiesEntry\022\013\n\003key\030\001 \001(\t\022\r\n\005value\030\002 \001(\t:\0028" +
-      "\001\"\"\n\005State\022\010\n\004none\020\000\022\007\n\003off\020\001\022\006\n\002on\020\002\"R\n" +
-      "\021FeatureCollection\022\014\n\004type\030\001 \001(\t\022\016\n\006appk" +
-      "ey\030\002 \001(\t\022\037\n\005items\030\003 \003(\0132\020.outland.Featur" +
-      "e\"D\n\rServiceAccess\022\014\n\004type\030\001 \001(\t\022\n\n\002id\030\002" +
-      " \001(\t\022\014\n\004name\030\n \001(\t\022\013\n\003key\030\013 \001(\t\"W\n\014Membe" +
-      "rAccess\022\014\n\004type\030\001 \001(\t\022\n\n\002id\030\002 \001(\t\022\014\n\004nam" +
-      "e\030\n \001(\t\022\020\n\010username\030\013 \001(\t\022\r\n\005email\030\014 \001(\t",
-      "\"r\n\020AccessCollection\022\014\n\004type\030\001 \001(\t\022(\n\010se" +
-      "rvices\030\n \003(\0132\026.outland.ServiceAccess\022&\n\007" +
-      "members\030\013 \003(\0132\025.outland.MemberAccess\"\270\001\n" +
-      "\tNamespace\022\014\n\004type\030\010 \001(\t\022\n\n\002id\030\001 \001(\t\022\013\n\003" +
-      "key\030\002 \001(\t\022\014\n\004name\030\003 \001(\t\022\017\n\007created\030\006 \001(\t" +
-      "\022\017\n\007updated\030\007 \001(\t\022(\n\006owners\030\005 \001(\0132\030.outl" +
-      "and.OwnerCollection\022*\n\007granted\030\t \001(\0132\031.o" +
-      "utland.AccessCollection* \n\nOptionType\022\010\n" +
-      "\004flag\020\000\022\010\n\004bool\020\001B+\n\025outland.feature.pro" +
-      "toB\016FeatureMessageH\001P\001b\006proto3"
+      "land.FeatureOption\"\243\003\n\007Feature\022\n\n\002id\030\001 \001" +
+      "(\t\022\013\n\003key\030\002 \001(\t\022\021\n\tnamespace\030\003 \001(\t\022%\n\005st" +
+      "ate\030\004 \001(\0162\026.outland.Feature.State\022\023\n\013des" +
+      "cription\030\005 \001(\t\022\017\n\007created\030\006 \001(\t\022\017\n\007updat" +
+      "ed\030\007 \001(\t\022\035\n\005owner\030\010 \001(\0132\016.outland.Owner\022" +
+      "4\n\nproperties\030\t \003(\0132 .outland.Feature.Pr" +
+      "opertiesEntry\022*\n\007options\030\n \001(\0132\031.outland",
+      ".OptionCollection\022(\n\007version\030\014 \001(\0132\027.out" +
+      "land.FeatureVersion\022\014\n\004type\030\r \001(\t\0321\n\017Pro" +
+      "pertiesEntry\022\013\n\003key\030\001 \001(\t\022\r\n\005value\030\002 \001(\t" +
+      ":\0028\001\"\"\n\005State\022\010\n\004none\020\000\022\007\n\003off\020\001\022\006\n\002on\020\002" +
+      "\"U\n\021FeatureCollection\022\014\n\004type\030\001 \001(\t\022\021\n\tn" +
+      "amespace\030\002 \001(\t\022\037\n\005items\030\003 \003(\0132\020.outland." +
+      "Feature\"D\n\rServiceAccess\022\014\n\004type\030\001 \001(\t\022\n" +
+      "\n\002id\030\002 \001(\t\022\014\n\004name\030\n \001(\t\022\013\n\003key\030\013 \001(\t\"W\n" +
+      "\014MemberAccess\022\014\n\004type\030\001 \001(\t\022\n\n\002id\030\002 \001(\t\022" +
+      "\014\n\004name\030\n \001(\t\022\020\n\010username\030\013 \001(\t\022\r\n\005email",
+      "\030\014 \001(\t\"r\n\020AccessCollection\022\014\n\004type\030\001 \001(\t" +
+      "\022(\n\010services\030\n \003(\0132\026.outland.ServiceAcce" +
+      "ss\022&\n\007members\030\013 \003(\0132\025.outland.MemberAcce" +
+      "ss\"\270\001\n\tNamespace\022\014\n\004type\030\010 \001(\t\022\n\n\002id\030\001 \001" +
+      "(\t\022\013\n\003key\030\002 \001(\t\022\014\n\004name\030\003 \001(\t\022\017\n\007created" +
+      "\030\006 \001(\t\022\017\n\007updated\030\007 \001(\t\022(\n\006owners\030\005 \001(\0132" +
+      "\030.outland.OwnerCollection\022*\n\007granted\030\t \001" +
+      "(\0132\031.outland.AccessCollection* \n\nOptionT" +
+      "ype\022\010\n\004flag\020\000\022\010\n\004bool\020\001B+\n\025outland.featu" +
+      "re.protoB\016FeatureMessageH\001P\001b\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -171,7 +171,7 @@ public final class FeatureMessage {
     internal_static_outland_Feature_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_outland_Feature_descriptor,
-        new java.lang.String[] { "Id", "Key", "Appkey", "State", "Description", "Created", "Updated", "Owner", "Properties", "Options", "Version", "Type", });
+        new java.lang.String[] { "Id", "Key", "Namespace", "State", "Description", "Created", "Updated", "Owner", "Properties", "Options", "Version", "Type", });
     internal_static_outland_Feature_PropertiesEntry_descriptor =
       internal_static_outland_Feature_descriptor.getNestedTypes().get(0);
     internal_static_outland_Feature_PropertiesEntry_fieldAccessorTable = new
@@ -183,7 +183,7 @@ public final class FeatureMessage {
     internal_static_outland_FeatureCollection_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_outland_FeatureCollection_descriptor,
-        new java.lang.String[] { "Type", "Appkey", "Items", });
+        new java.lang.String[] { "Type", "Namespace", "Items", });
     internal_static_outland_ServiceAccess_descriptor =
       getDescriptor().getMessageTypes().get(7);
     internal_static_outland_ServiceAccess_fieldAccessorTable = new
