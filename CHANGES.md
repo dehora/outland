@@ -1,5 +1,13 @@
 ### Changes
 
+### 0.0.8
+
+- Rejects re-creation of Features with a 422.
+
+- Rejects re-creation of Apps with a 422.
+
+- Extends the readme quickstart with HTTP API examples
+
 ### 0.0.7
 
  - Fixes updates sent with no option changes.
