@@ -29,7 +29,7 @@ import outland.feature.proto.FeatureCollection;
 import outland.feature.server.Problem;
 import outland.feature.server.ServerConfiguration;
 import outland.feature.server.ServiceException;
-import outland.feature.server.apps.NamespaceService;
+import outland.feature.server.namespaces.NamespaceService;
 import outland.feature.server.auth.AccessControlSupport;
 import outland.feature.server.auth.AuthPrincipal;
 import outland.feature.server.features.FeatureService;

@@ -3,7 +3,7 @@ package outland.feature.server.auth;
 import io.dropwizard.auth.AuthenticationException;
 import java.util.Optional;
 import javax.inject.Inject;
-import outland.feature.server.apps.NamesapaceAuthService;
+import outland.feature.server.namespaces.NamesapaceAuthService;
 
 public class TokenOAuthAuthenticator implements io.dropwizard.auth.Authenticator<String, AuthPrincipal> {
 

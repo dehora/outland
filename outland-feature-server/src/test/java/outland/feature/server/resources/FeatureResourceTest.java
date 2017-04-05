@@ -27,7 +27,7 @@ import outland.feature.proto.ServiceAccess;
 import outland.feature.server.Problem;
 import outland.feature.server.ServerConfiguration;
 import outland.feature.server.ServerMain;
-import outland.feature.server.apps.NamespaceService;
+import outland.feature.server.namespaces.NamespaceService;
 import outland.feature.server.features.Ulid;
 import outland.feature.server.protobuf.Protobuf3Support;
 

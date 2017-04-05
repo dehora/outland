@@ -17,7 +17,7 @@ import java.util.List;
 import javax.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import outland.feature.server.apps.NamespaceStorage;
+import outland.feature.server.namespaces.NamespaceStorage;
 import outland.feature.server.features.TableConfiguration;
 
 public class DynamoCreateNamespaceGraphTableTask extends Task {

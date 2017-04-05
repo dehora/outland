@@ -1,4 +1,4 @@
-package outland.feature.server.apps;
+package outland.feature.server.namespaces;
 
 import com.google.common.collect.Maps;
 import java.util.Map;

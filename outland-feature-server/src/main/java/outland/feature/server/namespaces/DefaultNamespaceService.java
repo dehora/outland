@@ -1,4 +1,4 @@
-package outland.feature.server.apps;
+package outland.feature.server.namespaces;
 
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.Timer;
