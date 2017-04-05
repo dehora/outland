@@ -3,8 +3,8 @@
 
 package outland.feature.proto;
 
-public interface ServiceGrantOrBuilder extends
-    // @@protoc_insertion_point(interface_extends:outland.ServiceGrant)
+public interface ServiceAccessOrBuilder extends
+    // @@protoc_insertion_point(interface_extends:outland.ServiceAccess)
     com.google.protobuf.MessageOrBuilder {
 
   /**

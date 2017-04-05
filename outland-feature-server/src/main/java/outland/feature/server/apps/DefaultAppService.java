@@ -14,12 +14,12 @@ import java.util.function.Consumer;
 import javax.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import outland.feature.proto.AccessCollection;
 import outland.feature.proto.App;
-import outland.feature.proto.GrantCollection;
-import outland.feature.proto.MemberGrant;
+import outland.feature.proto.MemberAccess;
 import outland.feature.proto.Owner;
 import outland.feature.proto.OwnerCollection;
-import outland.feature.proto.ServiceGrant;
+import outland.feature.proto.ServiceAccess;
 import outland.feature.server.Problem;
 import outland.feature.server.ServiceException;
 import outland.feature.server.features.MetricsTimer;
@@ -67,29 +67,29 @@ public class DefaultAppService implements AppService, MetricsTimer {
     return processUpdate(app, builder -> {});
   }
 
-  @Override public App addToApp(App app, ServiceGrant service) {
+  @Override public App addToApp(App app, ServiceAccess service) {
     logger.info("{} /app[{}]/svc[{}]", kvp("op", "addToApp.service"),
         TextFormat.shortDebugString(app), TextFormat.shortDebugString(service));
 
     return processUpdate(app,
         builder -> {
-          GrantCollection.Builder grantBuilder = newGrantCollectionBuilder();
-          grantBuilder.addAllServices(appUpdateProcessor.mergeServices(app, service));
-          grantBuilder.addAllMembers(app.getGranted().getMembersList());
-          builder.setGranted(grantBuilder.buildPartial());
+          AccessCollection.Builder accessBuilder = newGrantCollectionBuilder();
+          accessBuilder.addAllServices(appUpdateProcessor.mergeServices(app, service));
+          accessBuilder.addAllMembers(app.getGranted().getMembersList());
+          builder.setGranted(accessBuilder.buildPartial());
         });
   }
 
-  @Override public App addToApp(App app, MemberGrant member) {
+  @Override public App addToApp(App app, MemberAccess member) {
     logger.info("{} /app[{}]/mbr[{}]", kvp("op", "addToApp.member"),
         TextFormat.shortDebugString(app), TextFormat.shortDebugString(member));
 
     return processUpdate(app,
         builder -> {
-          GrantCollection.Builder grantBuilder = newGrantCollectionBuilder();
-          grantBuilder.addAllMembers(appUpdateProcessor.mergeMembers(app, member));
-          grantBuilder.addAllServices(app.getGranted().getServicesList());
-          builder.setGranted(grantBuilder.buildPartial());
+          AccessCollection.Builder accessBuilder = newGrantCollectionBuilder();
+          accessBuilder.addAllMembers(appUpdateProcessor.mergeMembers(app, member));
+          accessBuilder.addAllServices(app.getGranted().getServicesList());
+          builder.setGranted(accessBuilder.buildPartial());
         });
   }
 
@@ -108,12 +108,12 @@ public class DefaultAppService implements AppService, MetricsTimer {
       return  app;
     }
 
-    final List<ServiceGrant> servicesList = app.getGranted().getServicesList();
-    final ArrayList<ServiceGrant> wrapped = Lists.newArrayList(servicesList);
-    final Iterator<ServiceGrant> iterator = wrapped.iterator();
-    ServiceGrant service = null;
+    final List<ServiceAccess> servicesList = app.getGranted().getServicesList();
+    final ArrayList<ServiceAccess> wrapped = Lists.newArrayList(servicesList);
+    final Iterator<ServiceAccess> iterator = wrapped.iterator();
+    ServiceAccess service = null;
     while (iterator.hasNext()) {
-      final ServiceGrant next = iterator.next();
+      final ServiceAccess next = iterator.next();
       if (serviceKey.equals(next.getKey())) {
         service = next;
         iterator.remove();
@@ -128,7 +128,7 @@ public class DefaultAppService implements AppService, MetricsTimer {
     final App.Builder builder = app.toBuilder();
     builder.clearGranted();
 
-    GrantCollection.Builder newBuilder = newGrantCollectionBuilder();
+    AccessCollection.Builder newBuilder = newGrantCollectionBuilder();
     newBuilder.addAllServices(wrapped);
     newBuilder.addAllMembers(app.getGranted().getMembersList());
 
@@ -149,33 +149,33 @@ public class DefaultAppService implements AppService, MetricsTimer {
       return  app;
     }
 
-    final List<MemberGrant> ownersList = app.getGranted().getMembersList();
-    final ArrayList<MemberGrant> wrapped = Lists.newArrayList(ownersList);
-    final Iterator<MemberGrant> iterator = wrapped.iterator();
-    MemberGrant memberGrant = null;
+    final List<MemberAccess> ownersList = app.getGranted().getMembersList();
+    final ArrayList<MemberAccess> wrapped = Lists.newArrayList(ownersList);
+    final Iterator<MemberAccess> iterator = wrapped.iterator();
+    MemberAccess MemberAccess = null;
 
     while (iterator.hasNext()) {
-      MemberGrant next = iterator.next();
+      MemberAccess next = iterator.next();
       if(memberKey.equals(next.getUsername())) {
-        memberGrant  = next;
+        MemberAccess  = next;
         iterator.remove();
         break;
       }
 
       if(memberKey.equals(next.getEmail())) {
-        memberGrant  = next;
+        MemberAccess  = next;
         iterator.remove();
         break;
       }
     }
 
-    if(memberGrant == null) {
+    if(MemberAccess == null) {
       return app;
     }
 
     final App.Builder builder = app.toBuilder();
     builder.clearGranted();
-    GrantCollection.Builder newBuilder = newGrantCollectionBuilder();
+    AccessCollection.Builder newBuilder = newGrantCollectionBuilder();
     newBuilder.addAllMembers(wrapped);
     newBuilder.addAllServices(app.getGranted().getServicesList());
 
@@ -187,7 +187,7 @@ public class DefaultAppService implements AppService, MetricsTimer {
 
     final App updated = builder.build();
     updateAppInner(updated);
-    removeMemberFromGraph(updated, memberGrant);
+    removeMemberFromGraph(updated, MemberAccess);
     return updated;
 
   }
@@ -265,11 +265,11 @@ public class DefaultAppService implements AppService, MetricsTimer {
     return appUpdateProcessor.prepareOwner(owner);
   }
 
-  private ServiceGrant prepareService(ServiceGrant service) {
+  private ServiceAccess prepareService(ServiceAccess service) {
     return appUpdateProcessor.prepareService(service);
   }
 
-  private MemberGrant prepareMember(MemberGrant member) {
+  private MemberAccess prepareMember(MemberAccess member) {
     return appUpdateProcessor.prepareMember(member);
   }
 
@@ -300,18 +300,18 @@ public class DefaultAppService implements AppService, MetricsTimer {
         .addAllItems(ownersReady);
     appBuilder.setOwners(oc);
 
-    GrantCollection.Builder grantCollectionBuilder = newGrantCollectionBuilder();
+    AccessCollection.Builder accessCollectionBuilder = newGrantCollectionBuilder();
 
-    List<ServiceGrant> servicesReady = Lists.newArrayList();
+    List<ServiceAccess> servicesReady = Lists.newArrayList();
     app.getGranted().getServicesList().forEach(service -> servicesReady.add(prepareService(service)));
-    grantCollectionBuilder.addAllServices(servicesReady);
+    accessCollectionBuilder.addAllServices(servicesReady);
 
-    List<MemberGrant> memberReady = Lists.newArrayList();
-    app.getGranted().getMembersList().forEach(grant -> memberReady.add(prepareMember(grant)));
-    grantCollectionBuilder.addAllMembers(memberReady);
+    List<MemberAccess> memberReady = Lists.newArrayList();
+    app.getGranted().getMembersList().forEach(access -> memberReady.add(prepareMember(access)));
+    accessCollectionBuilder.addAllMembers(memberReady);
 
     appBuilder.clearGranted();
-    appBuilder.setGranted(grantCollectionBuilder.buildPartial());
+    appBuilder.setGranted(accessCollectionBuilder.buildPartial());
 
     final App registered = appBuilder.build();
 
@@ -324,8 +324,8 @@ public class DefaultAppService implements AppService, MetricsTimer {
     return Optional.of(registered);
   }
 
-  private GrantCollection.Builder newGrantCollectionBuilder() {
-    return GrantCollection.newBuilder().setType("grant.collection");
+  private AccessCollection.Builder newGrantCollectionBuilder() {
+    return AccessCollection.newBuilder().setType("access.collection");
   }
 
   private App.Builder newAppBuilder(App app) {
@@ -337,7 +337,7 @@ public class DefaultAppService implements AppService, MetricsTimer {
   }
 
   private boolean appHasGrantRelation(String appKey, String relatedType, String relatedKey) {
-    return appHasRelation(appKey, relatedType, relatedKey, GRANT_RELATION);
+    return appHasRelation(appKey, relatedType, relatedKey, ACCESS_RELATION);
   }
 
   private boolean appHasRelation(String appKey, String relatedType, String relatedKey,
@@ -386,9 +386,9 @@ public class DefaultAppService implements AppService, MetricsTimer {
     app.getOwners().getItemsList().forEach(service -> addOwnerToGraph(app, service));
   }
 
-  private void addServiceToGraph(App app, ServiceGrant service) {
+  private void addServiceToGraph(App app, ServiceAccess service) {
 
-    final String relation = GRANT_RELATION;
+    final String relation = ACCESS_RELATION;
     final String subjectType = "app";
     final String subjectKey = app.getKey();
     final String objectType = AppService.SERVICE;
@@ -398,8 +398,8 @@ public class DefaultAppService implements AppService, MetricsTimer {
         app, relation, subjectType, subjectKey, objectType, objectKey, saveServiceTimer);
   }
 
-  private void addMemberToGraph(App app, MemberGrant member) {
-    final String relation = GRANT_RELATION;
+  private void addMemberToGraph(App app, MemberAccess member) {
+    final String relation = ACCESS_RELATION;
     final String subjectType = "app";
     final String subjectKey = app.getKey();
     final String objectType = AppService.MEMBER;
@@ -499,8 +499,8 @@ public class DefaultAppService implements AppService, MetricsTimer {
     }
   }
 
-  private void removeMemberFromGraph(App app, MemberGrant member) {
-    final String relation = GRANT_RELATION;
+  private void removeMemberFromGraph(App app, MemberAccess member) {
+    final String relation = ACCESS_RELATION;
     final String subjectType = "app";
     final String subjectKey = app.getKey();
     final String objectType = AppService.MEMBER;
@@ -518,8 +518,8 @@ public class DefaultAppService implements AppService, MetricsTimer {
     }
   }
 
-  private void removeServiceFromGraph(App app, ServiceGrant service) {
-    final String relation = GRANT_RELATION;
+  private void removeServiceFromGraph(App app, ServiceAccess service) {
+    final String relation = ACCESS_RELATION;
     final String subjectType = "app";
     final String subjectKey = app.getKey();
     final String objectType = AppService.SERVICE;

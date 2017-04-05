@@ -4,17 +4,17 @@
 package outland.feature.proto;
 
 /**
- * Protobuf type {@code outland.GrantCollection}
+ * Protobuf type {@code outland.AccessCollection}
  */
-public  final class GrantCollection extends
+public  final class AccessCollection extends
     com.google.protobuf.GeneratedMessageV3 implements
-    // @@protoc_insertion_point(message_implements:outland.GrantCollection)
-    GrantCollectionOrBuilder {
-  // Use GrantCollection.newBuilder() to construct.
-  private GrantCollection(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+    // @@protoc_insertion_point(message_implements:outland.AccessCollection)
+    AccessCollectionOrBuilder {
+  // Use AccessCollection.newBuilder() to construct.
+  private AccessCollection(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
     super(builder);
   }
-  private GrantCollection() {
+  private AccessCollection() {
     type_ = "";
     services_ = java.util.Collections.emptyList();
     members_ = java.util.Collections.emptyList();
@@ -25,7 +25,7 @@ public  final class GrantCollection extends
   getUnknownFields() {
     return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
   }
-  private GrantCollection(
+  private AccessCollection(
       com.google.protobuf.CodedInputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
@@ -53,20 +53,20 @@ public  final class GrantCollection extends
           }
           case 82: {
             if (!((mutable_bitField0_ & 0x00000002) == 0x00000002)) {
-              services_ = new java.util.ArrayList<outland.feature.proto.ServiceGrant>();
+              services_ = new java.util.ArrayList<outland.feature.proto.ServiceAccess>();
               mutable_bitField0_ |= 0x00000002;
             }
             services_.add(
-                input.readMessage(outland.feature.proto.ServiceGrant.parser(), extensionRegistry));
+                input.readMessage(outland.feature.proto.ServiceAccess.parser(), extensionRegistry));
             break;
           }
           case 90: {
             if (!((mutable_bitField0_ & 0x00000004) == 0x00000004)) {
-              members_ = new java.util.ArrayList<outland.feature.proto.MemberGrant>();
+              members_ = new java.util.ArrayList<outland.feature.proto.MemberAccess>();
               mutable_bitField0_ |= 0x00000004;
             }
             members_.add(
-                input.readMessage(outland.feature.proto.MemberGrant.parser(), extensionRegistry));
+                input.readMessage(outland.feature.proto.MemberAccess.parser(), extensionRegistry));
             break;
           }
         }
@@ -88,14 +88,14 @@ public  final class GrantCollection extends
   }
   public static final com.google.protobuf.Descriptors.Descriptor
       getDescriptor() {
-    return outland.feature.proto.FeatureMessage.internal_static_outland_GrantCollection_descriptor;
+    return outland.feature.proto.FeatureMessage.internal_static_outland_AccessCollection_descriptor;
   }
 
   protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internalGetFieldAccessorTable() {
-    return outland.feature.proto.FeatureMessage.internal_static_outland_GrantCollection_fieldAccessorTable
+    return outland.feature.proto.FeatureMessage.internal_static_outland_AccessCollection_fieldAccessorTable
         .ensureFieldAccessorsInitialized(
-            outland.feature.proto.GrantCollection.class, outland.feature.proto.GrantCollection.Builder.class);
+            outland.feature.proto.AccessCollection.class, outland.feature.proto.AccessCollection.Builder.class);
   }
 
   private int bitField0_;
@@ -134,71 +134,71 @@ public  final class GrantCollection extends
   }
 
   public static final int SERVICES_FIELD_NUMBER = 10;
-  private java.util.List<outland.feature.proto.ServiceGrant> services_;
+  private java.util.List<outland.feature.proto.ServiceAccess> services_;
   /**
-   * <code>repeated .outland.ServiceGrant services = 10;</code>
+   * <code>repeated .outland.ServiceAccess services = 10;</code>
    */
-  public java.util.List<outland.feature.proto.ServiceGrant> getServicesList() {
+  public java.util.List<outland.feature.proto.ServiceAccess> getServicesList() {
     return services_;
   }
   /**
-   * <code>repeated .outland.ServiceGrant services = 10;</code>
+   * <code>repeated .outland.ServiceAccess services = 10;</code>
    */
-  public java.util.List<? extends outland.feature.proto.ServiceGrantOrBuilder> 
+  public java.util.List<? extends outland.feature.proto.ServiceAccessOrBuilder> 
       getServicesOrBuilderList() {
     return services_;
   }
   /**
-   * <code>repeated .outland.ServiceGrant services = 10;</code>
+   * <code>repeated .outland.ServiceAccess services = 10;</code>
    */
   public int getServicesCount() {
     return services_.size();
   }
   /**
-   * <code>repeated .outland.ServiceGrant services = 10;</code>
+   * <code>repeated .outland.ServiceAccess services = 10;</code>
    */
-  public outland.feature.proto.ServiceGrant getServices(int index) {
+  public outland.feature.proto.ServiceAccess getServices(int index) {
     return services_.get(index);
   }
   /**
-   * <code>repeated .outland.ServiceGrant services = 10;</code>
+   * <code>repeated .outland.ServiceAccess services = 10;</code>
    */
-  public outland.feature.proto.ServiceGrantOrBuilder getServicesOrBuilder(
+  public outland.feature.proto.ServiceAccessOrBuilder getServicesOrBuilder(
       int index) {
     return services_.get(index);
   }
 
   public static final int MEMBERS_FIELD_NUMBER = 11;
-  private java.util.List<outland.feature.proto.MemberGrant> members_;
+  private java.util.List<outland.feature.proto.MemberAccess> members_;
   /**
-   * <code>repeated .outland.MemberGrant members = 11;</code>
+   * <code>repeated .outland.MemberAccess members = 11;</code>
    */
-  public java.util.List<outland.feature.proto.MemberGrant> getMembersList() {
+  public java.util.List<outland.feature.proto.MemberAccess> getMembersList() {
     return members_;
   }
   /**
-   * <code>repeated .outland.MemberGrant members = 11;</code>
+   * <code>repeated .outland.MemberAccess members = 11;</code>
    */
-  public java.util.List<? extends outland.feature.proto.MemberGrantOrBuilder> 
+  public java.util.List<? extends outland.feature.proto.MemberAccessOrBuilder> 
       getMembersOrBuilderList() {
     return members_;
   }
   /**
-   * <code>repeated .outland.MemberGrant members = 11;</code>
+   * <code>repeated .outland.MemberAccess members = 11;</code>
    */
   public int getMembersCount() {
     return members_.size();
   }
   /**
-   * <code>repeated .outland.MemberGrant members = 11;</code>
+   * <code>repeated .outland.MemberAccess members = 11;</code>
    */
-  public outland.feature.proto.MemberGrant getMembers(int index) {
+  public outland.feature.proto.MemberAccess getMembers(int index) {
     return members_.get(index);
   }
   /**
-   * <code>repeated .outland.MemberGrant members = 11;</code>
+   * <code>repeated .outland.MemberAccess members = 11;</code>
    */
-  public outland.feature.proto.MemberGrantOrBuilder getMembersOrBuilder(
+  public outland.feature.proto.MemberAccessOrBuilder getMembersOrBuilder(
       int index) {
     return members_.get(index);
   }
@@ -252,10 +252,10 @@ public  final class GrantCollection extends
     if (obj == this) {
      return true;
     }
-    if (!(obj instanceof outland.feature.proto.GrantCollection)) {
+    if (!(obj instanceof outland.feature.proto.AccessCollection)) {
       return super.equals(obj);
     }
-    outland.feature.proto.GrantCollection other = (outland.feature.proto.GrantCollection) obj;
+    outland.feature.proto.AccessCollection other = (outland.feature.proto.AccessCollection) obj;
 
     boolean result = true;
     result = result && getType()
@@ -289,58 +289,58 @@ public  final class GrantCollection extends
     return hash;
   }
 
-  public static outland.feature.proto.GrantCollection parseFrom(
+  public static outland.feature.proto.AccessCollection parseFrom(
       com.google.protobuf.ByteString data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static outland.feature.proto.GrantCollection parseFrom(
+  public static outland.feature.proto.AccessCollection parseFrom(
       com.google.protobuf.ByteString data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static outland.feature.proto.GrantCollection parseFrom(byte[] data)
+  public static outland.feature.proto.AccessCollection parseFrom(byte[] data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static outland.feature.proto.GrantCollection parseFrom(
+  public static outland.feature.proto.AccessCollection parseFrom(
       byte[] data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static outland.feature.proto.GrantCollection parseFrom(java.io.InputStream input)
+  public static outland.feature.proto.AccessCollection parseFrom(java.io.InputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input);
   }
-  public static outland.feature.proto.GrantCollection parseFrom(
+  public static outland.feature.proto.AccessCollection parseFrom(
       java.io.InputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input, extensionRegistry);
   }
-  public static outland.feature.proto.GrantCollection parseDelimitedFrom(java.io.InputStream input)
+  public static outland.feature.proto.AccessCollection parseDelimitedFrom(java.io.InputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseDelimitedWithIOException(PARSER, input);
   }
-  public static outland.feature.proto.GrantCollection parseDelimitedFrom(
+  public static outland.feature.proto.AccessCollection parseDelimitedFrom(
       java.io.InputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
   }
-  public static outland.feature.proto.GrantCollection parseFrom(
+  public static outland.feature.proto.AccessCollection parseFrom(
       com.google.protobuf.CodedInputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input);
   }
-  public static outland.feature.proto.GrantCollection parseFrom(
+  public static outland.feature.proto.AccessCollection parseFrom(
       com.google.protobuf.CodedInputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
@@ -352,7 +352,7 @@ public  final class GrantCollection extends
   public static Builder newBuilder() {
     return DEFAULT_INSTANCE.toBuilder();
   }
-  public static Builder newBuilder(outland.feature.proto.GrantCollection prototype) {
+  public static Builder newBuilder(outland.feature.proto.AccessCollection prototype) {
     return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
   }
   public Builder toBuilder() {
@@ -367,25 +367,25 @@ public  final class GrantCollection extends
     return builder;
   }
   /**
-   * Protobuf type {@code outland.GrantCollection}
+   * Protobuf type {@code outland.AccessCollection}
    */
   public static final class Builder extends
       com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-      // @@protoc_insertion_point(builder_implements:outland.GrantCollection)
-      outland.feature.proto.GrantCollectionOrBuilder {
+      // @@protoc_insertion_point(builder_implements:outland.AccessCollection)
+      outland.feature.proto.AccessCollectionOrBuilder {
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return outland.feature.proto.FeatureMessage.internal_static_outland_GrantCollection_descriptor;
+      return outland.feature.proto.FeatureMessage.internal_static_outland_AccessCollection_descriptor;
     }
 
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return outland.feature.proto.FeatureMessage.internal_static_outland_GrantCollection_fieldAccessorTable
+      return outland.feature.proto.FeatureMessage.internal_static_outland_AccessCollection_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              outland.feature.proto.GrantCollection.class, outland.feature.proto.GrantCollection.Builder.class);
+              outland.feature.proto.AccessCollection.class, outland.feature.proto.AccessCollection.Builder.class);
     }
 
-    // Construct using outland.feature.proto.GrantCollection.newBuilder()
+    // Construct using outland.feature.proto.AccessCollection.newBuilder()
     private Builder() {
       maybeForceBuilderInitialization();
     }
@@ -423,23 +423,23 @@ public  final class GrantCollection extends
 
     public com.google.protobuf.Descriptors.Descriptor
         getDescriptorForType() {
-      return outland.feature.proto.FeatureMessage.internal_static_outland_GrantCollection_descriptor;
+      return outland.feature.proto.FeatureMessage.internal_static_outland_AccessCollection_descriptor;
     }
 
-    public outland.feature.proto.GrantCollection getDefaultInstanceForType() {
-      return outland.feature.proto.GrantCollection.getDefaultInstance();
+    public outland.feature.proto.AccessCollection getDefaultInstanceForType() {
+      return outland.feature.proto.AccessCollection.getDefaultInstance();
     }
 
-    public outland.feature.proto.GrantCollection build() {
-      outland.feature.proto.GrantCollection result = buildPartial();
+    public outland.feature.proto.AccessCollection build() {
+      outland.feature.proto.AccessCollection result = buildPartial();
       if (!result.isInitialized()) {
         throw newUninitializedMessageException(result);
       }
       return result;
     }
 
-    public outland.feature.proto.GrantCollection buildPartial() {
-      outland.feature.proto.GrantCollection result = new outland.feature.proto.GrantCollection(this);
+    public outland.feature.proto.AccessCollection buildPartial() {
+      outland.feature.proto.AccessCollection result = new outland.feature.proto.AccessCollection(this);
       int from_bitField0_ = bitField0_;
       int to_bitField0_ = 0;
       result.type_ = type_;
@@ -493,16 +493,16 @@ public  final class GrantCollection extends
       return (Builder) super.addRepeatedField(field, value);
     }
     public Builder mergeFrom(com.google.protobuf.Message other) {
-      if (other instanceof outland.feature.proto.GrantCollection) {
-        return mergeFrom((outland.feature.proto.GrantCollection)other);
+      if (other instanceof outland.feature.proto.AccessCollection) {
+        return mergeFrom((outland.feature.proto.AccessCollection)other);
       } else {
         super.mergeFrom(other);
         return this;
       }
     }
 
-    public Builder mergeFrom(outland.feature.proto.GrantCollection other) {
-      if (other == outland.feature.proto.GrantCollection.getDefaultInstance()) return this;
+    public Builder mergeFrom(outland.feature.proto.AccessCollection other) {
+      if (other == outland.feature.proto.AccessCollection.getDefaultInstance()) return this;
       if (!other.getType().isEmpty()) {
         type_ = other.type_;
         onChanged();
@@ -571,11 +571,11 @@ public  final class GrantCollection extends
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      outland.feature.proto.GrantCollection parsedMessage = null;
+      outland.feature.proto.AccessCollection parsedMessage = null;
       try {
         parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        parsedMessage = (outland.feature.proto.GrantCollection) e.getUnfinishedMessage();
+        parsedMessage = (outland.feature.proto.AccessCollection) e.getUnfinishedMessage();
         throw e.unwrapIOException();
       } finally {
         if (parsedMessage != null) {
@@ -655,22 +655,22 @@ public  final class GrantCollection extends
       return this;
     }
 
-    private java.util.List<outland.feature.proto.ServiceGrant> services_ =
+    private java.util.List<outland.feature.proto.ServiceAccess> services_ =
       java.util.Collections.emptyList();
     private void ensureServicesIsMutable() {
       if (!((bitField0_ & 0x00000002) == 0x00000002)) {
-        services_ = new java.util.ArrayList<outland.feature.proto.ServiceGrant>(services_);
+        services_ = new java.util.ArrayList<outland.feature.proto.ServiceAccess>(services_);
         bitField0_ |= 0x00000002;
        }
     }
 
     private com.google.protobuf.RepeatedFieldBuilderV3<
-        outland.feature.proto.ServiceGrant, outland.feature.proto.ServiceGrant.Builder, outland.feature.proto.ServiceGrantOrBuilder> servicesBuilder_;
+        outland.feature.proto.ServiceAccess, outland.feature.proto.ServiceAccess.Builder, outland.feature.proto.ServiceAccessOrBuilder> servicesBuilder_;
 
     /**
-     * <code>repeated .outland.ServiceGrant services = 10;</code>
+     * <code>repeated .outland.ServiceAccess services = 10;</code>
      */
-    public java.util.List<outland.feature.proto.ServiceGrant> getServicesList() {
+    public java.util.List<outland.feature.proto.ServiceAccess> getServicesList() {
       if (servicesBuilder_ == null) {
         return java.util.Collections.unmodifiableList(services_);
       } else {
@@ -678,7 +678,7 @@ public  final class GrantCollection extends
       }
     }
     /**
-     * <code>repeated .outland.ServiceGrant services = 10;</code>
+     * <code>repeated .outland.ServiceAccess services = 10;</code>
      */
     public int getServicesCount() {
       if (servicesBuilder_ == null) {
@@ -688,9 +688,9 @@ public  final class GrantCollection extends
       }
     }
     /**
-     * <code>repeated .outland.ServiceGrant services = 10;</code>
+     * <code>repeated .outland.ServiceAccess services = 10;</code>
      */
-    public outland.feature.proto.ServiceGrant getServices(int index) {
+    public outland.feature.proto.ServiceAccess getServices(int index) {
       if (servicesBuilder_ == null) {
         return services_.get(index);
       } else {
@@ -698,10 +698,10 @@ public  final class GrantCollection extends
       }
     }
     /**
-     * <code>repeated .outland.ServiceGrant services = 10;</code>
+     * <code>repeated .outland.ServiceAccess services = 10;</code>
      */
     public Builder setServices(
-        int index, outland.feature.proto.ServiceGrant value) {
+        int index, outland.feature.proto.ServiceAccess value) {
       if (servicesBuilder_ == null) {
         if (value == null) {
           throw new NullPointerException();
@@ -715,10 +715,10 @@ public  final class GrantCollection extends
       return this;
     }
     /**
-     * <code>repeated .outland.ServiceGrant services = 10;</code>
+     * <code>repeated .outland.ServiceAccess services = 10;</code>
      */
     public Builder setServices(
-        int index, outland.feature.proto.ServiceGrant.Builder builderForValue) {
+        int index, outland.feature.proto.ServiceAccess.Builder builderForValue) {
       if (servicesBuilder_ == null) {
         ensureServicesIsMutable();
         services_.set(index, builderForValue.build());
@@ -729,9 +729,9 @@ public  final class GrantCollection extends
       return this;
     }
     /**
-     * <code>repeated .outland.ServiceGrant services = 10;</code>
+     * <code>repeated .outland.ServiceAccess services = 10;</code>
      */
-    public Builder addServices(outland.feature.proto.ServiceGrant value) {
+    public Builder addServices(outland.feature.proto.ServiceAccess value) {
       if (servicesBuilder_ == null) {
         if (value == null) {
           throw new NullPointerException();
@@ -745,10 +745,10 @@ public  final class GrantCollection extends
       return this;
     }
     /**
-     * <code>repeated .outland.ServiceGrant services = 10;</code>
+     * <code>repeated .outland.ServiceAccess services = 10;</code>
      */
     public Builder addServices(
-        int index, outland.feature.proto.ServiceGrant value) {
+        int index, outland.feature.proto.ServiceAccess value) {
       if (servicesBuilder_ == null) {
         if (value == null) {
           throw new NullPointerException();
@@ -762,10 +762,10 @@ public  final class GrantCollection extends
       return this;
     }
     /**
-     * <code>repeated .outland.ServiceGrant services = 10;</code>
+     * <code>repeated .outland.ServiceAccess services = 10;</code>
      */
     public Builder addServices(
-        outland.feature.proto.ServiceGrant.Builder builderForValue) {
+        outland.feature.proto.ServiceAccess.Builder builderForValue) {
       if (servicesBuilder_ == null) {
         ensureServicesIsMutable();
         services_.add(builderForValue.build());
@@ -776,10 +776,10 @@ public  final class GrantCollection extends
       return this;
     }
     /**
-     * <code>repeated .outland.ServiceGrant services = 10;</code>
+     * <code>repeated .outland.ServiceAccess services = 10;</code>
      */
     public Builder addServices(
-        int index, outland.feature.proto.ServiceGrant.Builder builderForValue) {
+        int index, outland.feature.proto.ServiceAccess.Builder builderForValue) {
       if (servicesBuilder_ == null) {
         ensureServicesIsMutable();
         services_.add(index, builderForValue.build());
@@ -790,10 +790,10 @@ public  final class GrantCollection extends
       return this;
     }
     /**
-     * <code>repeated .outland.ServiceGrant services = 10;</code>
+     * <code>repeated .outland.ServiceAccess services = 10;</code>
      */
     public Builder addAllServices(
-        java.lang.Iterable<? extends outland.feature.proto.ServiceGrant> values) {
+        java.lang.Iterable<? extends outland.feature.proto.ServiceAccess> values) {
       if (servicesBuilder_ == null) {
         ensureServicesIsMutable();
         com.google.protobuf.AbstractMessageLite.Builder.addAll(
@@ -805,7 +805,7 @@ public  final class GrantCollection extends
       return this;
     }
     /**
-     * <code>repeated .outland.ServiceGrant services = 10;</code>
+     * <code>repeated .outland.ServiceAccess services = 10;</code>
      */
     public Builder clearServices() {
       if (servicesBuilder_ == null) {
@@ -818,7 +818,7 @@ public  final class GrantCollection extends
       return this;
     }
     /**
-     * <code>repeated .outland.ServiceGrant services = 10;</code>
+     * <code>repeated .outland.ServiceAccess services = 10;</code>
      */
     public Builder removeServices(int index) {
       if (servicesBuilder_ == null) {
@@ -831,16 +831,16 @@ public  final class GrantCollection extends
       return this;
     }
     /**
-     * <code>repeated .outland.ServiceGrant services = 10;</code>
+     * <code>repeated .outland.ServiceAccess services = 10;</code>
      */
-    public outland.feature.proto.ServiceGrant.Builder getServicesBuilder(
+    public outland.feature.proto.ServiceAccess.Builder getServicesBuilder(
         int index) {
       return getServicesFieldBuilder().getBuilder(index);
     }
     /**
-     * <code>repeated .outland.ServiceGrant services = 10;</code>
+     * <code>repeated .outland.ServiceAccess services = 10;</code>
      */
-    public outland.feature.proto.ServiceGrantOrBuilder getServicesOrBuilder(
+    public outland.feature.proto.ServiceAccessOrBuilder getServicesOrBuilder(
         int index) {
       if (servicesBuilder_ == null) {
         return services_.get(index);  } else {
@@ -848,9 +848,9 @@ public  final class GrantCollection extends
       }
     }
     /**
-     * <code>repeated .outland.ServiceGrant services = 10;</code>
+     * <code>repeated .outland.ServiceAccess services = 10;</code>
      */
-    public java.util.List<? extends outland.feature.proto.ServiceGrantOrBuilder> 
+    public java.util.List<? extends outland.feature.proto.ServiceAccessOrBuilder> 
          getServicesOrBuilderList() {
       if (servicesBuilder_ != null) {
         return servicesBuilder_.getMessageOrBuilderList();
@@ -859,33 +859,33 @@ public  final class GrantCollection extends
       }
     }
     /**
-     * <code>repeated .outland.ServiceGrant services = 10;</code>
+     * <code>repeated .outland.ServiceAccess services = 10;</code>
      */
-    public outland.feature.proto.ServiceGrant.Builder addServicesBuilder() {
+    public outland.feature.proto.ServiceAccess.Builder addServicesBuilder() {
       return getServicesFieldBuilder().addBuilder(
-          outland.feature.proto.ServiceGrant.getDefaultInstance());
+          outland.feature.proto.ServiceAccess.getDefaultInstance());
     }
     /**
-     * <code>repeated .outland.ServiceGrant services = 10;</code>
+     * <code>repeated .outland.ServiceAccess services = 10;</code>
      */
-    public outland.feature.proto.ServiceGrant.Builder addServicesBuilder(
+    public outland.feature.proto.ServiceAccess.Builder addServicesBuilder(
         int index) {
       return getServicesFieldBuilder().addBuilder(
-          index, outland.feature.proto.ServiceGrant.getDefaultInstance());
+          index, outland.feature.proto.ServiceAccess.getDefaultInstance());
     }
     /**
-     * <code>repeated .outland.ServiceGrant services = 10;</code>
+     * <code>repeated .outland.ServiceAccess services = 10;</code>
      */
-    public java.util.List<outland.feature.proto.ServiceGrant.Builder> 
+    public java.util.List<outland.feature.proto.ServiceAccess.Builder> 
          getServicesBuilderList() {
       return getServicesFieldBuilder().getBuilderList();
     }
     private com.google.protobuf.RepeatedFieldBuilderV3<
-        outland.feature.proto.ServiceGrant, outland.feature.proto.ServiceGrant.Builder, outland.feature.proto.ServiceGrantOrBuilder> 
+        outland.feature.proto.ServiceAccess, outland.feature.proto.ServiceAccess.Builder, outland.feature.proto.ServiceAccessOrBuilder> 
         getServicesFieldBuilder() {
       if (servicesBuilder_ == null) {
         servicesBuilder_ = new com.google.protobuf.RepeatedFieldBuilderV3<
-            outland.feature.proto.ServiceGrant, outland.feature.proto.ServiceGrant.Builder, outland.feature.proto.ServiceGrantOrBuilder>(
+            outland.feature.proto.ServiceAccess, outland.feature.proto.ServiceAccess.Builder, outland.feature.proto.ServiceAccessOrBuilder>(
                 services_,
                 ((bitField0_ & 0x00000002) == 0x00000002),
                 getParentForChildren(),
@@ -895,22 +895,22 @@ public  final class GrantCollection extends
       return servicesBuilder_;
     }
 
-    private java.util.List<outland.feature.proto.MemberGrant> members_ =
+    private java.util.List<outland.feature.proto.MemberAccess> members_ =
       java.util.Collections.emptyList();
     private void ensureMembersIsMutable() {
       if (!((bitField0_ & 0x00000004) == 0x00000004)) {
-        members_ = new java.util.ArrayList<outland.feature.proto.MemberGrant>(members_);
+        members_ = new java.util.ArrayList<outland.feature.proto.MemberAccess>(members_);
         bitField0_ |= 0x00000004;
        }
     }
 
     private com.google.protobuf.RepeatedFieldBuilderV3<
-        outland.feature.proto.MemberGrant, outland.feature.proto.MemberGrant.Builder, outland.feature.proto.MemberGrantOrBuilder> membersBuilder_;
+        outland.feature.proto.MemberAccess, outland.feature.proto.MemberAccess.Builder, outland.feature.proto.MemberAccessOrBuilder> membersBuilder_;
 
     /**
-     * <code>repeated .outland.MemberGrant members = 11;</code>
+     * <code>repeated .outland.MemberAccess members = 11;</code>
      */
-    public java.util.List<outland.feature.proto.MemberGrant> getMembersList() {
+    public java.util.List<outland.feature.proto.MemberAccess> getMembersList() {
       if (membersBuilder_ == null) {
         return java.util.Collections.unmodifiableList(members_);
       } else {
@@ -918,7 +918,7 @@ public  final class GrantCollection extends
       }
     }
     /**
-     * <code>repeated .outland.MemberGrant members = 11;</code>
+     * <code>repeated .outland.MemberAccess members = 11;</code>
      */
     public int getMembersCount() {
       if (membersBuilder_ == null) {
@@ -928,9 +928,9 @@ public  final class GrantCollection extends
       }
     }
     /**
-     * <code>repeated .outland.MemberGrant members = 11;</code>
+     * <code>repeated .outland.MemberAccess members = 11;</code>
      */
-    public outland.feature.proto.MemberGrant getMembers(int index) {
+    public outland.feature.proto.MemberAccess getMembers(int index) {
       if (membersBuilder_ == null) {
         return members_.get(index);
       } else {
@@ -938,10 +938,10 @@ public  final class GrantCollection extends
       }
     }
     /**
-     * <code>repeated .outland.MemberGrant members = 11;</code>
+     * <code>repeated .outland.MemberAccess members = 11;</code>
      */
     public Builder setMembers(
-        int index, outland.feature.proto.MemberGrant value) {
+        int index, outland.feature.proto.MemberAccess value) {
       if (membersBuilder_ == null) {
         if (value == null) {
           throw new NullPointerException();
@@ -955,10 +955,10 @@ public  final class GrantCollection extends
       return this;
     }
     /**
-     * <code>repeated .outland.MemberGrant members = 11;</code>
+     * <code>repeated .outland.MemberAccess members = 11;</code>
      */
     public Builder setMembers(
-        int index, outland.feature.proto.MemberGrant.Builder builderForValue) {
+        int index, outland.feature.proto.MemberAccess.Builder builderForValue) {
       if (membersBuilder_ == null) {
         ensureMembersIsMutable();
         members_.set(index, builderForValue.build());
@@ -969,9 +969,9 @@ public  final class GrantCollection extends
       return this;
     }
     /**
-     * <code>repeated .outland.MemberGrant members = 11;</code>
+     * <code>repeated .outland.MemberAccess members = 11;</code>
      */
-    public Builder addMembers(outland.feature.proto.MemberGrant value) {
+    public Builder addMembers(outland.feature.proto.MemberAccess value) {
       if (membersBuilder_ == null) {
         if (value == null) {
           throw new NullPointerException();
@@ -985,10 +985,10 @@ public  final class GrantCollection extends
       return this;
     }
     /**
-     * <code>repeated .outland.MemberGrant members = 11;</code>
+     * <code>repeated .outland.MemberAccess members = 11;</code>
      */
     public Builder addMembers(
-        int index, outland.feature.proto.MemberGrant value) {
+        int index, outland.feature.proto.MemberAccess value) {
       if (membersBuilder_ == null) {
         if (value == null) {
           throw new NullPointerException();
@@ -1002,10 +1002,10 @@ public  final class GrantCollection extends
       return this;
     }
     /**
-     * <code>repeated .outland.MemberGrant members = 11;</code>
+     * <code>repeated .outland.MemberAccess members = 11;</code>
      */
     public Builder addMembers(
-        outland.feature.proto.MemberGrant.Builder builderForValue) {
+        outland.feature.proto.MemberAccess.Builder builderForValue) {
       if (membersBuilder_ == null) {
         ensureMembersIsMutable();
         members_.add(builderForValue.build());
@@ -1016,10 +1016,10 @@ public  final class GrantCollection extends
       return this;
     }
     /**
-     * <code>repeated .outland.MemberGrant members = 11;</code>
+     * <code>repeated .outland.MemberAccess members = 11;</code>
      */
     public Builder addMembers(
-        int index, outland.feature.proto.MemberGrant.Builder builderForValue) {
+        int index, outland.feature.proto.MemberAccess.Builder builderForValue) {
       if (membersBuilder_ == null) {
         ensureMembersIsMutable();
         members_.add(index, builderForValue.build());
@@ -1030,10 +1030,10 @@ public  final class GrantCollection extends
       return this;
     }
     /**
-     * <code>repeated .outland.MemberGrant members = 11;</code>
+     * <code>repeated .outland.MemberAccess members = 11;</code>
      */
     public Builder addAllMembers(
-        java.lang.Iterable<? extends outland.feature.proto.MemberGrant> values) {
+        java.lang.Iterable<? extends outland.feature.proto.MemberAccess> values) {
       if (membersBuilder_ == null) {
         ensureMembersIsMutable();
         com.google.protobuf.AbstractMessageLite.Builder.addAll(
@@ -1045,7 +1045,7 @@ public  final class GrantCollection extends
       return this;
     }
     /**
-     * <code>repeated .outland.MemberGrant members = 11;</code>
+     * <code>repeated .outland.MemberAccess members = 11;</code>
      */
     public Builder clearMembers() {
       if (membersBuilder_ == null) {
@@ -1058,7 +1058,7 @@ public  final class GrantCollection extends
       return this;
     }
     /**
-     * <code>repeated .outland.MemberGrant members = 11;</code>
+     * <code>repeated .outland.MemberAccess members = 11;</code>
      */
     public Builder removeMembers(int index) {
       if (membersBuilder_ == null) {
@@ -1071,16 +1071,16 @@ public  final class GrantCollection extends
       return this;
     }
     /**
-     * <code>repeated .outland.MemberGrant members = 11;</code>
+     * <code>repeated .outland.MemberAccess members = 11;</code>
      */
-    public outland.feature.proto.MemberGrant.Builder getMembersBuilder(
+    public outland.feature.proto.MemberAccess.Builder getMembersBuilder(
         int index) {
       return getMembersFieldBuilder().getBuilder(index);
     }
     /**
-     * <code>repeated .outland.MemberGrant members = 11;</code>
+     * <code>repeated .outland.MemberAccess members = 11;</code>
      */
-    public outland.feature.proto.MemberGrantOrBuilder getMembersOrBuilder(
+    public outland.feature.proto.MemberAccessOrBuilder getMembersOrBuilder(
         int index) {
       if (membersBuilder_ == null) {
         return members_.get(index);  } else {
@@ -1088,9 +1088,9 @@ public  final class GrantCollection extends
       }
     }
     /**
-     * <code>repeated .outland.MemberGrant members = 11;</code>
+     * <code>repeated .outland.MemberAccess members = 11;</code>
      */
-    public java.util.List<? extends outland.feature.proto.MemberGrantOrBuilder> 
+    public java.util.List<? extends outland.feature.proto.MemberAccessOrBuilder> 
          getMembersOrBuilderList() {
       if (membersBuilder_ != null) {
         return membersBuilder_.getMessageOrBuilderList();
@@ -1099,33 +1099,33 @@ public  final class GrantCollection extends
       }
     }
     /**
-     * <code>repeated .outland.MemberGrant members = 11;</code>
+     * <code>repeated .outland.MemberAccess members = 11;</code>
      */
-    public outland.feature.proto.MemberGrant.Builder addMembersBuilder() {
+    public outland.feature.proto.MemberAccess.Builder addMembersBuilder() {
       return getMembersFieldBuilder().addBuilder(
-          outland.feature.proto.MemberGrant.getDefaultInstance());
+          outland.feature.proto.MemberAccess.getDefaultInstance());
     }
     /**
-     * <code>repeated .outland.MemberGrant members = 11;</code>
+     * <code>repeated .outland.MemberAccess members = 11;</code>
      */
-    public outland.feature.proto.MemberGrant.Builder addMembersBuilder(
+    public outland.feature.proto.MemberAccess.Builder addMembersBuilder(
         int index) {
       return getMembersFieldBuilder().addBuilder(
-          index, outland.feature.proto.MemberGrant.getDefaultInstance());
+          index, outland.feature.proto.MemberAccess.getDefaultInstance());
     }
     /**
-     * <code>repeated .outland.MemberGrant members = 11;</code>
+     * <code>repeated .outland.MemberAccess members = 11;</code>
      */
-    public java.util.List<outland.feature.proto.MemberGrant.Builder> 
+    public java.util.List<outland.feature.proto.MemberAccess.Builder> 
          getMembersBuilderList() {
       return getMembersFieldBuilder().getBuilderList();
     }
     private com.google.protobuf.RepeatedFieldBuilderV3<
-        outland.feature.proto.MemberGrant, outland.feature.proto.MemberGrant.Builder, outland.feature.proto.MemberGrantOrBuilder> 
+        outland.feature.proto.MemberAccess, outland.feature.proto.MemberAccess.Builder, outland.feature.proto.MemberAccessOrBuilder> 
         getMembersFieldBuilder() {
       if (membersBuilder_ == null) {
         membersBuilder_ = new com.google.protobuf.RepeatedFieldBuilderV3<
-            outland.feature.proto.MemberGrant, outland.feature.proto.MemberGrant.Builder, outland.feature.proto.MemberGrantOrBuilder>(
+            outland.feature.proto.MemberAccess, outland.feature.proto.MemberAccess.Builder, outland.feature.proto.MemberAccessOrBuilder>(
                 members_,
                 ((bitField0_ & 0x00000004) == 0x00000004),
                 getParentForChildren(),
@@ -1145,39 +1145,39 @@ public  final class GrantCollection extends
     }
 
 
-    // @@protoc_insertion_point(builder_scope:outland.GrantCollection)
+    // @@protoc_insertion_point(builder_scope:outland.AccessCollection)
   }
 
-  // @@protoc_insertion_point(class_scope:outland.GrantCollection)
-  private static final outland.feature.proto.GrantCollection DEFAULT_INSTANCE;
+  // @@protoc_insertion_point(class_scope:outland.AccessCollection)
+  private static final outland.feature.proto.AccessCollection DEFAULT_INSTANCE;
   static {
-    DEFAULT_INSTANCE = new outland.feature.proto.GrantCollection();
+    DEFAULT_INSTANCE = new outland.feature.proto.AccessCollection();
   }
 
-  public static outland.feature.proto.GrantCollection getDefaultInstance() {
+  public static outland.feature.proto.AccessCollection getDefaultInstance() {
     return DEFAULT_INSTANCE;
   }
 
-  private static final com.google.protobuf.Parser<GrantCollection>
-      PARSER = new com.google.protobuf.AbstractParser<GrantCollection>() {
-    public GrantCollection parsePartialFrom(
+  private static final com.google.protobuf.Parser<AccessCollection>
+      PARSER = new com.google.protobuf.AbstractParser<AccessCollection>() {
+    public AccessCollection parsePartialFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-        return new GrantCollection(input, extensionRegistry);
+        return new AccessCollection(input, extensionRegistry);
     }
   };
 
-  public static com.google.protobuf.Parser<GrantCollection> parser() {
+  public static com.google.protobuf.Parser<AccessCollection> parser() {
     return PARSER;
   }
 
   @java.lang.Override
-  public com.google.protobuf.Parser<GrantCollection> getParserForType() {
+  public com.google.protobuf.Parser<AccessCollection> getParserForType() {
     return PARSER;
   }
 
-  public outland.feature.proto.GrantCollection getDefaultInstanceForType() {
+  public outland.feature.proto.AccessCollection getDefaultInstanceForType() {
     return DEFAULT_INSTANCE;
   }
 

@@ -98,11 +98,11 @@ public  final class App extends
             break;
           }
           case 74: {
-            outland.feature.proto.GrantCollection.Builder subBuilder = null;
+            outland.feature.proto.AccessCollection.Builder subBuilder = null;
             if (granted_ != null) {
               subBuilder = granted_.toBuilder();
             }
-            granted_ = input.readMessage(outland.feature.proto.GrantCollection.parser(), extensionRegistry);
+            granted_ = input.readMessage(outland.feature.proto.AccessCollection.parser(), extensionRegistry);
             if (subBuilder != null) {
               subBuilder.mergeFrom(granted_);
               granted_ = subBuilder.buildPartial();
@@ -359,23 +359,23 @@ public  final class App extends
   }
 
   public static final int GRANTED_FIELD_NUMBER = 9;
-  private outland.feature.proto.GrantCollection granted_;
+  private outland.feature.proto.AccessCollection granted_;
   /**
-   * <code>optional .outland.GrantCollection granted = 9;</code>
+   * <code>optional .outland.AccessCollection granted = 9;</code>
    */
   public boolean hasGranted() {
     return granted_ != null;
   }
   /**
-   * <code>optional .outland.GrantCollection granted = 9;</code>
+   * <code>optional .outland.AccessCollection granted = 9;</code>
    */
-  public outland.feature.proto.GrantCollection getGranted() {
-    return granted_ == null ? outland.feature.proto.GrantCollection.getDefaultInstance() : granted_;
+  public outland.feature.proto.AccessCollection getGranted() {
+    return granted_ == null ? outland.feature.proto.AccessCollection.getDefaultInstance() : granted_;
   }
   /**
-   * <code>optional .outland.GrantCollection granted = 9;</code>
+   * <code>optional .outland.AccessCollection granted = 9;</code>
    */
-  public outland.feature.proto.GrantCollectionOrBuilder getGrantedOrBuilder() {
+  public outland.feature.proto.AccessCollectionOrBuilder getGrantedOrBuilder() {
     return getGranted();
   }
 
@@ -1324,29 +1324,29 @@ public  final class App extends
       return ownersBuilder_;
     }
 
-    private outland.feature.proto.GrantCollection granted_ = null;
+    private outland.feature.proto.AccessCollection granted_ = null;
     private com.google.protobuf.SingleFieldBuilderV3<
-        outland.feature.proto.GrantCollection, outland.feature.proto.GrantCollection.Builder, outland.feature.proto.GrantCollectionOrBuilder> grantedBuilder_;
+        outland.feature.proto.AccessCollection, outland.feature.proto.AccessCollection.Builder, outland.feature.proto.AccessCollectionOrBuilder> grantedBuilder_;
     /**
-     * <code>optional .outland.GrantCollection granted = 9;</code>
+     * <code>optional .outland.AccessCollection granted = 9;</code>
      */
     public boolean hasGranted() {
       return grantedBuilder_ != null || granted_ != null;
     }
     /**
-     * <code>optional .outland.GrantCollection granted = 9;</code>
+     * <code>optional .outland.AccessCollection granted = 9;</code>
      */
-    public outland.feature.proto.GrantCollection getGranted() {
+    public outland.feature.proto.AccessCollection getGranted() {
       if (grantedBuilder_ == null) {
-        return granted_ == null ? outland.feature.proto.GrantCollection.getDefaultInstance() : granted_;
+        return granted_ == null ? outland.feature.proto.AccessCollection.getDefaultInstance() : granted_;
       } else {
         return grantedBuilder_.getMessage();
       }
     }
     /**
-     * <code>optional .outland.GrantCollection granted = 9;</code>
+     * <code>optional .outland.AccessCollection granted = 9;</code>
      */
-    public Builder setGranted(outland.feature.proto.GrantCollection value) {
+    public Builder setGranted(outland.feature.proto.AccessCollection value) {
       if (grantedBuilder_ == null) {
         if (value == null) {
           throw new NullPointerException();
@@ -1360,10 +1360,10 @@ public  final class App extends
       return this;
     }
     /**
-     * <code>optional .outland.GrantCollection granted = 9;</code>
+     * <code>optional .outland.AccessCollection granted = 9;</code>
      */
     public Builder setGranted(
-        outland.feature.proto.GrantCollection.Builder builderForValue) {
+        outland.feature.proto.AccessCollection.Builder builderForValue) {
       if (grantedBuilder_ == null) {
         granted_ = builderForValue.build();
         onChanged();
@@ -1374,13 +1374,13 @@ public  final class App extends
       return this;
     }
     /**
-     * <code>optional .outland.GrantCollection granted = 9;</code>
+     * <code>optional .outland.AccessCollection granted = 9;</code>
      */
-    public Builder mergeGranted(outland.feature.proto.GrantCollection value) {
+    public Builder mergeGranted(outland.feature.proto.AccessCollection value) {
       if (grantedBuilder_ == null) {
         if (granted_ != null) {
           granted_ =
-            outland.feature.proto.GrantCollection.newBuilder(granted_).mergeFrom(value).buildPartial();
+            outland.feature.proto.AccessCollection.newBuilder(granted_).mergeFrom(value).buildPartial();
         } else {
           granted_ = value;
         }
@@ -1392,7 +1392,7 @@ public  final class App extends
       return this;
     }
     /**
-     * <code>optional .outland.GrantCollection granted = 9;</code>
+     * <code>optional .outland.AccessCollection granted = 9;</code>
      */
     public Builder clearGranted() {
       if (grantedBuilder_ == null) {
@@ -1406,33 +1406,33 @@ public  final class App extends
       return this;
     }
     /**
-     * <code>optional .outland.GrantCollection granted = 9;</code>
+     * <code>optional .outland.AccessCollection granted = 9;</code>
      */
-    public outland.feature.proto.GrantCollection.Builder getGrantedBuilder() {
+    public outland.feature.proto.AccessCollection.Builder getGrantedBuilder() {
       
       onChanged();
       return getGrantedFieldBuilder().getBuilder();
     }
     /**
-     * <code>optional .outland.GrantCollection granted = 9;</code>
+     * <code>optional .outland.AccessCollection granted = 9;</code>
      */
-    public outland.feature.proto.GrantCollectionOrBuilder getGrantedOrBuilder() {
+    public outland.feature.proto.AccessCollectionOrBuilder getGrantedOrBuilder() {
       if (grantedBuilder_ != null) {
         return grantedBuilder_.getMessageOrBuilder();
       } else {
         return granted_ == null ?
-            outland.feature.proto.GrantCollection.getDefaultInstance() : granted_;
+            outland.feature.proto.AccessCollection.getDefaultInstance() : granted_;
       }
     }
     /**
-     * <code>optional .outland.GrantCollection granted = 9;</code>
+     * <code>optional .outland.AccessCollection granted = 9;</code>
      */
     private com.google.protobuf.SingleFieldBuilderV3<
-        outland.feature.proto.GrantCollection, outland.feature.proto.GrantCollection.Builder, outland.feature.proto.GrantCollectionOrBuilder> 
+        outland.feature.proto.AccessCollection, outland.feature.proto.AccessCollection.Builder, outland.feature.proto.AccessCollectionOrBuilder> 
         getGrantedFieldBuilder() {
       if (grantedBuilder_ == null) {
         grantedBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-            outland.feature.proto.GrantCollection, outland.feature.proto.GrantCollection.Builder, outland.feature.proto.GrantCollectionOrBuilder>(
+            outland.feature.proto.AccessCollection, outland.feature.proto.AccessCollection.Builder, outland.feature.proto.AccessCollectionOrBuilder>(
                 getGranted(),
                 getParentForChildren(),
                 isClean());

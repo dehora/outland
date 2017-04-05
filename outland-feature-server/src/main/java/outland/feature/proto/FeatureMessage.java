@@ -55,20 +55,20 @@ public final class FeatureMessage {
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_outland_FeatureCollection_fieldAccessorTable;
   static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_outland_ServiceGrant_descriptor;
+    internal_static_outland_ServiceAccess_descriptor;
   static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_outland_ServiceGrant_fieldAccessorTable;
+      internal_static_outland_ServiceAccess_fieldAccessorTable;
   static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_outland_MemberGrant_descriptor;
+    internal_static_outland_MemberAccess_descriptor;
   static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_outland_MemberGrant_fieldAccessorTable;
+      internal_static_outland_MemberAccess_fieldAccessorTable;
   static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_outland_GrantCollection_descriptor;
+    internal_static_outland_AccessCollection_descriptor;
   static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_outland_GrantCollection_fieldAccessorTable;
+      internal_static_outland_AccessCollection_fieldAccessorTable;
   static final com.google.protobuf.Descriptors.Descriptor
     internal_static_outland_App_descriptor;
   static final 
@@ -108,20 +108,20 @@ public final class FeatureMessage {
       "\001(\t:\0028\001\"\"\n\005State\022\010\n\004none\020\000\022\007\n\003off\020\001\022\006\n\002o" +
       "n\020\002\"R\n\021FeatureCollection\022\014\n\004type\030\001 \001(\t\022\016" +
       "\n\006appkey\030\002 \001(\t\022\037\n\005items\030\003 \003(\0132\020.outland." +
-      "Feature\"C\n\014ServiceGrant\022\014\n\004type\030\001 \001(\t\022\n\n" +
-      "\002id\030\002 \001(\t\022\014\n\004name\030\n \001(\t\022\013\n\003key\030\013 \001(\t\"V\n\013" +
-      "MemberGrant\022\014\n\004type\030\001 \001(\t\022\n\n\002id\030\002 \001(\t\022\014\n" +
-      "\004name\030\n \001(\t\022\020\n\010username\030\013 \001(\t\022\r\n\005email\030\014" +
-      " \001(\t\"o\n\017GrantCollection\022\014\n\004type\030\001 \001(\t\022\'\n",
-      "\010services\030\n \003(\0132\025.outland.ServiceGrant\022%" +
-      "\n\007members\030\013 \003(\0132\024.outland.MemberGrant\"\261\001" +
-      "\n\003App\022\014\n\004type\030\010 \001(\t\022\n\n\002id\030\001 \001(\t\022\013\n\003key\030\002" +
-      " \001(\t\022\014\n\004name\030\003 \001(\t\022\017\n\007created\030\006 \001(\t\022\017\n\007u" +
-      "pdated\030\007 \001(\t\022(\n\006owners\030\005 \001(\0132\030.outland.O" +
-      "wnerCollection\022)\n\007granted\030\t \001(\0132\030.outlan" +
-      "d.GrantCollection* \n\nOptionType\022\010\n\004flag\020" +
-      "\000\022\010\n\004bool\020\001B+\n\025outland.feature.protoB\016Fe" +
-      "atureMessageH\001P\001b\006proto3"
+      "Feature\"D\n\rServiceAccess\022\014\n\004type\030\001 \001(\t\022\n" +
+      "\n\002id\030\002 \001(\t\022\014\n\004name\030\n \001(\t\022\013\n\003key\030\013 \001(\t\"W\n" +
+      "\014MemberAccess\022\014\n\004type\030\001 \001(\t\022\n\n\002id\030\002 \001(\t\022" +
+      "\014\n\004name\030\n \001(\t\022\020\n\010username\030\013 \001(\t\022\r\n\005email" +
+      "\030\014 \001(\t\"r\n\020AccessCollection\022\014\n\004type\030\001 \001(\t",
+      "\022(\n\010services\030\n \003(\0132\026.outland.ServiceAcce" +
+      "ss\022&\n\007members\030\013 \003(\0132\025.outland.MemberAcce" +
+      "ss\"\262\001\n\003App\022\014\n\004type\030\010 \001(\t\022\n\n\002id\030\001 \001(\t\022\013\n\003" +
+      "key\030\002 \001(\t\022\014\n\004name\030\003 \001(\t\022\017\n\007created\030\006 \001(\t" +
+      "\022\017\n\007updated\030\007 \001(\t\022(\n\006owners\030\005 \001(\0132\030.outl" +
+      "and.OwnerCollection\022*\n\007granted\030\t \001(\0132\031.o" +
+      "utland.AccessCollection* \n\nOptionType\022\010\n" +
+      "\004flag\020\000\022\010\n\004bool\020\001B+\n\025outland.feature.pro" +
+      "toB\016FeatureMessageH\001P\001b\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -183,23 +183,23 @@ public final class FeatureMessage {
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_outland_FeatureCollection_descriptor,
         new java.lang.String[] { "Type", "Appkey", "Items", });
-    internal_static_outland_ServiceGrant_descriptor =
+    internal_static_outland_ServiceAccess_descriptor =
       getDescriptor().getMessageTypes().get(7);
-    internal_static_outland_ServiceGrant_fieldAccessorTable = new
+    internal_static_outland_ServiceAccess_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_outland_ServiceGrant_descriptor,
+        internal_static_outland_ServiceAccess_descriptor,
         new java.lang.String[] { "Type", "Id", "Name", "Key", });
-    internal_static_outland_MemberGrant_descriptor =
+    internal_static_outland_MemberAccess_descriptor =
       getDescriptor().getMessageTypes().get(8);
-    internal_static_outland_MemberGrant_fieldAccessorTable = new
+    internal_static_outland_MemberAccess_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_outland_MemberGrant_descriptor,
+        internal_static_outland_MemberAccess_descriptor,
         new java.lang.String[] { "Type", "Id", "Name", "Username", "Email", });
-    internal_static_outland_GrantCollection_descriptor =
+    internal_static_outland_AccessCollection_descriptor =
       getDescriptor().getMessageTypes().get(9);
-    internal_static_outland_GrantCollection_fieldAccessorTable = new
+    internal_static_outland_AccessCollection_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_outland_GrantCollection_descriptor,
+        internal_static_outland_AccessCollection_descriptor,
         new java.lang.String[] { "Type", "Services", "Members", });
     internal_static_outland_App_descriptor =
       getDescriptor().getMessageTypes().get(10);
