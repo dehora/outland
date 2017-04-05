@@ -18,6 +18,7 @@ import outland.feature.proto.App;
 import outland.feature.proto.GrantCollection;
 import outland.feature.proto.MemberGrant;
 import outland.feature.proto.Owner;
+import outland.feature.proto.OwnerCollection;
 import outland.feature.proto.ServiceGrant;
 import outland.feature.server.Problem;
 import outland.feature.server.ServiceException;
@@ -33,6 +34,7 @@ public class DefaultAppService implements AppService, MetricsTimer {
 
   private final AppStorage appStorage;
   private final VersionService versionService;
+  private final AppUpdateProcessor appUpdateProcessor;
 
   private Timer saveAppTimer;
   private Timer saveServiceTimer;
@@ -49,6 +51,7 @@ public class DefaultAppService implements AppService, MetricsTimer {
   ) {
     this.appStorage = appStorage;
     this.versionService = versionService;
+    this.appUpdateProcessor = new AppUpdateProcessor();
     configureMetrics(metrics);
   }
 
@@ -70,24 +73,9 @@ public class DefaultAppService implements AppService, MetricsTimer {
 
     return processUpdate(app,
         builder -> {
-          final GrantCollection granted = app.getGranted();
-          List<ServiceGrant> grants = granted.getServicesList();
-          boolean found = false;
-          for (ServiceGrant grant : grants) {
-            if(grant.getKey().equals(service.getKey())) {
-              found = true;
-              break;
-            }
-          }
-
-          if (!found) {
-            grants = Lists.newArrayList(grants);
-            grants.add(prepareService(service));
-          }
-
           GrantCollection.Builder grantBuilder = newGrantCollectionBuilder();
-          grantBuilder.addAllServices(grants);
-          grantBuilder.addAllMembers(granted.getMembersList());
+          grantBuilder.addAllServices(appUpdateProcessor.mergeServices(app, service));
+          grantBuilder.addAllMembers(app.getGranted().getMembersList());
           builder.setGranted(grantBuilder.buildPartial());
         });
   }
@@ -98,40 +86,20 @@ public class DefaultAppService implements AppService, MetricsTimer {
 
     return processUpdate(app,
         builder -> {
-          final GrantCollection granted = app.getGranted();
-          List<MemberGrant> grants = granted.getMembersList();
-          boolean found = false;
-          for (MemberGrant grant : grants) {
-            final String username = grant.getUsername();
-            if (!Strings.isNullOrEmpty(username) && username.equals(member.getUsername())) {
-              found = true;
-              break;
-            }
-
-            final String email = grant.getEmail();
-            if (!Strings.isNullOrEmpty(email) && email.equals(member.getEmail())) {
-              found = true;
-              break;
-            }
-          }
-
-          if (!found) {
-            grants = Lists.newArrayList(grants);
-            grants.add(prepareMember(member));
-          }
-
           GrantCollection.Builder grantBuilder = newGrantCollectionBuilder();
-          grantBuilder.addAllMembers(grants);
-          grantBuilder.addAllServices(granted.getServicesList());
+          grantBuilder.addAllMembers(appUpdateProcessor.mergeMembers(app, member));
+          grantBuilder.addAllServices(app.getGranted().getServicesList());
           builder.setGranted(grantBuilder.buildPartial());
         });
   }
 
-  @Override public App addToApp(App app, final Owner owner) {
+  @Override public App addToApp(App app, final Owner incoming) {
     logger.info("{} /app[{}]/own[{}]", kvp("op", "addToApp.owner"),
-        TextFormat.shortDebugString(app), TextFormat.shortDebugString(owner));
+        TextFormat.shortDebugString(app), TextFormat.shortDebugString(incoming));
 
-    return processUpdate(app, builder -> builder.addOwners(prepareOwner(owner)));
+    return processUpdate(app,
+        builder -> builder.setOwners(OwnerCollection.newBuilder()
+            .addAllItems(appUpdateProcessor.mergeOwners(app, incoming))));
   }
 
   @Override public App removeServiceGrant(App app, String serviceKey) {
@@ -231,12 +199,12 @@ public class DefaultAppService implements AppService, MetricsTimer {
       return app;
     }
 
-    if(app.getOwnersCount() == 1) {
+    if(app.getOwners().getItemsCount() == 1) {
       throw new ServiceException(Problem.clientProblem("at_least_one_owner",
           "only one owner remaining, refusing to remove", 422));
     }
 
-    final List<Owner> ownersList = app.getOwnersList();
+    final List<Owner> ownersList = app.getOwners().getItemsList();
     final ArrayList<Owner> wrapped = Lists.newArrayList(ownersList);
     final Iterator<Owner> iterator = wrapped.iterator();
     Owner owner = null;
@@ -261,8 +229,11 @@ public class DefaultAppService implements AppService, MetricsTimer {
     }
 
     final App.Builder builder = app.toBuilder();
-    builder.clearOwners();
-    builder.addAllOwners(wrapped);
+    builder.getOwners().getItemsList().clear();
+    OwnerCollection.Builder oc = OwnerCollection.newBuilder()
+        .setType("owner.collection")
+        .addAllItems(wrapped);
+    builder.setOwners(oc);
 
     OffsetDateTime now = OffsetDateTime.now();
     String updateTime = AppService.asString(now);
@@ -291,15 +262,15 @@ public class DefaultAppService implements AppService, MetricsTimer {
   }
 
   private Owner prepareOwner(Owner owner) {
-    return owner.toBuilder().setType("owner").setId(mintOwnerId()).build();
+    return appUpdateProcessor.prepareOwner(owner);
   }
 
   private ServiceGrant prepareService(ServiceGrant service) {
-    return service.toBuilder().setType("service").setId(mintServiceId()).build();
+    return appUpdateProcessor.prepareService(service);
   }
 
   private MemberGrant prepareMember(MemberGrant member) {
-    return member.toBuilder().setType("member").setId(mintMemberId()).build();
+    return appUpdateProcessor.prepareMember(member);
   }
 
   private App processUpdate(App app, Consumer<App.Builder> updateExtra) {
@@ -323,8 +294,11 @@ public class DefaultAppService implements AppService, MetricsTimer {
     appBuilder.setUpdated(created);
 
     List<Owner> ownersReady = Lists.newArrayList();
-    app.getOwnersList().forEach(owner -> ownersReady.add(prepareOwner(owner)));
-    appBuilder.clearOwners().addAllOwners(ownersReady);
+    app.getOwners().getItemsList().forEach(owner -> ownersReady.add(prepareOwner(owner)));
+    OwnerCollection.Builder oc = OwnerCollection.newBuilder()
+        .setType("owner.collection")
+        .addAllItems(ownersReady);
+    appBuilder.setOwners(oc);
 
     GrantCollection.Builder grantCollectionBuilder = newGrantCollectionBuilder();
 
@@ -393,19 +367,7 @@ public class DefaultAppService implements AppService, MetricsTimer {
   }
 
   private void registerOwners(App app) {
-    app.getOwnersList().forEach(service -> addOwnerToGraph(app, service));
-  }
-
-  private String mintOwnerId() {
-    return "usr_" + Ulid.random();
-  }
-
-  private String mintServiceId() {
-    return "svc_" + Ulid.random();
-  }
-
-  private String mintMemberId() {
-    return "mbr_" + Ulid.random();
+    app.getOwners().getItemsList().forEach(service -> addOwnerToGraph(app, service));
   }
 
   private void updateAppInner(App registered) {
@@ -421,7 +383,7 @@ public class DefaultAppService implements AppService, MetricsTimer {
   }
 
   private void updateOwners(App app) {
-    app.getOwnersList().forEach(service -> addOwnerToGraph(app, service));
+    app.getOwners().getItemsList().forEach(service -> addOwnerToGraph(app, service));
   }
 
   private void addServiceToGraph(App app, ServiceGrant service) {

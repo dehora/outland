@@ -21,7 +21,6 @@ public  final class App extends
     name_ = "";
     created_ = "";
     updated_ = "";
-    owners_ = java.util.Collections.emptyList();
   }
 
   @java.lang.Override
@@ -68,12 +67,16 @@ public  final class App extends
             break;
           }
           case 42: {
-            if (!((mutable_bitField0_ & 0x00000040) == 0x00000040)) {
-              owners_ = new java.util.ArrayList<outland.feature.proto.Owner>();
-              mutable_bitField0_ |= 0x00000040;
+            outland.feature.proto.OwnerCollection.Builder subBuilder = null;
+            if (owners_ != null) {
+              subBuilder = owners_.toBuilder();
             }
-            owners_.add(
-                input.readMessage(outland.feature.proto.Owner.parser(), extensionRegistry));
+            owners_ = input.readMessage(outland.feature.proto.OwnerCollection.parser(), extensionRegistry);
+            if (subBuilder != null) {
+              subBuilder.mergeFrom(owners_);
+              owners_ = subBuilder.buildPartial();
+            }
+
             break;
           }
           case 50: {
@@ -115,9 +118,6 @@ public  final class App extends
       throw new com.google.protobuf.InvalidProtocolBufferException(
           e).setUnfinishedMessage(this);
     } finally {
-      if (((mutable_bitField0_ & 0x00000040) == 0x00000040)) {
-        owners_ = java.util.Collections.unmodifiableList(owners_);
-      }
       makeExtensionsImmutable();
     }
   }
@@ -133,7 +133,6 @@ public  final class App extends
             outland.feature.proto.App.class, outland.feature.proto.App.Builder.class);
   }
 
-  private int bitField0_;
   public static final int TYPE_FIELD_NUMBER = 8;
   private volatile java.lang.Object type_;
   /**
@@ -339,38 +338,24 @@ public  final class App extends
   }
 
   public static final int OWNERS_FIELD_NUMBER = 5;
-  private java.util.List<outland.feature.proto.Owner> owners_;
+  private outland.feature.proto.OwnerCollection owners_;
   /**
-   * <code>repeated .outland.Owner owners = 5;</code>
+   * <code>optional .outland.OwnerCollection owners = 5;</code>
    */
-  public java.util.List<outland.feature.proto.Owner> getOwnersList() {
-    return owners_;
+  public boolean hasOwners() {
+    return owners_ != null;
   }
   /**
-   * <code>repeated .outland.Owner owners = 5;</code>
+   * <code>optional .outland.OwnerCollection owners = 5;</code>
    */
-  public java.util.List<? extends outland.feature.proto.OwnerOrBuilder> 
-      getOwnersOrBuilderList() {
-    return owners_;
+  public outland.feature.proto.OwnerCollection getOwners() {
+    return owners_ == null ? outland.feature.proto.OwnerCollection.getDefaultInstance() : owners_;
   }
   /**
-   * <code>repeated .outland.Owner owners = 5;</code>
+   * <code>optional .outland.OwnerCollection owners = 5;</code>
    */
-  public int getOwnersCount() {
-    return owners_.size();
-  }
-  /**
-   * <code>repeated .outland.Owner owners = 5;</code>
-   */
-  public outland.feature.proto.Owner getOwners(int index) {
-    return owners_.get(index);
-  }
-  /**
-   * <code>repeated .outland.Owner owners = 5;</code>
-   */
-  public outland.feature.proto.OwnerOrBuilder getOwnersOrBuilder(
-      int index) {
-    return owners_.get(index);
+  public outland.feature.proto.OwnerCollectionOrBuilder getOwnersOrBuilder() {
+    return getOwners();
   }
 
   public static final int GRANTED_FIELD_NUMBER = 9;
@@ -415,8 +400,8 @@ public  final class App extends
     if (!getNameBytes().isEmpty()) {
       com.google.protobuf.GeneratedMessageV3.writeString(output, 3, name_);
     }
-    for (int i = 0; i < owners_.size(); i++) {
-      output.writeMessage(5, owners_.get(i));
+    if (owners_ != null) {
+      output.writeMessage(5, getOwners());
     }
     if (!getCreatedBytes().isEmpty()) {
       com.google.protobuf.GeneratedMessageV3.writeString(output, 6, created_);
@@ -446,9 +431,9 @@ public  final class App extends
     if (!getNameBytes().isEmpty()) {
       size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, name_);
     }
-    for (int i = 0; i < owners_.size(); i++) {
+    if (owners_ != null) {
       size += com.google.protobuf.CodedOutputStream
-        .computeMessageSize(5, owners_.get(i));
+        .computeMessageSize(5, getOwners());
     }
     if (!getCreatedBytes().isEmpty()) {
       size += com.google.protobuf.GeneratedMessageV3.computeStringSize(6, created_);
@@ -491,8 +476,11 @@ public  final class App extends
         .equals(other.getCreated());
     result = result && getUpdated()
         .equals(other.getUpdated());
-    result = result && getOwnersList()
-        .equals(other.getOwnersList());
+    result = result && (hasOwners() == other.hasOwners());
+    if (hasOwners()) {
+      result = result && getOwners()
+          .equals(other.getOwners());
+    }
     result = result && (hasGranted() == other.hasGranted());
     if (hasGranted()) {
       result = result && getGranted()
@@ -520,9 +508,9 @@ public  final class App extends
     hash = (53 * hash) + getCreated().hashCode();
     hash = (37 * hash) + UPDATED_FIELD_NUMBER;
     hash = (53 * hash) + getUpdated().hashCode();
-    if (getOwnersCount() > 0) {
+    if (hasOwners()) {
       hash = (37 * hash) + OWNERS_FIELD_NUMBER;
-      hash = (53 * hash) + getOwnersList().hashCode();
+      hash = (53 * hash) + getOwners().hashCode();
     }
     if (hasGranted()) {
       hash = (37 * hash) + GRANTED_FIELD_NUMBER;
@@ -642,7 +630,6 @@ public  final class App extends
     private void maybeForceBuilderInitialization() {
       if (com.google.protobuf.GeneratedMessageV3
               .alwaysUseFieldBuilders) {
-        getOwnersFieldBuilder();
       }
     }
     public Builder clear() {
@@ -660,10 +647,10 @@ public  final class App extends
       updated_ = "";
 
       if (ownersBuilder_ == null) {
-        owners_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00000040);
+        owners_ = null;
       } else {
-        ownersBuilder_.clear();
+        owners_ = null;
+        ownersBuilder_ = null;
       }
       if (grantedBuilder_ == null) {
         granted_ = null;
@@ -693,8 +680,6 @@ public  final class App extends
 
     public outland.feature.proto.App buildPartial() {
       outland.feature.proto.App result = new outland.feature.proto.App(this);
-      int from_bitField0_ = bitField0_;
-      int to_bitField0_ = 0;
       result.type_ = type_;
       result.id_ = id_;
       result.key_ = key_;
@@ -702,10 +687,6 @@ public  final class App extends
       result.created_ = created_;
       result.updated_ = updated_;
       if (ownersBuilder_ == null) {
-        if (((bitField0_ & 0x00000040) == 0x00000040)) {
-          owners_ = java.util.Collections.unmodifiableList(owners_);
-          bitField0_ = (bitField0_ & ~0x00000040);
-        }
         result.owners_ = owners_;
       } else {
         result.owners_ = ownersBuilder_.build();
@@ -715,7 +696,6 @@ public  final class App extends
       } else {
         result.granted_ = grantedBuilder_.build();
       }
-      result.bitField0_ = to_bitField0_;
       onBuilt();
       return result;
     }
@@ -781,31 +761,8 @@ public  final class App extends
         updated_ = other.updated_;
         onChanged();
       }
-      if (ownersBuilder_ == null) {
-        if (!other.owners_.isEmpty()) {
-          if (owners_.isEmpty()) {
-            owners_ = other.owners_;
-            bitField0_ = (bitField0_ & ~0x00000040);
-          } else {
-            ensureOwnersIsMutable();
-            owners_.addAll(other.owners_);
-          }
-          onChanged();
-        }
-      } else {
-        if (!other.owners_.isEmpty()) {
-          if (ownersBuilder_.isEmpty()) {
-            ownersBuilder_.dispose();
-            ownersBuilder_ = null;
-            owners_ = other.owners_;
-            bitField0_ = (bitField0_ & ~0x00000040);
-            ownersBuilder_ = 
-              com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders ?
-                 getOwnersFieldBuilder() : null;
-          } else {
-            ownersBuilder_.addAllMessages(other.owners_);
-          }
-        }
+      if (other.hasOwners()) {
+        mergeOwners(other.getOwners());
       }
       if (other.hasGranted()) {
         mergeGranted(other.getGranted());
@@ -835,7 +792,6 @@ public  final class App extends
       }
       return this;
     }
-    private int bitField0_;
 
     private java.lang.Object type_ = "";
     /**
@@ -1251,239 +1207,116 @@ public  final class App extends
       return this;
     }
 
-    private java.util.List<outland.feature.proto.Owner> owners_ =
-      java.util.Collections.emptyList();
-    private void ensureOwnersIsMutable() {
-      if (!((bitField0_ & 0x00000040) == 0x00000040)) {
-        owners_ = new java.util.ArrayList<outland.feature.proto.Owner>(owners_);
-        bitField0_ |= 0x00000040;
-       }
+    private outland.feature.proto.OwnerCollection owners_ = null;
+    private com.google.protobuf.SingleFieldBuilderV3<
+        outland.feature.proto.OwnerCollection, outland.feature.proto.OwnerCollection.Builder, outland.feature.proto.OwnerCollectionOrBuilder> ownersBuilder_;
+    /**
+     * <code>optional .outland.OwnerCollection owners = 5;</code>
+     */
+    public boolean hasOwners() {
+      return ownersBuilder_ != null || owners_ != null;
     }
+    /**
+     * <code>optional .outland.OwnerCollection owners = 5;</code>
+     */
+    public outland.feature.proto.OwnerCollection getOwners() {
+      if (ownersBuilder_ == null) {
+        return owners_ == null ? outland.feature.proto.OwnerCollection.getDefaultInstance() : owners_;
+      } else {
+        return ownersBuilder_.getMessage();
+      }
+    }
+    /**
+     * <code>optional .outland.OwnerCollection owners = 5;</code>
+     */
+    public Builder setOwners(outland.feature.proto.OwnerCollection value) {
+      if (ownersBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        owners_ = value;
+        onChanged();
+      } else {
+        ownersBuilder_.setMessage(value);
+      }
 
-    private com.google.protobuf.RepeatedFieldBuilderV3<
-        outland.feature.proto.Owner, outland.feature.proto.Owner.Builder, outland.feature.proto.OwnerOrBuilder> ownersBuilder_;
-
-    /**
-     * <code>repeated .outland.Owner owners = 5;</code>
-     */
-    public java.util.List<outland.feature.proto.Owner> getOwnersList() {
-      if (ownersBuilder_ == null) {
-        return java.util.Collections.unmodifiableList(owners_);
-      } else {
-        return ownersBuilder_.getMessageList();
-      }
+      return this;
     }
     /**
-     * <code>repeated .outland.Owner owners = 5;</code>
-     */
-    public int getOwnersCount() {
-      if (ownersBuilder_ == null) {
-        return owners_.size();
-      } else {
-        return ownersBuilder_.getCount();
-      }
-    }
-    /**
-     * <code>repeated .outland.Owner owners = 5;</code>
-     */
-    public outland.feature.proto.Owner getOwners(int index) {
-      if (ownersBuilder_ == null) {
-        return owners_.get(index);
-      } else {
-        return ownersBuilder_.getMessage(index);
-      }
-    }
-    /**
-     * <code>repeated .outland.Owner owners = 5;</code>
+     * <code>optional .outland.OwnerCollection owners = 5;</code>
      */
     public Builder setOwners(
-        int index, outland.feature.proto.Owner value) {
+        outland.feature.proto.OwnerCollection.Builder builderForValue) {
       if (ownersBuilder_ == null) {
-        if (value == null) {
-          throw new NullPointerException();
+        owners_ = builderForValue.build();
+        onChanged();
+      } else {
+        ownersBuilder_.setMessage(builderForValue.build());
+      }
+
+      return this;
+    }
+    /**
+     * <code>optional .outland.OwnerCollection owners = 5;</code>
+     */
+    public Builder mergeOwners(outland.feature.proto.OwnerCollection value) {
+      if (ownersBuilder_ == null) {
+        if (owners_ != null) {
+          owners_ =
+            outland.feature.proto.OwnerCollection.newBuilder(owners_).mergeFrom(value).buildPartial();
+        } else {
+          owners_ = value;
         }
-        ensureOwnersIsMutable();
-        owners_.set(index, value);
         onChanged();
       } else {
-        ownersBuilder_.setMessage(index, value);
+        ownersBuilder_.mergeFrom(value);
       }
+
       return this;
     }
     /**
-     * <code>repeated .outland.Owner owners = 5;</code>
-     */
-    public Builder setOwners(
-        int index, outland.feature.proto.Owner.Builder builderForValue) {
-      if (ownersBuilder_ == null) {
-        ensureOwnersIsMutable();
-        owners_.set(index, builderForValue.build());
-        onChanged();
-      } else {
-        ownersBuilder_.setMessage(index, builderForValue.build());
-      }
-      return this;
-    }
-    /**
-     * <code>repeated .outland.Owner owners = 5;</code>
-     */
-    public Builder addOwners(outland.feature.proto.Owner value) {
-      if (ownersBuilder_ == null) {
-        if (value == null) {
-          throw new NullPointerException();
-        }
-        ensureOwnersIsMutable();
-        owners_.add(value);
-        onChanged();
-      } else {
-        ownersBuilder_.addMessage(value);
-      }
-      return this;
-    }
-    /**
-     * <code>repeated .outland.Owner owners = 5;</code>
-     */
-    public Builder addOwners(
-        int index, outland.feature.proto.Owner value) {
-      if (ownersBuilder_ == null) {
-        if (value == null) {
-          throw new NullPointerException();
-        }
-        ensureOwnersIsMutable();
-        owners_.add(index, value);
-        onChanged();
-      } else {
-        ownersBuilder_.addMessage(index, value);
-      }
-      return this;
-    }
-    /**
-     * <code>repeated .outland.Owner owners = 5;</code>
-     */
-    public Builder addOwners(
-        outland.feature.proto.Owner.Builder builderForValue) {
-      if (ownersBuilder_ == null) {
-        ensureOwnersIsMutable();
-        owners_.add(builderForValue.build());
-        onChanged();
-      } else {
-        ownersBuilder_.addMessage(builderForValue.build());
-      }
-      return this;
-    }
-    /**
-     * <code>repeated .outland.Owner owners = 5;</code>
-     */
-    public Builder addOwners(
-        int index, outland.feature.proto.Owner.Builder builderForValue) {
-      if (ownersBuilder_ == null) {
-        ensureOwnersIsMutable();
-        owners_.add(index, builderForValue.build());
-        onChanged();
-      } else {
-        ownersBuilder_.addMessage(index, builderForValue.build());
-      }
-      return this;
-    }
-    /**
-     * <code>repeated .outland.Owner owners = 5;</code>
-     */
-    public Builder addAllOwners(
-        java.lang.Iterable<? extends outland.feature.proto.Owner> values) {
-      if (ownersBuilder_ == null) {
-        ensureOwnersIsMutable();
-        com.google.protobuf.AbstractMessageLite.Builder.addAll(
-            values, owners_);
-        onChanged();
-      } else {
-        ownersBuilder_.addAllMessages(values);
-      }
-      return this;
-    }
-    /**
-     * <code>repeated .outland.Owner owners = 5;</code>
+     * <code>optional .outland.OwnerCollection owners = 5;</code>
      */
     public Builder clearOwners() {
       if (ownersBuilder_ == null) {
-        owners_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00000040);
+        owners_ = null;
         onChanged();
       } else {
-        ownersBuilder_.clear();
+        owners_ = null;
+        ownersBuilder_ = null;
       }
+
       return this;
     }
     /**
-     * <code>repeated .outland.Owner owners = 5;</code>
+     * <code>optional .outland.OwnerCollection owners = 5;</code>
      */
-    public Builder removeOwners(int index) {
-      if (ownersBuilder_ == null) {
-        ensureOwnersIsMutable();
-        owners_.remove(index);
-        onChanged();
-      } else {
-        ownersBuilder_.remove(index);
-      }
-      return this;
+    public outland.feature.proto.OwnerCollection.Builder getOwnersBuilder() {
+      
+      onChanged();
+      return getOwnersFieldBuilder().getBuilder();
     }
     /**
-     * <code>repeated .outland.Owner owners = 5;</code>
+     * <code>optional .outland.OwnerCollection owners = 5;</code>
      */
-    public outland.feature.proto.Owner.Builder getOwnersBuilder(
-        int index) {
-      return getOwnersFieldBuilder().getBuilder(index);
-    }
-    /**
-     * <code>repeated .outland.Owner owners = 5;</code>
-     */
-    public outland.feature.proto.OwnerOrBuilder getOwnersOrBuilder(
-        int index) {
-      if (ownersBuilder_ == null) {
-        return owners_.get(index);  } else {
-        return ownersBuilder_.getMessageOrBuilder(index);
-      }
-    }
-    /**
-     * <code>repeated .outland.Owner owners = 5;</code>
-     */
-    public java.util.List<? extends outland.feature.proto.OwnerOrBuilder> 
-         getOwnersOrBuilderList() {
+    public outland.feature.proto.OwnerCollectionOrBuilder getOwnersOrBuilder() {
       if (ownersBuilder_ != null) {
-        return ownersBuilder_.getMessageOrBuilderList();
+        return ownersBuilder_.getMessageOrBuilder();
       } else {
-        return java.util.Collections.unmodifiableList(owners_);
+        return owners_ == null ?
+            outland.feature.proto.OwnerCollection.getDefaultInstance() : owners_;
       }
     }
     /**
-     * <code>repeated .outland.Owner owners = 5;</code>
+     * <code>optional .outland.OwnerCollection owners = 5;</code>
      */
-    public outland.feature.proto.Owner.Builder addOwnersBuilder() {
-      return getOwnersFieldBuilder().addBuilder(
-          outland.feature.proto.Owner.getDefaultInstance());
-    }
-    /**
-     * <code>repeated .outland.Owner owners = 5;</code>
-     */
-    public outland.feature.proto.Owner.Builder addOwnersBuilder(
-        int index) {
-      return getOwnersFieldBuilder().addBuilder(
-          index, outland.feature.proto.Owner.getDefaultInstance());
-    }
-    /**
-     * <code>repeated .outland.Owner owners = 5;</code>
-     */
-    public java.util.List<outland.feature.proto.Owner.Builder> 
-         getOwnersBuilderList() {
-      return getOwnersFieldBuilder().getBuilderList();
-    }
-    private com.google.protobuf.RepeatedFieldBuilderV3<
-        outland.feature.proto.Owner, outland.feature.proto.Owner.Builder, outland.feature.proto.OwnerOrBuilder> 
+    private com.google.protobuf.SingleFieldBuilderV3<
+        outland.feature.proto.OwnerCollection, outland.feature.proto.OwnerCollection.Builder, outland.feature.proto.OwnerCollectionOrBuilder> 
         getOwnersFieldBuilder() {
       if (ownersBuilder_ == null) {
-        ownersBuilder_ = new com.google.protobuf.RepeatedFieldBuilderV3<
-            outland.feature.proto.Owner, outland.feature.proto.Owner.Builder, outland.feature.proto.OwnerOrBuilder>(
-                owners_,
-                ((bitField0_ & 0x00000040) == 0x00000040),
+        ownersBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+            outland.feature.proto.OwnerCollection, outland.feature.proto.OwnerCollection.Builder, outland.feature.proto.OwnerCollectionOrBuilder>(
+                getOwners(),
                 getParentForChildren(),
                 isClean());
         owners_ = null;

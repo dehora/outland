@@ -3,6 +3,7 @@ package outland.feature.server.apps;
 import org.junit.Test;
 import outland.feature.proto.App;
 import outland.feature.proto.Owner;
+import outland.feature.proto.OwnerCollection;
 import outland.feature.server.ServiceException;
 
 import static org.junit.Assert.*;
@@ -12,7 +13,12 @@ public class AppValidatorTest {
   @Test
   public void validateAppRegistrationThrowingOk() {
     App.Builder builder = App.newBuilder();
-    builder.addOwners(Owner.newBuilder().setName("Bob").setUsername("bob"))
+
+    OwnerCollection.Builder oc = OwnerCollection.newBuilder()
+        .setType("owner.collection")
+        .addItems(Owner.newBuilder().setName("Bob").setUsername("bob"));
+
+    builder.setOwners(oc)
         .setKey("key1")
         .setName("app 1");
 
@@ -37,7 +43,10 @@ public class AppValidatorTest {
   @Test
   public void validateAppRegistrationThrowingJunkOwner() {
     App.Builder builder = App.newBuilder();
-    builder.addOwners(Owner.newBuilder().setName("Bob"));
+    OwnerCollection.Builder oc = OwnerCollection.newBuilder()
+        .setType("owner.collection")
+        .addItems(Owner.newBuilder().setName("Bob"));
+    builder.setOwners(oc);
 
     callValidate(builder, "incomplete_owner_for_app", 422);
   }
@@ -45,7 +54,10 @@ public class AppValidatorTest {
   @Test
   public void validateAppRegistrationThrowingNoKey() {
     App.Builder builder = App.newBuilder();
-    builder.addOwners(Owner.newBuilder().setName("Bob").setUsername("bob"));
+    OwnerCollection.Builder oc = OwnerCollection.newBuilder()
+        .setType("owner.collection")
+        .addItems(Owner.newBuilder().setName("Bob").setUsername("bob"));
+    builder.setOwners(oc);
 
     callValidate(builder, "missing_key_for_app", 422);
   }
@@ -53,7 +65,10 @@ public class AppValidatorTest {
   @Test
   public void validateAppRegistrationThrowingNoName() {
     App.Builder builder = App.newBuilder();
-    builder.addOwners(Owner.newBuilder().setName("Bob").setUsername("bob"))
+    OwnerCollection.Builder oc = OwnerCollection.newBuilder()
+        .setType("owner.collection")
+        .addItems(Owner.newBuilder().setName("Bob").setUsername("bob"));
+    builder.setOwners(oc)
         .setKey("key1");
 
     callValidate(builder, "missing_name_for_app", 422);

@@ -22,6 +22,7 @@ import outland.feature.proto.Feature;
 import outland.feature.proto.GrantCollection;
 import outland.feature.proto.MemberGrant;
 import outland.feature.proto.Owner;
+import outland.feature.proto.OwnerCollection;
 import outland.feature.proto.ServiceGrant;
 import outland.feature.server.Problem;
 import outland.feature.server.ServerConfiguration;
@@ -60,11 +61,13 @@ public class AppResourceTest {
     final ArrayList<ServiceGrant> services = Lists.newArrayList();
     services.add(ServiceGrant.newBuilder().setKey(serviceKey).buildPartial());
     grantBuilder.addAllServices(services);
-
+    OwnerCollection.Builder oc = OwnerCollection.newBuilder()
+        .setType("owner.collection")
+        .addItems(Owner.newBuilder().setName("Jayne").setUsername("jayne"));
     final App app = App.newBuilder()
         .setKey(appKey)
         .setName("name")
-        .addOwners(Owner.newBuilder().setName("Jayne").setUsername("jayne"))
+        .setOwners(oc)
         .setGranted(grantBuilder.buildPartial())
         .build();
 

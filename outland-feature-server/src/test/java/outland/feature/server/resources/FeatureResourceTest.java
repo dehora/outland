@@ -24,6 +24,7 @@ import outland.feature.proto.Feature;
 import outland.feature.proto.GrantCollection;
 import outland.feature.proto.MemberGrant;
 import outland.feature.proto.Owner;
+import outland.feature.proto.OwnerCollection;
 import outland.feature.proto.ServiceGrant;
 import outland.feature.server.Problem;
 import outland.feature.server.ServerConfiguration;
@@ -85,11 +86,15 @@ public class FeatureResourceTest {
     builder.addServices(ServiceGrant.newBuilder().setKey(seedServiceOne).buildPartial());
     builder.addMembers(MemberGrant.newBuilder().setUsername(seedMemberOne).buildPartial());
 
+    OwnerCollection.Builder oc = OwnerCollection.newBuilder()
+        .setType("owner.collection")
+        .addItems(Owner.newBuilder().setUsername(seedOwnerOne));
+
     appService.registerApp(
         App.newBuilder()
             .setKey(seedAppOneKey)
             .setName("name")
-            .addOwners(Owner.newBuilder().setUsername(seedOwnerOne))
+            .setOwners(oc)
             .setGranted(builder.buildPartial())
             .build()
     );
@@ -98,11 +103,15 @@ public class FeatureResourceTest {
     builder.addServices(ServiceGrant.newBuilder().setKey(seedServiceFoo).buildPartial());
     builder.addMembers(MemberGrant.newBuilder().setUsername(seedMemberFoo).buildPartial());
 
+    oc = OwnerCollection.newBuilder()
+        .setType("owner.collection")
+        .addItems(Owner.newBuilder().setUsername(seedOwnerFoo));
+
     appService.registerApp(
         App.newBuilder()
             .setKey(seedAppFooKey)
             .setName("name")
-            .addOwners(Owner.newBuilder().setUsername(seedOwnerFoo))
+            .setOwners(oc)
             .setGranted(builder.buildPartial())
             .build()
     );
@@ -111,11 +120,15 @@ public class FeatureResourceTest {
     builder.addServices(ServiceGrant.newBuilder().setKey(seedServiceBar).buildPartial());
     builder.addMembers(MemberGrant.newBuilder().setUsername(seedMemberBar).buildPartial());
 
+    oc = OwnerCollection.newBuilder()
+        .setType("owner.collection")
+        .addItems(Owner.newBuilder().setUsername(seedOwnerBar));
+
     appService.registerApp(
         App.newBuilder()
             .setKey(seedAppBarKey)
             .setName("name")
-            .addOwners(Owner.newBuilder().setUsername(seedOwnerBar))
+            .setOwners(oc)
             .setGranted(builder.buildPartial())
             .build()
     );
@@ -139,11 +152,15 @@ public class FeatureResourceTest {
     grantBuilder.addAllServices(
         Lists.newArrayList(ServiceGrant.newBuilder().setKey(service).buildPartial()));
 
+    OwnerCollection.Builder oc = OwnerCollection.newBuilder()
+        .setType("owner.collection")
+        .addItems(Owner.newBuilder().setName("Jayne").setUsername("jayne"));
+
     appService.registerApp(
         App.newBuilder()
             .setKey("testAuthFailures")
             .setName("name")
-            .addOwners(Owner.newBuilder().setName("Jayne").setUsername("jayne"))
+            .setOwners(oc)
             .setGranted(grantBuilder.buildPartial())
             .build()
     );
@@ -379,11 +396,15 @@ public class FeatureResourceTest {
     services.add(ServiceGrant.newBuilder().setKey(serviceKey).buildPartial());
     grantBuilder.addAllServices(services);
 
+    OwnerCollection.Builder oc = OwnerCollection.newBuilder()
+        .setType("owner.collection")
+        .addItems(Owner.newBuilder().setName("Jayne").setUsername("jayne"));
+
     instance.registerApp(
         App.newBuilder()
             .setKey(appKey)
             .setName("name")
-            .addOwners(Owner.newBuilder().setName("Jayne").setUsername("jayne"))
+            .setOwners(oc)
             .setGranted(grantBuilder.buildPartial())
             .build()
     );
@@ -550,11 +571,15 @@ public class FeatureResourceTest {
     services.add(ServiceGrant.newBuilder().setKey(whitelisted).buildPartial());
     grantBuilder.addAllServices(services);
 
+    OwnerCollection.Builder oc = OwnerCollection.newBuilder()
+        .setType("owner.collection")
+        .addItems(Owner.newBuilder().setName("Jayne").setUsername("jayne"));
+
     instance.registerApp(
         App.newBuilder()
             .setKey(appKey)
             .setName("name")
-            .addOwners(Owner.newBuilder().setName("Jayne").setUsername("jayne"))
+            .setOwners(oc)
             .setGranted(grantBuilder.buildPartial())
             .build()
     );
@@ -598,11 +623,15 @@ public class FeatureResourceTest {
     services.add(ServiceGrant.newBuilder().setKey(serviceKey).buildPartial());
     grantBuilder.addAllServices(services);
 
+    OwnerCollection.Builder oc = OwnerCollection.newBuilder()
+        .setType("owner.collection")
+        .addItems(Owner.newBuilder().setName("Jayne").setUsername("jayne"));
+
     instance.registerApp(
         App.newBuilder()
             .setKey(appKey)
             .setName("name")
-            .addOwners(Owner.newBuilder().setName("Jayne").setUsername("jayne"))
+            .setOwners(oc)
             .setGranted(grantBuilder.buildPartial())
             .build()
     );
