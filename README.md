@@ -192,21 +192,22 @@ curl -v http://localhost:8180/features \
 -H "Content-type: application/json" \
 -u testconsole/service:letmein -d'
 {
-  "key": "testfeature-2",
-  "description": "A test feature flag",
-  "appkey": "testapp-1",
-  "options": {
-    "option": "bool"
-    ,"items": [
+  "key": "testfeature-2"
+  ,"description": "A test feature flag"
+  ,"appkey": "testapp-1"
+  ,"options": {
+    "option": "flag",
+    "items":[
       {
-        "name": "false"
-        ,"value": "false"
-        ,"weight": 9500
-      }, {
+        "name":"false",
+        "value":"false"
+        "weight": 9500
+      },
+      {
         "name": "true"
-        ,"value": "true"
-        ,"weight": 500
-      } 
+        "value": "true"
+        "weight": 9500
+      }
     ]
   },
   "owner": {
