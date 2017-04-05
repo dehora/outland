@@ -3,22 +3,22 @@ package outland.feature.server.apps;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import java.util.List;
+import outland.feature.proto.AccessCollection;
 import outland.feature.proto.App;
-import outland.feature.proto.GrantCollection;
-import outland.feature.proto.MemberGrant;
+import outland.feature.proto.MemberAccess;
 import outland.feature.proto.Owner;
 import outland.feature.proto.OwnerCollection;
-import outland.feature.proto.ServiceGrant;
+import outland.feature.proto.ServiceAccess;
 import outland.feature.server.features.Ulid;
 
 class AppUpdateProcessor {
 
-  List<ServiceGrant> mergeServices(App app, ServiceGrant incoming) {
-    final GrantCollection existingGrants = app.getGranted();
-    final List<ServiceGrant> existingGrantsList = existingGrants.getServicesList();
-    final List<ServiceGrant> updateGrantList = Lists.newArrayList();
+  List<ServiceAccess> mergeServices(App app, ServiceAccess incoming) {
+    final AccessCollection existingGrants = app.getGranted();
+    final List<ServiceAccess> existingGrantsList = existingGrants.getServicesList();
+    final List<ServiceAccess> updateGrantList = Lists.newArrayList();
     boolean found = false;
-    for (ServiceGrant existing : existingGrantsList) {
+    for (ServiceAccess existing : existingGrantsList) {
       if (isMatchingServiceGrant(incoming, existing)) {
         updateGrantList.add(mergeServiceGrants(existing, incoming));
         found = true;
@@ -33,12 +33,12 @@ class AppUpdateProcessor {
     return updateGrantList;
   }
 
-  List<MemberGrant> mergeMembers(App app, MemberGrant incoming) {
-    final GrantCollection existingGrants = app.getGranted();
-    final List<MemberGrant> existingGrantsList = existingGrants.getMembersList();
-    final List<MemberGrant> updateGrantList = Lists.newArrayList();
+  List<MemberAccess> mergeMembers(App app, MemberAccess incoming) {
+    final AccessCollection existingGrants = app.getGranted();
+    final List<MemberAccess> existingGrantsList = existingGrants.getMembersList();
+    final List<MemberAccess> updateGrantList = Lists.newArrayList();
     boolean found = false;
-    for (MemberGrant existing : existingGrantsList) {
+    for (MemberAccess existing : existingGrantsList) {
       if (isMatchingMemberGrant(incoming, existing)) {
         updateGrantList.add(mergeMemberGrants(existing, incoming));
         found = true;
@@ -73,7 +73,7 @@ class AppUpdateProcessor {
     return updateOwnerList;
   }
 
-  private boolean isMatchingServiceGrant(ServiceGrant incoming, ServiceGrant existing) {
+  private boolean isMatchingServiceGrant(ServiceAccess incoming, ServiceAccess existing) {
     return existing.getKey().equals(incoming.getKey());
   }
 
@@ -85,7 +85,7 @@ class AppUpdateProcessor {
             .equals(incoming.getEmail()));
   }
 
-  private boolean isMatchingMemberGrant(MemberGrant incoming, MemberGrant existing) {
+  private boolean isMatchingMemberGrant(MemberAccess incoming, MemberAccess existing) {
     return (!Strings.isNullOrEmpty(existing.getUsername()) && existing.getUsername()
         .equals(incoming.getUsername()))
         ||
@@ -93,7 +93,7 @@ class AppUpdateProcessor {
             .equals(incoming.getEmail()));
   }
 
-  MemberGrant prepareMember(MemberGrant member) {
+  MemberAccess prepareMember(MemberAccess member) {
     return member.toBuilder().setType("member").setId(mintMemberId()).build();
   }
 
@@ -101,7 +101,7 @@ class AppUpdateProcessor {
     return owner.toBuilder().setType("owner").setId(mintOwnerId()).build();
   }
 
-  ServiceGrant prepareService(ServiceGrant service) {
+  ServiceAccess prepareService(ServiceAccess service) {
     return service.toBuilder().setType("service").setId(mintServiceId()).build();
   }
 
@@ -109,11 +109,11 @@ class AppUpdateProcessor {
     return existing.toBuilder().mergeFrom(incoming).setId(existing.getId()).build();
   }
 
-  private ServiceGrant mergeServiceGrants(ServiceGrant existing, ServiceGrant incoming) {
+  private ServiceAccess mergeServiceGrants(ServiceAccess existing, ServiceAccess incoming) {
     return existing.toBuilder().mergeFrom(incoming).setId(existing.getId()).build();
   }
 
-  private MemberGrant mergeMemberGrants(MemberGrant existing, MemberGrant incoming) {
+  private MemberAccess mergeMemberGrants(MemberAccess existing, MemberAccess incoming) {
     return existing.toBuilder().mergeFrom(incoming).setId(existing.getId()).build();
   }
 

@@ -3,8 +3,8 @@
 
 package outland.feature.proto;
 
-public interface MemberGrantOrBuilder extends
-    // @@protoc_insertion_point(interface_extends:outland.MemberGrant)
+public interface MemberAccessOrBuilder extends
+    // @@protoc_insertion_point(interface_extends:outland.MemberAccess)
     com.google.protobuf.MessageOrBuilder {
 
   /**

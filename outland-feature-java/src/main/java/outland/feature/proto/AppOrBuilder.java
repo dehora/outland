@@ -81,15 +81,15 @@ public interface AppOrBuilder extends
   outland.feature.proto.OwnerCollectionOrBuilder getOwnersOrBuilder();
 
   /**
-   * <code>optional .outland.GrantCollection granted = 9;</code>
+   * <code>optional .outland.AccessCollection granted = 9;</code>
    */
   boolean hasGranted();
   /**
-   * <code>optional .outland.GrantCollection granted = 9;</code>
+   * <code>optional .outland.AccessCollection granted = 9;</code>
    */
-  outland.feature.proto.GrantCollection getGranted();
+  outland.feature.proto.AccessCollection getGranted();
   /**
-   * <code>optional .outland.GrantCollection granted = 9;</code>
+   * <code>optional .outland.AccessCollection granted = 9;</code>
    */
-  outland.feature.proto.GrantCollectionOrBuilder getGrantedOrBuilder();
+  outland.feature.proto.AccessCollectionOrBuilder getGrantedOrBuilder();
 }

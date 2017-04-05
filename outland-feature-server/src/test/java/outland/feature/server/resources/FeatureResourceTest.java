@@ -15,17 +15,15 @@ import org.assertj.core.util.Lists;
 import org.glassfish.jersey.client.JerseyClient;
 import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
 import org.glassfish.jersey.logging.LoggingFeature;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Test;
+import outland.feature.proto.AccessCollection;
 import outland.feature.proto.App;
 import outland.feature.proto.Feature;
-import outland.feature.proto.GrantCollection;
-import outland.feature.proto.MemberGrant;
+import outland.feature.proto.MemberAccess;
 import outland.feature.proto.Owner;
 import outland.feature.proto.OwnerCollection;
-import outland.feature.proto.ServiceGrant;
+import outland.feature.proto.ServiceAccess;
 import outland.feature.server.Problem;
 import outland.feature.server.ServerConfiguration;
 import outland.feature.server.ServerMain;
@@ -82,9 +80,9 @@ public class FeatureResourceTest {
   }
 
   public void setUp() {
-    GrantCollection.Builder builder = GrantCollection.newBuilder();
-    builder.addServices(ServiceGrant.newBuilder().setKey(seedServiceOne).buildPartial());
-    builder.addMembers(MemberGrant.newBuilder().setUsername(seedMemberOne).buildPartial());
+    AccessCollection.Builder builder = AccessCollection.newBuilder();
+    builder.addServices(ServiceAccess.newBuilder().setKey(seedServiceOne).buildPartial());
+    builder.addMembers(MemberAccess.newBuilder().setUsername(seedMemberOne).buildPartial());
 
     OwnerCollection.Builder oc = OwnerCollection.newBuilder()
         .setType("owner.collection")
@@ -99,9 +97,9 @@ public class FeatureResourceTest {
             .build()
     );
 
-    builder = GrantCollection.newBuilder();
-    builder.addServices(ServiceGrant.newBuilder().setKey(seedServiceFoo).buildPartial());
-    builder.addMembers(MemberGrant.newBuilder().setUsername(seedMemberFoo).buildPartial());
+    builder = AccessCollection.newBuilder();
+    builder.addServices(ServiceAccess.newBuilder().setKey(seedServiceFoo).buildPartial());
+    builder.addMembers(MemberAccess.newBuilder().setUsername(seedMemberFoo).buildPartial());
 
     oc = OwnerCollection.newBuilder()
         .setType("owner.collection")
@@ -116,9 +114,9 @@ public class FeatureResourceTest {
             .build()
     );
 
-    builder = GrantCollection.newBuilder();
-    builder.addServices(ServiceGrant.newBuilder().setKey(seedServiceBar).buildPartial());
-    builder.addMembers(MemberGrant.newBuilder().setUsername(seedMemberBar).buildPartial());
+    builder = AccessCollection.newBuilder();
+    builder.addServices(ServiceAccess.newBuilder().setKey(seedServiceBar).buildPartial());
+    builder.addMembers(MemberAccess.newBuilder().setUsername(seedMemberBar).buildPartial());
 
     oc = OwnerCollection.newBuilder()
         .setType("owner.collection")
@@ -147,10 +145,10 @@ public class FeatureResourceTest {
     final String user = "unknownuser";
     final String service = "knownservice";
 
-    final GrantCollection.Builder grantBuilder = GrantCollection.newBuilder();
+    final AccessCollection.Builder accessBuilder = AccessCollection.newBuilder();
 
-    grantBuilder.addAllServices(
-        Lists.newArrayList(ServiceGrant.newBuilder().setKey(service).buildPartial()));
+    accessBuilder.addAllServices(
+        Lists.newArrayList(ServiceAccess.newBuilder().setKey(service).buildPartial()));
 
     OwnerCollection.Builder oc = OwnerCollection.newBuilder()
         .setType("owner.collection")
@@ -161,7 +159,7 @@ public class FeatureResourceTest {
             .setKey("testAuthFailures")
             .setName("name")
             .setOwners(oc)
-            .setGranted(grantBuilder.buildPartial())
+            .setGranted(accessBuilder.buildPartial())
             .build()
     );
 
@@ -246,7 +244,7 @@ public class FeatureResourceTest {
     String jsonRes = response.readEntity(String.class);
     final Problem problem = gson.fromJson(jsonRes, Problem.class);
     assertTrue(problem.status() == 401);
-    assertTrue(problem.title().contains("Member grant not authenticated"));
+    assertTrue(problem.title().contains("Member not authenticated"));
     assertEquals(Problem.AUTH_TYPE, problem.type());
   }
 
@@ -259,11 +257,11 @@ public class FeatureResourceTest {
     final String featureKey = Ulid.random();
     final String appKey = seedAppOneKey;
     final String serviceName = "unknownMember";
-    final String grantName = "unknownKind";
+    final String accessName = "unknownKind";
 
     Response response = client.target(url + "/" + appKey + "/" + featureKey)
         .request()
-        .property(HTTP_AUTHENTICATION_BASIC_USERNAME, serviceName + "/" + grantName)
+        .property(HTTP_AUTHENTICATION_BASIC_USERNAME, serviceName + "/" + accessName)
         .property(HTTP_AUTHENTICATION_BASIC_PASSWORD, basicPassword)
         .get();
 
@@ -271,7 +269,7 @@ public class FeatureResourceTest {
     String jsonRes = response.readEntity(String.class);
     final Problem problem = gson.fromJson(jsonRes, Problem.class);
     assertTrue(problem.status() == 401);
-    assertTrue(problem.title().contains("Unknown grant type"));
+    assertTrue(problem.title().contains("Unknown access type"));
     assertEquals(Problem.AUTH_TYPE, problem.type());
   }
 
@@ -391,10 +389,10 @@ public class FeatureResourceTest {
     final String appKey = "testPostAppKey";
     final String serviceKey = "testPostService";
 
-    GrantCollection.Builder grantBuilder = GrantCollection.newBuilder();
-    final ArrayList<ServiceGrant> services = Lists.newArrayList();
-    services.add(ServiceGrant.newBuilder().setKey(serviceKey).buildPartial());
-    grantBuilder.addAllServices(services);
+    AccessCollection.Builder accessBuilder = AccessCollection.newBuilder();
+    final ArrayList<ServiceAccess> services = Lists.newArrayList();
+    services.add(ServiceAccess.newBuilder().setKey(serviceKey).buildPartial());
+    accessBuilder.addAllServices(services);
 
     OwnerCollection.Builder oc = OwnerCollection.newBuilder()
         .setType("owner.collection")
@@ -405,7 +403,7 @@ public class FeatureResourceTest {
             .setKey(appKey)
             .setName("name")
             .setOwners(oc)
-            .setGranted(grantBuilder.buildPartial())
+            .setGranted(accessBuilder.buildPartial())
             .build()
     );
 
@@ -454,7 +452,7 @@ public class FeatureResourceTest {
 
     Response register = client.target(url)
         .request()
-        // create using a service's grant
+        // create using a service's access
         .property(HTTP_AUTHENTICATION_BASIC_USERNAME, seedServiceOne + "/service")
         .property(HTTP_AUTHENTICATION_BASIC_PASSWORD, basicPassword)
         .post(Entity.entity(featureJson, MediaType.APPLICATION_JSON_TYPE));
@@ -566,10 +564,10 @@ public class FeatureResourceTest {
 
     final AppService instance = injector.getInstance(AppService.class);
 
-    GrantCollection.Builder grantBuilder = GrantCollection.newBuilder();
-    final ArrayList<ServiceGrant> services = Lists.newArrayList();
-    services.add(ServiceGrant.newBuilder().setKey(whitelisted).buildPartial());
-    grantBuilder.addAllServices(services);
+    AccessCollection.Builder accessBuilder = AccessCollection.newBuilder();
+    final ArrayList<ServiceAccess> services = Lists.newArrayList();
+    services.add(ServiceAccess.newBuilder().setKey(whitelisted).buildPartial());
+    accessBuilder.addAllServices(services);
 
     OwnerCollection.Builder oc = OwnerCollection.newBuilder()
         .setType("owner.collection")
@@ -580,7 +578,7 @@ public class FeatureResourceTest {
             .setKey(appKey)
             .setName("name")
             .setOwners(oc)
-            .setGranted(grantBuilder.buildPartial())
+            .setGranted(accessBuilder.buildPartial())
             .build()
     );
 
@@ -618,10 +616,10 @@ public class FeatureResourceTest {
     final String appKey = "testDoubleCreatePostCauses409AppKey";
     final String serviceKey = "testDoubleCreatePostCauses409Service";
 
-    final GrantCollection.Builder grantBuilder = GrantCollection.newBuilder();
-    final ArrayList<ServiceGrant> services = Lists.newArrayList();
-    services.add(ServiceGrant.newBuilder().setKey(serviceKey).buildPartial());
-    grantBuilder.addAllServices(services);
+    final AccessCollection.Builder accessBuilder = AccessCollection.newBuilder();
+    final ArrayList<ServiceAccess> services = Lists.newArrayList();
+    services.add(ServiceAccess.newBuilder().setKey(serviceKey).buildPartial());
+    accessBuilder.addAllServices(services);
 
     OwnerCollection.Builder oc = OwnerCollection.newBuilder()
         .setType("owner.collection")
@@ -632,7 +630,7 @@ public class FeatureResourceTest {
             .setKey(appKey)
             .setName("name")
             .setOwners(oc)
-            .setGranted(grantBuilder.buildPartial())
+            .setGranted(accessBuilder.buildPartial())
             .build()
     );
 

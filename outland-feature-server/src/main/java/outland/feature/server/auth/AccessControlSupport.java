@@ -38,15 +38,15 @@ public class AccessControlSupport {
     }
 
     if (! AppService.MEMBER.equals(authPrincipal.type()) && ! AppService.SERVICE.equals(authPrincipal.type())) {
-      throw new AuthenticationException("Unknown grant type "+ authPrincipal.type());
+      throw new AuthenticationException("Unknown type "+ authPrincipal.type());
     }
 
     if (AppService.MEMBER.equals(authPrincipal.type()) && ! memberHasGrant(authPrincipal, app)) {
-      throw new AuthenticationException("Member grant not authenticated");
+      throw new AuthenticationException("Member not authenticated");
     }
 
     if(AppService.SERVICE.equals(authPrincipal.type()) && ! serviceHasGrant(authPrincipal, app)) {
-      throw new AuthenticationException("Service grant not authenticated");
+      throw new AuthenticationException("Service not authenticated");
     }
   }
 
@@ -60,15 +60,15 @@ public class AccessControlSupport {
     }
 
     if (! AppService.MEMBER.equals(authPrincipal.type()) && ! AppService.SERVICE.equals(authPrincipal.type())) {
-      throw new AuthenticationException("Unknown grant type "+ authPrincipal.type());
+      throw new AuthenticationException("Unknown access type "+ authPrincipal.type());
     }
 
     if (AppService.MEMBER.equals(authPrincipal.type()) && !memberHasGrant(authPrincipal, appKey)) {
-      throw new AuthenticationException("Member grant not authenticated");
+      throw new AuthenticationException("Member not authenticated");
     }
 
     if (AppService.SERVICE.equals(authPrincipal.type()) && !serviceHasGrant(authPrincipal, appKey)) {
-      throw new AuthenticationException("Service grant not authenticated");
+      throw new AuthenticationException("Service not authenticated");
     }
   }
 

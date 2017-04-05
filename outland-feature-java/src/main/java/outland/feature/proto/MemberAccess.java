@@ -4,21 +4,22 @@
 package outland.feature.proto;
 
 /**
- * Protobuf type {@code outland.ServiceGrant}
+ * Protobuf type {@code outland.MemberAccess}
  */
-public  final class ServiceGrant extends
+public  final class MemberAccess extends
     com.google.protobuf.GeneratedMessageV3 implements
-    // @@protoc_insertion_point(message_implements:outland.ServiceGrant)
-    ServiceGrantOrBuilder {
-  // Use ServiceGrant.newBuilder() to construct.
-  private ServiceGrant(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+    // @@protoc_insertion_point(message_implements:outland.MemberAccess)
+    MemberAccessOrBuilder {
+  // Use MemberAccess.newBuilder() to construct.
+  private MemberAccess(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
     super(builder);
   }
-  private ServiceGrant() {
+  private MemberAccess() {
     type_ = "";
     id_ = "";
     name_ = "";
-    key_ = "";
+    username_ = "";
+    email_ = "";
   }
 
   @java.lang.Override
@@ -26,7 +27,7 @@ public  final class ServiceGrant extends
   getUnknownFields() {
     return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
   }
-  private ServiceGrant(
+  private MemberAccess(
       com.google.protobuf.CodedInputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
@@ -67,7 +68,13 @@ public  final class ServiceGrant extends
           case 90: {
             java.lang.String s = input.readStringRequireUtf8();
 
-            key_ = s;
+            username_ = s;
+            break;
+          }
+          case 98: {
+            java.lang.String s = input.readStringRequireUtf8();
+
+            email_ = s;
             break;
           }
         }
@@ -83,14 +90,14 @@ public  final class ServiceGrant extends
   }
   public static final com.google.protobuf.Descriptors.Descriptor
       getDescriptor() {
-    return outland.feature.proto.FeatureMessage.internal_static_outland_ServiceGrant_descriptor;
+    return outland.feature.proto.FeatureMessage.internal_static_outland_MemberAccess_descriptor;
   }
 
   protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internalGetFieldAccessorTable() {
-    return outland.feature.proto.FeatureMessage.internal_static_outland_ServiceGrant_fieldAccessorTable
+    return outland.feature.proto.FeatureMessage.internal_static_outland_MemberAccess_fieldAccessorTable
         .ensureFieldAccessorsInitialized(
-            outland.feature.proto.ServiceGrant.class, outland.feature.proto.ServiceGrant.Builder.class);
+            outland.feature.proto.MemberAccess.class, outland.feature.proto.MemberAccess.Builder.class);
   }
 
   public static final int TYPE_FIELD_NUMBER = 1;
@@ -195,34 +202,68 @@ public  final class ServiceGrant extends
     }
   }
 
-  public static final int KEY_FIELD_NUMBER = 11;
-  private volatile java.lang.Object key_;
+  public static final int USERNAME_FIELD_NUMBER = 11;
+  private volatile java.lang.Object username_;
   /**
-   * <code>optional string key = 11;</code>
+   * <code>optional string username = 11;</code>
    */
-  public java.lang.String getKey() {
-    java.lang.Object ref = key_;
+  public java.lang.String getUsername() {
+    java.lang.Object ref = username_;
     if (ref instanceof java.lang.String) {
       return (java.lang.String) ref;
     } else {
       com.google.protobuf.ByteString bs = 
           (com.google.protobuf.ByteString) ref;
       java.lang.String s = bs.toStringUtf8();
-      key_ = s;
+      username_ = s;
       return s;
     }
   }
   /**
-   * <code>optional string key = 11;</code>
+   * <code>optional string username = 11;</code>
    */
   public com.google.protobuf.ByteString
-      getKeyBytes() {
-    java.lang.Object ref = key_;
+      getUsernameBytes() {
+    java.lang.Object ref = username_;
     if (ref instanceof java.lang.String) {
       com.google.protobuf.ByteString b = 
           com.google.protobuf.ByteString.copyFromUtf8(
               (java.lang.String) ref);
-      key_ = b;
+      username_ = b;
+      return b;
+    } else {
+      return (com.google.protobuf.ByteString) ref;
+    }
+  }
+
+  public static final int EMAIL_FIELD_NUMBER = 12;
+  private volatile java.lang.Object email_;
+  /**
+   * <code>optional string email = 12;</code>
+   */
+  public java.lang.String getEmail() {
+    java.lang.Object ref = email_;
+    if (ref instanceof java.lang.String) {
+      return (java.lang.String) ref;
+    } else {
+      com.google.protobuf.ByteString bs = 
+          (com.google.protobuf.ByteString) ref;
+      java.lang.String s = bs.toStringUtf8();
+      email_ = s;
+      return s;
+    }
+  }
+  /**
+   * <code>optional string email = 12;</code>
+   */
+  public com.google.protobuf.ByteString
+      getEmailBytes() {
+    java.lang.Object ref = email_;
+    if (ref instanceof java.lang.String) {
+      com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString.copyFromUtf8(
+              (java.lang.String) ref);
+      email_ = b;
       return b;
     } else {
       return (com.google.protobuf.ByteString) ref;
@@ -250,8 +291,11 @@ public  final class ServiceGrant extends
     if (!getNameBytes().isEmpty()) {
       com.google.protobuf.GeneratedMessageV3.writeString(output, 10, name_);
     }
-    if (!getKeyBytes().isEmpty()) {
-      com.google.protobuf.GeneratedMessageV3.writeString(output, 11, key_);
+    if (!getUsernameBytes().isEmpty()) {
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 11, username_);
+    }
+    if (!getEmailBytes().isEmpty()) {
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 12, email_);
     }
   }
 
@@ -269,8 +313,11 @@ public  final class ServiceGrant extends
     if (!getNameBytes().isEmpty()) {
       size += com.google.protobuf.GeneratedMessageV3.computeStringSize(10, name_);
     }
-    if (!getKeyBytes().isEmpty()) {
-      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(11, key_);
+    if (!getUsernameBytes().isEmpty()) {
+      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(11, username_);
+    }
+    if (!getEmailBytes().isEmpty()) {
+      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(12, email_);
     }
     memoizedSize = size;
     return size;
@@ -282,10 +329,10 @@ public  final class ServiceGrant extends
     if (obj == this) {
      return true;
     }
-    if (!(obj instanceof outland.feature.proto.ServiceGrant)) {
+    if (!(obj instanceof outland.feature.proto.MemberAccess)) {
       return super.equals(obj);
     }
-    outland.feature.proto.ServiceGrant other = (outland.feature.proto.ServiceGrant) obj;
+    outland.feature.proto.MemberAccess other = (outland.feature.proto.MemberAccess) obj;
 
     boolean result = true;
     result = result && getType()
@@ -294,8 +341,10 @@ public  final class ServiceGrant extends
         .equals(other.getId());
     result = result && getName()
         .equals(other.getName());
-    result = result && getKey()
-        .equals(other.getKey());
+    result = result && getUsername()
+        .equals(other.getUsername());
+    result = result && getEmail()
+        .equals(other.getEmail());
     return result;
   }
 
@@ -312,65 +361,67 @@ public  final class ServiceGrant extends
     hash = (53 * hash) + getId().hashCode();
     hash = (37 * hash) + NAME_FIELD_NUMBER;
     hash = (53 * hash) + getName().hashCode();
-    hash = (37 * hash) + KEY_FIELD_NUMBER;
-    hash = (53 * hash) + getKey().hashCode();
+    hash = (37 * hash) + USERNAME_FIELD_NUMBER;
+    hash = (53 * hash) + getUsername().hashCode();
+    hash = (37 * hash) + EMAIL_FIELD_NUMBER;
+    hash = (53 * hash) + getEmail().hashCode();
     hash = (29 * hash) + unknownFields.hashCode();
     memoizedHashCode = hash;
     return hash;
   }
 
-  public static outland.feature.proto.ServiceGrant parseFrom(
+  public static outland.feature.proto.MemberAccess parseFrom(
       com.google.protobuf.ByteString data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static outland.feature.proto.ServiceGrant parseFrom(
+  public static outland.feature.proto.MemberAccess parseFrom(
       com.google.protobuf.ByteString data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static outland.feature.proto.ServiceGrant parseFrom(byte[] data)
+  public static outland.feature.proto.MemberAccess parseFrom(byte[] data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static outland.feature.proto.ServiceGrant parseFrom(
+  public static outland.feature.proto.MemberAccess parseFrom(
       byte[] data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static outland.feature.proto.ServiceGrant parseFrom(java.io.InputStream input)
+  public static outland.feature.proto.MemberAccess parseFrom(java.io.InputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input);
   }
-  public static outland.feature.proto.ServiceGrant parseFrom(
+  public static outland.feature.proto.MemberAccess parseFrom(
       java.io.InputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input, extensionRegistry);
   }
-  public static outland.feature.proto.ServiceGrant parseDelimitedFrom(java.io.InputStream input)
+  public static outland.feature.proto.MemberAccess parseDelimitedFrom(java.io.InputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseDelimitedWithIOException(PARSER, input);
   }
-  public static outland.feature.proto.ServiceGrant parseDelimitedFrom(
+  public static outland.feature.proto.MemberAccess parseDelimitedFrom(
       java.io.InputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
   }
-  public static outland.feature.proto.ServiceGrant parseFrom(
+  public static outland.feature.proto.MemberAccess parseFrom(
       com.google.protobuf.CodedInputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input);
   }
-  public static outland.feature.proto.ServiceGrant parseFrom(
+  public static outland.feature.proto.MemberAccess parseFrom(
       com.google.protobuf.CodedInputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
@@ -382,7 +433,7 @@ public  final class ServiceGrant extends
   public static Builder newBuilder() {
     return DEFAULT_INSTANCE.toBuilder();
   }
-  public static Builder newBuilder(outland.feature.proto.ServiceGrant prototype) {
+  public static Builder newBuilder(outland.feature.proto.MemberAccess prototype) {
     return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
   }
   public Builder toBuilder() {
@@ -397,25 +448,25 @@ public  final class ServiceGrant extends
     return builder;
   }
   /**
-   * Protobuf type {@code outland.ServiceGrant}
+   * Protobuf type {@code outland.MemberAccess}
    */
   public static final class Builder extends
       com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-      // @@protoc_insertion_point(builder_implements:outland.ServiceGrant)
-      outland.feature.proto.ServiceGrantOrBuilder {
+      // @@protoc_insertion_point(builder_implements:outland.MemberAccess)
+      outland.feature.proto.MemberAccessOrBuilder {
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return outland.feature.proto.FeatureMessage.internal_static_outland_ServiceGrant_descriptor;
+      return outland.feature.proto.FeatureMessage.internal_static_outland_MemberAccess_descriptor;
     }
 
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return outland.feature.proto.FeatureMessage.internal_static_outland_ServiceGrant_fieldAccessorTable
+      return outland.feature.proto.FeatureMessage.internal_static_outland_MemberAccess_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              outland.feature.proto.ServiceGrant.class, outland.feature.proto.ServiceGrant.Builder.class);
+              outland.feature.proto.MemberAccess.class, outland.feature.proto.MemberAccess.Builder.class);
     }
 
-    // Construct using outland.feature.proto.ServiceGrant.newBuilder()
+    // Construct using outland.feature.proto.MemberAccess.newBuilder()
     private Builder() {
       maybeForceBuilderInitialization();
     }
@@ -438,34 +489,37 @@ public  final class ServiceGrant extends
 
       name_ = "";
 
-      key_ = "";
+      username_ = "";
+
+      email_ = "";
 
       return this;
     }
 
     public com.google.protobuf.Descriptors.Descriptor
         getDescriptorForType() {
-      return outland.feature.proto.FeatureMessage.internal_static_outland_ServiceGrant_descriptor;
+      return outland.feature.proto.FeatureMessage.internal_static_outland_MemberAccess_descriptor;
     }
 
-    public outland.feature.proto.ServiceGrant getDefaultInstanceForType() {
-      return outland.feature.proto.ServiceGrant.getDefaultInstance();
+    public outland.feature.proto.MemberAccess getDefaultInstanceForType() {
+      return outland.feature.proto.MemberAccess.getDefaultInstance();
     }
 
-    public outland.feature.proto.ServiceGrant build() {
-      outland.feature.proto.ServiceGrant result = buildPartial();
+    public outland.feature.proto.MemberAccess build() {
+      outland.feature.proto.MemberAccess result = buildPartial();
       if (!result.isInitialized()) {
         throw newUninitializedMessageException(result);
       }
       return result;
     }
 
-    public outland.feature.proto.ServiceGrant buildPartial() {
-      outland.feature.proto.ServiceGrant result = new outland.feature.proto.ServiceGrant(this);
+    public outland.feature.proto.MemberAccess buildPartial() {
+      outland.feature.proto.MemberAccess result = new outland.feature.proto.MemberAccess(this);
       result.type_ = type_;
       result.id_ = id_;
       result.name_ = name_;
-      result.key_ = key_;
+      result.username_ = username_;
+      result.email_ = email_;
       onBuilt();
       return result;
     }
@@ -497,16 +551,16 @@ public  final class ServiceGrant extends
       return (Builder) super.addRepeatedField(field, value);
     }
     public Builder mergeFrom(com.google.protobuf.Message other) {
-      if (other instanceof outland.feature.proto.ServiceGrant) {
-        return mergeFrom((outland.feature.proto.ServiceGrant)other);
+      if (other instanceof outland.feature.proto.MemberAccess) {
+        return mergeFrom((outland.feature.proto.MemberAccess)other);
       } else {
         super.mergeFrom(other);
         return this;
       }
     }
 
-    public Builder mergeFrom(outland.feature.proto.ServiceGrant other) {
-      if (other == outland.feature.proto.ServiceGrant.getDefaultInstance()) return this;
+    public Builder mergeFrom(outland.feature.proto.MemberAccess other) {
+      if (other == outland.feature.proto.MemberAccess.getDefaultInstance()) return this;
       if (!other.getType().isEmpty()) {
         type_ = other.type_;
         onChanged();
@@ -519,8 +573,12 @@ public  final class ServiceGrant extends
         name_ = other.name_;
         onChanged();
       }
-      if (!other.getKey().isEmpty()) {
-        key_ = other.key_;
+      if (!other.getUsername().isEmpty()) {
+        username_ = other.username_;
+        onChanged();
+      }
+      if (!other.getEmail().isEmpty()) {
+        email_ = other.email_;
         onChanged();
       }
       onChanged();
@@ -535,11 +593,11 @@ public  final class ServiceGrant extends
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      outland.feature.proto.ServiceGrant parsedMessage = null;
+      outland.feature.proto.MemberAccess parsedMessage = null;
       try {
         parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        parsedMessage = (outland.feature.proto.ServiceGrant) e.getUnfinishedMessage();
+        parsedMessage = (outland.feature.proto.MemberAccess) e.getUnfinishedMessage();
         throw e.unwrapIOException();
       } finally {
         if (parsedMessage != null) {
@@ -756,71 +814,140 @@ public  final class ServiceGrant extends
       return this;
     }
 
-    private java.lang.Object key_ = "";
+    private java.lang.Object username_ = "";
     /**
-     * <code>optional string key = 11;</code>
+     * <code>optional string username = 11;</code>
      */
-    public java.lang.String getKey() {
-      java.lang.Object ref = key_;
+    public java.lang.String getUsername() {
+      java.lang.Object ref = username_;
       if (!(ref instanceof java.lang.String)) {
         com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
-        key_ = s;
+        username_ = s;
         return s;
       } else {
         return (java.lang.String) ref;
       }
     }
     /**
-     * <code>optional string key = 11;</code>
+     * <code>optional string username = 11;</code>
      */
     public com.google.protobuf.ByteString
-        getKeyBytes() {
-      java.lang.Object ref = key_;
+        getUsernameBytes() {
+      java.lang.Object ref = username_;
       if (ref instanceof String) {
         com.google.protobuf.ByteString b = 
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
-        key_ = b;
+        username_ = b;
         return b;
       } else {
         return (com.google.protobuf.ByteString) ref;
       }
     }
     /**
-     * <code>optional string key = 11;</code>
+     * <code>optional string username = 11;</code>
      */
-    public Builder setKey(
+    public Builder setUsername(
         java.lang.String value) {
       if (value == null) {
     throw new NullPointerException();
   }
   
-      key_ = value;
+      username_ = value;
       onChanged();
       return this;
     }
     /**
-     * <code>optional string key = 11;</code>
+     * <code>optional string username = 11;</code>
      */
-    public Builder clearKey() {
+    public Builder clearUsername() {
       
-      key_ = getDefaultInstance().getKey();
+      username_ = getDefaultInstance().getUsername();
       onChanged();
       return this;
     }
     /**
-     * <code>optional string key = 11;</code>
+     * <code>optional string username = 11;</code>
      */
-    public Builder setKeyBytes(
+    public Builder setUsernameBytes(
         com.google.protobuf.ByteString value) {
       if (value == null) {
     throw new NullPointerException();
   }
   checkByteStringIsUtf8(value);
       
-      key_ = value;
+      username_ = value;
+      onChanged();
+      return this;
+    }
+
+    private java.lang.Object email_ = "";
+    /**
+     * <code>optional string email = 12;</code>
+     */
+    public java.lang.String getEmail() {
+      java.lang.Object ref = email_;
+      if (!(ref instanceof java.lang.String)) {
+        com.google.protobuf.ByteString bs =
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        email_ = s;
+        return s;
+      } else {
+        return (java.lang.String) ref;
+      }
+    }
+    /**
+     * <code>optional string email = 12;</code>
+     */
+    public com.google.protobuf.ByteString
+        getEmailBytes() {
+      java.lang.Object ref = email_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        email_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+    /**
+     * <code>optional string email = 12;</code>
+     */
+    public Builder setEmail(
+        java.lang.String value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  
+      email_ = value;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>optional string email = 12;</code>
+     */
+    public Builder clearEmail() {
+      
+      email_ = getDefaultInstance().getEmail();
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>optional string email = 12;</code>
+     */
+    public Builder setEmailBytes(
+        com.google.protobuf.ByteString value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+      
+      email_ = value;
       onChanged();
       return this;
     }
@@ -835,39 +962,39 @@ public  final class ServiceGrant extends
     }
 
 
-    // @@protoc_insertion_point(builder_scope:outland.ServiceGrant)
+    // @@protoc_insertion_point(builder_scope:outland.MemberAccess)
   }
 
-  // @@protoc_insertion_point(class_scope:outland.ServiceGrant)
-  private static final outland.feature.proto.ServiceGrant DEFAULT_INSTANCE;
+  // @@protoc_insertion_point(class_scope:outland.MemberAccess)
+  private static final outland.feature.proto.MemberAccess DEFAULT_INSTANCE;
   static {
-    DEFAULT_INSTANCE = new outland.feature.proto.ServiceGrant();
+    DEFAULT_INSTANCE = new outland.feature.proto.MemberAccess();
   }
 
-  public static outland.feature.proto.ServiceGrant getDefaultInstance() {
+  public static outland.feature.proto.MemberAccess getDefaultInstance() {
     return DEFAULT_INSTANCE;
   }
 
-  private static final com.google.protobuf.Parser<ServiceGrant>
-      PARSER = new com.google.protobuf.AbstractParser<ServiceGrant>() {
-    public ServiceGrant parsePartialFrom(
+  private static final com.google.protobuf.Parser<MemberAccess>
+      PARSER = new com.google.protobuf.AbstractParser<MemberAccess>() {
+    public MemberAccess parsePartialFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-        return new ServiceGrant(input, extensionRegistry);
+        return new MemberAccess(input, extensionRegistry);
     }
   };
 
-  public static com.google.protobuf.Parser<ServiceGrant> parser() {
+  public static com.google.protobuf.Parser<MemberAccess> parser() {
     return PARSER;
   }
 
   @java.lang.Override
-  public com.google.protobuf.Parser<ServiceGrant> getParserForType() {
+  public com.google.protobuf.Parser<MemberAccess> getParserForType() {
     return PARSER;
   }
 
-  public outland.feature.proto.ServiceGrant getDefaultInstanceForType() {
+  public outland.feature.proto.MemberAccess getDefaultInstanceForType() {
     return DEFAULT_INSTANCE;
   }
 

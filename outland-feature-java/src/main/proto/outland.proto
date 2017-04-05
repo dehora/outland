@@ -82,14 +82,14 @@ message FeatureCollection {
     repeated Feature items = 3;
 }
 
-message ServiceGrant {
+message ServiceAccess {
     string type = 1;
     string id = 2;
     string name = 10;
     string key = 11;
 }
 
-message MemberGrant {
+message MemberAccess {
     string type = 1;
     string id = 2;
     string name = 10;
@@ -97,10 +97,10 @@ message MemberGrant {
     string email = 12;
 }
 
-message GrantCollection {
+message AccessCollection {
     string type = 1;
-    repeated ServiceGrant services = 10;
-    repeated MemberGrant members = 11;
+    repeated ServiceAccess services = 10;
+    repeated MemberAccess members = 11;
 }
 
 message App {
@@ -111,5 +111,5 @@ message App {
     string created = 6;
     string updated = 7;
     OwnerCollection owners = 5;
-    GrantCollection granted = 9;
+    AccessCollection granted = 9;
 }

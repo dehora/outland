@@ -1,11 +1,8 @@
 package outland.feature.server.resources;
 
 import com.google.gson.Gson;
-import com.google.inject.Injector;
-import com.google.protobuf.util.JsonFormat;
 import io.dropwizard.testing.junit.DropwizardAppRule;
 import java.util.ArrayList;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ws.rs.client.Entity;
@@ -17,27 +14,18 @@ import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
 import org.glassfish.jersey.logging.LoggingFeature;
 import org.junit.ClassRule;
 import org.junit.Test;
+import outland.feature.proto.AccessCollection;
 import outland.feature.proto.App;
-import outland.feature.proto.Feature;
-import outland.feature.proto.GrantCollection;
-import outland.feature.proto.MemberGrant;
 import outland.feature.proto.Owner;
 import outland.feature.proto.OwnerCollection;
-import outland.feature.proto.ServiceGrant;
+import outland.feature.proto.ServiceAccess;
 import outland.feature.server.Problem;
 import outland.feature.server.ServerConfiguration;
-import outland.feature.server.ServerMain;
-import outland.feature.server.apps.AppService;
-import outland.feature.server.features.Ulid;
 import outland.feature.server.protobuf.Protobuf3Support;
 
-import static junit.framework.TestCase.assertNull;
 import static junit.framework.TestCase.assertTrue;
 import static org.glassfish.jersey.client.authentication.HttpAuthenticationFeature.HTTP_AUTHENTICATION_BASIC_PASSWORD;
 import static org.glassfish.jersey.client.authentication.HttpAuthenticationFeature.HTTP_AUTHENTICATION_BASIC_USERNAME;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
 
 public class AppResourceTest {
 
@@ -57,10 +45,10 @@ public class AppResourceTest {
     final String appKey = "testDoubleCreatePost409AppKey";
     final String serviceKey = "testDoubleCreatePost409Service";
 
-    final GrantCollection.Builder grantBuilder = GrantCollection.newBuilder();
-    final ArrayList<ServiceGrant> services = Lists.newArrayList();
-    services.add(ServiceGrant.newBuilder().setKey(serviceKey).buildPartial());
-    grantBuilder.addAllServices(services);
+    final AccessCollection.Builder accessBuilder = AccessCollection.newBuilder();
+    final ArrayList<ServiceAccess> services = Lists.newArrayList();
+    services.add(ServiceAccess.newBuilder().setKey(serviceKey).buildPartial());
+    accessBuilder.addAllServices(services);
     OwnerCollection.Builder oc = OwnerCollection.newBuilder()
         .setType("owner.collection")
         .addItems(Owner.newBuilder().setName("Jayne").setUsername("jayne"));
@@ -68,7 +56,7 @@ public class AppResourceTest {
         .setKey(appKey)
         .setName("name")
         .setOwners(oc)
-        .setGranted(grantBuilder.buildPartial())
+        .setGranted(accessBuilder.buildPartial())
         .build();
 
     final String url = createAppUrl();

@@ -24,9 +24,9 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 import outland.feature.proto.App;
-import outland.feature.proto.MemberGrant;
+import outland.feature.proto.MemberAccess;
 import outland.feature.proto.Owner;
-import outland.feature.proto.ServiceGrant;
+import outland.feature.proto.ServiceAccess;
 import outland.feature.server.Problem;
 import outland.feature.server.ServerConfiguration;
 import outland.feature.server.apps.AppService;
@@ -127,37 +127,37 @@ public class AppResource {
   }
 
   @POST
-  @Path("/{app_key}/grants/services")
+  @Path("/{app_key}/access/services")
   @Produces(MediaType.APPLICATION_JSON)
   @PermitAll
   @Timed(name = "addService")
   public Response addService(
       @Auth AuthPrincipal authPrincipal,
       @PathParam("app_key") String appKey,
-      ServiceGrant grant
+      ServiceAccess serviceAccess
   ) throws AuthenticationException {
-    return postUpdate(authPrincipal, appKey, app -> appService.addToApp(app, grant));
+    return postUpdate(authPrincipal, appKey, app -> appService.addToApp(app, serviceAccess));
   }
 
   @POST
-  @Path("/{app_key}/grants/members")
+  @Path("/{app_key}/access/members")
   @Produces(MediaType.APPLICATION_JSON)
   @PermitAll
   @Timed(name = "addService")
   public Response addService(
       @Auth AuthPrincipal authPrincipal,
       @PathParam("app_key") String appKey,
-      MemberGrant grant
+      MemberAccess memberAccess
   ) throws AuthenticationException {
-    return postUpdate(authPrincipal, appKey, app -> appService.addToApp(app, grant));
+    return postUpdate(authPrincipal, appKey, app -> appService.addToApp(app, memberAccess));
   }
 
   @DELETE
-  @Path("/{app_key}/grants/services/{service_key}")
+  @Path("/{app_key}/access/services/{service_key}")
   @Produces(MediaType.APPLICATION_JSON)
   @PermitAll
-  @Timed(name = "removeServiceGrant")
-  public Response removeServiceGrant(
+  @Timed(name = "removeService")
+  public Response removeService(
       @Auth AuthPrincipal authPrincipal,
       @PathParam("app_key") String appKey,
       @PathParam("service_key") String serviceKey
@@ -179,11 +179,11 @@ public class AppResource {
   }
 
   @DELETE
-  @Path("/{app_key}/grants/members/{member_key}")
+  @Path("/{app_key}/access/members/{member_key}")
   @Produces(MediaType.APPLICATION_JSON)
   @PermitAll
-  @Timed(name = "removeMemberGrant")
-  public Response removeMemberGrant(
+  @Timed(name = "removeMember")
+  public Response removeMember(
       @Auth AuthPrincipal authPrincipal,
       @PathParam("app_key") String appKey,
       @PathParam("member_key") String memberKey
@@ -257,7 +257,7 @@ public class AppResource {
 
       boolean found = false;
 
-      if(AppService.GRANT_RELATION.equals(relation)) {
+      if(AppService.ACCESS_RELATION.equals(relation)) {
         if (!Strings.isNullOrEmpty(username)) {
           found = appService.appHasMemberGrant(appKey, username);
         } else if (!Strings.isNullOrEmpty(email)) {
