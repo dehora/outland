@@ -37,11 +37,11 @@ public class DefaultNamespaceStorage implements NamespaceStorage {
   private static final String HASH_KEY = "app_key";
 
   private final DynamoDB dynamoDB;
-  private final String appsTableName;
-  private final String appsGraphTableName;
-  private final HystrixConfiguration dynamodbAppWriteHystrix;
-  private final HystrixConfiguration dynamodbAppGraphWriteHystrix;
-  private final HystrixConfiguration dynamodbAppGraphQueryHystrix;
+  private final String namespaceTableName;
+  private final String namespaceGraphTableName;
+  private final HystrixConfiguration dynamodbNamespaceWriteHystrix;
+  private final HystrixConfiguration dynamodbNamespaceGraphWriteHystrix;
+  private final HystrixConfiguration dynamodbNamespaceGraphQueryHystrix;
   private final MetricRegistry metrics;
   private final AmazonDynamoDB amazonDynamoDB;
 
@@ -49,18 +49,18 @@ public class DefaultNamespaceStorage implements NamespaceStorage {
   public DefaultNamespaceStorage(
       AmazonDynamoDB amazonDynamoDB,
       TableConfiguration tableConfiguration,
-      @Named("dynamodbAppWriteHystrix") HystrixConfiguration dynamodbAppWriteHystrix,
-      @Named("dynamodbAppGraphWriteHystrix") HystrixConfiguration dynamodbAppGraphWriteHystrix,
-      @Named("dynamodbAppGraphQueryHystrix") HystrixConfiguration dynamodbAppGraphQueryHystrix,
+      @Named("dynamodbNamespaceWriteHystrix") HystrixConfiguration dynamodbNamespaceWriteHystrix,
+      @Named("dynamodbNamespaceGraphWriteHystrix") HystrixConfiguration dynamodbNamespaceGraphWriteHystrix,
+      @Named("dynamodbNamespaceGraphQueryHystrix") HystrixConfiguration dynamodbNamespaceGraphQueryHystrix,
       MetricRegistry metrics
   ) {
     this.amazonDynamoDB = amazonDynamoDB;
     this.dynamoDB = new DynamoDB(this.amazonDynamoDB);
-    this.appsTableName = tableConfiguration.outlandAppsTable;
-    this.appsGraphTableName = tableConfiguration.outlandAppGraphTable;
-    this.dynamodbAppWriteHystrix = dynamodbAppWriteHystrix;
-    this.dynamodbAppGraphWriteHystrix = dynamodbAppGraphWriteHystrix;
-    this.dynamodbAppGraphQueryHystrix = dynamodbAppGraphQueryHystrix;
+    this.namespaceTableName = tableConfiguration.outlandAppsTable;
+    this.namespaceGraphTableName = tableConfiguration.outlandAppGraphTable;
+    this.dynamodbNamespaceWriteHystrix = dynamodbNamespaceWriteHystrix;
+    this.dynamodbNamespaceGraphWriteHystrix = dynamodbNamespaceGraphWriteHystrix;
+    this.dynamodbNamespaceGraphQueryHystrix = dynamodbNamespaceGraphQueryHystrix;
     this.metrics = metrics;
   }
 
@@ -72,7 +72,7 @@ public class DefaultNamespaceStorage implements NamespaceStorage {
         .withConditionExpression("attribute_not_exists(#appkey)")
         .withNameMap(new NameMap().with("#appkey", HASH_KEY));
 
-    Table table = dynamoDB.getTable(appsTableName);
+    Table table = dynamoDB.getTable(namespaceTableName);
     final Supplier<PutItemOutcome> putItemOutcomeSupplier = () -> {
       try {
         return table.putItem(putItemSpec);
@@ -87,7 +87,7 @@ public class DefaultNamespaceStorage implements NamespaceStorage {
 
   @Override public Void saveNamespace(Namespace namespace) {
     Item item = preparePutItem(namespace);
-    Table table = dynamoDB.getTable(appsTableName);
+    Table table = dynamoDB.getTable(namespaceTableName);
     final Supplier<PutItemOutcome> putItemOutcomeSupplier = () -> table.putItem(item);
     return putItem(namespace, putItemOutcomeSupplier);
   }
@@ -111,7 +111,7 @@ public class DefaultNamespaceStorage implements NamespaceStorage {
         () -> {
           throw new RuntimeException("saveNamespace");
         },
-        dynamodbAppWriteHystrix,
+        dynamodbNamespaceWriteHystrix,
         metrics);
 
     PutItemOutcome outcome = cmd.execute();
@@ -132,14 +132,14 @@ public class DefaultNamespaceStorage implements NamespaceStorage {
         .withString(NamespaceStorage.SUBJECT_KEY, relationHashKey)
         .withString(NamespaceStorage.OBJECT_RELATION_KEY, relationRangeKey);
 
-    Table table = dynamoDB.getTable(appsGraphTableName);
+    Table table = dynamoDB.getTable(namespaceGraphTableName);
 
     DynamoDbCommand<PutItemOutcome> cmd = new DynamoDbCommand<>("saveRelation",
         () -> table.putItem(item),
         () -> {
           throw new RuntimeException("saveRelation");
         },
-        dynamodbAppGraphWriteHystrix,
+        dynamodbNamespaceGraphWriteHystrix,
         metrics);
 
     PutItemOutcome outcome = cmd.execute();
@@ -158,7 +158,7 @@ public class DefaultNamespaceStorage implements NamespaceStorage {
 
   @Override public Void removeRelation(Namespace namespace, String relationHashKey, String relationRangeKey) {
 
-    Table table = dynamoDB.getTable(appsGraphTableName);
+    Table table = dynamoDB.getTable(namespaceGraphTableName);
 
     final PrimaryKey key = new PrimaryKey(
         NamespaceStorage.SUBJECT_KEY, relationHashKey,
@@ -170,7 +170,7 @@ public class DefaultNamespaceStorage implements NamespaceStorage {
         () -> {
           throw new RuntimeException("removeRelation");
         },
-        dynamodbAppGraphWriteHystrix,
+        dynamodbNamespaceGraphWriteHystrix,
         metrics);
 
     final DeleteItemOutcome deleteItemOutcome = cmd.execute();
@@ -188,7 +188,7 @@ public class DefaultNamespaceStorage implements NamespaceStorage {
 
   @Override public boolean queryRelationExists(String relationHashKey, String relationRangeKey) {
 
-    Table table = dynamoDB.getTable(this.appsGraphTableName);
+    Table table = dynamoDB.getTable(this.namespaceGraphTableName);
 
     QuerySpec querySpec = new QuerySpec()
         .withKeyConditionExpression("subject = :k_subject and object_relation = :k_object_relation")
@@ -204,7 +204,7 @@ public class DefaultNamespaceStorage implements NamespaceStorage {
         () -> {
           throw new RuntimeException("queryRelation");
         },
-        dynamodbAppGraphQueryHystrix,
+        dynamodbNamespaceGraphQueryHystrix,
         metrics);
 
     // can't use getLastLowLevelResult directly; it's false unless the outcome is iterated first :|
@@ -212,7 +212,7 @@ public class DefaultNamespaceStorage implements NamespaceStorage {
   }
 
   @Override public Optional<Namespace> loadNamespaceByKey(String nsKey) {
-    Table table = dynamoDB.getTable(this.appsTableName);
+    Table table = dynamoDB.getTable(this.namespaceTableName);
 
     QuerySpec querySpec = new QuerySpec()
         .withKeyConditionExpression(HASH_KEY+" = :k_app_key")
@@ -227,7 +227,7 @@ public class DefaultNamespaceStorage implements NamespaceStorage {
         () -> {
           throw new RuntimeException("loadNamespaceByKey");
         },
-        dynamodbAppGraphQueryHystrix,
+        dynamodbNamespaceGraphQueryHystrix,
         metrics);
 
     final ItemCollection<QueryOutcome> items = cmd.execute();

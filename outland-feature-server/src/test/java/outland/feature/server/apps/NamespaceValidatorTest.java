@@ -23,7 +23,7 @@ public class NamespaceValidatorTest {
         .setName("ns 1");
 
     try {
-      new NamespaceValidator().validateAppRegistrationThrowing(builder.build());
+      new NamespaceValidator().validateNamespaceRegistrationThrowing(builder.build());
     } catch (ServiceException e) {
       fail();
     }
@@ -76,7 +76,7 @@ public class NamespaceValidatorTest {
 
   private void callValidate(Namespace.Builder builder, String expectedTitle, int expectedCode) {
     try {
-      new NamespaceValidator().validateAppRegistrationThrowing(builder.build());
+      new NamespaceValidator().validateNamespaceRegistrationThrowing(builder.build());
       fail();
     } catch (ServiceException e) {
       assertEquals(expectedCode, e.problem().status());

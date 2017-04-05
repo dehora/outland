@@ -86,7 +86,7 @@ public class NamespaceResourceTest {
   }
 
   private String createAppUrl() {
-    return "http://localhost:" + APP.getLocalPort() + "/apps";
+    return "http://localhost:" + APP.getLocalPort() + "/namespaces";
   }
 
   private JerseyClient createClient() {

@@ -6,7 +6,7 @@ api_key="letmein"
 
 ikey_app="idemkey-test-acme-app"
 
-curl -i http://localhost:8180/apps \
+curl -i http://localhost:8180/namespaces \
 -u ${service}:${api_key} \
 -H "Content-type: application/json" \
 -H "Idempotency-Key: ${ikey_app}" \

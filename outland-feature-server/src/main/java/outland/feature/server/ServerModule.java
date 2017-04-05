@@ -35,15 +35,15 @@ public class ServerModule extends AbstractModule {
         .toInstance(configuration.dynamodbFeatureReadHystrix);
 
     bind(HystrixConfiguration.class)
-        .annotatedWith(named("dynamodbAppGraphWriteHystrix"))
-        .toInstance(configuration.dynamodbAppGraphWriteHystrix);
+        .annotatedWith(named("dynamodbNamespaceGraphWriteHystrix"))
+        .toInstance(configuration.dynamodbNamespaceGraphWriteHystrix);
 
     bind(HystrixConfiguration.class)
-        .annotatedWith(named("dynamodbAppWriteHystrix"))
-        .toInstance(configuration.dynamodbAppWriteHystrix);
+        .annotatedWith(named("dynamodbNamespaceWriteHystrix"))
+        .toInstance(configuration.dynamodbNamespaceWriteHystrix);
 
     bind(HystrixConfiguration.class)
-        .annotatedWith(named("dynamodbAppGraphQueryHystrix"))
-        .toInstance(configuration.dynamodbAppWriteHystrix);
+        .annotatedWith(named("dynamodbNamespaceGraphQueryHystrix"))
+        .toInstance(configuration.dynamodbNamespaceWriteHystrix);
   }
 }
