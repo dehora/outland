@@ -77,7 +77,7 @@ public class DefaultNamespaceStorage implements NamespaceStorage {
       try {
         return table.putItem(putItemSpec);
       } catch (ConditionalCheckFailedException e) {
-        logger.error("err=conflict_app_already_exists appkey={} {}", namespace.getKey(), e.getMessage());
+        logger.error("err=conflict_namespace_already_exists appkey={} {}", namespace.getKey(), e.getMessage());
         throwConflictAlreadyExists(namespace);
         return null;
       }

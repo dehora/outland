@@ -11,7 +11,7 @@ public interface NamespaceStorage {
   String OBJECT_RELATION_KEY = "object_relation";
 
   default void throwConflictAlreadyExists(Namespace app) {
-    throw new ServiceException(Problem.clientProblem("conflict_app_already_exists",
+    throw new ServiceException(Problem.clientProblem("conflict_namespace_already_exists",
         String.format("The Namespace named %s already exists and can't be recreated. "
             + "Please consider submitting requests with an Idempotency-Key header. "
             + "If you are already sending the header please check your client "
