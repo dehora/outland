@@ -82,7 +82,7 @@ public class NamespaceResourceTest {
     final String jsonRes = postAgain.readEntity(String.class);
     final Problem problem = gson.fromJson(jsonRes, Problem.class);
     assertTrue(problem.status() == 409);
-    assertTrue(problem.title().contains("conflict_app_already_exists"));
+    assertTrue(problem.title().contains("conflict_namespace_already_exists"));
   }
 
   private String createAppUrl() {
