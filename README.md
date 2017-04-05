@@ -196,17 +196,17 @@ curl -v http://localhost:8180/features \
   ,"description": "A test feature flag"
   ,"appkey": "testapp-1"
   ,"options": {
-    "option": "flag",
+    "option": "bool",
     "items":[
       {
         "name":"false",
-        "value":"false"
+        "value":"false",
         "weight": 9500
       },
       {
-        "name": "true"
-        "value": "true"
-        "weight": 9500
+        "name": "true",
+        "value": "true",
+        "weight": 500
       }
     ]
   },
