@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 
 echo "Creating Graph Table"
-curl --head -XPOST localhost:8181/tasks/DynamoCreateAppGraphTableTask
+curl --head -XPOST localhost:8181/tasks/DynamoCreateNamespaceGraphTableTask
 
 echo "Creating Apps Table"
-curl --head -XPOST localhost:8181/tasks/DynamoCreateAppsTableTask
+curl --head -XPOST localhost:8181/tasks/DynamoCreateNamespacesTableTask
 
 echo "Creating Feature Table"
 curl --head -XPOST localhost:8181/tasks/DynamoCreateFeatureTableTask

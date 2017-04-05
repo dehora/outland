@@ -34,7 +34,7 @@ import static outland.feature.server.StructLog.kvp;
 public class DefaultNamespaceStorage implements NamespaceStorage {
 
   private static final Logger logger = LoggerFactory.getLogger(DefaultNamespaceStorage.class);
-  private static final String HASH_KEY = "app_key";
+  private static final String HASH_KEY = "ns_key";
 
   private final DynamoDB dynamoDB;
   private final String namespaceTableName;
@@ -69,15 +69,15 @@ public class DefaultNamespaceStorage implements NamespaceStorage {
 
     PutItemSpec putItemSpec = new PutItemSpec()
         .withItem(item)
-        .withConditionExpression("attribute_not_exists(#appkey)")
-        .withNameMap(new NameMap().with("#appkey", HASH_KEY));
+        .withConditionExpression("attribute_not_exists(#ns_key)")
+        .withNameMap(new NameMap().with("#ns_key", HASH_KEY));
 
     Table table = dynamoDB.getTable(namespaceTableName);
     final Supplier<PutItemOutcome> putItemOutcomeSupplier = () -> {
       try {
         return table.putItem(putItemSpec);
       } catch (ConditionalCheckFailedException e) {
-        logger.error("err=conflict_namespace_already_exists appkey={} {}", namespace.getKey(), e.getMessage());
+        logger.error("err=conflict_namespace_already_exists ns_key={} {}", namespace.getKey(), e.getMessage());
         throwConflictAlreadyExists(namespace);
         return null;
       }
