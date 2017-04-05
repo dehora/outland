@@ -9,8 +9,7 @@ echo "---------------------------------------------------------------"
 
 ./build_service
 
-export OUTLAND_VERSION=${version}
-docker build -t $public_name:latest .
-docker build -t $public_name:$version .
-docker push $public_name:latest
-docker push $public_name:$version
+docker build -t ${public_name}:latest .
+docker build -t ${public_name}:${version} .
+docker push ${public_name}:latest
+docker push ${public_name}:${version}
