@@ -23,35 +23,35 @@ import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
-import outland.feature.proto.App;
+import outland.feature.proto.Namespace;
 import outland.feature.proto.MemberAccess;
 import outland.feature.proto.Owner;
 import outland.feature.proto.ServiceAccess;
 import outland.feature.server.Problem;
 import outland.feature.server.ServerConfiguration;
-import outland.feature.server.apps.AppService;
+import outland.feature.server.apps.NamespaceService;
 import outland.feature.server.auth.AccessControlSupport;
 import outland.feature.server.auth.AuthPrincipal;
 
 @Resource
 @Path("/apps")
-public class AppResource {
+public class NamespaceResource {
 
-  private final AppService appService;
+  private final NamespaceService namespaceService;
   private final IdempotencyChecker idempotencyChecker;
   private final AccessControlSupport accessControlSupport;
   private final URI baseURI;
   private final Headers headers;
 
   @Inject
-  public AppResource(
-      AppService appService,
+  public NamespaceResource(
+      NamespaceService namespaceService,
       IdempotencyChecker idempotencyChecker,
       AccessControlSupport accessControlSupport,
       ServerConfiguration serviceConfiguration,
       Headers headers
   ) {
-    this.appService = appService;
+    this.namespaceService = namespaceService;
     this.idempotencyChecker = idempotencyChecker;
     this.accessControlSupport = accessControlSupport;
     this.baseURI = serviceConfiguration.baseURI;
@@ -62,10 +62,10 @@ public class AppResource {
   @POST
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
-  @Timed(name = "registerApp")
-  public Response registerApp(
+  @Timed(name = "registerNamespace")
+  public Response registerNamespace(
       @Auth AuthPrincipal authPrincipal,
-      App app,
+      Namespace namespace,
       @Context HttpHeaders httpHeaders
   ) throws AuthenticationException {
 
@@ -74,38 +74,38 @@ public class AppResource {
     // no further acl check; if you are an authenticated AuthPrincipal, you can create apps
 
     URI loc = UriBuilder.fromUri(baseURI)
-        .path(app.getKey())
+        .path(namespace.getKey())
         .build();
 
     final Optional<String> optional = idempotencyChecker.extractKey(httpHeaders);
     final boolean seen = optional.isPresent() && idempotencyChecker.seen(optional.get());
     if (seen) {
       return headers.enrich(
-          Response.ok(appService.loadAppByKey(app.getKey()))
+          Response.ok(namespaceService.loadNamespaceByKey(namespace.getKey()))
               .header(IdempotencyChecker.RES_HEADER, "key=" + optional.get()), start).build();
     }
 
-    App registered = appService.registerApp(app)
+    Namespace registered = namespaceService.registerNamespace(namespace)
         .orElseThrow(() -> new RuntimeException("todo"));
 
     return headers.enrich(Response.created(loc).entity(registered), start).build();
   }
 
   @GET
-  @Path("/{app_key}")
+  @Path("/{ns_key}")
   @Produces(MediaType.APPLICATION_JSON)
   @PermitAll
-  @Timed(name = "getAppByKey")
-  public Response getAppByKey(
+  @Timed(name = "getNamespaceByKey")
+  public Response getNamespaceByKey(
       @Auth AuthPrincipal authPrincipal,
-      @PathParam("app_key") String appKey
+      @PathParam("ns_key") String nsKey
   ) throws AuthenticationException {
 
     final long start = System.currentTimeMillis();
-    final Optional<App> maybe = appService.loadAppByKey(appKey);
+    final Optional<Namespace> maybe = namespaceService.loadNamespaceByKey(nsKey);
 
     if (maybe.isPresent()) {
-      accessControlSupport.throwUnlessGrantedForApp(authPrincipal, maybe.get());
+      accessControlSupport.throwUnlessGrantedForNamespace(authPrincipal, maybe.get());
       return headers.enrich(Response.ok(maybe.get()), start).build();
     }
 
@@ -114,62 +114,62 @@ public class AppResource {
   }
 
   @POST
-  @Path("/{app_key}/owners")
+  @Path("/{ns_key}/owners")
   @Produces(MediaType.APPLICATION_JSON)
   @PermitAll
   @Timed(name = "addOwner")
   public Response addOwner(
       @Auth AuthPrincipal authPrincipal,
-      @PathParam("app_key") String appKey,
+      @PathParam("ns_key") String nsKey,
       Owner owner
   ) throws AuthenticationException {
-    return postUpdate(authPrincipal, appKey, app -> appService.addToApp(app, owner));
+    return postUpdate(authPrincipal, nsKey, namespace -> namespaceService.addToNamespace(namespace, owner));
   }
 
   @POST
-  @Path("/{app_key}/access/services")
+  @Path("/{ns_key}/access/services")
   @Produces(MediaType.APPLICATION_JSON)
   @PermitAll
   @Timed(name = "addService")
   public Response addService(
       @Auth AuthPrincipal authPrincipal,
-      @PathParam("app_key") String appKey,
+      @PathParam("ns_key") String nsKey,
       ServiceAccess serviceAccess
   ) throws AuthenticationException {
-    return postUpdate(authPrincipal, appKey, app -> appService.addToApp(app, serviceAccess));
+    return postUpdate(authPrincipal, nsKey, namespace -> namespaceService.addToNamespace(namespace, serviceAccess));
   }
 
   @POST
-  @Path("/{app_key}/access/members")
+  @Path("/{ns_key}/access/members")
   @Produces(MediaType.APPLICATION_JSON)
   @PermitAll
   @Timed(name = "addService")
   public Response addService(
       @Auth AuthPrincipal authPrincipal,
-      @PathParam("app_key") String appKey,
+      @PathParam("ns_key") String nsKey,
       MemberAccess memberAccess
   ) throws AuthenticationException {
-    return postUpdate(authPrincipal, appKey, app -> appService.addToApp(app, memberAccess));
+    return postUpdate(authPrincipal, nsKey, namespace -> namespaceService.addToNamespace(namespace, memberAccess));
   }
 
   @DELETE
-  @Path("/{app_key}/access/services/{service_key}")
+  @Path("/{ns_key}/access/services/{service_key}")
   @Produces(MediaType.APPLICATION_JSON)
   @PermitAll
   @Timed(name = "removeService")
   public Response removeService(
       @Auth AuthPrincipal authPrincipal,
-      @PathParam("app_key") String appKey,
+      @PathParam("ns_key") String nsKey,
       @PathParam("service_key") String serviceKey
   ) throws AuthenticationException {
     final long start = System.currentTimeMillis();
 
-    final Optional<App> maybe = appService.loadAppByKey(appKey);
+    final Optional<Namespace> maybe = namespaceService.loadNamespaceByKey(nsKey);
 
     if (maybe.isPresent()) {
-      final App app = maybe.get();
-      accessControlSupport.throwUnlessGrantedForApp(authPrincipal, app);
-      final App updated = appService.removeServiceGrant(app, serviceKey);
+      final Namespace namespace = maybe.get();
+      accessControlSupport.throwUnlessGrantedForNamespace(authPrincipal, namespace);
+      final Namespace updated = namespaceService.removeServiceAccess(namespace, serviceKey);
 
       return headers.enrich(Response.ok(updated), start).build();
     }
@@ -190,12 +190,12 @@ public class AppResource {
   ) throws AuthenticationException {
     final long start = System.currentTimeMillis();
 
-    final Optional<App> maybe = appService.loadAppByKey(appKey);
+    final Optional<Namespace> maybe = namespaceService.loadNamespaceByKey(appKey);
 
     if (maybe.isPresent()) {
-      final App app = maybe.get();
-      accessControlSupport.throwUnlessGrantedForApp(authPrincipal, app);
-      final App updated = appService.removeMemberGrant(app, memberKey);
+      final Namespace namespace = maybe.get();
+      accessControlSupport.throwUnlessGrantedForNamespace(authPrincipal, namespace);
+      final Namespace updated = namespaceService.removeMemberAccess(namespace, memberKey);
 
       return headers.enrich(Response.ok(updated), start).build();
     }
@@ -221,13 +221,13 @@ public class AppResource {
           Problem.clientProblem("param_not_found", "", 404)), start).build();
     }
 
-    final Optional<App> maybe = appService.loadAppByKey(appKey);
+    final Optional<Namespace> maybe = namespaceService.loadNamespaceByKey(appKey);
 
     if (maybe.isPresent()) {
-      final App app = maybe.get();
-      accessControlSupport.throwUnlessGrantedForApp(authPrincipal, app);
+      final Namespace namespace = maybe.get();
+      accessControlSupport.throwUnlessGrantedForNamespace(authPrincipal, namespace);
 
-      App updated = appService.removeOwner(app, ownerKey);
+      Namespace updated = namespaceService.removeOwner(namespace, ownerKey);
       return headers.enrich(Response.ok(updated), start).build();
     }
 
@@ -251,27 +251,27 @@ public class AppResource {
 
     final long start = System.currentTimeMillis();
 
-    final Optional<App> maybe = appService.loadAppByKey(appKey);
+    final Optional<Namespace> maybe = namespaceService.loadNamespaceByKey(appKey);
     if (maybe.isPresent()) {
-      accessControlSupport.throwUnlessGrantedForApp(authPrincipal, maybe.get());
+      accessControlSupport.throwUnlessGrantedForNamespace(authPrincipal, maybe.get());
 
       boolean found = false;
 
-      if(AppService.ACCESS_RELATION.equals(relation)) {
+      if(NamespaceService.ACCESS_RELATION.equals(relation)) {
         if (!Strings.isNullOrEmpty(username)) {
-          found = appService.appHasMemberGrant(appKey, username);
+          found = namespaceService.hasMemberAccess(appKey, username);
         } else if (!Strings.isNullOrEmpty(email)) {
-          found = appService.appHasMemberGrant(appKey, email);
+          found = namespaceService.hasMemberAccess(appKey, email);
         } else {
-          found = appService.appHasServiceGrant(appKey, serviceKey);
+          found = namespaceService.hasServiceAccess(appKey, serviceKey);
         }
       }
 
-      if(AppService.OWNER_RELATION.equals(relation)) {
+      if(NamespaceService.OWNER_RELATION.equals(relation)) {
         if (!Strings.isNullOrEmpty(username)) {
-          found = appService.appHasOwner(appKey, username);
+          found = namespaceService.hasOwner(appKey, username);
         } else if (!Strings.isNullOrEmpty(email)) {
-          found = appService.appHasOwner(appKey, email);
+          found = namespaceService.hasOwner(appKey, email);
         }
       }
 
@@ -290,16 +290,16 @@ public class AppResource {
   private Response postUpdate(
       AuthPrincipal authPrincipal,
       String appKey,
-      Function<App, App> updater
+      Function<Namespace, Namespace> updater
   ) throws AuthenticationException {
 
     final long start = System.currentTimeMillis();
-    final Optional<App> maybe = appService.loadAppByKey(appKey);
+    final Optional<Namespace> maybe = namespaceService.loadNamespaceByKey(appKey);
 
     if (maybe.isPresent()) {
-      final App app = maybe.get();
-     accessControlSupport.throwUnlessGrantedForApp(authPrincipal, app);
-      final App updated = updater.apply(app);
+      final Namespace namespace = maybe.get();
+     accessControlSupport.throwUnlessGrantedForNamespace(authPrincipal, namespace);
+      final Namespace updated = updater.apply(namespace);
       return headers.enrich(Response.ok(updated), start).build();
     }
 

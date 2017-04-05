@@ -49,13 +49,13 @@ public class AuthModule extends AbstractModule {
         .annotatedWith(Names.named("basicAppAuthenticator"))
         .to(BasicAuthenticator.class);
 
-    List<String> multipleAppAccessList = Lists.newArrayList();
+    List<String> multipleNamespaceAccessList = Lists.newArrayList();
 
-    multipleAppAccessList.addAll(
-        Splitter.on(",").splitToList(authConfiguration.multipleAppAccessList));
+    multipleNamespaceAccessList.addAll(
+        Splitter.on(",").splitToList(authConfiguration.multipleNamespaceAccessList));
 
     bind(new TypeLiteral<List<String>>() {
-    }).annotatedWith(Names.named("multipleAppAccessList")).toInstance(multipleAppAccessList);
+    }).annotatedWith(Names.named("multipleNamespaceAccessList")).toInstance(multipleNamespaceAccessList);
 
     bind(AccessControlSupport.class).asEagerSingleton();
 

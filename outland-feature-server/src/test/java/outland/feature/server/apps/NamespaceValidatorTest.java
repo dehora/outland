@@ -1,18 +1,18 @@
 package outland.feature.server.apps;
 
 import org.junit.Test;
-import outland.feature.proto.App;
+import outland.feature.proto.Namespace;
 import outland.feature.proto.Owner;
 import outland.feature.proto.OwnerCollection;
 import outland.feature.server.ServiceException;
 
 import static org.junit.Assert.*;
 
-public class AppValidatorTest {
+public class NamespaceValidatorTest {
 
   @Test
   public void validateAppRegistrationThrowingOk() {
-    App.Builder builder = App.newBuilder();
+    Namespace.Builder builder = Namespace.newBuilder();
 
     OwnerCollection.Builder oc = OwnerCollection.newBuilder()
         .setType("owner.collection")
@@ -20,10 +20,10 @@ public class AppValidatorTest {
 
     builder.setOwners(oc)
         .setKey("key1")
-        .setName("app 1");
+        .setName("ns 1");
 
     try {
-      new AppValidator().validateAppRegistrationThrowing(builder.build());
+      new NamespaceValidator().validateAppRegistrationThrowing(builder.build());
     } catch (ServiceException e) {
       fail();
     }
@@ -36,47 +36,47 @@ public class AppValidatorTest {
 
   @Test
   public void validateAppRegistrationThrowingNoOwner() {
-    App.Builder builder = App.newBuilder();
-    callValidate(builder, "no_owner_for_app", 422);
+    Namespace.Builder builder = Namespace.newBuilder();
+    callValidate(builder, "no_owner_for_namespace", 422);
   }
 
   @Test
   public void validateAppRegistrationThrowingJunkOwner() {
-    App.Builder builder = App.newBuilder();
+    Namespace.Builder builder = Namespace.newBuilder();
     OwnerCollection.Builder oc = OwnerCollection.newBuilder()
         .setType("owner.collection")
         .addItems(Owner.newBuilder().setName("Bob"));
     builder.setOwners(oc);
 
-    callValidate(builder, "incomplete_owner_for_app", 422);
+    callValidate(builder, "incomplete_owner_for_namespace", 422);
   }
 
   @Test
   public void validateAppRegistrationThrowingNoKey() {
-    App.Builder builder = App.newBuilder();
+    Namespace.Builder builder = Namespace.newBuilder();
     OwnerCollection.Builder oc = OwnerCollection.newBuilder()
         .setType("owner.collection")
         .addItems(Owner.newBuilder().setName("Bob").setUsername("bob"));
     builder.setOwners(oc);
 
-    callValidate(builder, "missing_key_for_app", 422);
+    callValidate(builder, "missing_key_for_namespace", 422);
   }
 
   @Test
   public void validateAppRegistrationThrowingNoName() {
-    App.Builder builder = App.newBuilder();
+    Namespace.Builder builder = Namespace.newBuilder();
     OwnerCollection.Builder oc = OwnerCollection.newBuilder()
         .setType("owner.collection")
         .addItems(Owner.newBuilder().setName("Bob").setUsername("bob"));
     builder.setOwners(oc)
         .setKey("key1");
 
-    callValidate(builder, "missing_name_for_app", 422);
+    callValidate(builder, "missing_name_for_namespace", 422);
   }
 
-  private void callValidate(App.Builder builder, String expectedTitle, int expectedCode) {
+  private void callValidate(Namespace.Builder builder, String expectedTitle, int expectedCode) {
     try {
-      new AppValidator().validateAppRegistrationThrowing(builder.build());
+      new NamespaceValidator().validateAppRegistrationThrowing(builder.build());
       fail();
     } catch (ServiceException e) {
       assertEquals(expectedCode, e.problem().status());

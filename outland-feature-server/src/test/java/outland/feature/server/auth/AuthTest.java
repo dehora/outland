@@ -10,7 +10,6 @@ import com.google.inject.TypeLiteral;
 import com.google.inject.name.Names;
 import io.dropwizard.auth.AuthenticationException;
 import io.dropwizard.auth.Authenticator;
-import io.dropwizard.auth.Authorizer;
 import io.dropwizard.auth.basic.BasicCredentials;
 import java.net.URI;
 import java.util.List;
@@ -47,7 +46,7 @@ public class AuthTest {
 
     authConfiguration.basicAuthenticationKeys = serviceKey + "=" + apiKey;
     authConfiguration.basicEnabled=true;
-    authConfiguration.multipleAppAccessList = "acme.ui";
+    authConfiguration.multipleNamespaceAccessList = "acme.ui";
 
     final Injector injector = Guice.createInjector(
         new AuthModule(authConfiguration),
@@ -56,12 +55,12 @@ public class AuthTest {
           @Override protected void configure() {
             bind(VersionService.class).to(Versions.class).asEagerSingleton();
             bind(AppAuthService.class).to(AppAuthServiceViaPlanBServer.class).asEagerSingleton();
-            List<String> multipleAppAccessList = Lists.newArrayList();
-            multipleAppAccessList.addAll(
-                Splitter.on(",").splitToList(authConfiguration.multipleAppAccessList));
+            List<String> multipleNamespaceAccessList = Lists.newArrayList();
+            multipleNamespaceAccessList.addAll(
+                Splitter.on(",").splitToList(authConfiguration.multipleNamespaceAccessList));
             bind(new TypeLiteral<List<String>>() {
-            }).annotatedWith(Names.named("multipleAppAccessList"))
-                .toInstance(multipleAppAccessList);
+            }).annotatedWith(Names.named("multipleNamespaceAccessList"))
+                .toInstance(multipleNamespaceAccessList);
             bind(AccessControlSupport.class).asEagerSingleton();
           }
         }

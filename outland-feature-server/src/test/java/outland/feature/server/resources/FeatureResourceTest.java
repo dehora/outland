@@ -18,7 +18,7 @@ import org.glassfish.jersey.logging.LoggingFeature;
 import org.junit.ClassRule;
 import org.junit.Test;
 import outland.feature.proto.AccessCollection;
-import outland.feature.proto.App;
+import outland.feature.proto.Namespace;
 import outland.feature.proto.Feature;
 import outland.feature.proto.MemberAccess;
 import outland.feature.proto.Owner;
@@ -27,7 +27,7 @@ import outland.feature.proto.ServiceAccess;
 import outland.feature.server.Problem;
 import outland.feature.server.ServerConfiguration;
 import outland.feature.server.ServerMain;
-import outland.feature.server.apps.AppService;
+import outland.feature.server.apps.NamespaceService;
 import outland.feature.server.features.Ulid;
 import outland.feature.server.protobuf.Protobuf3Support;
 
@@ -46,29 +46,29 @@ public class FeatureResourceTest {
   private String basicPassword = "topsecret";
   private Gson gson;
 
-  private final String seedAppOneKey = "appOne";
+  private final String seedNamespaceOneKey = "appOne";
   private final String seedOwnerOne = "ownerOne";
   private final String seedServiceOne = "serviceOne";
   private final String seedMemberOne = "memberOne";
 
-  private final String seedAppFooKey = "appFoo";
+  private final String seedNamespaceFooKey = "appFoo";
   private final String seedOwnerFoo = "ownerFoo";
   private final String seedServiceFoo = "serviceFoo";
   private final String seedMemberFoo = "memberFoo";
 
-  private final String seedAppBarKey = "appBar";
+  private final String seedNamespaceBarKey = "appBar";
   private final String seedOwnerBar = "ownerBar";
   private final String seedServiceBar = "serviceBar";
   private final String seedMemberBar = "memberBar";
 
   private Injector injector;
-  private AppService appService;
+  private NamespaceService namespaceService;
 
   public FeatureResourceTest() {
     gson = new Gson();
     ServerMain application = APP.getApplication();
     injector = application.injector();
-    appService = injector.getInstance(AppService.class);
+    namespaceService = injector.getInstance(NamespaceService.class);
 
     /*
     create our seeds just once. we're not using a before class because we need APP to be
@@ -88,9 +88,9 @@ public class FeatureResourceTest {
         .setType("owner.collection")
         .addItems(Owner.newBuilder().setUsername(seedOwnerOne));
 
-    appService.registerApp(
-        App.newBuilder()
-            .setKey(seedAppOneKey)
+    namespaceService.registerNamespace(
+        Namespace.newBuilder()
+            .setKey(seedNamespaceOneKey)
             .setName("name")
             .setOwners(oc)
             .setGranted(builder.buildPartial())
@@ -105,9 +105,9 @@ public class FeatureResourceTest {
         .setType("owner.collection")
         .addItems(Owner.newBuilder().setUsername(seedOwnerFoo));
 
-    appService.registerApp(
-        App.newBuilder()
-            .setKey(seedAppFooKey)
+    namespaceService.registerNamespace(
+        Namespace.newBuilder()
+            .setKey(seedNamespaceFooKey)
             .setName("name")
             .setOwners(oc)
             .setGranted(builder.buildPartial())
@@ -122,9 +122,9 @@ public class FeatureResourceTest {
         .setType("owner.collection")
         .addItems(Owner.newBuilder().setUsername(seedOwnerBar));
 
-    appService.registerApp(
-        App.newBuilder()
-            .setKey(seedAppBarKey)
+    namespaceService.registerNamespace(
+        Namespace.newBuilder()
+            .setKey(seedNamespaceBarKey)
             .setName("name")
             .setOwners(oc)
             .setGranted(builder.buildPartial())
@@ -141,7 +141,7 @@ public class FeatureResourceTest {
     auth mechanism
      */
 
-    final String appKey = "testAuthFailures";
+    final String nsKey = "testAuthFailures";
     final String user = "unknownuser";
     final String service = "knownservice";
 
@@ -154,8 +154,8 @@ public class FeatureResourceTest {
         .setType("owner.collection")
         .addItems(Owner.newBuilder().setName("Jayne").setUsername("jayne"));
 
-    appService.registerApp(
-        App.newBuilder()
+    namespaceService.registerNamespace(
+        Namespace.newBuilder()
             .setKey("testAuthFailures")
             .setName("name")
             .setOwners(oc)
@@ -168,20 +168,20 @@ public class FeatureResourceTest {
 
     // no auth header returns 401
 
-    Response response = clientNoAuth.target(url + "/" + appKey)
+    Response response = clientNoAuth.target(url + "/" + nsKey)
         .request()
         .get();
     assertTrue(response.getStatus() == 401);
     assertTrue(response.getHeaderString("WWW-Authenticate").contains("Basic"));
 
-    // mismatched auth header and url app ids return 401
+    // mismatched auth header and url namespace ids return 401
 
     JerseyClient clientWithAuth = ServerSuite.client()
         //.register(
         //    new LoggingFeature(Logger.getLogger(getClass().getName()), Level.INFO, null, null))
         .register(HttpAuthenticationFeature.universalBuilder().build());
 
-    Response response1 = clientWithAuth.target(url + "/" + appKey)
+    Response response1 = clientWithAuth.target(url + "/" + nsKey)
         .request()
         .property(HTTP_AUTHENTICATION_BASIC_USERNAME, user + "/member")
         .property(HTTP_AUTHENTICATION_BASIC_PASSWORD, basicPassword)
@@ -191,7 +191,7 @@ public class FeatureResourceTest {
 
     // matching auth header and url works
 
-    Response response2 = clientWithAuth.target(url + "/" + appKey)
+    Response response2 = clientWithAuth.target(url + "/" + nsKey)
         .request()
         .property(HTTP_AUTHENTICATION_BASIC_USERNAME, service + "/service")
         .property(HTTP_AUTHENTICATION_BASIC_PASSWORD, basicPassword)
@@ -207,10 +207,10 @@ public class FeatureResourceTest {
     JerseyClient client = createClient();
 
     final String featureKey = Ulid.random();
-    final String appKey = seedAppOneKey;
+    final String nsKey = seedNamespaceOneKey;
     final String serviceName = "unknownService";
 
-    Response response = client.target(url + "/" + appKey + "/" + featureKey)
+    Response response = client.target(url + "/" + nsKey + "/" + featureKey)
         .request()
         .property(HTTP_AUTHENTICATION_BASIC_USERNAME, serviceName + "/service")
         .property(HTTP_AUTHENTICATION_BASIC_PASSWORD, basicPassword)
@@ -231,10 +231,10 @@ public class FeatureResourceTest {
     JerseyClient client = createClient();
 
     final String featureKey = Ulid.random();
-    final String appKey = seedAppOneKey;
+    final String nsKey = seedNamespaceOneKey;
     final String serviceName = "unknownMember";
 
-    Response response = client.target(url + "/" + appKey + "/" + featureKey)
+    Response response = client.target(url + "/" + nsKey + "/" + featureKey)
         .request()
         .property(HTTP_AUTHENTICATION_BASIC_USERNAME, serviceName + "/member")
         .property(HTTP_AUTHENTICATION_BASIC_PASSWORD, basicPassword)
@@ -255,11 +255,11 @@ public class FeatureResourceTest {
     JerseyClient client = createClient();
 
     final String featureKey = Ulid.random();
-    final String appKey = seedAppOneKey;
+    final String nsKey = seedNamespaceOneKey;
     final String serviceName = "unknownMember";
     final String accessName = "unknownKind";
 
-    Response response = client.target(url + "/" + appKey + "/" + featureKey)
+    Response response = client.target(url + "/" + nsKey + "/" + featureKey)
         .request()
         .property(HTTP_AUTHENTICATION_BASIC_USERNAME, serviceName + "/" + accessName)
         .property(HTTP_AUTHENTICATION_BASIC_PASSWORD, basicPassword)
@@ -274,7 +274,7 @@ public class FeatureResourceTest {
   }
 
   @Test
-  public void testUpdateNonMatchingAppKeyUrlAndDataCauses422() throws Exception {
+  public void testUpdateNonMatchingNamespaceKeyUrlAndDataCauses422() throws Exception {
 
     String url = createFeatureUrl();
     JerseyClient client = createClient();
@@ -282,11 +282,11 @@ public class FeatureResourceTest {
     // don't accept mismatched url and body even when authenticated
 
     String featureKey = Ulid.random();
-    Feature feature = buildTestFeature(seedAppBarKey, featureKey);
+    Feature feature = buildTestFeature(seedNamespaceBarKey, featureKey);
     String jsonReq = Protobuf3Support.toJsonString(feature);
 
     // auth is performed relative to the url, so match it with a granted service
-    final String uri = url + "/" + seedAppOneKey + "/" + featureKey;
+    final String uri = url + "/" + seedNamespaceOneKey + "/" + featureKey;
     final String basicAuth = seedServiceOne + "/service";
 
     Response response = client.target(uri)
@@ -300,8 +300,8 @@ public class FeatureResourceTest {
 
     final Problem problem = gson.fromJson(jsonRes, Problem.class);
     assertTrue(problem.status() == 422);
-    assertTrue(problem.detail().get().contains("url_appkey"));
-    assertTrue(problem.detail().get().contains("data_appkey"));
+    assertTrue(problem.detail().get().contains("url_nskey"));
+    assertTrue(problem.detail().get().contains("data_nskey"));
 
     assertEquals(Problem.CLIENT_TYPE, problem.type());
   }
@@ -309,7 +309,7 @@ public class FeatureResourceTest {
   @Test
   public void testUpdateNonMatchingFeatureUrlAndDataCauses422() throws Exception {
 
-    final String appKey = seedAppOneKey;
+    final String nsKey = seedNamespaceOneKey;
 
     String urlFeatureKey = Ulid.random();
     String dataFeatureKey = Ulid.random();
@@ -317,10 +317,10 @@ public class FeatureResourceTest {
     String url = createFeatureUrl();
     JerseyClient client = createClient();
 
-    Feature feature = buildTestFeature(appKey, dataFeatureKey);
+    Feature feature = buildTestFeature(nsKey, dataFeatureKey);
     String jsonReq = Protobuf3Support.toJsonString(feature);
 
-    final String uri = url + "/" + appKey + "/" + urlFeatureKey;
+    final String uri = url + "/" + nsKey + "/" + urlFeatureKey;
 
     Response response = client.target(uri)
         .request()
@@ -348,7 +348,7 @@ public class FeatureResourceTest {
 
     final String idempotencyKey = Ulid.random();
     String featureKey = Ulid.random();
-    Feature feature = buildTestFeature(seedAppOneKey, featureKey);
+    Feature feature = buildTestFeature(seedNamespaceOneKey, featureKey);
     String featureJson = Protobuf3Support.toJsonString(feature);
 
     Response post = client.target(url)
@@ -384,9 +384,9 @@ public class FeatureResourceTest {
   @Test
   public void testPost() throws Exception {
 
-    final AppService instance = injector.getInstance(AppService.class);
+    final NamespaceService instance = injector.getInstance(NamespaceService.class);
 
-    final String appKey = "testPostAppKey";
+    final String nsKey = "testPostNamespaceKey";
     final String serviceKey = "testPostService";
 
     AccessCollection.Builder accessBuilder = AccessCollection.newBuilder();
@@ -398,9 +398,9 @@ public class FeatureResourceTest {
         .setType("owner.collection")
         .addItems(Owner.newBuilder().setName("Jayne").setUsername("jayne"));
 
-    instance.registerApp(
-        App.newBuilder()
-            .setKey(appKey)
+    instance.registerNamespace(
+        Namespace.newBuilder()
+            .setKey(nsKey)
             .setName("name")
             .setOwners(oc)
             .setGranted(accessBuilder.buildPartial())
@@ -411,7 +411,7 @@ public class FeatureResourceTest {
     JerseyClient client = createClient();
 
     String key = "testPostFeatureKey";
-    Feature feature = buildTestFeature(appKey, key);
+    Feature feature = buildTestFeature(nsKey, key);
     String jsonReq = Protobuf3Support.toJsonString(feature);
 
     Response post = client.target(url)
@@ -445,7 +445,7 @@ public class FeatureResourceTest {
     JerseyClient client = createClient();
 
     String featureKey = "testUpdateFeatureKey";
-    Feature feature = buildTestFeature(seedAppOneKey, featureKey);
+    Feature feature = buildTestFeature(seedNamespaceOneKey, featureKey);
     String featureJson = Protobuf3Support.toJsonString(feature);
 
     // create a feature
@@ -483,7 +483,7 @@ public class FeatureResourceTest {
 
     Feature update = builderRegister.build().toBuilder().setState(Feature.State.on).build();
     String featureUpdateJson = Protobuf3Support.toJsonString(update);
-    Response responseUpdate = client.target(url + "/" + seedAppOneKey + "/" + featureKey)
+    Response responseUpdate = client.target(url + "/" + seedNamespaceOneKey + "/" + featureKey)
         .request()
         // this time update using a member
         .property(HTTP_AUTHENTICATION_BASIC_USERNAME, seedMemberOne + "/member")
@@ -509,7 +509,7 @@ public class FeatureResourceTest {
 
     // now read it back from the server and double check
 
-    Response responseGet = client.target(url + "/" + seedAppOneKey + "/" + featureKey)
+    Response responseGet = client.target(url + "/" + seedNamespaceOneKey + "/" + featureKey)
         .request()
         // ask using a service's grant
         .property(HTTP_AUTHENTICATION_BASIC_USERNAME, seedServiceOne + "/service")
@@ -535,16 +535,16 @@ public class FeatureResourceTest {
   }
 
   @Test
-  public void testMissingAppThrows404() throws Exception {
+  public void testMissingNamespaceThrows404() throws Exception {
 
     String url = createFeatureUrl();
     JerseyClient client = createClient();
 
-    String key = "testMissingAppThrows404";
-    String appKey = Ulid.random();
+    String key = "testMissingNamespaceThrows404";
+    String nsKey = Ulid.random();
     String serviceCaller = seedServiceBar;
 
-    Feature feature = buildTestFeature(appKey, key);
+    Feature feature = buildTestFeature(nsKey, key);
     String jsonReq = Protobuf3Support.toJsonString(feature);
 
     Response post = client.target(url)
@@ -560,9 +560,9 @@ public class FeatureResourceTest {
   public void testOwnerIncomplete422() throws Exception {
 
     final String whitelisted = "whitelisted";
-    final String appKey = "testOwnerIncomplete422App";
+    final String nsKey = "testOwnerIncomplete422Namespace";
 
-    final AppService instance = injector.getInstance(AppService.class);
+    final NamespaceService instance = injector.getInstance(NamespaceService.class);
 
     AccessCollection.Builder accessBuilder = AccessCollection.newBuilder();
     final ArrayList<ServiceAccess> services = Lists.newArrayList();
@@ -573,9 +573,9 @@ public class FeatureResourceTest {
         .setType("owner.collection")
         .addItems(Owner.newBuilder().setName("Jayne").setUsername("jayne"));
 
-    instance.registerApp(
-        App.newBuilder()
-            .setKey(appKey)
+    instance.registerNamespace(
+        Namespace.newBuilder()
+            .setKey(nsKey)
             .setName("name")
             .setOwners(oc)
             .setGranted(accessBuilder.buildPartial())
@@ -589,7 +589,7 @@ public class FeatureResourceTest {
     Feature feature = Feature.newBuilder()
         .setKey(key)
         .setDescription("desc")
-        .setAppkey(appKey)
+        .setAppkey(nsKey)
         .build();
     ;
     String jsonReq = Protobuf3Support.toJsonString(feature);
@@ -612,8 +612,8 @@ public class FeatureResourceTest {
   @Test
   public void testDoubleCreatePostCauses409() throws Exception {
 
-    final AppService instance = injector.getInstance(AppService.class);
-    final String appKey = "testDoubleCreatePostCauses409AppKey";
+    final NamespaceService instance = injector.getInstance(NamespaceService.class);
+    final String nsKey = "testDoubleCreatePostCauses409NamespaceKey";
     final String serviceKey = "testDoubleCreatePostCauses409Service";
 
     final AccessCollection.Builder accessBuilder = AccessCollection.newBuilder();
@@ -625,9 +625,9 @@ public class FeatureResourceTest {
         .setType("owner.collection")
         .addItems(Owner.newBuilder().setName("Jayne").setUsername("jayne"));
 
-    instance.registerApp(
-        App.newBuilder()
-            .setKey(appKey)
+    instance.registerNamespace(
+        Namespace.newBuilder()
+            .setKey(nsKey)
             .setName("name")
             .setOwners(oc)
             .setGranted(accessBuilder.buildPartial())
@@ -638,7 +638,7 @@ public class FeatureResourceTest {
     final JerseyClient client = createClient();
 
     final String key = "testDoubleCreatePostCauses409FeatureKey";
-    final Feature feature = buildTestFeature(appKey, key);
+    final Feature feature = buildTestFeature(nsKey, key);
     final String jsonReq = Protobuf3Support.toJsonString(feature);
 
     final Response post = client.target(url)
@@ -667,13 +667,13 @@ public class FeatureResourceTest {
     return "http://localhost:" + APP.getLocalPort() + "/features";
   }
 
-  private Feature buildTestFeature(String appKey, String key) {
+  private Feature buildTestFeature(String nsKey, String key) {
     final Owner owner =
         Owner.newBuilder().setEmail("wile.e@acme.com").setUsername("wile,e").build();
     return Feature.newBuilder()
         .setKey(key)
         .setDescription("desc")
-        .setAppkey(appKey)
+        .setAppkey(nsKey)
         .setOwner(owner)
         .build();
   }

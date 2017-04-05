@@ -12,8 +12,8 @@ public class AppModule extends AbstractModule {
   }
 
   @Override protected void configure() {
-    bind(AppService.class).to(DefaultAppService.class).asEagerSingleton();
-    bind(AppStorage.class).to(DefaultAppStorage.class).asEagerSingleton();
+    bind(NamespaceService.class).to(DefaultNamespaceService.class).asEagerSingleton();
+    bind(NamespaceStorage.class).to(DefaultNamespaceStorage.class).asEagerSingleton();
     bind(AppAuthService.class).to(AppAuthServiceViaPlanBServer.class).asEagerSingleton();
   }
 }

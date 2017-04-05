@@ -23,13 +23,13 @@ import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
-import outland.feature.proto.App;
+import outland.feature.proto.Namespace;
 import outland.feature.proto.Feature;
 import outland.feature.proto.FeatureCollection;
 import outland.feature.server.Problem;
 import outland.feature.server.ServerConfiguration;
 import outland.feature.server.ServiceException;
-import outland.feature.server.apps.AppService;
+import outland.feature.server.apps.NamespaceService;
 import outland.feature.server.auth.AccessControlSupport;
 import outland.feature.server.auth.AuthPrincipal;
 import outland.feature.server.features.FeatureService;
@@ -41,7 +41,7 @@ import static outland.feature.server.StructLog.kvp;
 public class FeatureResource {
 
   private final FeatureService featureService;
-  private final AppService appService;
+  private final NamespaceService namespaceService;
   private final IdempotencyChecker idempotencyChecker;
   private final AccessControlSupport accessControlSupport;
   private final URI baseURI;
@@ -50,14 +50,14 @@ public class FeatureResource {
   @Inject
   public FeatureResource(
       FeatureService featureService,
-      AppService appService,
+      NamespaceService namespaceService,
       IdempotencyChecker idempotencyChecker,
       AccessControlSupport accessControlSupport,
       ServerConfiguration serviceConfiguration,
       Headers headers
   ) {
     this.featureService = featureService;
-    this.appService = appService;
+    this.namespaceService = namespaceService;
     this.idempotencyChecker = idempotencyChecker;
     this.baseURI = serviceConfiguration.baseURI;
     this.accessControlSupport = accessControlSupport;
@@ -77,13 +77,13 @@ public class FeatureResource {
 
     final long start = System.currentTimeMillis();
 
-    final Optional<App> maybe = appService.loadAppByKey(feature.getAppkey());
+    final Optional<Namespace> maybe = namespaceService.loadNamespaceByKey(feature.getAppkey());
     if(! maybe.isPresent()) {
       return headers.enrich(Response.status(404).entity(
-          Problem.clientProblem("app_not_found", "", 404)), start).build();
+          Problem.clientProblem("namespace_not_found", "", 404)), start).build();
     }
 
-    accessControlSupport.throwUnlessGrantedForApp(authPrincipal, maybe.get());
+    accessControlSupport.throwUnlessGrantedForNamespace(authPrincipal, maybe.get());
 
     URI loc = UriBuilder.fromUri(baseURI)
         .path(feature.getAppkey())
@@ -106,14 +106,14 @@ public class FeatureResource {
   }
 
   @POST
-  @Path("/{appkey}/{feature_key}")
+  @Path("/{ns_key}/{feature_key}")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
   @PermitAll
   @Timed(name = "updateFeature")
   public Response updateFeature(
       @Auth AuthPrincipal authPrincipal,
-      @PathParam("appkey") String appKey,
+      @PathParam("ns_key") String nsKey,
       @PathParam("feature_key") String featureKey,
       Feature feature,
       @Context HttpHeaders httpHeaders
@@ -121,8 +121,8 @@ public class FeatureResource {
 
     final long start = System.currentTimeMillis();
 
-    accessControlSupport.throwUnlessGrantedForApp(authPrincipal, appKey);
-    throwUnlessappKeyMatch(feature, appKey);
+    accessControlSupport.throwUnlessGrantedForNamespace(authPrincipal, nsKey);
+    throwUnlessNamespaceKeyMatch(feature, nsKey);
     throwUnlessFeatureKeyMatch(feature, featureKey);
 
     final Optional<String> optional = idempotencyChecker.extractKey(httpHeaders);
@@ -134,28 +134,28 @@ public class FeatureResource {
           start).build();
     }
 
-    Feature updated = featureService.updateFeature(appKey, featureKey, feature)
+    Feature updated = featureService.updateFeature(nsKey, featureKey, feature)
         .orElseThrow(() -> new RuntimeException(""));
 
     return headers.enrich(Response.ok(updated), start).build();
   }
 
   @GET
-  @Path("/{appkey}/{feature_key}")
+  @Path("/{ns_key}/{feature_key}")
   @Produces(MediaType.APPLICATION_JSON)
   @PermitAll
   @Timed(name = "getFeatureByKey")
   public Response getFeatureByKey(
       @Auth AuthPrincipal authPrincipal,
-      @PathParam("appkey") String appKey,
+      @PathParam("ns_key") String nsKey,
       @PathParam("feature_key") String featureKey
   ) throws AuthenticationException {
 
     final long start = System.currentTimeMillis();
 
-    accessControlSupport.throwUnlessGrantedForApp(authPrincipal, appKey);
+    accessControlSupport.throwUnlessGrantedForNamespace(authPrincipal, nsKey);
 
-    final Optional<Feature> feature = featureService.loadFeatureByKey(appKey, featureKey);
+    final Optional<Feature> feature = featureService.loadFeatureByKey(nsKey, featureKey);
 
     if(feature.isPresent()) {
       return headers.enrich(Response.ok(feature.get()), start).build();
@@ -166,42 +166,42 @@ public class FeatureResource {
   }
 
   @GET
-  @Path("/{appkey}")
+  @Path("/{ns_key}")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
   @PermitAll
   @Timed(name = "getFeatures")
   public Response getFeatures(
       @Auth AuthPrincipal authPrincipal,
-      @PathParam("appkey") String appKey
+      @PathParam("ns_key") String nsKey
   ) throws AuthenticationException {
 
     final long start = System.currentTimeMillis();
-    accessControlSupport.throwUnlessGrantedForApp(authPrincipal, appKey);
+    accessControlSupport.throwUnlessGrantedForNamespace(authPrincipal, nsKey);
 
-    FeatureCollection features = featureService.loadFeatures(appKey);
+    FeatureCollection features = featureService.loadFeatures(nsKey);
 
     return this.headers.enrich(Response.ok(features), start).build();
   }
 
   @GET
-  @Path("/{appkey}/feed")
+  @Path("/{ns_key}/feed")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
   @PermitAll
   @Timed(name = "getFeaturesSince")
   public Response getFeaturesSince(
       @Auth AuthPrincipal authPrincipal,
-      @PathParam("appkey") String appKey,
+      @PathParam("ns_key") String nsKey,
       @QueryParam("since") long since
   ) throws AuthenticationException {
 
     final long start = System.currentTimeMillis();
-    accessControlSupport.throwUnlessGrantedForApp(authPrincipal, appKey);
+    accessControlSupport.throwUnlessGrantedForNamespace(authPrincipal, nsKey);
 
     OffsetDateTime utc =
         OffsetDateTime.ofInstant(Instant.ofEpochSecond(since), ZoneId.of("UTC").normalized());
-    FeatureCollection features = featureService.loadFeaturesChangedSince(appKey, utc);
+    FeatureCollection features = featureService.loadFeaturesChangedSince(nsKey, utc);
 
     return this.headers.enrich(Response.ok(features), start).build();
   }
@@ -216,11 +216,11 @@ public class FeatureResource {
     }
   }
 
-  private void throwUnlessappKeyMatch(Feature feature, String appKey) {
-    if (!feature.getAppkey().equals(appKey)) {
+  private void throwUnlessNamespaceKeyMatch(Feature feature, String nsKey) {
+    if (!feature.getAppkey().equals(nsKey)) {
       throw new ServiceException(Problem.clientProblem(
-          "Resource and entity app ids do not match.",
-          kvp("url_appkey", appKey, "data_appkey", feature.getAppkey()),
+          "Resource and entity namespace ids do not match.",
+          kvp("url_nskey", nsKey, "data_nskey", feature.getAppkey()),
           422));
     }
   }

@@ -4,7 +4,7 @@ import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import java.util.List;
 import outland.feature.proto.AccessCollection;
-import outland.feature.proto.App;
+import outland.feature.proto.Namespace;
 import outland.feature.proto.MemberAccess;
 import outland.feature.proto.Owner;
 import outland.feature.proto.OwnerCollection;
@@ -13,7 +13,7 @@ import outland.feature.server.features.Ulid;
 
 class AppUpdateProcessor {
 
-  List<ServiceAccess> mergeServices(App app, ServiceAccess incoming) {
+  List<ServiceAccess> mergeServices(Namespace app, ServiceAccess incoming) {
     final AccessCollection existingGrants = app.getGranted();
     final List<ServiceAccess> existingGrantsList = existingGrants.getServicesList();
     final List<ServiceAccess> updateGrantList = Lists.newArrayList();
@@ -33,7 +33,7 @@ class AppUpdateProcessor {
     return updateGrantList;
   }
 
-  List<MemberAccess> mergeMembers(App app, MemberAccess incoming) {
+  List<MemberAccess> mergeMembers(Namespace app, MemberAccess incoming) {
     final AccessCollection existingGrants = app.getGranted();
     final List<MemberAccess> existingGrantsList = existingGrants.getMembersList();
     final List<MemberAccess> updateGrantList = Lists.newArrayList();
@@ -53,7 +53,7 @@ class AppUpdateProcessor {
     return updateGrantList;
   }
 
-  List<Owner> mergeOwners(App app, Owner incoming) {
+  List<Owner> mergeOwners(Namespace app, Owner incoming) {
     final OwnerCollection existingOwners = app.getOwners();
     final List<Owner> existingOwnerList = existingOwners.getItemsList();
     final List<Owner> updateOwnerList = Lists.newArrayList();
