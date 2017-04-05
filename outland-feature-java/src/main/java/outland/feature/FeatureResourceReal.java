@@ -52,13 +52,13 @@ class FeatureResourceReal implements FeatureResource {
 
   @Override public Feature update(Feature feature) {
     FeatureException.throwIfNull(feature, "Please supply a feature");
-    FeatureException.throwIfNull(feature.getAppkey(), "Please add a namespace key to the feature");
+    FeatureException.throwIfNull(feature.getNamespace(), "Please add a namespace key to the feature");
     FeatureException.throwIfNull(feature.getKey(), "Please add a feature key to the feature");
 
     try {
       String url = UriBuilder.builder(baseUri)
           .path(PATH_FEATURES)
-          .path(feature.getAppkey())
+          .path(feature.getNamespace())
           .path(feature.getKey())
           .buildString();
 
@@ -193,7 +193,7 @@ class FeatureResourceReal implements FeatureResource {
   private Response postRequest(String url, Feature feature) {
     return resourceProvider
         .newResource()
-        .requestThrowing(Resource.POST, url, prepareOptions(feature.getAppkey()), feature);
+        .requestThrowing(Resource.POST, url, prepareOptions(feature.getNamespace()), feature);
   }
 
   private ResourceOptions prepareOptions(String nsKey) {

@@ -285,7 +285,7 @@ From the client:
   FeatureResource features = client.resources().features();
 
   Feature feature = Feature.newBuilder()
-      .setAppkey("testapp")
+      .setNamespace("testapp")
       .setKey("test-flag-1")
       .setState(Feature.State.on)
       .build();

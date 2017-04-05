@@ -144,7 +144,7 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
     wipBuilder.setType("feature");
     wipBuilder.setCreated(found.getCreated());
     wipBuilder.setId(found.getId());
-    wipBuilder.setAppkey(found.getAppkey());
+    wipBuilder.setNamespace(found.getNamespace());
     wipBuilder.setKey(found.getKey());
 
     final FeatureVersion foundVersion = found.getVersion();
@@ -251,7 +251,7 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
 
     FeatureCollection.Builder builder = FeatureCollection.newBuilder();
     builder.setType("feature.list");
-    builder.setAppkey(nskey);
+    builder.setNamespace(nskey);
 
     Optional<Map<String, String>> cacheSet = timed(loadFeaturesCacheTimer,
         () -> featureCache.getCacheSet(nskey));
@@ -314,7 +314,7 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
     FeatureCollection.Builder builder = FeatureCollection.newBuilder();
     final FeatureCollection featureCollection = builder
         .addAllItems(sinceList)
-        .setAppkey(nskey)
+        .setNamespace(nskey)
         .setType("feature.list")
         .build();
 

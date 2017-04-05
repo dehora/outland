@@ -33,7 +33,7 @@ public class TestFeatureStorage implements FeatureStorage {
 
     Set<Map.Entry<String, Feature>> entries = features.entrySet();
     for (Map.Entry<String, Feature> entry : entries) {
-      if (entry.getValue().getKey().equals(key) && entry.getValue().getAppkey().equals(appKey)) {
+      if (entry.getValue().getKey().equals(key) && entry.getValue().getNamespace().equals(appKey)) {
         return Optional.of(entry.getValue());
       }
     }

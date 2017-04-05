@@ -50,10 +50,10 @@ class FeatureStoreReal implements FeatureStore {
   }
 
   @Override public Void put(Feature feature) {
-    final String storageKey = FeatureStoreKeys.storageKey(feature.getAppkey(), feature.getKey());
+    final String storageKey = FeatureStoreKeys.storageKey(feature.getNamespace(), feature.getKey());
 
     logger.info("op=put, storage=cache, appkey={}, feature_key={} storage_key={}",
-        feature.getAppkey(), feature.getKey(), storageKey);
+        feature.getNamespace(), feature.getKey(), storageKey);
 
     featureCache.put(storageKey, feature);
 
@@ -110,7 +110,7 @@ class FeatureStoreReal implements FeatureStore {
         final Set<Map.Entry<String, Feature>> entries = map.entrySet();
         for (Map.Entry<String, Feature> entry : entries) {
           logger.info("op=close, action=flush_feature_to_local_store, appkey={}, feature_key={}",
-              entry.getValue().getAppkey(), entry.getValue().getKey());
+              entry.getValue().getNamespace(), entry.getValue().getKey());
           backingFeatureStore.put(entry.getValue());
         }
       } catch (Exception e) {
@@ -198,7 +198,7 @@ class FeatureStoreReal implements FeatureStore {
 
         // access cache directly to avoid writing back out to store
         itemsList.forEach(
-            f -> featureCache.put(FeatureStoreKeys.storageKey(f.getAppkey(), f.getKey()), f));
+            f -> featureCache.put(FeatureStoreKeys.storageKey(f.getNamespace(), f.getKey()), f));
         return true;
       } else {
         logger.warn("op=populateCache, action=load, source=local, result=null");

@@ -57,7 +57,7 @@ message OptionCollection {
 message Feature {
     string id = 1;
     string key = 2;
-    string appkey = 3;
+    string namespace = 3;
     enum State {
         none = 0;
         off = 1;
@@ -76,7 +76,7 @@ message Feature {
 
 message FeatureCollection {
     string type = 1;
-    string appkey = 2;
+    string namespace = 2;
     repeated Feature items = 3;
 }
 

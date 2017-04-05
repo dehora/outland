@@ -17,7 +17,7 @@ public  final class Feature extends
   private Feature() {
     id_ = "";
     key_ = "";
-    appkey_ = "";
+    namespace_ = "";
     state_ = 0;
     description_ = "";
     created_ = "";
@@ -65,7 +65,7 @@ public  final class Feature extends
           case 26: {
             java.lang.String s = input.readStringRequireUtf8();
 
-            appkey_ = s;
+            namespace_ = s;
             break;
           }
           case 32: {
@@ -359,34 +359,34 @@ public  final class Feature extends
     }
   }
 
-  public static final int APPKEY_FIELD_NUMBER = 3;
-  private volatile java.lang.Object appkey_;
+  public static final int NAMESPACE_FIELD_NUMBER = 3;
+  private volatile java.lang.Object namespace_;
   /**
-   * <code>optional string appkey = 3;</code>
+   * <code>optional string namespace = 3;</code>
    */
-  public java.lang.String getAppkey() {
-    java.lang.Object ref = appkey_;
+  public java.lang.String getNamespace() {
+    java.lang.Object ref = namespace_;
     if (ref instanceof java.lang.String) {
       return (java.lang.String) ref;
     } else {
       com.google.protobuf.ByteString bs = 
           (com.google.protobuf.ByteString) ref;
       java.lang.String s = bs.toStringUtf8();
-      appkey_ = s;
+      namespace_ = s;
       return s;
     }
   }
   /**
-   * <code>optional string appkey = 3;</code>
+   * <code>optional string namespace = 3;</code>
    */
   public com.google.protobuf.ByteString
-      getAppkeyBytes() {
-    java.lang.Object ref = appkey_;
+      getNamespaceBytes() {
+    java.lang.Object ref = namespace_;
     if (ref instanceof java.lang.String) {
       com.google.protobuf.ByteString b = 
           com.google.protobuf.ByteString.copyFromUtf8(
               (java.lang.String) ref);
-      appkey_ = b;
+      namespace_ = b;
       return b;
     } else {
       return (com.google.protobuf.ByteString) ref;
@@ -702,8 +702,8 @@ public  final class Feature extends
     if (!getKeyBytes().isEmpty()) {
       com.google.protobuf.GeneratedMessageV3.writeString(output, 2, key_);
     }
-    if (!getAppkeyBytes().isEmpty()) {
-      com.google.protobuf.GeneratedMessageV3.writeString(output, 3, appkey_);
+    if (!getNamespaceBytes().isEmpty()) {
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 3, namespace_);
     }
     if (state_ != outland.feature.proto.Feature.State.none.getNumber()) {
       output.writeEnum(4, state_);
@@ -751,8 +751,8 @@ public  final class Feature extends
     if (!getKeyBytes().isEmpty()) {
       size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, key_);
     }
-    if (!getAppkeyBytes().isEmpty()) {
-      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, appkey_);
+    if (!getNamespaceBytes().isEmpty()) {
+      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, namespace_);
     }
     if (state_ != outland.feature.proto.Feature.State.none.getNumber()) {
       size += com.google.protobuf.CodedOutputStream
@@ -812,8 +812,8 @@ public  final class Feature extends
         .equals(other.getId());
     result = result && getKey()
         .equals(other.getKey());
-    result = result && getAppkey()
-        .equals(other.getAppkey());
+    result = result && getNamespace()
+        .equals(other.getNamespace());
     result = result && state_ == other.state_;
     result = result && getDescription()
         .equals(other.getDescription());
@@ -854,8 +854,8 @@ public  final class Feature extends
     hash = (53 * hash) + getId().hashCode();
     hash = (37 * hash) + KEY_FIELD_NUMBER;
     hash = (53 * hash) + getKey().hashCode();
-    hash = (37 * hash) + APPKEY_FIELD_NUMBER;
-    hash = (53 * hash) + getAppkey().hashCode();
+    hash = (37 * hash) + NAMESPACE_FIELD_NUMBER;
+    hash = (53 * hash) + getNamespace().hashCode();
     hash = (37 * hash) + STATE_FIELD_NUMBER;
     hash = (53 * hash) + state_;
     hash = (37 * hash) + DESCRIPTION_FIELD_NUMBER;
@@ -1026,7 +1026,7 @@ public  final class Feature extends
 
       key_ = "";
 
-      appkey_ = "";
+      namespace_ = "";
 
       state_ = 0;
 
@@ -1083,7 +1083,7 @@ public  final class Feature extends
       int to_bitField0_ = 0;
       result.id_ = id_;
       result.key_ = key_;
-      result.appkey_ = appkey_;
+      result.namespace_ = namespace_;
       result.state_ = state_;
       result.description_ = description_;
       result.created_ = created_;
@@ -1156,8 +1156,8 @@ public  final class Feature extends
         key_ = other.key_;
         onChanged();
       }
-      if (!other.getAppkey().isEmpty()) {
-        appkey_ = other.appkey_;
+      if (!other.getNamespace().isEmpty()) {
+        namespace_ = other.namespace_;
         onChanged();
       }
       if (other.state_ != 0) {
@@ -1355,71 +1355,71 @@ public  final class Feature extends
       return this;
     }
 
-    private java.lang.Object appkey_ = "";
+    private java.lang.Object namespace_ = "";
     /**
-     * <code>optional string appkey = 3;</code>
+     * <code>optional string namespace = 3;</code>
      */
-    public java.lang.String getAppkey() {
-      java.lang.Object ref = appkey_;
+    public java.lang.String getNamespace() {
+      java.lang.Object ref = namespace_;
       if (!(ref instanceof java.lang.String)) {
         com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
-        appkey_ = s;
+        namespace_ = s;
         return s;
       } else {
         return (java.lang.String) ref;
       }
     }
     /**
-     * <code>optional string appkey = 3;</code>
+     * <code>optional string namespace = 3;</code>
      */
     public com.google.protobuf.ByteString
-        getAppkeyBytes() {
-      java.lang.Object ref = appkey_;
+        getNamespaceBytes() {
+      java.lang.Object ref = namespace_;
       if (ref instanceof String) {
         com.google.protobuf.ByteString b = 
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
-        appkey_ = b;
+        namespace_ = b;
         return b;
       } else {
         return (com.google.protobuf.ByteString) ref;
       }
     }
     /**
-     * <code>optional string appkey = 3;</code>
+     * <code>optional string namespace = 3;</code>
      */
-    public Builder setAppkey(
+    public Builder setNamespace(
         java.lang.String value) {
       if (value == null) {
     throw new NullPointerException();
   }
   
-      appkey_ = value;
+      namespace_ = value;
       onChanged();
       return this;
     }
     /**
-     * <code>optional string appkey = 3;</code>
+     * <code>optional string namespace = 3;</code>
      */
-    public Builder clearAppkey() {
+    public Builder clearNamespace() {
       
-      appkey_ = getDefaultInstance().getAppkey();
+      namespace_ = getDefaultInstance().getNamespace();
       onChanged();
       return this;
     }
     /**
-     * <code>optional string appkey = 3;</code>
+     * <code>optional string namespace = 3;</code>
      */
-    public Builder setAppkeyBytes(
+    public Builder setNamespaceBytes(
         com.google.protobuf.ByteString value) {
       if (value == null) {
     throw new NullPointerException();
   }
   checkByteStringIsUtf8(value);
       
-      appkey_ = value;
+      namespace_ = value;
       onChanged();
       return this;
     }

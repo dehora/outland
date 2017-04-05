@@ -46,13 +46,13 @@ public class DefaultFeatureCache implements FeatureCache {
         metrics).execute();
 
     new RedisCacheCommand<>("CacheSet",
-        () -> redisCache.set(buildCacheKeyByFeatureKey(feature.getAppkey(), feature.getKey()), raw),
+        () -> redisCache.set(buildCacheKeyByFeatureKey(feature.getNamespace(), feature.getKey()), raw),
         () -> null,
         hystrixConfiguration,
         metrics).execute();
 
     new RedisCacheCommand<>("CacheHSet",
-        () -> redisCache.hset(feature.getAppkey(), feature.getKey(), raw),
+        () -> redisCache.hset(feature.getNamespace(), feature.getKey(), raw),
         () -> null,
         hystrixConfiguration,
         metrics).execute();

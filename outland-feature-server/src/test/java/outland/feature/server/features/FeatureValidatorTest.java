@@ -20,7 +20,7 @@ public class FeatureValidatorTest {
     Feature.Builder builder = Feature.newBuilder();
     builder.setOwner(Owner.newBuilder().setName("Jayne").setUsername("jayne"))
         .setKey("key1")
-        .setAppkey("app1");
+        .setNamespace("app1");
 
     try {
       new FeatureValidator().validateFeatureRegistrationThrowing(builder.build());
@@ -40,7 +40,7 @@ public class FeatureValidatorTest {
 
     builder.setOwner(Owner.newBuilder().setName("Jayne").setUsername("jayne"))
         .setKey("key1")
-        .setAppkey("app1")
+        .setNamespace("app1")
         .setOptions(collectionBuilder)
     ;
 
@@ -62,7 +62,7 @@ public class FeatureValidatorTest {
 
     builder.setOwner(Owner.newBuilder().setName("Jayne").setUsername("jayne"))
         .setKey("key1")
-        .setAppkey("app1")
+        .setNamespace("app1")
         .setOptions(collectionBuilder)
     ;
 
@@ -116,7 +116,7 @@ public class FeatureValidatorTest {
 
     builder.setOwner(Owner.newBuilder().setName("Jayne").setUsername("jayne"))
         .setKey("key1")
-        .setAppkey("app1")
+        .setNamespace("app1")
         .setOptions(collectionBuilder)
         ;
 
@@ -135,7 +135,7 @@ public class FeatureValidatorTest {
 
     builder.setOwner(Owner.newBuilder().setName("Jayne").setUsername("jayne"))
         .setKey("key1")
-        .setAppkey("app1")
+        .setNamespace("app1")
         .setOptions(collectionBuilder)
     ;
 
@@ -153,7 +153,7 @@ public class FeatureValidatorTest {
 
     builder.setOwner(Owner.newBuilder().setName("Jayne").setUsername("jayne"))
         .setKey("key1")
-        .setAppkey("app1")
+        .setNamespace("app1")
         .setOptions(collectionBuilder)
     ;
 
@@ -171,7 +171,7 @@ public class FeatureValidatorTest {
 
     builder.setOwner(Owner.newBuilder().setName("Jayne").setUsername("jayne"))
         .setKey("key1")
-        .setAppkey("app1")
+        .setNamespace("app1")
         .setOptions(collectionBuilder)
     ;
 
@@ -186,7 +186,7 @@ public class FeatureValidatorTest {
 
     builder.setOwner(Owner.newBuilder().setName("Jayne").setUsername("jayne"))
         .setKey("key1")
-        .setAppkey("app1")
+        .setNamespace("app1")
         .setOptions(collectionBuilder)
     ;
 
@@ -204,7 +204,7 @@ public class FeatureValidatorTest {
 
     builder.setOwner(Owner.newBuilder().setName("Jayne").setUsername("jayne"))
         .setKey("key1")
-        .setAppkey("app1")
+        .setNamespace("app1")
         .setOptions(collectionBuilder)
     ;
 
@@ -224,7 +224,7 @@ public class FeatureValidatorTest {
 
     builder.setOwner(Owner.newBuilder().setName("Jayne").setUsername("jayne"))
         .setKey("key1")
-        .setAppkey("app1")
+        .setNamespace("app1")
         .setOptions(collectionBuilder)
     ;
 
@@ -240,7 +240,7 @@ public class FeatureValidatorTest {
         .addItems(FeatureOption.newBuilder().setValue("false").setName("false").setWeight(10_001));
     builder.setOwner(Owner.newBuilder().setName("Jayne").setUsername("jayne"))
         .setKey("key1")
-        .setAppkey("app1")
+        .setNamespace("app1")
         .setOptions(collectionBuilder)
     ;
 
@@ -259,7 +259,7 @@ public class FeatureValidatorTest {
 
     builder.setOwner(Owner.newBuilder().setName("Jayne").setUsername("jayne"))
         .setKey("key1")
-        .setAppkey("app1")
+        .setNamespace("app1")
         .setOptions(collectionBuilder)
     ;
 
@@ -278,7 +278,7 @@ public class FeatureValidatorTest {
 
     builder.setOwner(Owner.newBuilder().setName("Jayne").setUsername("jayne"))
         .setKey("key1")
-        .setAppkey("app1")
+        .setNamespace("app1")
         .setOptions(collectionBuilder)
     ;
 

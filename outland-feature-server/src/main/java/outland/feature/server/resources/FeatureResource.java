@@ -77,7 +77,7 @@ public class FeatureResource {
 
     final long start = System.currentTimeMillis();
 
-    final Optional<Namespace> maybe = namespaceService.loadNamespaceByKey(feature.getAppkey());
+    final Optional<Namespace> maybe = namespaceService.loadNamespaceByKey(feature.getNamespace());
     if(! maybe.isPresent()) {
       return headers.enrich(Response.status(404).entity(
           Problem.clientProblem("namespace_not_found", "", 404)), start).build();
@@ -86,7 +86,7 @@ public class FeatureResource {
     accessControlSupport.throwUnlessGrantedForNamespace(authPrincipal, maybe.get());
 
     URI loc = UriBuilder.fromUri(baseURI)
-        .path(feature.getAppkey())
+        .path(feature.getNamespace())
         .path(feature.getKey())
         .build();
 
@@ -95,7 +95,7 @@ public class FeatureResource {
     if (optional.isPresent() && seen) {
       return headers.enrich(
           Response.created(loc).header(IdempotencyChecker.RES_HEADER, "key=" + optional.get())
-              .entity(featureService.loadFeatureByKey(feature.getAppkey(), feature.getKey()))
+              .entity(featureService.loadFeatureByKey(feature.getNamespace(), feature.getKey()))
           , start).build();
     }
 
@@ -129,7 +129,7 @@ public class FeatureResource {
 
     if (optional.isPresent() && idempotencyChecker.seen(optional.get())) {
       return headers.enrich(
-          Response.ok(featureService.loadFeatureByKey(feature.getAppkey(), feature.getKey()))
+          Response.ok(featureService.loadFeatureByKey(feature.getNamespace(), feature.getKey()))
               .header(IdempotencyChecker.RES_HEADER, "key=" + optional.get()),
           start).build();
     }
@@ -217,10 +217,10 @@ public class FeatureResource {
   }
 
   private void throwUnlessNamespaceKeyMatch(Feature feature, String nsKey) {
-    if (!feature.getAppkey().equals(nsKey)) {
+    if (!feature.getNamespace().equals(nsKey)) {
       throw new ServiceException(Problem.clientProblem(
           "Resource and entity namespace ids do not match.",
-          kvp("url_nskey", nsKey, "data_nskey", feature.getAppkey()),
+          kvp("url_nskey", nsKey, "data_nskey", feature.getNamespace()),
           422));
     }
   }
