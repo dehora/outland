@@ -244,10 +244,10 @@ The client is available via JCenter, see the [Client](#client) section for detai
 Once the client is setup up as a dependency you can configure it as follows:
 
 ```java
-  final String appKey = "testapp";
+  final String nsKey = "testapp";
   ServerConfiguration conf = new ServerConfiguration()
       .baseURI("http://localhost:8180")
-      .appKey(appKey);
+      .nsKey(nsKey);
 
   FeatureClient client = FeatureClient.newBuilder()
       .serverConfiguration(conf)
