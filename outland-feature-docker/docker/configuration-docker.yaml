@@ -44,8 +44,8 @@ aws:
 
 featureTable:
   outlandFeaturesTable: ${OUTLAND_FEATURE_TABLE_FEATURES:-dev_outland_features}
-  outlandAppsTable: ${OUTLAND_FEATURE_TABLE_APPS:-dev_outland_apps}
-  outlandAppGraphTable: ${OUTLAND_FEATURE_TABLE_GRAPHS:-dev_outland_app_graph}
+  outlandAppsTable: ${OUTLAND_FEATURE_TABLE_APPS:-dev_outland_namespaces}
+  outlandAppGraphTable: ${OUTLAND_FEATURE_TABLE_GRAPHS:-dev_outland_namespaces_graph}
 
 auth:
   basicEnabled: ${OUTLAND_FEATURE_AUTH_BASIC_ENABLED:-true}
@@ -60,7 +60,7 @@ auth:
     tokenLookupURI: ${OUTLAND_FEATURE_REMOTE_OAUTH_SERVER:-https://localhost/oauth2/tokeninfo}
     connectTimeout: ${OUTLAND_FEATURE_AUTH_OAUTH_CONN_TO:-3000}
     readTimeout: ${OUTLAND_FEATURE_AUTH_OAUTH_READ_TO:-3000}
-  multipleNamespaceAccessList: ${OUTLAND_FEATURE_ANY_APP_GRANT}
+  multipleNamespaceAccessList: ${OUTLAND_FEATURE_ANY_NAMESPACE_GRANT}
 
 redisFeatureCacheHystrix:
   hystrixCommandGroupKey: redisFeatureCacheHystrix
@@ -80,20 +80,20 @@ dynamodbFeatureReadHystrix:
    threadpool:
      coreSize: 16
 
-dynamodbAppGraphWriteHystrix:
-  hystrixCommandGroupKey: dynamodbAppGraphWriteHystrix
+dynamodbNamespaceGraphWriteHystrix:
+  hystrixCommandGroupKey: dynamodbNamespaceGraphWriteHystrix
   executionTimeoutInMilliseconds: 3000
   threadpool:
     coreSize: 8
 
-dynamodbAppWriteHystrix:
-  hystrixCommandGroupKey: dynamodbAppWriteHystrix
+dynamodbNamespaceWriteHystrix:
+  hystrixCommandGroupKey: dynamodbNamespaceWriteHystrix
   executionTimeoutInMilliseconds: 3000
   threadpool:
     coreSize: 8
 
-dynamodbAppGraphQueryHystrix:
-  hystrixCommandGroupKey: dynamodbAppGraphQueryHystrix
+dynamodbNamespaceGraphQueryHystrix:
+  hystrixCommandGroupKey: dynamodbNamespaceGraphQueryHystrix
   executionTimeoutInMilliseconds: 3000
   threadpool:
     coreSize: 8

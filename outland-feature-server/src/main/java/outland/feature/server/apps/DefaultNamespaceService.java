@@ -31,6 +31,7 @@ import static outland.feature.server.StructLog.kvp;
 public class DefaultNamespaceService implements NamespaceService, MetricsTimer {
 
   private static final Logger logger = LoggerFactory.getLogger(DefaultNamespaceService.class);
+  public static final String SUBJECT_TYPE = "app";
 
   private final NamespaceStorage namespaceStorage;
   private final VersionService versionService;
@@ -40,7 +41,7 @@ public class DefaultNamespaceService implements NamespaceService, MetricsTimer {
   private Timer saveServiceTimer;
   private Timer saveOwnerTimer;
   private Timer saveMemberTimer;
-  private Timer readAppTimer;
+  private Timer readNamespaceTimer;
   private Timer removeRelationTimer;
 
   @Inject
@@ -57,58 +58,58 @@ public class DefaultNamespaceService implements NamespaceService, MetricsTimer {
 
   @Override public Optional<Namespace> registerNamespace(Namespace namespace) {
     logger.info("{} /namespace[{}]", kvp("op", "registerNamespace"), TextFormat.shortDebugString(namespace));
-    new NamespaceValidator().validateAppRegistrationThrowing(namespace);
+    new NamespaceValidator().validateNamespaceRegistrationThrowing(namespace);
     return processRegistration(namespace);
   }
 
-  @Override public Namespace updateNamespace(Namespace app) {
-    logger.info("{} /namespace[{}]", kvp("op", "updateNamespace"), TextFormat.shortDebugString(app));
+  @Override public Namespace updateNamespace(Namespace namespace) {
+    logger.info("{} /namespace[{}]", kvp("op", "updateNamespace"), TextFormat.shortDebugString(namespace));
 
-    return processUpdate(app, builder -> {});
+    return processUpdate(namespace, builder -> {});
   }
 
-  @Override public Namespace addToNamespace(Namespace app, ServiceAccess service) {
+  @Override public Namespace addToNamespace(Namespace namespace, ServiceAccess service) {
     logger.info("{} /namespace[{}]/svc[{}]", kvp("op", "addToNamespace.service"),
-        TextFormat.shortDebugString(app), TextFormat.shortDebugString(service));
+        TextFormat.shortDebugString(namespace), TextFormat.shortDebugString(service));
 
-    return processUpdate(app,
+    return processUpdate(namespace,
         builder -> {
           AccessCollection.Builder accessBuilder = newGrantCollectionBuilder();
-          accessBuilder.addAllServices(appUpdateProcessor.mergeServices(app, service));
-          accessBuilder.addAllMembers(app.getGranted().getMembersList());
+          accessBuilder.addAllServices(appUpdateProcessor.mergeServices(namespace, service));
+          accessBuilder.addAllMembers(namespace.getGranted().getMembersList());
           builder.setGranted(accessBuilder.buildPartial());
         });
   }
 
-  @Override public Namespace addToNamespace(Namespace app, MemberAccess member) {
+  @Override public Namespace addToNamespace(Namespace namespace, MemberAccess member) {
     logger.info("{} /namespace[{}]/mbr[{}]", kvp("op", "addToNamespace.member"),
-        TextFormat.shortDebugString(app), TextFormat.shortDebugString(member));
+        TextFormat.shortDebugString(namespace), TextFormat.shortDebugString(member));
 
-    return processUpdate(app,
+    return processUpdate(namespace,
         builder -> {
           AccessCollection.Builder accessBuilder = newGrantCollectionBuilder();
-          accessBuilder.addAllMembers(appUpdateProcessor.mergeMembers(app, member));
-          accessBuilder.addAllServices(app.getGranted().getServicesList());
+          accessBuilder.addAllMembers(appUpdateProcessor.mergeMembers(namespace, member));
+          accessBuilder.addAllServices(namespace.getGranted().getServicesList());
           builder.setGranted(accessBuilder.buildPartial());
         });
   }
 
-  @Override public Namespace addToNamespace(Namespace app, final Owner incoming) {
+  @Override public Namespace addToNamespace(Namespace namespace, final Owner incoming) {
     logger.info("{} /namespace[{}]/own[{}]", kvp("op", "addToNamespace.owner"),
-        TextFormat.shortDebugString(app), TextFormat.shortDebugString(incoming));
+        TextFormat.shortDebugString(namespace), TextFormat.shortDebugString(incoming));
 
-    return processUpdate(app,
+    return processUpdate(namespace,
         builder -> builder.setOwners(OwnerCollection.newBuilder()
-            .addAllItems(appUpdateProcessor.mergeOwners(app, incoming))));
+            .addAllItems(appUpdateProcessor.mergeOwners(namespace, incoming))));
   }
 
-  @Override public Namespace removeServiceAccess(Namespace app, String serviceKey) {
+  @Override public Namespace removeServiceAccess(Namespace namespace, String serviceKey) {
 
     if(serviceKey == null) {
-      return  app;
+      return  namespace;
     }
 
-    final List<ServiceAccess> servicesList = app.getGranted().getServicesList();
+    final List<ServiceAccess> servicesList = namespace.getGranted().getServicesList();
     final ArrayList<ServiceAccess> wrapped = Lists.newArrayList(servicesList);
     final Iterator<ServiceAccess> iterator = wrapped.iterator();
     ServiceAccess service = null;
@@ -122,15 +123,15 @@ public class DefaultNamespaceService implements NamespaceService, MetricsTimer {
     }
 
     if(service == null) {
-      return app;
+      return namespace;
     }
 
-    final Namespace.Builder builder = app.toBuilder();
+    final Namespace.Builder builder = namespace.toBuilder();
     builder.clearGranted();
 
     AccessCollection.Builder newBuilder = newGrantCollectionBuilder();
     newBuilder.addAllServices(wrapped);
-    newBuilder.addAllMembers(app.getGranted().getMembersList());
+    newBuilder.addAllMembers(namespace.getGranted().getMembersList());
 
     builder.setGranted(newBuilder.buildPartial());
 
@@ -144,12 +145,12 @@ public class DefaultNamespaceService implements NamespaceService, MetricsTimer {
     return updated;
   }
 
-  @Override public Namespace removeMemberAccess(Namespace app, String memberKey) {
+  @Override public Namespace removeMemberAccess(Namespace namespace, String memberKey) {
     if(memberKey == null) {
-      return  app;
+      return  namespace;
     }
 
-    final List<MemberAccess> ownersList = app.getGranted().getMembersList();
+    final List<MemberAccess> ownersList = namespace.getGranted().getMembersList();
     final ArrayList<MemberAccess> wrapped = Lists.newArrayList(ownersList);
     final Iterator<MemberAccess> iterator = wrapped.iterator();
     MemberAccess MemberAccess = null;
@@ -170,14 +171,14 @@ public class DefaultNamespaceService implements NamespaceService, MetricsTimer {
     }
 
     if(MemberAccess == null) {
-      return app;
+      return namespace;
     }
 
-    final Namespace.Builder builder = app.toBuilder();
+    final Namespace.Builder builder = namespace.toBuilder();
     builder.clearGranted();
     AccessCollection.Builder newBuilder = newGrantCollectionBuilder();
     newBuilder.addAllMembers(wrapped);
-    newBuilder.addAllServices(app.getGranted().getServicesList());
+    newBuilder.addAllServices(namespace.getGranted().getServicesList());
 
     builder.setGranted(newBuilder.buildPartial());
 
@@ -193,18 +194,18 @@ public class DefaultNamespaceService implements NamespaceService, MetricsTimer {
   }
 
   @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
-  @Override public Namespace removeOwner(Namespace app, String ownerKey) {
+  @Override public Namespace removeOwner(Namespace namespace, String ownerKey) {
 
     if(ownerKey == null) {
-      return app;
+      return namespace;
     }
 
-    if(app.getOwners().getItemsCount() == 1) {
+    if(namespace.getOwners().getItemsCount() == 1) {
       throw new ServiceException(Problem.clientProblem("at_least_one_owner",
           "only one owner remaining, refusing to remove", 422));
     }
 
-    final List<Owner> ownersList = app.getOwners().getItemsList();
+    final List<Owner> ownersList = namespace.getOwners().getItemsList();
     final ArrayList<Owner> wrapped = Lists.newArrayList(ownersList);
     final Iterator<Owner> iterator = wrapped.iterator();
     Owner owner = null;
@@ -225,10 +226,10 @@ public class DefaultNamespaceService implements NamespaceService, MetricsTimer {
     }
 
     if(owner == null) {
-      return app;
+      return namespace;
     }
 
-    final Namespace.Builder builder = app.toBuilder();
+    final Namespace.Builder builder = namespace.toBuilder();
     builder.getOwners().getItemsList().clear();
     OwnerCollection.Builder oc = OwnerCollection.newBuilder()
         .setType("owner.collection")
@@ -258,7 +259,7 @@ public class DefaultNamespaceService implements NamespaceService, MetricsTimer {
   }
 
   @Override public Optional<Namespace> loadNamespaceByKey(String nsKey) {
-    return timed(readAppTimer, () -> namespaceStorage.loadNamespaceByKey(nsKey));
+    return timed(readNamespaceTimer, () -> namespaceStorage.loadNamespaceByKey(nsKey));
   }
 
   private Owner prepareOwner(Owner owner) {
@@ -273,8 +274,8 @@ public class DefaultNamespaceService implements NamespaceService, MetricsTimer {
     return appUpdateProcessor.prepareMember(member);
   }
 
-  private Namespace processUpdate(Namespace app, Consumer<Namespace.Builder> updateExtra) {
-    final Namespace.Builder builder = newAppBuilder(app);
+  private Namespace processUpdate(Namespace namespace, Consumer<Namespace.Builder> updateExtra) {
+    final Namespace.Builder builder = newAppBuilder(namespace);
     builder.setUpdated(NamespaceService.asString(OffsetDateTime.now()));
     updateExtra.accept(builder);
     final Namespace updated = builder.build();
@@ -285,16 +286,16 @@ public class DefaultNamespaceService implements NamespaceService, MetricsTimer {
     return updated;
   }
 
-  private Optional<Namespace> processRegistration(Namespace app) {
+  private Optional<Namespace> processRegistration(Namespace namespace) {
     OffsetDateTime now = OffsetDateTime.now();
     String created = NamespaceService.asString(now);
-    final Namespace.Builder appBuilder = newAppBuilder(app);
+    final Namespace.Builder appBuilder = newAppBuilder(namespace);
     appBuilder.setId("app_" + Ulid.random(now.toInstant().toEpochMilli()));
     appBuilder.setCreated(created);
     appBuilder.setUpdated(created);
 
     List<Owner> ownersReady = Lists.newArrayList();
-    app.getOwners().getItemsList().forEach(owner -> ownersReady.add(prepareOwner(owner)));
+    namespace.getOwners().getItemsList().forEach(owner -> ownersReady.add(prepareOwner(owner)));
     OwnerCollection.Builder oc = OwnerCollection.newBuilder()
         .setType("owner.collection")
         .addAllItems(ownersReady);
@@ -303,11 +304,11 @@ public class DefaultNamespaceService implements NamespaceService, MetricsTimer {
     AccessCollection.Builder accessCollectionBuilder = newGrantCollectionBuilder();
 
     List<ServiceAccess> servicesReady = Lists.newArrayList();
-    app.getGranted().getServicesList().forEach(service -> servicesReady.add(prepareService(service)));
+    namespace.getGranted().getServicesList().forEach(service -> servicesReady.add(prepareService(service)));
     accessCollectionBuilder.addAllServices(servicesReady);
 
     List<MemberAccess> memberReady = Lists.newArrayList();
-    app.getGranted().getMembersList().forEach(access -> memberReady.add(prepareMember(access)));
+    namespace.getGranted().getMembersList().forEach(access -> memberReady.add(prepareMember(access)));
     accessCollectionBuilder.addAllMembers(memberReady);
 
     appBuilder.clearGranted();
@@ -328,8 +329,8 @@ public class DefaultNamespaceService implements NamespaceService, MetricsTimer {
     return AccessCollection.newBuilder().setType("access.collection");
   }
 
-  private Namespace.Builder newAppBuilder(Namespace app) {
-    return app.toBuilder().setType("app");
+  private Namespace.Builder newAppBuilder(Namespace namespace) {
+    return namespace.toBuilder().setType(DefaultNamespaceService.SUBJECT_TYPE);
   }
 
   private boolean appHasOwnerRelation(String appKey, String relatedType, String relatedKey) {
@@ -342,7 +343,7 @@ public class DefaultNamespaceService implements NamespaceService, MetricsTimer {
 
   private boolean appHasRelation(String appKey, String relatedType, String relatedKey,
       String relation) {
-    final String subjectType = "app";
+    final String subjectType = DefaultNamespaceService.SUBJECT_TYPE;
     final String subjectKey = appKey;
     final String objectType = relatedType;
     final String objectKey = relatedKey;
@@ -358,87 +359,87 @@ public class DefaultNamespaceService implements NamespaceService, MetricsTimer {
     timed(saveAppTimer, () -> namespaceStorage.createNamespace(registered));
   }
 
-  private void registerServices(Namespace app) {
-    app.getGranted().getServicesList().forEach(service -> addServiceToGraph(app, service));
+  private void registerServices(Namespace namespace) {
+    namespace.getGranted().getServicesList().forEach(service -> addServiceToGraph(namespace, service));
   }
 
-  private void registerMembers(Namespace app) {
-    app.getGranted().getMembersList().forEach(member -> addMemberToGraph(app, member));
+  private void registerMembers(Namespace namespace) {
+    namespace.getGranted().getMembersList().forEach(member -> addMemberToGraph(namespace, member));
   }
 
-  private void registerOwners(Namespace app) {
-    app.getOwners().getItemsList().forEach(service -> addOwnerToGraph(app, service));
+  private void registerOwners(Namespace namespace) {
+    namespace.getOwners().getItemsList().forEach(service -> addOwnerToGraph(namespace, service));
   }
 
   private void updateAppInner(Namespace registered) {
     timed(saveAppTimer, () -> namespaceStorage.saveNamespace(registered));
   }
 
-  private void updateServices(Namespace app) {
-    app.getGranted().getServicesList().forEach(service -> addServiceToGraph(app, service));
+  private void updateServices(Namespace namespace) {
+    namespace.getGranted().getServicesList().forEach(service -> addServiceToGraph(namespace, service));
   }
 
-  private void updateMembers(Namespace app) {
-    app.getGranted().getMembersList().forEach(member -> addMemberToGraph(app, member));
+  private void updateMembers(Namespace namespace) {
+    namespace.getGranted().getMembersList().forEach(member -> addMemberToGraph(namespace, member));
   }
 
-  private void updateOwners(Namespace app) {
-    app.getOwners().getItemsList().forEach(service -> addOwnerToGraph(app, service));
+  private void updateOwners(Namespace namespace) {
+    namespace.getOwners().getItemsList().forEach(service -> addOwnerToGraph(namespace, service));
   }
 
-  private void addServiceToGraph(Namespace app, ServiceAccess service) {
+  private void addServiceToGraph(Namespace namespace, ServiceAccess service) {
 
     final String relation = ACCESS_RELATION;
-    final String subjectType = "app";
-    final String subjectKey = app.getKey();
+    final String subjectType = DefaultNamespaceService.SUBJECT_TYPE;
+    final String subjectKey = namespace.getKey();
     final String objectType = NamespaceService.SERVICE;
     final String objectKey = service.getKey();
 
     saveGraphRelation(
-        app, relation, subjectType, subjectKey, objectType, objectKey, saveServiceTimer);
+        namespace, relation, subjectType, subjectKey, objectType, objectKey, saveServiceTimer);
   }
 
-  private void addMemberToGraph(Namespace app, MemberAccess member) {
+  private void addMemberToGraph(Namespace namespace, MemberAccess member) {
     final String relation = ACCESS_RELATION;
-    final String subjectType = "app";
-    final String subjectKey = app.getKey();
+    final String subjectType = DefaultNamespaceService.SUBJECT_TYPE;
+    final String subjectKey = namespace.getKey();
     final String objectType = NamespaceService.MEMBER;
 
     if(! Strings.isNullOrEmpty(member.getUsername())) {
       final String objectKey = member.getUsername();
       saveGraphRelation(
-          app, relation, subjectType, subjectKey, objectType, objectKey, saveOwnerTimer);
+          namespace, relation, subjectType, subjectKey, objectType, objectKey, saveOwnerTimer);
     }
 
     if(! Strings.isNullOrEmpty(member.getEmail())) {
       final String objectKey = member.getEmail();
       saveGraphRelation(
-          app, relation, subjectType, subjectKey, objectType, objectKey, saveOwnerTimer);
+          namespace, relation, subjectType, subjectKey, objectType, objectKey, saveOwnerTimer);
     }
   }
 
-  private void addOwnerToGraph(Namespace app, Owner owner) {
+  private void addOwnerToGraph(Namespace namespace, Owner owner) {
     final String relation = OWNER_RELATION;
-    final String subjectType = "app";
-    final String subjectKey = app.getKey();
+    final String subjectType = DefaultNamespaceService.SUBJECT_TYPE;
+    final String subjectKey = namespace.getKey();
     final String objectType = NamespaceService.OWNER;
 
     if(! Strings.isNullOrEmpty(owner.getUsername())) {
       final String objectKey = owner.getUsername();
       saveGraphRelation(
-          app, relation, subjectType, subjectKey, objectType, objectKey, saveOwnerTimer);
+          namespace, relation, subjectType, subjectKey, objectType, objectKey, saveOwnerTimer);
     }
 
     if(! Strings.isNullOrEmpty(owner.getEmail())) {
       final String objectKey = owner.getEmail();
       saveGraphRelation(
-          app, relation, subjectType, subjectKey, objectType, objectKey, saveOwnerTimer);
+          namespace, relation, subjectType, subjectKey, objectType, objectKey, saveOwnerTimer);
     }
 
   }
 
   private void saveGraphRelation(
-      Namespace app,
+      Namespace namespace,
       String relation,
       String subjectType,
       String subjectKey,
@@ -454,7 +455,7 @@ public class DefaultNamespaceService implements NamespaceService, MetricsTimer {
       allows queries about a relation in general, but also about a relation
       between a subject and a specific type (range queries in dynamo can use a
       prefix pattern). In our case we can use it to track the owner members of an
-      app distinctly from the service members of an app, or just grab both membership
+      namespace distinctly from the service members of an namespace, or just grab both membership
       kinds.
 
       +-----------------------------+------------------------------------------+
@@ -472,65 +473,65 @@ public class DefaultNamespaceService implements NamespaceService, MetricsTimer {
     final String relationHashKey = subjectType + "." + subjectKey;
     final String relationRangeKey = rel + relation + "." + objectType + "." + objectKey;
     timed(timer,
-        () -> namespaceStorage.saveRelation(app, relationHashKey, relationRangeKey));
+        () -> namespaceStorage.saveRelation(namespace, relationHashKey, relationRangeKey));
 
     final String inverseRelationHashKey = objectType + "." + objectKey;
     final String inverseRelationRangeKey = inv + relation + "." + subjectType + "." + subjectKey;
     timed(timer,
-        () -> namespaceStorage.saveRelation(app, inverseRelationHashKey, inverseRelationRangeKey));
+        () -> namespaceStorage.saveRelation(namespace, inverseRelationHashKey, inverseRelationRangeKey));
   }
 
-  private void removeOwnerFromGraph(Namespace app, Owner owner) {
+  private void removeOwnerFromGraph(Namespace namespace, Owner owner) {
     final String relation = OWNER_RELATION;
-    final String subjectType = "app";
-    final String subjectKey = app.getKey();
+    final String subjectType = SUBJECT_TYPE;
+    final String subjectKey = namespace.getKey();
     final String objectType = NamespaceService.OWNER;
 
     if(! Strings.isNullOrEmpty(owner.getUsername())) {
       final String objectKey = owner.getUsername();
       removeGraphRelation(
-          app, relation, subjectType, subjectKey, objectType, objectKey, saveOwnerTimer);
+          namespace, relation, subjectType, subjectKey, objectType, objectKey, saveOwnerTimer);
     }
 
     if(! Strings.isNullOrEmpty(owner.getEmail())) {
       final String objectKey = owner.getEmail();
       removeGraphRelation(
-          app, relation, subjectType, subjectKey, objectType, objectKey, saveOwnerTimer);
+          namespace, relation, subjectType, subjectKey, objectType, objectKey, saveOwnerTimer);
     }
   }
 
-  private void removeMemberFromGraph(Namespace app, MemberAccess member) {
+  private void removeMemberFromGraph(Namespace namespace, MemberAccess member) {
     final String relation = ACCESS_RELATION;
-    final String subjectType = "app";
-    final String subjectKey = app.getKey();
+    final String subjectType = SUBJECT_TYPE;
+    final String subjectKey = namespace.getKey();
     final String objectType = NamespaceService.MEMBER;
 
     if(! Strings.isNullOrEmpty(member.getUsername())) {
       final String objectKey = member.getUsername();
       removeGraphRelation(
-          app, relation, subjectType, subjectKey, objectType, objectKey, saveOwnerTimer);
+          namespace, relation, subjectType, subjectKey, objectType, objectKey, saveOwnerTimer);
     }
 
     if(! Strings.isNullOrEmpty(member.getEmail())) {
       final String objectKey = member.getEmail();
       removeGraphRelation(
-          app, relation, subjectType, subjectKey, objectType, objectKey, saveOwnerTimer);
+          namespace, relation, subjectType, subjectKey, objectType, objectKey, saveOwnerTimer);
     }
   }
 
-  private void removeServiceFromGraph(Namespace app, ServiceAccess service) {
+  private void removeServiceFromGraph(Namespace namespace, ServiceAccess service) {
     final String relation = ACCESS_RELATION;
-    final String subjectType = "app";
-    final String subjectKey = app.getKey();
+    final String subjectType = SUBJECT_TYPE;
+    final String subjectKey = namespace.getKey();
     final String objectType = NamespaceService.SERVICE;
     final String objectKey = service.getKey();
 
     removeGraphRelation(
-        app, relation, subjectType, subjectKey, objectType, objectKey, removeRelationTimer);
+        namespace, relation, subjectType, subjectKey, objectType, objectKey, removeRelationTimer);
   }
 
   private void removeGraphRelation(
-      Namespace app,
+      Namespace namespace,
       String relation,
       String subjectType,
       String subjectKey,
@@ -544,12 +545,12 @@ public class DefaultNamespaceService implements NamespaceService, MetricsTimer {
     final String relationHashKey = subjectType + "." + subjectKey;
     final String relationRangeKey = rel + relation + "." + objectType + "." + objectKey;
     timed(timer,
-        () -> namespaceStorage.removeRelation(app, relationHashKey, relationRangeKey));
+        () -> namespaceStorage.removeRelation(namespace, relationHashKey, relationRangeKey));
 
     final String inverseRelationHashKey = objectType + "." + objectKey;
     final String inverseRelationRangeKey = inv + relation + "." + subjectType + "." + subjectKey;
     timed(timer,
-        () -> namespaceStorage.removeRelation(app, inverseRelationHashKey, inverseRelationRangeKey));
+        () -> namespaceStorage.removeRelation(namespace, inverseRelationHashKey, inverseRelationRangeKey));
   }
 
   private void configureMetrics(MetricRegistry metrics) {
@@ -561,8 +562,8 @@ public class DefaultNamespaceService implements NamespaceService, MetricsTimer {
         "saveServiceTimer"));
     saveMemberTimer = metrics.timer(MetricRegistry.name(DefaultNamespaceService.class,
         "saveMemberTimer"));
-    readAppTimer = metrics.timer(MetricRegistry.name(DefaultNamespaceService.class,
-        "readAppTimer"));
+    readNamespaceTimer = metrics.timer(MetricRegistry.name(DefaultNamespaceService.class,
+        "readNamespaceTimer"));
     removeRelationTimer = metrics.timer(MetricRegistry.name(DefaultNamespaceService.class,
         "removeRelationTimer"));
   }

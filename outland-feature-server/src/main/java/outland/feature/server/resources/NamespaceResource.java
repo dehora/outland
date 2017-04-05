@@ -34,7 +34,7 @@ import outland.feature.server.auth.AccessControlSupport;
 import outland.feature.server.auth.AuthPrincipal;
 
 @Resource
-@Path("/apps")
+@Path("/namespaces")
 public class NamespaceResource {
 
   private final NamespaceService namespaceService;
@@ -71,7 +71,7 @@ public class NamespaceResource {
 
     final long start = System.currentTimeMillis();
 
-    // no further acl check; if you are an authenticated AuthPrincipal, you can create apps
+    // no further acl check; if you are an authenticated AuthPrincipal, you can create namespaces
 
     URI loc = UriBuilder.fromUri(baseURI)
         .path(namespace.getKey())

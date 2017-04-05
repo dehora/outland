@@ -87,7 +87,7 @@ abstract public class GuiceApplication<T extends Configuration> extends Applicat
 
   /**
    * Access the Dropwizard {@link Environment} and/or the Guice {@link Injector}. This provides
-   * a hook for apps to add providers and resources for the application as an alternative to
+   * a hook for namespaces to add providers and resources for the application as an alternative to
    * accessing {@link #run} in a default Dropwizard app.
    *
    * @param configuration the app configuration
