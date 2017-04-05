@@ -26,7 +26,6 @@ services:
       - OUTLAND_FEATURE_REDIS_CACHE_HOST
       - OUTLAND_FEATURE_REDIS_CACHE_PORT
       - OUTLAND_FEATURE_REDIS_IDEM_HOST
-      - OUTLAND_FEATURE_REDIS_MAXCONN
       # set jvm options here
       - JAVA_OPTS
       # aws client env if you're using the "credentials" option
