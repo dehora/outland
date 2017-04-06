@@ -17,22 +17,19 @@ class FeatureResourceReal implements FeatureResource {
 
   private final ResourceProvider resourceProvider;
   private final AuthorizationProvider authorizationProvider;
-  private final String nsKey;
+  private final String namespace;
   private final URI baseUri;
-  private final boolean multiNamespaceEnabled;
 
   FeatureResourceReal(
       ResourceProvider resourceProvider,
       AuthorizationProvider authorizationProvider,
-      String nsKey,
-      URI baseUri,
-      boolean multiNamespaceEnabled
+      String namespace,
+      URI baseUri
   ) {
     this.resourceProvider = resourceProvider;
     this.authorizationProvider = authorizationProvider;
-    this.nsKey = nsKey;
+    this.namespace = namespace;
     this.baseUri = baseUri;
-    this.multiNamespaceEnabled = multiNamespaceEnabled;
   }
 
   @Override public Feature register(Feature feature) {
@@ -70,42 +67,42 @@ class FeatureResourceReal implements FeatureResource {
   }
 
   @Override public Feature findByKey(String featureKey) {
-    if(multiNamespaceEnabled) {
-      throw new FeatureException(Problem.configProblem("find_by_key_multi_with_no_ns_key",
-          "Find by key cannot be called with only a feature key when multi namespace is configured. "
-              + "Please supply a namespace key as well as a feature for multi namespace configuration."));
+    if(namespace == null) {
+      throw new FeatureException(Problem.configProblem("find_by_key_with_no_namespace",
+          "Find by key cannot be called with only a feature key and no default namespace configured. "
+              + "Please configure a default namespace or use the namespace/feature method."));
     }
 
     FeatureException.throwIfNull(featureKey, "Please supply a featureKey");
 
-    return findByKey(nsKey, featureKey);
+    return findByKey(namespace, featureKey);
   }
 
   @Override public FeatureCollection listFeatures() {
-    if(multiNamespaceEnabled) {
-      throw new FeatureException(Problem.configProblem("list_features_multi_with_no_ns_key",
-          "List features cannot be called without a namespace key when multi namespace is configured. "
-              + "Please supply a namespace key for multi namespace configuration."));
+    if(namespace == null) {
+      throw new FeatureException(Problem.configProblem("list_features_multi_with_no_namespace",
+          "List features cannot be called with only a feature key and no default namespace configured."
+              + "Please configure a default namespace or use the namespace/feature method."));
     }
 
-    return listFeatures(nsKey);
+    return listFeatures(namespace);
   }
 
   @Override public FeatureCollection listFeaturesSince(long timestamp, TimeUnit timeUnit) {
-    if(multiNamespaceEnabled) {
+    if(namespace ==  null) {
       throw new FeatureException(Problem.configProblem("list_features_since_multi_with_no_ns_key",
-          "List features since cannot be called without a namespace key when multi namespace is configured. "
-              + "Please supply a namespace key for multi namespace configuration."));
+          "List features since cannot be called with only a feature key and no default namespace configured."
+              + "Please configure a default namespace or use the namespace/feature method."));
     }
 
     FeatureException.throwIfNull(timeUnit, "Please supply a timeUnit");
 
-    return listFeaturesSince(nsKey, timestamp, timeUnit);
+    return listFeaturesSince(namespace, timestamp, timeUnit);
   }
 
   @Override
   public Feature findByKey(String namespace, String featureKey) {
-    FeatureException.throwIfNull(namespace, "Please supply a nsKey");
+    FeatureException.throwIfNull(namespace, "Please supply a namespace");
     FeatureException.throwIfNull(featureKey, "Please supply a featureKey");
 
     return findByKeyInner(namespace, featureKey);
@@ -113,14 +110,14 @@ class FeatureResourceReal implements FeatureResource {
 
   @Override
   public FeatureCollection listFeatures(String namespace) {
-    FeatureException.throwIfNull(namespace, "Please supply a nsKey");
+    FeatureException.throwIfNull(namespace, "Please supply a namespace");
 
     return listFeaturesInner(namespace);
   }
 
   @Override
   public FeatureCollection listFeaturesSince(String namespace, long timestamp, TimeUnit timeUnit) {
-    FeatureException.throwIfNull(namespace, "Please supply a nsKey");
+    FeatureException.throwIfNull(namespace, "Please supply a namespace");
     FeatureException.throwIfNull(timeUnit, "Please supply a timeUnit");
 
     return listFeaturesSinceInner(namespace, timestamp, timeUnit);

@@ -133,11 +133,11 @@ class FeatureStoreReal implements FeatureStore {
 
   private void loadFeaturesIntoCache() {
 
-    // only call the api when we are working with one namespace
-    if (client.namespace() != null) {
+    // only call the api when we are working with a default (pre-supplied) namespace
+    if (client.defaultNamespace() != null) {
       loadFromApiAttempted.getAndSet(true);
       logger.info("op=populateCache, action=attempt_load, source=api");
-      if (loadedFromApi(client.namespace())) {
+      if (loadedFromApi(client.defaultNamespace())) {
         loadFromApiSuccessful.getAndSet(true);
         logger.info("op=populateCache, action=attempt_load, source=api result=ok");
       }
@@ -182,13 +182,13 @@ class FeatureStoreReal implements FeatureStore {
     try {
 
       FeatureCollection all = null;
-      if(client.multiNamespaceEnabled()) {
+      if(client.defaultNamespace() == null) {
         logger.info("op=loadedFromLocal, action=attempt_load_multi_namespace, source=local");
         all = backingFeatureStore.loadAll();
       } else {
         logger.info("op=loadedFromLocal, action=attempt_load_single_namespace, source=local namespace={}",
-            client.namespace());
-        all = backingFeatureStore.findAll(client.namespace());
+            client.defaultNamespace());
+        all = backingFeatureStore.findAll(client.defaultNamespace());
       }
 
       if (all != null) {

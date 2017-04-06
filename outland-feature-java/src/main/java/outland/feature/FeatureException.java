@@ -1,7 +1,7 @@
 package outland.feature;
 
 /**
- * The top level exception thrown by feature clients. All feature client API exceptions extend this
+ * The top level exception thrown by the client. All client exceptions extend this.
  */
 public class FeatureException extends RuntimeException {
 
@@ -13,7 +13,7 @@ public class FeatureException extends RuntimeException {
    * @return the object if not null
    * @throws IllegalArgumentException if {@code obj} is {@code null}
    */
-  public static <T> T throwIfNull(T arg, String message) {
+  static <T> T throwIfNull(T arg, String message) {
     if (arg == null) {
       IllegalArgumentException cause = new IllegalArgumentException(message);
       throw new FeatureException(Problem.configProblem(cause.getMessage(), ""), cause);
@@ -41,6 +41,8 @@ public class FeatureException extends RuntimeException {
   }
 
   /**
+   * Object representation of an RFC7807 Problem. Used in the client to provide error details.
+   *
    * @return the problem detail
    */
   public Problem problem() {
