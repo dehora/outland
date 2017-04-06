@@ -4,7 +4,7 @@ import java.util.Optional;
 import outland.feature.proto.Feature;
 import outland.feature.proto.FeatureCollection;
 
-public class FeatureStoreNone implements FeatureStore {
+class FeatureStoreNone implements FeatureStore {
 
   @Override public Void put(Feature feature) {
     return null;

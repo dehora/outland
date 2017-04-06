@@ -20,7 +20,7 @@ import org.slf4j.LoggerFactory;
 import outland.feature.proto.Feature;
 import outland.feature.proto.FeatureCollection;
 
-public class FeatureStoreRocksDb implements FeatureStoreLocal, MeterTimer {
+class FeatureStoreRocksDb implements FeatureStoreLocal, MeterTimer {
 
   private static final Logger logger = LoggerFactory.getLogger("FeatureClient");
 

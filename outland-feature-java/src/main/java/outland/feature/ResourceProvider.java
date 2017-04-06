@@ -6,7 +6,7 @@ package outland.feature;
  * can be used via a lambda expression.
  */
 @FunctionalInterface
-public interface ResourceProvider {
+interface ResourceProvider {
 
   /**
    * Supply a new resource to access the server.
