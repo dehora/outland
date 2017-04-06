@@ -9,7 +9,7 @@ public interface FeatureStoreLocal {
 
   FeatureCollection loadAll() throws FeatureException;
 
-  FeatureCollection findAll(String appKey)  throws FeatureException;
+  FeatureCollection findAll(String namespace)  throws FeatureException;
 
   void close() throws FeatureException;
 }

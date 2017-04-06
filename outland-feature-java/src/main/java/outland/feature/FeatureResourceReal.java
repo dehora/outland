@@ -104,26 +104,26 @@ class FeatureResourceReal implements FeatureResource {
   }
 
   @Override
-  public Feature findByKey(String nsKey, String featureKey) {
-    FeatureException.throwIfNull(nsKey, "Please supply a nsKey");
+  public Feature findByKey(String namespace, String featureKey) {
+    FeatureException.throwIfNull(namespace, "Please supply a nsKey");
     FeatureException.throwIfNull(featureKey, "Please supply a featureKey");
 
-    return findByKeyInner(nsKey, featureKey);
+    return findByKeyInner(namespace, featureKey);
   }
 
   @Override
-  public FeatureCollection listFeatures(String nsKey) {
-    FeatureException.throwIfNull(nsKey, "Please supply a nsKey");
+  public FeatureCollection listFeatures(String namespace) {
+    FeatureException.throwIfNull(namespace, "Please supply a nsKey");
 
-    return listFeaturesInner(nsKey);
+    return listFeaturesInner(namespace);
   }
 
   @Override
-  public FeatureCollection listFeaturesSince(String nsKey, long timestamp, TimeUnit timeUnit) {
-    FeatureException.throwIfNull(nsKey, "Please supply a nsKey");
+  public FeatureCollection listFeaturesSince(String namespace, long timestamp, TimeUnit timeUnit) {
+    FeatureException.throwIfNull(namespace, "Please supply a nsKey");
     FeatureException.throwIfNull(timeUnit, "Please supply a timeUnit");
 
-    return listFeaturesSinceInner(nsKey, timestamp, timeUnit);
+    return listFeaturesSinceInner(namespace, timestamp, timeUnit);
   }
 
   private Feature findByKeyInner(String nsKey, String key) {
@@ -196,9 +196,9 @@ class FeatureResourceReal implements FeatureResource {
         .requestThrowing(Resource.POST, url, prepareOptions(feature.getNamespace()), feature);
   }
 
-  private ResourceOptions prepareOptions(String nsKey) {
+  private ResourceOptions prepareOptions(String namespace) {
     return ResourceSupport.options(APPLICATION_JSON)
-        .appKey(nsKey)
+        .namespace(namespace)
         .securityTokenProvider(authorizationProvider);
   }
 }

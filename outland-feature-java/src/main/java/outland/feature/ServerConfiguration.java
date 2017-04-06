@@ -12,11 +12,11 @@ public class ServerConfiguration {
   static final int REFRESH_AFTER_WRITE_S = 8;
 
   private URI baseURI;
-  private String appKey;
+  private String namespace;
   private long connectTimeout = 5_000L;
   private long readTimeout = 3_000L;
   private boolean httpLoggingEnabled;
-  private boolean multiAppEnabled;
+  private boolean multiNamespaceEnabled;
   private boolean localStoreEnabled = true;
   private String certificatePath;
   private long maxCacheSize = MAX_CACHE_SIZE;
@@ -71,12 +71,12 @@ public class ServerConfiguration {
     return this;
   }
 
-  public String appKey() {
-    return appKey;
+  public String namespace() {
+    return namespace;
   }
 
-  public ServerConfiguration appKey(String appKey) {
-    this.appKey = appKey;
+  public ServerConfiguration namespace(String namespace) {
+    this.namespace = namespace;
     return this;
   }
 
@@ -91,12 +91,12 @@ public class ServerConfiguration {
 
   @SuppressWarnings("WeakerAccess")
   public ServerConfiguration multiAppEnabled(boolean multiAppEnabled) {
-    this.multiAppEnabled = multiAppEnabled;
+    this.multiNamespaceEnabled = multiAppEnabled;
     return this;
   }
 
   @SuppressWarnings("WeakerAccess") public boolean multiAppEnabled() {
-    return this.multiAppEnabled;
+    return this.multiNamespaceEnabled;
   }
 
   @SuppressWarnings({"WeakerAccess", "SameParameterValue"})
@@ -144,20 +144,20 @@ public class ServerConfiguration {
         "Please provide a base URI for the feature server");
 
 
-    if(! multiAppEnabled() && appKey() == null) {
-      throw new FeatureException(Problem.configProblem("neither_multi_app_or_single_app_enabled",
-          "Please configure the client to have an app id, or use multi app support."));
+    if(! multiAppEnabled() && namespace() == null) {
+      throw new FeatureException(Problem.configProblem("neither_multi_namespace_or_single_namespace_enabled",
+          "Please configure the client to have a namespace, or use multi namespace support."));
     }
 
-    if(! multiAppEnabled() && Strings.isNullOrEmpty(appKey())) {
+    if(! multiAppEnabled() && Strings.isNullOrEmpty(namespace())) {
 
-      throw new FeatureException(Problem.configProblem("neither_multi_app_or_single_app_enabled",
-          "Please configure the client to have an app id, or use multi app support."));
+      throw new FeatureException(Problem.configProblem("neither_multi_namespace_or_single_namespace_enabled",
+          "Please configure the client to have a namespace, or use multi namespace support."));
     }
 
-    if (multiAppEnabled() && appKey() != null) {
-      throw new FeatureException(Problem.configProblem("multi_app_and_single_app_enabled",
-          "Cannot configure multi app support and a single app at the same time."));
+    if (multiAppEnabled() && namespace() != null) {
+      throw new FeatureException(Problem.configProblem("multi_namespace_and_single_namespace_enabled",
+          "Cannot configure multi namespace support and a single namespace at the same time."));
     }
 
   }

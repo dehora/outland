@@ -6,20 +6,20 @@ public class Resources {
 
   private final AuthorizationProvider authorizationProvider;
   private final ResourceProvider resourceProvider;
-  private final String appKey;
+  private final String namespace;
   private final URI baseURI;
   private final boolean multiAppEnabled;
 
   Resources(
       ResourceProvider resourceProvider,
       AuthorizationProvider authorizationProvider,
-      String appKey,
+      String namespace,
       URI baseUri,
       boolean multiAppEnabled
   ) {
     this.resourceProvider = resourceProvider;
     this.authorizationProvider = authorizationProvider;
-    this.appKey = appKey;
+    this.namespace = namespace;
     this.baseURI = baseUri;
     this.multiAppEnabled = multiAppEnabled;
   }
@@ -28,7 +28,7 @@ public class Resources {
     return new FeatureResourceReal(
         resourceProvider,
         authorizationProvider,
-        appKey,
+        namespace,
         baseURI,
         multiAppEnabled
     );

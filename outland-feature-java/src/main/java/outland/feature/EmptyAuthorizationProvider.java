@@ -7,7 +7,7 @@ import java.util.Optional;
  */
 public class EmptyAuthorizationProvider implements AuthorizationProvider {
 
-  @Override public Optional<Authorization> authorization(String appKey, String scope) {
+  @Override public Optional<Authorization> authorization(String namespace, String scope) {
     return Optional.empty();
   }
 }
