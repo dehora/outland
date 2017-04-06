@@ -5,6 +5,9 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * Configure the client for an API server.
+ */
 public class ServerConfiguration {
 
   static final long MAX_CACHE_SIZE = 2048L;
@@ -22,10 +25,19 @@ public class ServerConfiguration {
   private int initialCacheSize = INITIAL_CAPACITY;
   private long refreshCacheAfterWrite = REFRESH_AFTER_WRITE_S;
 
+  /**
+   * The base API url the client is using.
+   */
   public URI baseURI() {
     return baseURI;
   }
 
+  /**
+   * Turn on http request/response logging. The http traffic will be logged at info.
+   *
+   * @param baseURI the URI as a string
+   * @return this.
+   */
   public ServerConfiguration baseURI(String baseURI) {
     try {
       baseURI(new URI(baseURI));
@@ -36,6 +48,12 @@ public class ServerConfiguration {
     }
   }
 
+  /**
+   * Set the required base URI for the server. All other resource URLs are derived from this.
+   *
+   * @param baseURI the URI
+   * @return this.
+   */
   public ServerConfiguration baseURI(URI baseURI) {
     this.baseURI = baseURI;
     return this;
@@ -45,8 +63,16 @@ public class ServerConfiguration {
     return connectTimeout;
   }
 
-  public ServerConfiguration connectTimeout(long connectTimeout) {
-    this.connectTimeout = connectTimeout;
+  /**
+   * Optionally set the default connect timeout for new connections. If 0, no timeout, otherwise
+   * values must be between 1 and {@link Integer#MAX_VALUE}.
+   *
+   * @param connectTimeout the timeout value.
+   * @param unit the time unit
+   * @return this.
+   */
+  public ServerConfiguration connectTimeout(long connectTimeout, TimeUnit unit) {
+    this.connectTimeout = unit.toMillis(connectTimeout);
     return this;
   }
 
@@ -54,8 +80,16 @@ public class ServerConfiguration {
     return readTimeout;
   }
 
-  public ServerConfiguration readTimeout(long readTimeout) {
-    this.readTimeout = readTimeout;
+  /**
+   * Optionally set the default read timeout for connections. If 0, no timeout, otherwise
+   * values must be between 1 and {@link Integer#MAX_VALUE}.
+   *
+   * @param readTimeout the timeout value.
+   * @param unit the time unit
+   * @return this.
+   */
+  public ServerConfiguration readTimeout(long readTimeout, TimeUnit unit) {
+    this.readTimeout = unit.toMillis(readTimeout);
     return this;
   }
 
@@ -63,6 +97,19 @@ public class ServerConfiguration {
     return certificatePath;
   }
 
+  /**
+   * Supply a path to a set of certificates.
+   * <p>If your target server is using a self-signed or other certificate and for some
+   * reason you can't install that cert into the system trust store using something like
+   * keytool you can supply the cert here. This will cause the client to install any certificates
+   * it finds in the supplied directory; files with `*.crt` and `*.pem` extensions are loaded. The
+   * path must begin with <code>"file:///"</code> or <code>"classpath:"</code> to indicate whether
+   * the certs are loaded from a file directory or  the classpath. If no
+   * <code>certificatePath</code> is supplied, the system defaults are used.
+   * </p>
+   * @param certificatePath the classpath or file path to the certs
+   * @return this
+   */
   public ServerConfiguration certificatePath(String certificatePath) {
     this.certificatePath = certificatePath;
     return this;
@@ -72,12 +119,23 @@ public class ServerConfiguration {
     return defaultNamespace;
   }
 
+  /**
+   * Configure a default namespace. All features are housed within a namespace.
+   * <p>
+   * This is used for {@link FeatureClient} and  {@link FeatureResource} calls that don't have
+   * the namespace as an argument. Enabling this does not interfere with calls which supply
+   * the namespace argument.
+   * </p>
+   *
+   * @param defaultNamespace the default namespace.
+   * @return this.
+   */
   public ServerConfiguration defaultNamespace(String defaultNamespace) {
     /*
      fast fail because a null namespace is logically ok as it means we expect to be called always
       with the namespace/feature variants, but setting a null/empty is a bug.
       */
-    if(Strings.isNullOrEmpty(defaultNamespace)) {
+    if (Strings.isNullOrEmpty(defaultNamespace)) {
       throw new FeatureException(Problem.configProblem("empty_namespace",
           "Please configure a non-null and non-empty namespace."));
     }
@@ -88,6 +146,11 @@ public class ServerConfiguration {
     return this;
   }
 
+  /**
+   * Turn on http request/response logging. The http traffic will be logged at info.
+   *
+   * @return this.
+   */
   public ServerConfiguration httpLoggingEnabled(boolean httpLoggingEnabled) {
     this.httpLoggingEnabled = httpLoggingEnabled;
     return this;
@@ -97,6 +160,12 @@ public class ServerConfiguration {
     return httpLoggingEnabled;
   }
 
+  /**
+   * Enable/disable local persistent storage of features. The default is enabled (true).
+   *
+   * @param localStoreEnabled enable/disable storage.
+   * @return this.
+   */
   public ServerConfiguration localStoreEnabled(boolean localStoreEnabled) {
     this.localStoreEnabled = localStoreEnabled;
     return this;
@@ -106,6 +175,12 @@ public class ServerConfiguration {
     return maxCacheSize;
   }
 
+  /**
+   * Configure the maximum number of items to cache.
+   *
+   * @param maxCacheSize the max size of the cache
+   * @return this.
+   */
   public ServerConfiguration maxCacheSize(long maxCacheSize) {
     this.maxCacheSize = maxCacheSize;
     return this;
@@ -115,6 +190,12 @@ public class ServerConfiguration {
     return initialCacheSize;
   }
 
+  /**
+   * Configure the initial cache size before resizing.
+   *
+   * @param initialCacheSize the initial cache size.
+   * @return this.
+   */
   public ServerConfiguration initialCacheSize(int initialCacheSize) {
     this.initialCacheSize = initialCacheSize;
     return this;
@@ -124,6 +205,13 @@ public class ServerConfiguration {
     return refreshCacheAfterWrite;
   }
 
+  /**
+   * When to refresh the in-memory cache of a feature.
+   *
+   * @param refreshCacheAfterWrite when to refresh
+   * @param unit the time unit
+   * @return this
+   */
   public ServerConfiguration refreshCacheAfterWrite(long refreshCacheAfterWrite, TimeUnit unit) {
     this.refreshCacheAfterWrite = unit.toSeconds(refreshCacheAfterWrite);
     return this;

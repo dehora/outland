@@ -3,7 +3,7 @@ package outland.feature;
 import outland.feature.proto.Feature;
 import outland.feature.proto.FeatureCollection;
 
-public class FeatureStoreLocalNone implements FeatureStoreLocal {
+class FeatureStoreLocalNone implements FeatureStoreLocal {
 
   @Override public Void put(Feature feature) throws FeatureException {
     return null;

@@ -2,6 +2,10 @@ package outland.feature;
 
 import java.net.URI;
 
+/**
+ * Allows access to the API via resource classes.
+ *
+ */
 public class Resources {
 
   private final AuthorizationProvider authorizationProvider;
@@ -21,6 +25,11 @@ public class Resources {
     this.baseURI = baseUri;
   }
 
+  /**
+   * The resource for features.
+   *
+   * @return a resource for working with features.
+   */
   public FeatureResource features() {
     return new FeatureResourceReal(
         resourceProvider,

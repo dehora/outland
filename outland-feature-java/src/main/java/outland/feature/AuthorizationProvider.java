@@ -3,15 +3,14 @@ package outland.feature;
 import java.util.Optional;
 
 /**
- * Provides a authorization string that can be used to authorize requests against the server or an
- * outland node. Acts as a {@link FunctionalInterface} and can be supplied as a lambda expression.
+ * Provides a authorization string that can be used to authorize requests.
+ * Acts as a {@link FunctionalInterface} and can be supplied as a lambda expression.
  */
 @FunctionalInterface
 public interface AuthorizationProvider {
 
   /**
-   * Provide an authorization string that can be used to authorize requests against the server or an
-   * outland node.
+   * Provide an authorization string that can be used to authorize requests.
    *
    * @param namespace the namespace for the feature request
    * @param scope an authorization scope such as an OAuth scope
