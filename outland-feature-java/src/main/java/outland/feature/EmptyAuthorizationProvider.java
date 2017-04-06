@@ -3,7 +3,7 @@ package outland.feature;
 import java.util.Optional;
 
 /**
- * Returns optional empty instead of a authorization.
+ * Returns optional empty instead of an authorization.
  */
 public class EmptyAuthorizationProvider implements AuthorizationProvider {
 
