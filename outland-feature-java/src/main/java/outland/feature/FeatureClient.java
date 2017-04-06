@@ -337,7 +337,9 @@ public class FeatureClient {
         localFeatureStore = new FeatureStoreLocalNone();
       }
 
-      return new FeatureClient(this);
+      final FeatureClient featureClient = new FeatureClient(this);
+      Runtime.getRuntime().addShutdownHook(new Thread(featureClient::close));
+      return featureClient;
     }
 
     @SuppressWarnings("WeakerAccess") public Builder serverConfiguration(
