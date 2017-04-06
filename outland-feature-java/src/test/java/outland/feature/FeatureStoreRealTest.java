@@ -19,7 +19,7 @@ public class FeatureStoreRealTest {
     ServerConfiguration serverConfiguration =
         new ServerConfiguration()
             .baseURI("http://localhost")
-            .multiAppEnabled(true); //
+            ;
 
     final FeatureClient client = FeatureClient.newBuilder()
         // set useless store and backing
@@ -28,7 +28,7 @@ public class FeatureStoreRealTest {
         .serverConfiguration(serverConfiguration)
         .build();
 
-    assertTrue(client.namespace() == null);
+    assertTrue(client.defaultNamespace() == null);
     assertTrue(client.localStoreEnabled());
 
     final File dbPath = Files.createTempDirectory("unittest_outland_feature_store_").toFile();
@@ -63,7 +63,7 @@ public class FeatureStoreRealTest {
         new ServerConfiguration()
             .baseURI("http://localhost")
             .localStoreEnabled(false)
-            .multiAppEnabled(true); //
+            ; //
 
     final FeatureClient client = FeatureClient.newBuilder()
         // set useless store and backing
@@ -72,8 +72,7 @@ public class FeatureStoreRealTest {
         .serverConfiguration(serverConfiguration)
         .build();
 
-    assertTrue(client.namespace() == null);
-    assertTrue(client.multiNamespaceEnabled());
+    assertTrue(client.defaultNamespace() == null);
     assertFalse(client.localStoreEnabled());
 
     FeatureStoreLocal rocks =
@@ -104,7 +103,7 @@ public class FeatureStoreRealTest {
         new ServerConfiguration()
             .baseURI("http://localhost")
             .localStoreEnabled(false) // disable rocks
-            .namespace("anapp");
+            .defaultNamespace("anapp");
 
     final FeatureClient client = FeatureClient.newBuilder()
         // set useless store and backing
@@ -113,7 +112,7 @@ public class FeatureStoreRealTest {
         .serverConfiguration(serverConfiguration)
         .build();
 
-    assertTrue(client.namespace() != null);
+    assertTrue(client.defaultNamespace() != null);
     assertFalse(client.localStoreEnabled());
 
     FeatureStoreLocal rocks =
@@ -144,7 +143,7 @@ public class FeatureStoreRealTest {
     ServerConfiguration serverConfiguration =
         new ServerConfiguration()
             .baseURI("http://localhost")
-            .namespace("the_app");
+            .defaultNamespace("the_app");
 
     final FeatureClient client = FeatureClient.newBuilder()
         // set useless store and backing
@@ -180,7 +179,7 @@ public class FeatureStoreRealTest {
     ServerConfiguration serverConfiguration =
         new ServerConfiguration()
             .baseURI("http://localhost")
-            .namespace("the_app");
+            .defaultNamespace("the_app");
 
     final FeatureClient client = FeatureClient.newBuilder()
         // set useless store and backing
@@ -215,7 +214,7 @@ public class FeatureStoreRealTest {
     ServerConfiguration serverConfiguration =
         new ServerConfiguration()
             .baseURI("http://localhost")
-            .namespace("the_app");
+            .defaultNamespace("the_app");
 
     final FeatureClient client = FeatureClient.newBuilder()
         // storage requests are circumvented with exceptions

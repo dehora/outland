@@ -8,20 +8,17 @@ public class Resources {
   private final ResourceProvider resourceProvider;
   private final String namespace;
   private final URI baseURI;
-  private final boolean multiAppEnabled;
 
   Resources(
       ResourceProvider resourceProvider,
       AuthorizationProvider authorizationProvider,
       String namespace,
-      URI baseUri,
-      boolean multiAppEnabled
+      URI baseUri
   ) {
     this.resourceProvider = resourceProvider;
     this.authorizationProvider = authorizationProvider;
     this.namespace = namespace;
     this.baseURI = baseUri;
-    this.multiAppEnabled = multiAppEnabled;
   }
 
   public FeatureResource features() {
@@ -29,8 +26,7 @@ public class Resources {
         resourceProvider,
         authorizationProvider,
         namespace,
-        baseURI,
-        multiAppEnabled
+        baseURI
     );
   }
 }

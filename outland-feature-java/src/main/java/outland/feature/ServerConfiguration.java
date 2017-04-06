@@ -12,22 +12,21 @@ public class ServerConfiguration {
   static final int REFRESH_AFTER_WRITE_S = 8;
 
   private URI baseURI;
-  private String namespace;
+  private String defaultNamespace;
   private long connectTimeout = 5_000L;
   private long readTimeout = 3_000L;
   private boolean httpLoggingEnabled;
-  private boolean multiNamespaceEnabled;
   private boolean localStoreEnabled = true;
   private String certificatePath;
   private long maxCacheSize = MAX_CACHE_SIZE;
   private int initialCacheSize = INITIAL_CAPACITY;
   private long refreshCacheAfterWrite = REFRESH_AFTER_WRITE_S;
 
-  @SuppressWarnings("WeakerAccess") public URI baseURI() {
+  public URI baseURI() {
     return baseURI;
   }
 
-  @SuppressWarnings("WeakerAccess") public ServerConfiguration baseURI(String baseURI) {
+  public ServerConfiguration baseURI(String baseURI) {
     try {
       baseURI(new URI(baseURI));
       return this;
@@ -37,32 +36,30 @@ public class ServerConfiguration {
     }
   }
 
-  @SuppressWarnings("WeakerAccess") public ServerConfiguration baseURI(URI baseURI) {
+  public ServerConfiguration baseURI(URI baseURI) {
     this.baseURI = baseURI;
     return this;
   }
 
-  @SuppressWarnings("WeakerAccess") public long connectTimeout() {
+  public long connectTimeout() {
     return connectTimeout;
   }
 
-  @SuppressWarnings({"WeakerAccess", "SameParameterValue"})
   public ServerConfiguration connectTimeout(long connectTimeout) {
     this.connectTimeout = connectTimeout;
     return this;
   }
 
-  @SuppressWarnings("WeakerAccess") public long readTimeout() {
+  public long readTimeout() {
     return readTimeout;
   }
 
-  @SuppressWarnings({"WeakerAccess", "SameParameterValue"})
   public ServerConfiguration readTimeout(long readTimeout) {
     this.readTimeout = readTimeout;
     return this;
   }
 
-  @SuppressWarnings("WeakerAccess") public String certificatePath() {
+  public String certificatePath() {
     return certificatePath;
   }
 
@@ -71,12 +68,23 @@ public class ServerConfiguration {
     return this;
   }
 
-  public String namespace() {
-    return namespace;
+  public String defaultNamespace() {
+    return defaultNamespace;
   }
 
-  public ServerConfiguration namespace(String namespace) {
-    this.namespace = namespace;
+  public ServerConfiguration defaultNamespace(String defaultNamespace) {
+    /*
+     fast fail because a null namespace is logically ok as it means we expect to be called always
+      with the namespace/feature variants, but setting a null/empty is a bug.
+      */
+    if(Strings.isNullOrEmpty(defaultNamespace)) {
+      throw new FeatureException(Problem.configProblem("empty_namespace",
+          "Please configure a non-null and non-empty namespace."));
+    }
+
+    // todo: reject junk once we define the legal namespace regex on the api
+
+    this.defaultNamespace = defaultNamespace;
     return this;
   }
 
@@ -85,27 +93,15 @@ public class ServerConfiguration {
     return this;
   }
 
-  @SuppressWarnings("WeakerAccess") public boolean httpLoggingEnabled() {
+  public boolean httpLoggingEnabled() {
     return httpLoggingEnabled;
   }
 
-  @SuppressWarnings("WeakerAccess")
-  public ServerConfiguration multiAppEnabled(boolean multiAppEnabled) {
-    this.multiNamespaceEnabled = multiAppEnabled;
-    return this;
-  }
-
-  @SuppressWarnings("WeakerAccess") public boolean multiAppEnabled() {
-    return this.multiNamespaceEnabled;
-  }
-
-  @SuppressWarnings({"WeakerAccess", "SameParameterValue"})
   public ServerConfiguration localStoreEnabled(boolean localStoreEnabled) {
     this.localStoreEnabled = localStoreEnabled;
     return this;
   }
 
-  @SuppressWarnings("WeakerAccess")
   public long maxCacheSize() {
     return maxCacheSize;
   }
@@ -115,7 +111,6 @@ public class ServerConfiguration {
     return this;
   }
 
-  @SuppressWarnings("WeakerAccess")
   public int initialCacheSize() {
     return initialCacheSize;
   }
@@ -125,7 +120,6 @@ public class ServerConfiguration {
     return this;
   }
 
-  @SuppressWarnings("WeakerAccess")
   public long refreshCacheAfterWriteSeconds() {
     return refreshCacheAfterWrite;
   }
@@ -135,30 +129,12 @@ public class ServerConfiguration {
     return this;
   }
 
-  @SuppressWarnings("WeakerAccess") public boolean localStoreEnabled() {
+  public boolean localStoreEnabled() {
     return localStoreEnabled;
   }
 
   void validate() {
     FeatureException.throwIfNull(baseURI(),
         "Please provide a base URI for the feature server");
-
-
-    if(! multiAppEnabled() && namespace() == null) {
-      throw new FeatureException(Problem.configProblem("neither_multi_namespace_or_single_namespace_enabled",
-          "Please configure the client to have a namespace, or use multi namespace support."));
-    }
-
-    if(! multiAppEnabled() && Strings.isNullOrEmpty(namespace())) {
-
-      throw new FeatureException(Problem.configProblem("neither_multi_namespace_or_single_namespace_enabled",
-          "Please configure the client to have a namespace, or use multi namespace support."));
-    }
-
-    if (multiAppEnabled() && namespace() != null) {
-      throw new FeatureException(Problem.configProblem("multi_namespace_and_single_namespace_enabled",
-          "Cannot configure multi namespace support and a single namespace at the same time."));
-    }
-
   }
 }

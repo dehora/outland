@@ -12,25 +12,24 @@ import static org.junit.Assert.assertNull;
 public class FeatureClientTest {
 
   @Test
-  public void throwMultiAndSingleApp() {
+  public void testWithAndWithoutDefaultNamespaceIsOk() {
     ServerConfiguration serverConfiguration =
         new ServerConfiguration()
             .baseURI("http://localhost")
-            .namespace("the_app")
-            .multiAppEnabled(true);
+            .defaultNamespace("the_app")
+            ;
 
-    assertTrue(serverConfiguration.multiAppEnabled());
-    assertTrue(serverConfiguration.namespace() != null);
+    assertTrue(serverConfiguration.defaultNamespace() != null);
 
+    // we can create a client without suppyling a default ns
     try {
       FeatureClient.newBuilder()
           .serverConfiguration(serverConfiguration)
           .featureStore(new FeatureStoreNone())
           .localFeatureStore(new FeatureStoreLocalNone())
           .build();
-      fail();
     } catch (FeatureException e) {
-      assertEquals("multi_app_and_single_app_enabled", e.problem().title());
+      fail();
     }
   }
 
@@ -40,7 +39,7 @@ public class FeatureClientTest {
     ServerConfiguration serverConfiguration =
         new ServerConfiguration()
             .baseURI("http://localhost")
-            .namespace("the_app");
+            .defaultNamespace("the_app");
 
     final FeatureClient client = FeatureClient.newBuilder()
         .serverConfiguration(serverConfiguration)
@@ -92,7 +91,7 @@ public class FeatureClientTest {
       ServerConfiguration serverConfiguration =
           new ServerConfiguration()
               .baseURI("http://localhost")
-              .namespace("the_app");
+              .defaultNamespace("the_app");
 
       client = FeatureClient.newBuilder()
           .featureStore(new FeatureStoreNone())

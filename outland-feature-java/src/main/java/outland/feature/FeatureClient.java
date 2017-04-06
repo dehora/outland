@@ -4,6 +4,7 @@ import com.codahale.metrics.MetricRegistry;
 import java.net.URI;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
+import javax.swing.text.html.Option;
 import okhttp3.OkHttpClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,6 +14,7 @@ import outland.feature.proto.OptionType;
 /**
  * A client which can be used to check feature state and access the feature management APIs.
  * Clients must be created via a {@link FeatureClient.Builder}.
+ *
  */
 public class FeatureClient {
 
@@ -25,16 +27,14 @@ public class FeatureClient {
   private final Resources resources;
   private final ContentSupport contentSupport;
   private final URI baseURI;
-  private final String namespace;
-  private final boolean multiNamespaceEnabled;
+  private final String defaultNamespace;
   private final boolean localStoreEnabled;
   private final MetricRegistry metricRegistry;
 
   public FeatureClient(Builder builder) {
     this.serverConfiguration = builder.serverConfiguration;
     this.baseURI = serverConfiguration.baseURI();
-    this.namespace = serverConfiguration.namespace();
-    this.multiNamespaceEnabled = serverConfiguration.multiAppEnabled();
+    this.defaultNamespace = serverConfiguration.defaultNamespace();
     this.localStoreEnabled = serverConfiguration.localStoreEnabled();
     this.authorizationProvider = builder.authorizationProvider;
     this.resourceProvider = builder.resourceProvider;
@@ -43,9 +43,8 @@ public class FeatureClient {
     this.resources = new Resources(
         this.resourceProvider,
         this.authorizationProvider,
-        this.namespace,
-        this.baseURI,
-        this.multiNamespaceEnabled
+        this.defaultNamespace,
+        this.baseURI
     );
     FeatureStoreLocal localFeatureStore = builder.localFeatureStore;
 
@@ -65,9 +64,6 @@ public class FeatureClient {
 
   /**
    * Get a builder that can construct a new client. Clients can't be created directly.
-   * <p>
-   * If the feature is not found, the result is always false.
-   * </p>
    *
    * @return a new builder
    */
@@ -78,40 +74,52 @@ public class FeatureClient {
   /**
    * Check and see if a feature is enabled.
    * <p>
-   *   The client stores feature state locally in a cache, and will periodically refresh
-   *   the cache record for a key by checking the remote API it's configured to use.
+   * This is a convenience call for {@link #enabledFor(String, String)} where the namespace
+   * argument is taken from  {@link #defaultNamespace()}
    * </p>
    * <p>
-   *   The feature is considered enabled if the underlying {@link Feature} has a state equal
-   *   to  {@link Feature.State#on}. The call will return false for the following scenarios:
-   *   <ol>
-   *     <li>If the underlying {@link Feature} has a state equal to {@link Feature.State#off}.</li>
-   *     <li>If the feature does not exist.</li>
-   *     <li>If there was an internal error. </li>
-   *   </ol>
+   * The client stores feature state locally in a cache, and will periodically refresh
+   * the cache record for a key by checking the remote API it's configured to use.
    * </p>
    * <p>
-   *   <b>Note</b> the last point, the client is designed generally to not throw exceptions
-   *   at the call site, preferring instead to return false and act as if the feature was
-   *   disabled or non-existent. Generally this means you should strongly prefer to write code
-   *   that fires when the feature is on, rather than on the basis the feature is off. If you
-   *   want to throw an exception for a missing feature, use {@link #enabledThrowing}.
+   * The feature is considered enabled if the underlying {@link Feature} has a state equal
+   * to  {@link Feature.State#on}. The call will return false for the following scenarios:
+   * <ol>
+   * <li>If the underlying {@link Feature} has a state equal to {@link Feature.State#off}.</li>
+   * <li>The {@link Feature} is enabled, but is a boolean option type and the boolean option
+   * evaluated to false. </li>
+   * <li>If the feature does not exist.</li>
+   * <li>If there was an internal error. </li>
+   * </ol>
+   * </p>
+   * <p>
+   * <b>Note</b> the last point - the client is designed generally to not throw exceptions
+   * at the call site, preferring instead to return false and act as if the feature was
+   * disabled or non-existent. Generally this means you should strongly prefer to write code
+   * that fires when the feature is on, rather than on the basis the feature is off. If you
+   * want to throw an exception for a missing feature, use {@link #enabledThrowing}.
    * </p>
    *
    * @param featureKey the feature key defined for the feature
-   * @throws FeatureException if the supplied featureKey is null.
-   * @return true if the feature is enabled. Returns false if the feature is not enabled, not
-   * known, or there was an internal error.
+   * @return true if the feature is enabled. Returns false if the feature is not enabled, not known,
+   * or there was an internal error.
+   * @throws FeatureException if the supplied featureKey is null, or, the default namespace has not
+   * been configured.
    */
-  @SuppressWarnings("WeakerAccess") public boolean enabled(String featureKey) {
-    throwIfMultiApp();
+  public boolean enabled(String featureKey) {
+    throwIfNoDefaultNamespace();
     FeatureException.throwIfNull(featureKey, "Please supply a feature key");
 
-    return enabledInner(namespace(), featureKey);
+    //noinspection ConstantConditions
+    return enabledInner(defaultNamespace, featureKey);
   }
 
   /**
    * Check and see if a feature is enabled.
+   * <p>
+   * This is a convenience call for {@link #enabledForThrowing(String, String)}
+   * where the namespace argument is taken from  {@link #defaultNamespace()}.
+   * </p>
    * <p>
    * This is same as {@link #enabled(String)} except it will throw a {@link FeatureException}
    * if the feature does not exist or there is an internal exception.
@@ -120,51 +128,102 @@ public class FeatureClient {
    * @param featureKey the feature key defined for the feature
    * @return true if the feature is enabled ({@link Feature.State#on}). Returns false if the feature
    * is not enabled ({@link Feature.State#off}).
-   * @throws FeatureException if the supplied featureKey is null, the feature does not exist or
-   * there was an internal error.
+   * @throws FeatureException if the supplied featureKey is null, the default namespace has not been
+   * configured, the feature does not exist or there was an internal error.
    */
-  @SuppressWarnings("WeakerAccess") public boolean enabledThrowing(String featureKey)
+  public boolean enabledThrowing(String featureKey)
       throws FeatureException {
-    throwIfMultiApp();
+    throwIfNoDefaultNamespace();
     FeatureException.throwIfNull(featureKey, "Please supply a feature key");
 
-    return enabledThrowingInner(namespace(), featureKey);
+    //noinspection ConstantConditions
+    return enabledThrowingInner(defaultNamespace, featureKey);
   }
 
-  @SuppressWarnings("WeakerAccess") public boolean enabledFor(String namespace, String featureKey) {
-    FeatureException.throwIfNull(namespace, "Please supply a namespace");
+  /**
+   * Check and see if a feature is enabled.
+   * <p>
+   * The client stores feature state locally in a cache, and will periodically refresh
+   * the cache record for a key by checking the remote API it's configured to use.
+   * </p>
+   * <p>
+   * The feature is considered enabled if the underlying {@link Feature} has a state equal
+   * to  {@link Feature.State#on}. The call will return false for the following scenarios:
+   * <ol>
+   * <li>If the underlying {@link Feature} has a state equal to {@link Feature.State#off}.</li>
+   * <li>The {@link Feature} is enabled, but is a boolean option type and the boolean option
+   * evaluated to false. </li>
+   * <li>If the feature does not exist.</li>
+   * <li>If there was an internal error. </li>
+   * </ol>
+   * </p>
+   * <p>
+   * <b>Note</b> the last point - the client is designed generally to not throw exceptions
+   * at the call site, preferring instead to return false and act as if the feature was
+   * disabled or non-existent. Generally this means you should strongly prefer to write code
+   * that fires when the feature is on, rather than on the basis the feature is off. If you
+   * want to throw an exception for a missing feature, use {@link #enabledThrowing}.
+   * </p>
+   *
+   * @param namespace the namespace the feature belongs to.
+   * @param featureKey the feature key defined for the feature
+   * @return true if the feature is enabled. Returns false if the feature is not enabled, not known,
+   * or there was an internal error.
+   * @throws FeatureException if the supplied featureKey is null, or, the default namespace has not
+   * been configured.
+   */
+  public boolean enabledFor(String namespace, String featureKey) {
+    FeatureException.throwIfNull(namespace, "Please supply a defaultNamespace");
     FeatureException.throwIfNull(featureKey, "Please supply a featureKey");
 
     return enabledInner(namespace, featureKey);
   }
 
+  /**
+   * Check and see if a feature is enabled.
+   * <p>
+   * This is same as {@link #enabledForThrowing(String, String)} except it will throw a
+   * {@link FeatureException} if the feature does not exist or there is an internal exception.
+   * </p>
+   *
+   * @param namespace the namespace the feature belongs to.
+   * @param featureKey the feature key defined for the feature
+   * @return true if the feature is enabled ({@link Feature.State#on}). Returns false if the feature
+   * is not enabled ({@link Feature.State#off}).
+   * @throws FeatureException if the supplied featureKey is null, the default namespace has not been
+   * configured, the feature does not exist or there was an internal error.
+   */
   public boolean enabledForThrowing(String namespace, String featureKey) {
-    FeatureException.throwIfNull(namespace, "Please supply a namespace");
+    FeatureException.throwIfNull(namespace, "Please supply a defaultNamespace");
     FeatureException.throwIfNull(featureKey, "Please supply a featureKey");
 
     return enabledThrowingInner(namespace, featureKey);
   }
 
   /**
-   * Access the feature management APIs.
+   * Entry point for the feature management APIs.
    *
    * @return a way to access feature management APIs.
    */
-  @SuppressWarnings("WeakerAccess") public Resources resources() {
+  public Resources resources() {
     return resources;
   }
 
   /**
    * Stop the feature client.
    * <p>
-   *   This allows the client to clean up and release any cache related resources such as local
-   *   storage. For example you can set this up in a shutdown hook as follows:
+   * This allows the client to clean up and release any cache related resources such as local
+   * storage.
    * </p>
    * <p>
-   *   <code>
-   *    &nbsp;&nbsp;Runtime.getRuntime().addShutdownHook(new Thread(client::close));
-   *   </code>
+   * Note. The {@link Builder#build()} method places this method in a shutdown hook.
    * </p>
+   * <p>
+   * <code>
+   * &nbsp;&nbsp;Runtime.getRuntime().addShutdownHook(new Thread(client::close));
+   * </code>
+   * </p>
+   *
    * @throws FeatureException or a subclass.
    */
   @SuppressWarnings("WeakerAccess") public void close() throws FeatureException {
@@ -172,64 +231,68 @@ public class FeatureClient {
     featureStore.close();
   }
 
+  @VisibleForTesting
   ServerConfiguration serverConfiguration() {
     return serverConfiguration;
   }
 
+  @VisibleForTesting
   AuthorizationProvider authorizationProvider() {
     return authorizationProvider;
   }
 
+  @VisibleForTesting
   ResourceProvider resourceProvider() {
     return resourceProvider;
   }
 
+  @VisibleForTesting
   ContentSupport contentSupport() {
     return contentSupport;
   }
 
+  @VisibleForTesting
   MetricRegistry metricRegistry() {
     return metricRegistry;
   }
 
+  @VisibleForTesting
   URI baseURI() {
     return baseURI;
   }
 
-  String namespace() {
-    return namespace;
+  String defaultNamespace() {
+    return defaultNamespace;
   }
 
-  boolean multiNamespaceEnabled() {
-    return this.multiNamespaceEnabled;
-  }
-
+  @VisibleForTesting
   boolean localStoreEnabled() {
     return localStoreEnabled;
   }
 
-  private void throwIfMultiApp() {
-    if (multiNamespaceEnabled()) {
-      throw new FeatureException(Problem.configProblem("enabled_check_and_multi_with_no_namespace",
-          "A feature flag check cannot be called without a namespace when multi namespace is configured. "
-              + "Please use the namespace plus feature key variants for multi namespace configuration."));
+  private void throwIfNoDefaultNamespace() {
+    if (defaultNamespace == null) {
+      throw new FeatureException(Problem.configProblem("enabled_check_with_no_namespace",
+          "A feature flag check with no namespace cannot be called without configuring "
+              + "a default namespace first. "
+              + "Please set the default namespace or use the namespace plus feature key variant."));
     }
   }
 
   private boolean enabledInner(String namespace, String featureKey) {
     final Optional<Feature> maybe = featureStore.find(namespace, featureKey);
 
-    if(! maybe.isPresent()) {
+    if (!maybe.isPresent()) {
       return false;
     }
 
     final Feature feature = maybe.get();
 
-    if(feature.getOptions().getOption().equals(OptionType.flag)) {
+    if (feature.getOptions().getOption().equals(OptionType.flag)) {
       return feature.getState().equals(Feature.State.on);
     }
 
-    if(feature.getOptions().getOption().equals(OptionType.bool)) {
+    if (feature.getOptions().getOption().equals(OptionType.bool)) {
       return new OptionEvaluator().evaluateBooleanOptions(feature);
     }
 
@@ -239,27 +302,30 @@ public class FeatureClient {
   private boolean enabledThrowingInner(String namespace, String featureKey) {
     final Optional<Feature> maybe = featureStore.find(namespace, featureKey);
 
-    if(! maybe.isPresent()) {
+    if (!maybe.isPresent()) {
       throw new FeatureException(
           Problem.noSuchFeature("feature_not_found",
               String.format(
-                  "feature %s for namespace %s was not found and raising an error was requested",
+                  "feature %s for defaultNamespace %s was not found and raising an error was requested",
                   featureKey, namespace)));
     }
 
     final Feature feature = maybe.get();
 
-    if(feature.getOptions().getOption().equals(OptionType.flag)) {
+    if (feature.getOptions().getOption().equals(OptionType.flag)) {
       return feature.getState().equals(Feature.State.on);
     }
 
-    if(feature.getOptions().getOption().equals(OptionType.bool)) {
+    if (feature.getOptions().getOption().equals(OptionType.bool)) {
       return new OptionEvaluator().evaluateBooleanOptions(feature);
     }
 
     return false;
   }
 
+  /**
+   * Prepares and creates a {@link FeatureClient}.
+   */
   public static class Builder {
 
     private ServerConfiguration serverConfiguration;
@@ -275,6 +341,25 @@ public class FeatureClient {
     Builder() {
     }
 
+    /**
+     * Build a new {@link FeatureClient}.
+     * <p>
+     * This is the only way to create a client. There's no restriction on the number of clients
+     * you can create per JVM process.
+     * </p>
+     * <p>
+     * This method adds the returned {@link FeatureClient#close()} method
+     * to a shutdown hook, ie calling this method effectively does the following:
+     * </p>
+     * <p>
+     * <code>
+     * &nbsp;&nbsp;Runtime.getRuntime().addShutdownHook(new Thread(client::close));
+     * </code>
+     * </p>
+     *
+     * @return a new FeatureClient.
+     * @throws FeatureException if the client is considered misconfigured or missing configuration.
+     */
     public FeatureClient build() {
 
       if (serverConfiguration == null) {
@@ -286,12 +371,14 @@ public class FeatureClient {
         metricsContextName = "outland.feature";
       }
 
-      if (authorizationProvider == null) {
-        authorizationProvider = new EmptyAuthorizationProvider();
-      }
-
       if (metricRegistry == null) {
         metricRegistry = new MetricRegistry();
+      }
+
+      metricsContext = new MetricsContext(metricsContextName, metricRegistry);
+
+      if (authorizationProvider == null) {
+        authorizationProvider = new EmptyAuthorizationProvider();
       }
 
       if (contentSupport == null) {
@@ -311,7 +398,6 @@ public class FeatureClient {
               serverConfiguration.certificatePath()).applySslSocketFactory(builder);
         }
 
-
         if (serverConfiguration.httpLoggingEnabled()) {
           builder = builder.addNetworkInterceptor(
               new HttpLoggingInterceptor(new okhttp3.logging.HttpLoggingInterceptor.Logger() {
@@ -329,8 +415,6 @@ public class FeatureClient {
             new OkHttpResourceProvider(builder.build(), contentSupport, metricRegistry);
       }
 
-      metricsContext = new MetricsContext(metricsContextName, metricRegistry);
-
       if (serverConfiguration.localStoreEnabled() && localFeatureStore == null) {
         localFeatureStore = new FeatureStoreRocksDb(metricsContext);
       } else {
@@ -342,20 +426,51 @@ public class FeatureClient {
       return featureClient;
     }
 
-    @SuppressWarnings("WeakerAccess") public Builder serverConfiguration(
-        ServerConfiguration serverConfiguration) {
+    /**
+     * Supply the {@link ServerConfiguration}.
+     *
+     * @param serverConfiguration the server configuration
+     * @return this
+     */
+    public Builder serverConfiguration(ServerConfiguration serverConfiguration) {
       this.serverConfiguration = serverConfiguration;
       return this;
     }
 
-    @SuppressWarnings("WeakerAccess")
+    /**
+     * Supply the {@link AuthorizationProvider}.
+     *
+     * @param authorizationProvider the provider
+     * @return this
+     */
     public Builder authorizationProvider(AuthorizationProvider authorizationProvider) {
       this.authorizationProvider = authorizationProvider;
       return this;
     }
 
-    @SuppressWarnings("WeakerAccess") public Builder metricRegistry(MetricRegistry metricRegistry) {
+    /**
+     * Supply the {@link MetricRegistry}.
+     *
+     * @param metricRegistry the registry
+     * @return this
+     */
+    public Builder metricRegistry(MetricRegistry metricRegistry) {
       this.metricRegistry = metricRegistry;
+      return this;
+    }
+
+    /**
+     * Supply the prefix used for metrics.
+     *
+     * <p>
+     * You can set this to make the metrics for your client's cluster or service distinct.
+     * </p>
+     *
+     * @param metricsContextName the metrics prefix
+     * @return this
+     */
+    public Builder metricsContextName(String metricsContextName) {
+      this.metricsContextName = metricsContextName;
       return this;
     }
 

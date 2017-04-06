@@ -8,89 +8,49 @@ import static org.junit.Assert.fail;
 public class ServerConfigurationTest {
 
   @Test
-  public void testMultiAndSingleAppCombos() {
+  public void testNamespaceConfiguration() {
 
     ServerConfiguration configuration = null;
 
     try {
-      // neither enabled
+      // nothing is ok
       configuration = new ServerConfiguration()
           .baseURI("http://localhost")
-          .namespace(null)
-          .multiAppEnabled(false);
+      ;
+
       configuration.validate();
-      fail();
     } catch (FeatureException e) {
-      assertEquals("neither_multi_app_or_single_app_enabled", e.problem().title());
+      fail("non null namespace should be configurable");
     }
 
     try {
-      // both enabled
+      // regular string is ok
       configuration = new ServerConfiguration()
           .baseURI("http://localhost")
-          .namespace("myapp")
-          .multiAppEnabled(true);
-
+          .defaultNamespace("myapp")
+      ;
       configuration.validate();
-      fail();
     } catch (FeatureException e) {
-      assertEquals("multi_app_and_single_app_enabled", e.problem().title());
+      fail("non null namespace should be configurable");
     }
 
     try {
-      // app id enabled and false
-      configuration = new ServerConfiguration()
+      new ServerConfiguration()
           .baseURI("http://localhost")
-          .namespace("myapp")
-          .multiAppEnabled(false);
-
-      configuration.validate();
-
-      // app id enabled and default multi (disabled)
-      configuration = new ServerConfiguration()
-          .baseURI("http://localhost")
-          .namespace("myapp");
-
-      configuration.validate();
+          .defaultNamespace(null)
+      ;
+      fail("null namespace should not be accepted");
     } catch (FeatureException e) {
-      e.printStackTrace();
-      fail();
+      assertEquals("empty_namespace", e.problem().title());
     }
 
     try {
-
-      // app id enabled but empty
-      configuration = new ServerConfiguration()
+      new ServerConfiguration()
           .baseURI("http://localhost")
-          .namespace("");
-
-      configuration.validate();
-      fail();
+          .defaultNamespace("");
+      fail("empty namespace should not be accepted");
     } catch (FeatureException e) {
-      e.printStackTrace();
-      assertEquals("neither_multi_app_or_single_app_enabled", e.problem().title());
-    }
-
-    try {
-      // multi enabled and null app id: ok
-
-      configuration = new ServerConfiguration()
-          .baseURI("http://localhost")
-          .namespace(null)
-          .multiAppEnabled(true);
-      configuration.validate();
-
-      // multi enabled and no app id: ok
-
-      configuration = new ServerConfiguration()
-          .baseURI("http://localhost")
-          .multiAppEnabled(true);
-
-      configuration.validate();
-
-    } catch (FeatureException e) {
-      e.printStackTrace();
-      fail();
+      assertEquals("empty_namespace", e.problem().title());
     }
   }
 }
