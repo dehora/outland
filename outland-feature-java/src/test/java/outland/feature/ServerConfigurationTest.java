@@ -16,7 +16,7 @@ public class ServerConfigurationTest {
       // neither enabled
       configuration = new ServerConfiguration()
           .baseURI("http://localhost")
-          .appKey(null)
+          .namespace(null)
           .multiAppEnabled(false);
       configuration.validate();
       fail();
@@ -28,7 +28,7 @@ public class ServerConfigurationTest {
       // both enabled
       configuration = new ServerConfiguration()
           .baseURI("http://localhost")
-          .appKey("myapp")
+          .namespace("myapp")
           .multiAppEnabled(true);
 
       configuration.validate();
@@ -41,7 +41,7 @@ public class ServerConfigurationTest {
       // app id enabled and false
       configuration = new ServerConfiguration()
           .baseURI("http://localhost")
-          .appKey("myapp")
+          .namespace("myapp")
           .multiAppEnabled(false);
 
       configuration.validate();
@@ -49,7 +49,7 @@ public class ServerConfigurationTest {
       // app id enabled and default multi (disabled)
       configuration = new ServerConfiguration()
           .baseURI("http://localhost")
-          .appKey("myapp");
+          .namespace("myapp");
 
       configuration.validate();
     } catch (FeatureException e) {
@@ -62,7 +62,7 @@ public class ServerConfigurationTest {
       // app id enabled but empty
       configuration = new ServerConfiguration()
           .baseURI("http://localhost")
-          .appKey("");
+          .namespace("");
 
       configuration.validate();
       fail();
@@ -76,7 +76,7 @@ public class ServerConfigurationTest {
 
       configuration = new ServerConfiguration()
           .baseURI("http://localhost")
-          .appKey(null)
+          .namespace(null)
           .multiAppEnabled(true);
       configuration.validate();
 

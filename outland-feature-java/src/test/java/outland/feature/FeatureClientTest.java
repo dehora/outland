@@ -16,11 +16,11 @@ public class FeatureClientTest {
     ServerConfiguration serverConfiguration =
         new ServerConfiguration()
             .baseURI("http://localhost")
-            .appKey("the_app")
+            .namespace("the_app")
             .multiAppEnabled(true);
 
     assertTrue(serverConfiguration.multiAppEnabled());
-    assertTrue(serverConfiguration.appKey() != null);
+    assertTrue(serverConfiguration.namespace() != null);
 
     try {
       FeatureClient.newBuilder()
@@ -40,7 +40,7 @@ public class FeatureClientTest {
     ServerConfiguration serverConfiguration =
         new ServerConfiguration()
             .baseURI("http://localhost")
-            .appKey("the_app");
+            .namespace("the_app");
 
     final FeatureClient client = FeatureClient.newBuilder()
         .serverConfiguration(serverConfiguration)
@@ -92,7 +92,7 @@ public class FeatureClientTest {
       ServerConfiguration serverConfiguration =
           new ServerConfiguration()
               .baseURI("http://localhost")
-              .appKey("the_app");
+              .namespace("the_app");
 
       client = FeatureClient.newBuilder()
           .featureStore(new FeatureStoreNone())

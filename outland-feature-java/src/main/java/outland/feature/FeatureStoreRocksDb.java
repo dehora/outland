@@ -129,7 +129,7 @@ public class FeatureStoreRocksDb implements FeatureStoreLocal, MeterTimer {
 
     final String storageKey = FeatureStoreKeys.storageKey(feature.getNamespace(), feature.getKey());
 
-    logger.info("op=put, storage=rocks, appkey={}, feature_key={}, storage_key={}",
+    logger.info("op=put, storage=rocks, namespace={}, feature_key={}, storage_key={}",
         feature.getNamespace(), feature.getKey(), storageKey);
 
     return metric(putTimer, putMeter, () -> putInner(storageKey, feature));
@@ -146,15 +146,15 @@ public class FeatureStoreRocksDb implements FeatureStoreLocal, MeterTimer {
     return metric(loadAllTimer, loadAllMeter, this::loadAllInner);
   }
 
-  @Override public FeatureCollection findAll(String appKey) {
+  @Override public FeatureCollection findAll(String namespace) {
     if (rocks == null) {
       logger.warn("op=findAll, storage=rocks, action=skip, msg='no rocks db client available'");
       return FeatureCollection.newBuilder().build();
     }
 
-    logger.info("op=findAll, storage=rocks, appkey={}", appKey);
+    logger.info("op=findAll, storage=rocks, namespace={}", namespace);
 
-    return metric(findAllTimer, findAllMeter, () -> this.findAllInner(appKey));
+    return metric(findAllTimer, findAllMeter, () -> this.findAllInner(namespace));
   }
 
   @Override public void close() {
@@ -181,12 +181,12 @@ public class FeatureStoreRocksDb implements FeatureStoreLocal, MeterTimer {
     }
   }
 
-  private FeatureCollection findAllInner(String appKey) {
+  private FeatureCollection findAllInner(String namespace) {
     final FeatureCollection.Builder builder = FeatureCollection.newBuilder();
 
     try {
       final byte[] prefix =
-          FeatureStoreKeys.storageKeyPrefix(appKey).getBytes(StandardCharsets.UTF_8);
+          FeatureStoreKeys.storageKeyPrefix(namespace).getBytes(StandardCharsets.UTF_8);
 
       String prefixString = new String(prefix);
 
@@ -201,15 +201,15 @@ public class FeatureStoreRocksDb implements FeatureStoreLocal, MeterTimer {
           */
         if(key.startsWith(prefixString)) {
           final Feature feature = Feature.newBuilder().mergeFrom(iterator.value()).build();
-          logger.info("op=findAll, storage=rocks, appkey={}, feature_key={}",
-              appKey, feature.getKey());
+          logger.info("op=findAll, storage=rocks, namespace={}, feature_key={}",
+              namespace, feature.getKey());
           builder.addItems(feature);
         }
 
       }
     } catch (Exception e) {
       throw new FeatureException(
-          Problem.localProblem("error finding from rocksdb appkey=" + appKey, e.getMessage()), e);
+          Problem.localProblem("error finding from rocksdb namespace=" + namespace, e.getMessage()), e);
     }
 
     return builder.build();
@@ -224,7 +224,7 @@ public class FeatureStoreRocksDb implements FeatureStoreLocal, MeterTimer {
           iterator.isValid();
           iterator.next()) {
         final Feature feature = Feature.newBuilder().mergeFrom(iterator.value()).build();
-        logger.info("op=loadAll, storage=rocks, appkey={}, feature_key={}",
+        logger.info("op=loadAll, storage=rocks, namespace={}, feature_key={}",
             feature.getNamespace(), feature.getKey());
         builder.addItems(feature);
       }

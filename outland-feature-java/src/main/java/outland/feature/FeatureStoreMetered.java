@@ -55,16 +55,16 @@ class FeatureStoreMetered implements FeatureStore, MeterTimer {
     return metric(putTimer, putMeter, () -> featureStore.put(feature));
   }
 
-  @Override public Optional<Feature> find(String appKey, String key) {
-    return metric(findTimer, findMeter, () -> featureStore.find(appKey, key));
+  @Override public Optional<Feature> find(String namespace, String key) {
+    return metric(findTimer, findMeter, () -> featureStore.find(namespace, key));
   }
 
-  @Override public FeatureCollection findAll(String appKey) {
-    return metric(findAllTimer, findAllMeter, () -> featureStore.findAll(appKey));
+  @Override public FeatureCollection findAll(String namespace) {
+    return metric(findAllTimer, findAllMeter, () -> featureStore.findAll(namespace));
   }
 
-  @Override public Void remove(String appKey, String featureKey) {
-    return metric(flushTimer, flushMeter, () -> featureStore.remove(appKey, featureKey));
+  @Override public Void remove(String namespace, String featureKey) {
+    return metric(flushTimer, flushMeter, () -> featureStore.remove(namespace, featureKey));
   }
 
   @Override public Void removeAll() {

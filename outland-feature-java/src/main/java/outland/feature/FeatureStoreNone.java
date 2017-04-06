@@ -10,15 +10,15 @@ public class FeatureStoreNone implements FeatureStore {
     return null;
   }
 
-  @Override public Optional<Feature> find(String appKey, String key) {
+  @Override public Optional<Feature> find(String namespace, String key) {
     return Optional.empty();
   }
 
-  @Override public FeatureCollection findAll(String appKey) {
+  @Override public FeatureCollection findAll(String namespace) {
     return null;
   }
 
-  @Override public Void remove(String appKey, String featureKey) {
+  @Override public Void remove(String namespace, String featureKey) {
     return null;
   }
 

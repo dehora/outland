@@ -13,7 +13,7 @@ public class FeatureStoreLocalFailing implements FeatureStoreLocal {
     throw new FeatureException(Problem.localProblem("failstore", ""));
   }
 
-  @Override public FeatureCollection findAll(String appKey) throws FeatureException {
+  @Override public FeatureCollection findAll(String namespace) throws FeatureException {
     throw new FeatureException(Problem.localProblem("failstore", ""));
   }
 

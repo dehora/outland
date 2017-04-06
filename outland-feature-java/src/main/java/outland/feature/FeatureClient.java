@@ -25,16 +25,16 @@ public class FeatureClient {
   private final Resources resources;
   private final ContentSupport contentSupport;
   private final URI baseURI;
-  private final String appKey;
-  private final boolean multiAppEnabled;
+  private final String namespace;
+  private final boolean multiNamespaceEnabled;
   private final boolean localStoreEnabled;
   private final MetricRegistry metricRegistry;
 
   public FeatureClient(Builder builder) {
     this.serverConfiguration = builder.serverConfiguration;
     this.baseURI = serverConfiguration.baseURI();
-    this.appKey = serverConfiguration.appKey();
-    this.multiAppEnabled = serverConfiguration.multiAppEnabled();
+    this.namespace = serverConfiguration.namespace();
+    this.multiNamespaceEnabled = serverConfiguration.multiAppEnabled();
     this.localStoreEnabled = serverConfiguration.localStoreEnabled();
     this.authorizationProvider = builder.authorizationProvider;
     this.resourceProvider = builder.resourceProvider;
@@ -43,9 +43,9 @@ public class FeatureClient {
     this.resources = new Resources(
         this.resourceProvider,
         this.authorizationProvider,
-        this.appKey,
+        this.namespace,
         this.baseURI,
-        this.multiAppEnabled
+        this.multiNamespaceEnabled
     );
     FeatureStoreLocal localFeatureStore = builder.localFeatureStore;
 
@@ -107,7 +107,7 @@ public class FeatureClient {
     throwIfMultiApp();
     FeatureException.throwIfNull(featureKey, "Please supply a feature key");
 
-    return enabledInner(appKey(), featureKey);
+    return enabledInner(namespace(), featureKey);
   }
 
   /**
@@ -128,21 +128,21 @@ public class FeatureClient {
     throwIfMultiApp();
     FeatureException.throwIfNull(featureKey, "Please supply a feature key");
 
-    return enabledThrowingInner(appKey(), featureKey);
+    return enabledThrowingInner(namespace(), featureKey);
   }
 
-  @SuppressWarnings("WeakerAccess") public boolean enabledFor(String appKey, String featureKey) {
-    FeatureException.throwIfNull(appKey, "Please supply an appKey");
+  @SuppressWarnings("WeakerAccess") public boolean enabledFor(String namespace, String featureKey) {
+    FeatureException.throwIfNull(namespace, "Please supply a namespace");
     FeatureException.throwIfNull(featureKey, "Please supply a featureKey");
 
-    return enabledInner(appKey, featureKey);
+    return enabledInner(namespace, featureKey);
   }
 
-  public boolean enabledForThrowing(String appKey, String featureKey) {
-    FeatureException.throwIfNull(appKey, "Please supply an appKey");
+  public boolean enabledForThrowing(String namespace, String featureKey) {
+    FeatureException.throwIfNull(namespace, "Please supply a namespace");
     FeatureException.throwIfNull(featureKey, "Please supply a featureKey");
 
-    return enabledThrowingInner(appKey, featureKey);
+    return enabledThrowingInner(namespace, featureKey);
   }
 
   /**
@@ -196,12 +196,12 @@ public class FeatureClient {
     return baseURI;
   }
 
-  String appKey() {
-    return appKey;
+  String namespace() {
+    return namespace;
   }
 
-  boolean multiAppEnabled() {
-    return this.multiAppEnabled;
+  boolean multiNamespaceEnabled() {
+    return this.multiNamespaceEnabled;
   }
 
   boolean localStoreEnabled() {
@@ -209,15 +209,15 @@ public class FeatureClient {
   }
 
   private void throwIfMultiApp() {
-    if (multiAppEnabled()) {
-      throw new FeatureException(Problem.configProblem("enabled_check_and_multi_with_no_appkey",
-          "A feature flag check cannot be called without an app id when multi app is configured. "
-              + "Please use the app id plus feature key variants for multi app configuration."));
+    if (multiNamespaceEnabled()) {
+      throw new FeatureException(Problem.configProblem("enabled_check_and_multi_with_no_namespace",
+          "A feature flag check cannot be called without a namespace when multi namespace is configured. "
+              + "Please use the namespace plus feature key variants for multi namespace configuration."));
     }
   }
 
-  private boolean enabledInner(String appKey, String featureKey) {
-    final Optional<Feature> maybe = featureStore.find(appKey, featureKey);
+  private boolean enabledInner(String namespace, String featureKey) {
+    final Optional<Feature> maybe = featureStore.find(namespace, featureKey);
 
     if(! maybe.isPresent()) {
       return false;
@@ -236,15 +236,15 @@ public class FeatureClient {
     return false;
   }
 
-  private boolean enabledThrowingInner(String appKey, String featureKey) {
-    final Optional<Feature> maybe = featureStore.find(appKey, featureKey);
+  private boolean enabledThrowingInner(String namespace, String featureKey) {
+    final Optional<Feature> maybe = featureStore.find(namespace, featureKey);
 
     if(! maybe.isPresent()) {
       throw new FeatureException(
           Problem.noSuchFeature("feature_not_found",
               String.format(
-                  "feature %s for app %s was not found and raising an error was requested",
-                  featureKey, appKey)));
+                  "feature %s for namespace %s was not found and raising an error was requested",
+                  featureKey, namespace)));
     }
 
     final Feature feature = maybe.get();
