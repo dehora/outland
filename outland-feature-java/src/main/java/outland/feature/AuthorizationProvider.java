@@ -9,8 +9,6 @@ import java.util.Optional;
 @FunctionalInterface
 public interface AuthorizationProvider {
 
-  String SCOPE_UID = "uid";
-
   /**
    * Provide an authorization string that can be used to authorize requests against the server or an
    * outland node.

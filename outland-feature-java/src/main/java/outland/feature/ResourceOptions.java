@@ -47,7 +47,7 @@ class ResourceOptions {
   }
 
   public Optional<Authorization> supplyToken() {
-    return provider.authorization(this.namespace, this.scope);
+    return provider.authorization(namespace, this.scope);
   }
 
   public String scope() {
