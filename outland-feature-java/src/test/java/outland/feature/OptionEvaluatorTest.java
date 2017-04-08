@@ -14,6 +14,35 @@ import static org.junit.Assert.assertTrue;
 public class OptionEvaluatorTest {
 
   @Test
+  public void testNotOne() {
+    OptionEvaluator oe = new OptionEvaluator();
+
+    assertFalse(oe.evaluateBooleanOptions(Feature.newBuilder()
+        .setState(Feature.State.off)
+        .build()));
+
+    assertFalse(oe.evaluateBooleanOptions(Feature.newBuilder()
+        .setState(Feature.State.none)
+        .build()));
+  }
+
+  @Test
+  public void testOptionCollectionFlag() {
+    OptionEvaluator oe = new OptionEvaluator();
+
+    OptionCollection collection = OptionCollection.newBuilder()
+        .setOption(OptionType.flag)
+        .build();
+
+    final Feature feature1 = Feature.newBuilder()
+        .setOptions(collection)
+        .setState(Feature.State.on)
+        .build();
+
+    assertFalse(oe.evaluateBooleanOptions(feature1));
+  }
+
+  @Test
   public void testNormalize() {
     OptionEvaluator oe = new OptionEvaluator();
 
@@ -32,6 +61,29 @@ public class OptionEvaluatorTest {
     // overflown values are an entry bug, but are capped to 0.0..1.0
     assertEquals(1.0d, oe.normalize(11_000), 0.0d);
     assertEquals(0.0d, oe.normalize(-1), 0.0d);
+  }
+
+  @Test
+  public void testZeroWeight() {
+    FeatureOption f = FeatureOption.newBuilder()
+        .setName("false").setValue("false").setWeight(0).build();
+
+    FeatureOption t = FeatureOption.newBuilder()
+        .setName("true").setValue("true").setWeight(0).build();
+
+    OptionCollection collection = OptionCollection.newBuilder()
+        .setOption(OptionType.bool)
+        .addItems(t)
+        .addItems(f)
+        .buildPartial();
+
+    final Feature feature1 = Feature.newBuilder()
+        .setOptions(collection)
+        .setState(Feature.State.on)
+        .build();
+
+    OptionEvaluator oe = new OptionEvaluator();
+    assertEquals(true, oe.evaluateBooleanOptions(feature1));
   }
 
   @Test
@@ -207,4 +259,5 @@ public class OptionEvaluatorTest {
     assertTrue((tr + fr == runs));
     assertTrue(fr/tr == ratio);
   }
+
 }
