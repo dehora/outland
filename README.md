@@ -53,9 +53,49 @@
 
 Outland is distributed feature flag and event messaging system.
 
-The reason Outland exists is the notion that feature flags are a first class engineering and product development activity that let you work smaller, better, faster, and with less risk. Feature flagging offers significant leverage and shouldn't just be a technology bolt-on or an afterthought, as is often the case today.
+The reason Outland exists is the notion that feature flags are a first class engineering and 
+product development activity that let you work smaller, better, faster, and with less risk. 
 
-Outland consists of an API server and a Java client, with the ambition to support an admin UI, clients in other languages, a decentralised cluster mode, a container sidecar, and more advanced evaluation and tracking options. 
+Outland consists of an API server and a Java client, with the ambition to support an admin UI, 
+clients in other languages, a decentralised cluster mode, a container sidecar, and more advanced 
+evaluation and tracking options. 
+
+## Why Feature Flags?
+
+Feature flagging offers significant leverage and shouldn't just be a technology bolt-on or an 
+afterthought, as is often the case today.
+
+Feature flags allow you to:
+
+- Work safely. Turning a dynamic flag off in production is faster than a rollback. 
+
+- Ship larger scale functionality faster as a set of small steps.  
+
+- Avoid long lived feature branches with their merge and integration test overhead. 
+
+Flags reinforce the benefits you get from shipping small changes and continuous delivery,  
+providing a flywheel effect for those practices.
+
+You can read more about the concepts in the post ["Feature Flags: Smaller, Better, Faster Software Development"](https://medium.com/@dehora/feature-flags-smaller-better-faster-software-development-f2eab58df0f9)
+
+## Why a Service?
+
+We can identify four reasons to make feature flagging a service:
+
+- **Everyone solves this differently**: Flag systems are typically built with whatever's to hand 
+instead of a system that designed from the ground up to support flag based engineering and development.  
+
+- **Support product development**: Feature flags have a way of becoming important to product and 
+service development processes over time. Having a first class service makes this easier 
+and simplifies coordination delivery across services and teams. 
+
+- **Observability**: In a microservices world (and also for monolithic or monocentric systems) 
+there's value in making flag state observable via a service. Service access 
+to feature flags allows human operators to more easily intervene and control systems change.
+
+- **Incident management**: A point of flags is to allow features to be turned off quickly. If the 
+flag system is a internal bolt-on to whatever the team happens to run is far more risky than a 
+service interface that offers the least power needed to change the state. 
 
 ## Project Status
 
@@ -245,19 +285,16 @@ The client is available via JCenter, see the [Client](#client) section for detai
 Once the client is setup up as a dependency you can configure it as follows:
 
 ```java
-  final String namespace = "testnamespace";
   ServerConfiguration conf = new ServerConfiguration()
       .baseURI("http://localhost:8180")
-      .nsKey(namespace);
+      .defaultNamespace("testnamespace-1");
 
   FeatureClient client = FeatureClient.newBuilder()
       .serverConfiguration(conf)
       .authorizationProvider(
-          (p, s) -> Optional.of(new Authorization(Authorization.REALM_BASIC,
+          (namespace, scope) -> Optional.of(new Authorization(Authorization.REALM_BASIC,
               new String(Base64.getEncoder().encode(("testconsole/service:letmein").getBytes())))))
-      .build();
-
-  Runtime.getRuntime().addShutdownHook(new Thread(client::close));      
+      .build();   
 ```
 
 In a real world setting the `authorizationProvider` would not be hardcoded with credentials, but 
@@ -268,25 +305,37 @@ this will do to connect to the local server.
 Now you can check one the features created by the seed script:
 
 ```java
-  if (client.enabled("test-flag-1")) {
+  if (client.enabled("testfeature-1")) {
     System.out.println(featureKey+": enabled");
   } else {
     System.out.println(featureKey+": disabled");
   }
 ```
 
-### Enable a Feature
+To access a feature in a particular namespace you can use the extended form of `enabled`:
 
-The feature will be off by default. You can enable it via the client or the API.
+```java
+  if (client.enabled("testnamespace-1", "testfeature-1")) {
+    System.out.println(featureKey+": enabled");
+  } else {
+    System.out.println(featureKey+": disabled");
+  }
+```
 
-From the client:
+It's common to work with just one namespace so the short form exists as a handy convenience. The 
+ short form takes its namespace from the `defaultNamespace` set via `ServerConfiguration`.
+
+
+### Client Feature API
+
+You can manage features via the client via `FeatureResource`:
 
 ```java
   FeatureResource features = client.resources().features();
 
   Feature feature = Feature.newBuilder()
-      .setNamespace("testnamespace")
-      .setKey("test-flag-1")
+      .setNamespace("testnamespace-1")
+      .setKey("testfeature-1")
       .setState(Feature.State.on)
       .build();
 
@@ -294,73 +343,24 @@ From the client:
   System.out.println("test-flag-1 state: " + updated.getState());
 ```
 
-From the API:
-
-```sh
-curl -i http://localhost:8180/features/testnamespace/test-flag-1 \
--u testconsole/service:letmein  \
--H "Content-type: application/json" -d '
-{
-  "key": "test-flag-1",
-  "namespace": "testnamespace",
-  "state": "on"
-}
-'
-```
-
-# Feature Flags and Modern Software Development
-
-Traditionally feature flags are used to control code execution - if the flag is on new code is executed, if the flag is off, the code is skipped. Flags allow you to:
-
-- Work safely by running new code in isolation, disabling or enabling as needed. Turning a dynamic flag off in production is faster than a rollback (assuming you [can in fact do a rollback](https://blog.skyliner.io/you-cant-have-a-rollback-button-83e914f420d9)). 
-
-- Ship larger scale functionality faster as a set of small steps. Flags let you iterate and [go round the loop faster](http://www.startuplessonslearned.com/2008/11/principles-of-lean-startups.html). 
-
-- Avoid long lived feature branches with their continuous merge and n-way integration test overhead. 
-
-Flags reinforce the benefits you get from shipping small changes and continuous delivery,  providing a flywheel effect for those practices. They but don't tend to get the attention the others practices do. Tooling and library support for flags isn't 
-close to the level of continuous build and delivery systems and there's far more 
-online literature around lean engineering practices than flag based development. 
-
-
-## Why a Service?
-
-We can identify four reasons to make feature flagging a service:
-
-- **Everyone solves this differently**: Flag systems are built for local needs with what's to hand. ZooKeeper, Etcd, Consul, Databases, Redis/Memcached, discovery services, config files, Puppet/Chef, even DNS, all can and probably have at this point been hammered into a flag service. Highly localised approaches don't compose across team/service boundaries resulting in wasted engineering effort as each team puts something together. 
-
-- **Support product development**: As described above, feature flags have a way of becoming instrinsic to product and service development processes over time. Having a first class service makes this evolution easier and simplifies coordination delivery across services and teams. Finally, the path to quantified product impact and measurable online experiments is less likely to get cut off. 
-
-- **Observability**: In a microservices world (and also for monolithic or monocentric systems) there's value in making flag state observable via a service. As a simple example you can correlate a state change with other metrics. Features can be made available to more than code - a service accessible flag can be used control/toggle infrastructure such as load balancers. Service access 
-to feature flags allows human operators to more easily intervene and control systems change.
-
-- **Incident management**: A point of flags is to allow features to be turned off quickly, 
-faster than any rollback/rollforward mechanism you might have. If the flag system is a 
-internal bolt-on to whatever the team happens to run, then  oncall is going to have 
-to delve into that to turn it off. A service interface that offers the least power needed to 
-change the state is a safer option. 
 
 # Outland Feature Flag Model
 
-In summary:
+## Summary: Features and Namespaces
 
-- A Feature is identified by a key, and can be in an on or off state. Every feature has an owner
-and a version. 
+A _Feature_ is identified by a _key_, and can be in an _on_ or _off_ state. Every feature has an owner
+and a version.  As well as a state, Features may also have a set of _options_. These are evaluated 
+in the on state and one option is returned. Each option can have a weight that affects the chance 
+if it being returned.
 
-- As well as a state, Features may also have a set of options. These are evaluated in the on 
-state to return a particular option. Each option has a weight that affects the chance if it 
-being returned.
-
-- A Namespace is a collection of features and identified by a key. Every Namespace at least one owner. A 
-Feature always belongs to one Namespace.
-
-- Namespaces also hold a list of Grants to services and team members. A grant allows them to access 
-the Namespace's features from the server. 
+A _Namespace_ is a collection of features and also identified by a key. Every Namespace at 
+least one owner. A Feature always belongs to one Namespace. Namespaces also hold a list of services 
+and team members that are allowed access its features. 
 
 ## Features
 
 Features have a state, which can be `on` or `off` indicating whether the feature is enabled or 
-disabled. As well as its state, a feature has a key acting as an identifier that allows it to be 
+disabled. As well as its state, a feature has a _key_ acting as an identifier that allows it to be 
 checked via the client, for example -
 
 ```java
@@ -374,7 +374,8 @@ if (features.enabled(featureKey)) {
  
 A feature has also a description, an owner and a version. Features have an owner 
 because we've found it helpful to be able to get in touch with someone about the feature, even 
-where there is a description for it. Versions are useful for tracking changes and in Outland version identifiers are also orderable.
+where there is a description for it. Versions are useful for tracking changes and in Outland 
+version identifiers are also orderable.
 
 ## Feature Flags and Feature Options
 
@@ -387,7 +388,7 @@ flag is on it evaluates to true and you're good to go.
   
 An `Option` is more involved and has two stages. First, the `on` or `off` state is checked, and 
 if the state is `off` it's skipped just like a Flag. Second, if the state `on`, the feature's 
-available options are evaluated and one of them is selected. Each option has a _weight_ and the 
+available options are evaluated and one of them is selected. Each option has a weight and the 
 probability of an option being selected is a function of its weight.
 
 Let's take a boolean feature option as an example. A boolean feature will have two options, "true" 
@@ -405,12 +406,12 @@ the weight of the "true" option allowing more requests to hit it. If it's not wo
 can increase the "false" weight, biasing traffic away from the new feature. Worst case if it's a 
 bust we can back out by setting the feature's state to `off` and disabling the feature altogether.
 
-A Flag can be considered a degenerate form of Option, where the weight of a Flag is wholly allocated 
+A Flag can be considered a reductive form of Option, where the weight of a Flag is wholly allocated 
 to its state. But Flags are such a common case we work with them using their state directly 
 and use the Option form for more advanced scenarios.   
 
 A boolean feature can only have true and false options, and this is the only option type available
-right now, but options are planned to have types other than boolean. For example a "String" feature 
+right now, but string and numeric options are planned. For example a "String" feature 
 could have 3 options, "red", "green" and "blue", each with a weight, 10%, 20%, and 70%  which 
 biases the evaluation. One time in ten the "red" option will be returned, two times out of ten 
 it'll be "green", and seven times out of ten it'll be "blue". This gives us a path beyond on/off 
@@ -418,21 +419,21 @@ toggles to things like A/B testing and multi-armed bandits.
 
 ## Namespace
 
-A Namespace is a collection of features and every feature belongs to just one Namespace. A Namespace can be 
-anything - it doesn't have to correspond to a construct in your system like a specific service 
-or a product. The main goal of a Namespace is to allow features to be observed by multiple systems. 
-For example you might use a Namespace to group features together for an epic project such that it allows 
+A Namespace is a collection of features and every feature belongs to just one Namespace. Every 
+feature in a Namespace must have a unique key within the Namespace. 
+
+The main goal of a Namespace is to allow features to be observed by multiple systems. For example 
+you might use a Namespace to group features together for an epic project such that it allows 
 those features to span multiple microservices owned by a few different teams. Or you may simply 
 want to make some features available to your backend server and your single page webapp.  
 
-Our experience is that the thing you want to develop often has multiple 
-parts and often will span multiple systems. In fact we think it's inevitable some ambitious thing 
-you want to build will cut across whatever boundaries you have in place, however well-considered, 
-be they social or technical. Namespaces allow you to express that need and deal with requirements that 
-are naturally divergent. 
+Our experience is that the thing you want to develop often has multiple parts and often will 
+span multiple systems. It's inevitable some thing you want to build will cut across whatever 
+service boundaries you have in place, however well-considered they are. Namespaces allow you to 
+handle that and deal with requirements that are naturally divergent. 
 
-Every Namespace has one or more owners that can administrate the Namespace and act as point of contact. Every 
-feature belonging to a Namespace must have a unique key within the Namespace.
+Every Namespace has one or more owners that can administrate the Namespace and act as point of 
+contact. 
  
 Finally, the Namespace construct enables multi-tenancy, allowing multiple teams to share the 
 same Outland service. There's nothing to stop you running multiple Outland servers but it 
@@ -441,15 +442,16 @@ can be nice to leverage shared infrastructure and reduce heavy lifting.
 ## Namespace Access
 
 As well as grouping features, an Namespace can _grant_ access to one or more services 
-(typically running systems), or to one or members (typically individual or teams). We'll just 
-refer to both kinds as services for now but they are handled separetely. 
+(typically running systems), or to one or members (typically individual or teams). Grants allow 
+the Namespace owner to declare which services can see the Namespace's features.  We'll just refer 
+to both kinds as services for now but they are handled separately. 
 
 Once the service requesting access to a feature or namespace is authenticated it is checked to see 
-if it's in the grant list for the Namespace. If it is it has access to the feature state, otherwise it 
-won't be authorised. 
+if it's in the grant list for the Namespace. If it is it has access to the feature state, 
+otherwise it won't be authorised. 
 
-Grants allow the Namespace owner to declare which services can see the Namespace's features. Owners and grants 
-are distinct - owners are not automatically given grants and are not looked up during authentication. 
+Owners and grants are distinct - owners are not automatically given grants and are not looked 
+up during authentication. 
 
 
 # Installation
