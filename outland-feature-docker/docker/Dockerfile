@@ -2,7 +2,7 @@ FROM registry.opensource.zalan.do/stups/openjdk:8-54
 
 RUN mkdir -p /outland
 
-COPY ./outland-feature-server-0.0.9.snapshot.jar /outland
+COPY ./outland-feature-server-0.0.9.jar /outland
 COPY ./configuration-docker.yaml /outland
 
 EXPOSE 8180
