@@ -1,5 +1,16 @@
 ### Changes
 
+### 0.0.9
+
+- Replaces "app" concept with namespace in client
+
+- Clients can work with multiple namespaces without declaring a configuration.
+
+- Adds an automatic client shutdown hook.
+
+- Adds JavaDoc for client.
+
+
 ### 0.0.8
 
 - Renames App to Namespace.
