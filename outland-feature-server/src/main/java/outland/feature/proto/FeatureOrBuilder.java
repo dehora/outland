@@ -158,4 +158,17 @@ public interface FeatureOrBuilder extends
    */
   com.google.protobuf.ByteString
       getTypeBytes();
+
+  /**
+   * <code>optional .outland.ZoneCollection zones = 14;</code>
+   */
+  boolean hasZones();
+  /**
+   * <code>optional .outland.ZoneCollection zones = 14;</code>
+   */
+  outland.feature.proto.ZoneCollection getZones();
+  /**
+   * <code>optional .outland.ZoneCollection zones = 14;</code>
+   */
+  outland.feature.proto.ZoneCollectionOrBuilder getZonesOrBuilder();
 }
