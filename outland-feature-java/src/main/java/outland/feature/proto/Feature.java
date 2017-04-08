@@ -149,6 +149,19 @@ public  final class Feature extends
             type_ = s;
             break;
           }
+          case 114: {
+            outland.feature.proto.ZoneCollection.Builder subBuilder = null;
+            if (zones_ != null) {
+              subBuilder = zones_.toBuilder();
+            }
+            zones_ = input.readMessage(outland.feature.proto.ZoneCollection.parser(), extensionRegistry);
+            if (subBuilder != null) {
+              subBuilder.mergeFrom(zones_);
+              zones_ = subBuilder.buildPartial();
+            }
+
+            break;
+          }
         }
       }
     } catch (com.google.protobuf.InvalidProtocolBufferException e) {
@@ -684,6 +697,27 @@ public  final class Feature extends
     }
   }
 
+  public static final int ZONES_FIELD_NUMBER = 14;
+  private outland.feature.proto.ZoneCollection zones_;
+  /**
+   * <code>optional .outland.ZoneCollection zones = 14;</code>
+   */
+  public boolean hasZones() {
+    return zones_ != null;
+  }
+  /**
+   * <code>optional .outland.ZoneCollection zones = 14;</code>
+   */
+  public outland.feature.proto.ZoneCollection getZones() {
+    return zones_ == null ? outland.feature.proto.ZoneCollection.getDefaultInstance() : zones_;
+  }
+  /**
+   * <code>optional .outland.ZoneCollection zones = 14;</code>
+   */
+  public outland.feature.proto.ZoneCollectionOrBuilder getZonesOrBuilder() {
+    return getZones();
+  }
+
   private byte memoizedIsInitialized = -1;
   public final boolean isInitialized() {
     byte isInitialized = memoizedIsInitialized;
@@ -737,6 +771,9 @@ public  final class Feature extends
     }
     if (!getTypeBytes().isEmpty()) {
       com.google.protobuf.GeneratedMessageV3.writeString(output, 13, type_);
+    }
+    if (zones_ != null) {
+      output.writeMessage(14, getZones());
     }
   }
 
@@ -792,6 +829,10 @@ public  final class Feature extends
     if (!getTypeBytes().isEmpty()) {
       size += com.google.protobuf.GeneratedMessageV3.computeStringSize(13, type_);
     }
+    if (zones_ != null) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeMessageSize(14, getZones());
+    }
     memoizedSize = size;
     return size;
   }
@@ -840,6 +881,11 @@ public  final class Feature extends
     }
     result = result && getType()
         .equals(other.getType());
+    result = result && (hasZones() == other.hasZones());
+    if (hasZones()) {
+      result = result && getZones()
+          .equals(other.getZones());
+    }
     return result;
   }
 
@@ -882,6 +928,10 @@ public  final class Feature extends
     }
     hash = (37 * hash) + TYPE_FIELD_NUMBER;
     hash = (53 * hash) + getType().hashCode();
+    if (hasZones()) {
+      hash = (37 * hash) + ZONES_FIELD_NUMBER;
+      hash = (53 * hash) + getZones().hashCode();
+    }
     hash = (29 * hash) + unknownFields.hashCode();
     memoizedHashCode = hash;
     return hash;
@@ -1057,6 +1107,12 @@ public  final class Feature extends
       }
       type_ = "";
 
+      if (zonesBuilder_ == null) {
+        zones_ = null;
+      } else {
+        zones_ = null;
+        zonesBuilder_ = null;
+      }
       return this;
     }
 
@@ -1106,6 +1162,11 @@ public  final class Feature extends
         result.version_ = versionBuilder_.build();
       }
       result.type_ = type_;
+      if (zonesBuilder_ == null) {
+        result.zones_ = zones_;
+      } else {
+        result.zones_ = zonesBuilder_.build();
+      }
       result.bitField0_ = to_bitField0_;
       onBuilt();
       return result;
@@ -1189,6 +1250,9 @@ public  final class Feature extends
       if (!other.getType().isEmpty()) {
         type_ = other.type_;
         onChanged();
+      }
+      if (other.hasZones()) {
+        mergeZones(other.getZones());
       }
       onChanged();
       return this;
@@ -2212,6 +2276,123 @@ public  final class Feature extends
       type_ = value;
       onChanged();
       return this;
+    }
+
+    private outland.feature.proto.ZoneCollection zones_ = null;
+    private com.google.protobuf.SingleFieldBuilderV3<
+        outland.feature.proto.ZoneCollection, outland.feature.proto.ZoneCollection.Builder, outland.feature.proto.ZoneCollectionOrBuilder> zonesBuilder_;
+    /**
+     * <code>optional .outland.ZoneCollection zones = 14;</code>
+     */
+    public boolean hasZones() {
+      return zonesBuilder_ != null || zones_ != null;
+    }
+    /**
+     * <code>optional .outland.ZoneCollection zones = 14;</code>
+     */
+    public outland.feature.proto.ZoneCollection getZones() {
+      if (zonesBuilder_ == null) {
+        return zones_ == null ? outland.feature.proto.ZoneCollection.getDefaultInstance() : zones_;
+      } else {
+        return zonesBuilder_.getMessage();
+      }
+    }
+    /**
+     * <code>optional .outland.ZoneCollection zones = 14;</code>
+     */
+    public Builder setZones(outland.feature.proto.ZoneCollection value) {
+      if (zonesBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        zones_ = value;
+        onChanged();
+      } else {
+        zonesBuilder_.setMessage(value);
+      }
+
+      return this;
+    }
+    /**
+     * <code>optional .outland.ZoneCollection zones = 14;</code>
+     */
+    public Builder setZones(
+        outland.feature.proto.ZoneCollection.Builder builderForValue) {
+      if (zonesBuilder_ == null) {
+        zones_ = builderForValue.build();
+        onChanged();
+      } else {
+        zonesBuilder_.setMessage(builderForValue.build());
+      }
+
+      return this;
+    }
+    /**
+     * <code>optional .outland.ZoneCollection zones = 14;</code>
+     */
+    public Builder mergeZones(outland.feature.proto.ZoneCollection value) {
+      if (zonesBuilder_ == null) {
+        if (zones_ != null) {
+          zones_ =
+            outland.feature.proto.ZoneCollection.newBuilder(zones_).mergeFrom(value).buildPartial();
+        } else {
+          zones_ = value;
+        }
+        onChanged();
+      } else {
+        zonesBuilder_.mergeFrom(value);
+      }
+
+      return this;
+    }
+    /**
+     * <code>optional .outland.ZoneCollection zones = 14;</code>
+     */
+    public Builder clearZones() {
+      if (zonesBuilder_ == null) {
+        zones_ = null;
+        onChanged();
+      } else {
+        zones_ = null;
+        zonesBuilder_ = null;
+      }
+
+      return this;
+    }
+    /**
+     * <code>optional .outland.ZoneCollection zones = 14;</code>
+     */
+    public outland.feature.proto.ZoneCollection.Builder getZonesBuilder() {
+      
+      onChanged();
+      return getZonesFieldBuilder().getBuilder();
+    }
+    /**
+     * <code>optional .outland.ZoneCollection zones = 14;</code>
+     */
+    public outland.feature.proto.ZoneCollectionOrBuilder getZonesOrBuilder() {
+      if (zonesBuilder_ != null) {
+        return zonesBuilder_.getMessageOrBuilder();
+      } else {
+        return zones_ == null ?
+            outland.feature.proto.ZoneCollection.getDefaultInstance() : zones_;
+      }
+    }
+    /**
+     * <code>optional .outland.ZoneCollection zones = 14;</code>
+     */
+    private com.google.protobuf.SingleFieldBuilderV3<
+        outland.feature.proto.ZoneCollection, outland.feature.proto.ZoneCollection.Builder, outland.feature.proto.ZoneCollectionOrBuilder> 
+        getZonesFieldBuilder() {
+      if (zonesBuilder_ == null) {
+        zonesBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+            outland.feature.proto.ZoneCollection, outland.feature.proto.ZoneCollection.Builder, outland.feature.proto.ZoneCollectionOrBuilder>(
+                getZones(),
+                getParentForChildren(),
+                isClean());
+        zones_ = null;
+      }
+      return zonesBuilder_;
     }
     public final Builder setUnknownFields(
         final com.google.protobuf.UnknownFieldSet unknownFields) {

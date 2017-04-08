@@ -56,6 +56,32 @@ message OptionCollection {
     repeated FeatureOption items = 4;
 }
 
+message ZoneFeature {
+    string type = 1;
+    string id = 2;
+    string key = 3;
+    string description = 4;
+    enum State {
+        none = 0;
+        off = 1;
+        on = 2;
+    }
+    State state = 5;
+    OptionCollection options = 6;
+    FeatureVersion version = 7;
+}
+
+message Zone {
+    string name = 1;
+    string key = 2;
+    ZoneFeature feature = 3;
+}
+
+message ZoneCollection {
+    string type = 1;
+    repeated Zone items = 2;
+}
+
 message Feature {
     string id = 1;
     string key = 2;
@@ -74,6 +100,7 @@ message Feature {
     OptionCollection options = 10;
     FeatureVersion version = 12;
     string type = 13;
+    ZoneCollection zones = 14;
 }
 
 message FeatureCollection {
