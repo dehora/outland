@@ -14,6 +14,8 @@
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [Welcome to Outland](#welcome-to-outland)
+  - [Why Feature Flags?](#why-feature-flags)
+  - [Why a Service?](#why-a-service)
   - [Project Status](#project-status)
 - [Quickstart](#quickstart)
   - [Server](#server)
@@ -23,10 +25,9 @@
   - [Client](#client)
     - [Add the client library](#add-the-client-library)
     - [Evaluate a Feature](#evaluate-a-feature)
-    - [Enable a Feature](#enable-a-feature-1)
-- [Feature Flags and Modern Software Development](#feature-flags-and-modern-software-development)
-  - [Why a Service?](#why-a-service)
+    - [Client Feature API](#client-feature-api)
 - [Outland Feature Flag Model](#outland-feature-flag-model)
+  - [Summary: Features and Namespaces](#summary-features-and-namespaces)
   - [Features](#features)
   - [Feature Flags and Feature Options](#feature-flags-and-feature-options)
   - [Namespace](#namespace)
