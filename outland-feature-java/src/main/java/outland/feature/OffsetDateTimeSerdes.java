@@ -41,10 +41,6 @@ class OffsetDateTimeSerdes
     return toDateObject(raw, OffsetDateTime::from);
   }
 
-  Instant toInstant(String raw) {
-    return toDateObject(raw, Instant::from);
-  }
-
   private <T> T toDateObject(String raw, TemporalQuery<T> from) {
     if (raw.contains(":59:60")) {
       // ISO_INSTANT doesn't crash on leap seconds
