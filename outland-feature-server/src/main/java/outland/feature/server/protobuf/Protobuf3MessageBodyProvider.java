@@ -1,5 +1,6 @@
 package outland.feature.server.protobuf;
 
+import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.Message;
 import com.google.protobuf.util.JsonFormat;
 import java.io.BufferedReader;
@@ -8,6 +9,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.lang.annotation.Annotation;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
@@ -19,6 +21,8 @@ import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.ext.MessageBodyReader;
 import javax.ws.rs.ext.MessageBodyWriter;
 import javax.ws.rs.ext.Provider;
+import outland.feature.server.Problem;
+import outland.feature.server.ServiceException;
 
 @Provider
 @Consumes(
@@ -70,8 +74,12 @@ public class Protobuf3MessageBodyProvider
       }
 
       return builder.mergeFrom(entityStream).build();
-    } catch (Exception e) {
-      throw new WebApplicationException(e);
+    } catch (InvalidProtocolBufferException e) {
+      throw new ServiceException(Problem.clientProblem("request_entity_invalid",
+          "The submitted content was invalid.", 422));
+    } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+      throw new ServiceException(Problem.clientProblem("request_entity_failure",
+          "A request handler could not be loaded.", 500));
     }
   }
 

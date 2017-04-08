@@ -10,6 +10,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import org.assertj.core.util.Lists;
 import org.glassfish.jersey.client.JerseyClient;
+import org.glassfish.jersey.client.JerseyInvocation;
 import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
 import org.glassfish.jersey.logging.LoggingFeature;
 import org.junit.ClassRule;
@@ -21,6 +22,7 @@ import outland.feature.proto.OwnerCollection;
 import outland.feature.proto.ServiceAccess;
 import outland.feature.server.Problem;
 import outland.feature.server.ServerConfiguration;
+import outland.feature.server.TestSupport;
 import outland.feature.server.protobuf.Protobuf3Support;
 
 import static junit.framework.TestCase.assertTrue;
@@ -37,6 +39,28 @@ public class NamespaceResourceTest {
   private final static Gson gson = new Gson();
 
   public NamespaceResourceTest() {
+  }
+
+  private JerseyInvocation.Builder buildAuthorisedClient(String url) {
+    final JerseyClient client = createClient();
+    return client.target(url)
+        .request()
+        .property(HTTP_AUTHENTICATION_BASIC_USERNAME, authService + "/service")
+        .property(HTTP_AUTHENTICATION_BASIC_PASSWORD, basicPassword);
+  }
+
+  @Test
+  public void testInvalidContentCauses422() throws Exception {
+    String invalid = TestSupport.load("json/namespace-invalid-owner.json");
+    final String url = createAppUrl();
+
+    final Response response =
+        buildAuthorisedClient(url).post(Entity.entity(invalid, MediaType.APPLICATION_JSON_TYPE));
+
+    assertTrue(response.getStatus() == 422);
+    final Problem problem = gson.fromJson(response.readEntity(String.class), Problem.class);
+    assertTrue(problem.status() == 422);
+    assertTrue(problem.title().contains("request_entity_invalid"));
   }
 
   @Test
