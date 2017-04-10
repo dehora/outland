@@ -4,17 +4,17 @@
 package outland.feature.proto;
 
 /**
- * Protobuf type {@code outland.Namespace}
+ * Protobuf type {@code outland.Group}
  */
-public  final class Namespace extends
+public  final class Group extends
     com.google.protobuf.GeneratedMessageV3 implements
-    // @@protoc_insertion_point(message_implements:outland.Namespace)
-    NamespaceOrBuilder {
-  // Use Namespace.newBuilder() to construct.
-  private Namespace(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+    // @@protoc_insertion_point(message_implements:outland.Group)
+    GroupOrBuilder {
+  // Use Group.newBuilder() to construct.
+  private Group(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
     super(builder);
   }
-  private Namespace() {
+  private Group() {
     type_ = "";
     id_ = "";
     key_ = "";
@@ -28,7 +28,7 @@ public  final class Namespace extends
   getUnknownFields() {
     return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
   }
-  private Namespace(
+  private Group(
       com.google.protobuf.CodedInputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
@@ -123,14 +123,14 @@ public  final class Namespace extends
   }
   public static final com.google.protobuf.Descriptors.Descriptor
       getDescriptor() {
-    return outland.feature.proto.FeatureMessage.internal_static_outland_Namespace_descriptor;
+    return outland.feature.proto.FeatureMessage.internal_static_outland_Group_descriptor;
   }
 
   protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internalGetFieldAccessorTable() {
-    return outland.feature.proto.FeatureMessage.internal_static_outland_Namespace_fieldAccessorTable
+    return outland.feature.proto.FeatureMessage.internal_static_outland_Group_fieldAccessorTable
         .ensureFieldAccessorsInitialized(
-            outland.feature.proto.Namespace.class, outland.feature.proto.Namespace.Builder.class);
+            outland.feature.proto.Group.class, outland.feature.proto.Group.Builder.class);
   }
 
   public static final int TYPE_FIELD_NUMBER = 8;
@@ -458,10 +458,10 @@ public  final class Namespace extends
     if (obj == this) {
      return true;
     }
-    if (!(obj instanceof outland.feature.proto.Namespace)) {
+    if (!(obj instanceof outland.feature.proto.Group)) {
       return super.equals(obj);
     }
-    outland.feature.proto.Namespace other = (outland.feature.proto.Namespace) obj;
+    outland.feature.proto.Group other = (outland.feature.proto.Group) obj;
 
     boolean result = true;
     result = result && getType()
@@ -521,58 +521,58 @@ public  final class Namespace extends
     return hash;
   }
 
-  public static outland.feature.proto.Namespace parseFrom(
+  public static outland.feature.proto.Group parseFrom(
       com.google.protobuf.ByteString data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static outland.feature.proto.Namespace parseFrom(
+  public static outland.feature.proto.Group parseFrom(
       com.google.protobuf.ByteString data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static outland.feature.proto.Namespace parseFrom(byte[] data)
+  public static outland.feature.proto.Group parseFrom(byte[] data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static outland.feature.proto.Namespace parseFrom(
+  public static outland.feature.proto.Group parseFrom(
       byte[] data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static outland.feature.proto.Namespace parseFrom(java.io.InputStream input)
+  public static outland.feature.proto.Group parseFrom(java.io.InputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input);
   }
-  public static outland.feature.proto.Namespace parseFrom(
+  public static outland.feature.proto.Group parseFrom(
       java.io.InputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input, extensionRegistry);
   }
-  public static outland.feature.proto.Namespace parseDelimitedFrom(java.io.InputStream input)
+  public static outland.feature.proto.Group parseDelimitedFrom(java.io.InputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseDelimitedWithIOException(PARSER, input);
   }
-  public static outland.feature.proto.Namespace parseDelimitedFrom(
+  public static outland.feature.proto.Group parseDelimitedFrom(
       java.io.InputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
   }
-  public static outland.feature.proto.Namespace parseFrom(
+  public static outland.feature.proto.Group parseFrom(
       com.google.protobuf.CodedInputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input);
   }
-  public static outland.feature.proto.Namespace parseFrom(
+  public static outland.feature.proto.Group parseFrom(
       com.google.protobuf.CodedInputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
@@ -584,7 +584,7 @@ public  final class Namespace extends
   public static Builder newBuilder() {
     return DEFAULT_INSTANCE.toBuilder();
   }
-  public static Builder newBuilder(outland.feature.proto.Namespace prototype) {
+  public static Builder newBuilder(outland.feature.proto.Group prototype) {
     return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
   }
   public Builder toBuilder() {
@@ -599,25 +599,25 @@ public  final class Namespace extends
     return builder;
   }
   /**
-   * Protobuf type {@code outland.Namespace}
+   * Protobuf type {@code outland.Group}
    */
   public static final class Builder extends
       com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-      // @@protoc_insertion_point(builder_implements:outland.Namespace)
-      outland.feature.proto.NamespaceOrBuilder {
+      // @@protoc_insertion_point(builder_implements:outland.Group)
+      outland.feature.proto.GroupOrBuilder {
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return outland.feature.proto.FeatureMessage.internal_static_outland_Namespace_descriptor;
+      return outland.feature.proto.FeatureMessage.internal_static_outland_Group_descriptor;
     }
 
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return outland.feature.proto.FeatureMessage.internal_static_outland_Namespace_fieldAccessorTable
+      return outland.feature.proto.FeatureMessage.internal_static_outland_Group_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              outland.feature.proto.Namespace.class, outland.feature.proto.Namespace.Builder.class);
+              outland.feature.proto.Group.class, outland.feature.proto.Group.Builder.class);
     }
 
-    // Construct using outland.feature.proto.Namespace.newBuilder()
+    // Construct using outland.feature.proto.Group.newBuilder()
     private Builder() {
       maybeForceBuilderInitialization();
     }
@@ -663,23 +663,23 @@ public  final class Namespace extends
 
     public com.google.protobuf.Descriptors.Descriptor
         getDescriptorForType() {
-      return outland.feature.proto.FeatureMessage.internal_static_outland_Namespace_descriptor;
+      return outland.feature.proto.FeatureMessage.internal_static_outland_Group_descriptor;
     }
 
-    public outland.feature.proto.Namespace getDefaultInstanceForType() {
-      return outland.feature.proto.Namespace.getDefaultInstance();
+    public outland.feature.proto.Group getDefaultInstanceForType() {
+      return outland.feature.proto.Group.getDefaultInstance();
     }
 
-    public outland.feature.proto.Namespace build() {
-      outland.feature.proto.Namespace result = buildPartial();
+    public outland.feature.proto.Group build() {
+      outland.feature.proto.Group result = buildPartial();
       if (!result.isInitialized()) {
         throw newUninitializedMessageException(result);
       }
       return result;
     }
 
-    public outland.feature.proto.Namespace buildPartial() {
-      outland.feature.proto.Namespace result = new outland.feature.proto.Namespace(this);
+    public outland.feature.proto.Group buildPartial() {
+      outland.feature.proto.Group result = new outland.feature.proto.Group(this);
       result.type_ = type_;
       result.id_ = id_;
       result.key_ = key_;
@@ -727,16 +727,16 @@ public  final class Namespace extends
       return (Builder) super.addRepeatedField(field, value);
     }
     public Builder mergeFrom(com.google.protobuf.Message other) {
-      if (other instanceof outland.feature.proto.Namespace) {
-        return mergeFrom((outland.feature.proto.Namespace)other);
+      if (other instanceof outland.feature.proto.Group) {
+        return mergeFrom((outland.feature.proto.Group)other);
       } else {
         super.mergeFrom(other);
         return this;
       }
     }
 
-    public Builder mergeFrom(outland.feature.proto.Namespace other) {
-      if (other == outland.feature.proto.Namespace.getDefaultInstance()) return this;
+    public Builder mergeFrom(outland.feature.proto.Group other) {
+      if (other == outland.feature.proto.Group.getDefaultInstance()) return this;
       if (!other.getType().isEmpty()) {
         type_ = other.type_;
         onChanged();
@@ -779,11 +779,11 @@ public  final class Namespace extends
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      outland.feature.proto.Namespace parsedMessage = null;
+      outland.feature.proto.Group parsedMessage = null;
       try {
         parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        parsedMessage = (outland.feature.proto.Namespace) e.getUnfinishedMessage();
+        parsedMessage = (outland.feature.proto.Group) e.getUnfinishedMessage();
         throw e.unwrapIOException();
       } finally {
         if (parsedMessage != null) {
@@ -1451,39 +1451,39 @@ public  final class Namespace extends
     }
 
 
-    // @@protoc_insertion_point(builder_scope:outland.Namespace)
+    // @@protoc_insertion_point(builder_scope:outland.Group)
   }
 
-  // @@protoc_insertion_point(class_scope:outland.Namespace)
-  private static final outland.feature.proto.Namespace DEFAULT_INSTANCE;
+  // @@protoc_insertion_point(class_scope:outland.Group)
+  private static final outland.feature.proto.Group DEFAULT_INSTANCE;
   static {
-    DEFAULT_INSTANCE = new outland.feature.proto.Namespace();
+    DEFAULT_INSTANCE = new outland.feature.proto.Group();
   }
 
-  public static outland.feature.proto.Namespace getDefaultInstance() {
+  public static outland.feature.proto.Group getDefaultInstance() {
     return DEFAULT_INSTANCE;
   }
 
-  private static final com.google.protobuf.Parser<Namespace>
-      PARSER = new com.google.protobuf.AbstractParser<Namespace>() {
-    public Namespace parsePartialFrom(
+  private static final com.google.protobuf.Parser<Group>
+      PARSER = new com.google.protobuf.AbstractParser<Group>() {
+    public Group parsePartialFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-        return new Namespace(input, extensionRegistry);
+        return new Group(input, extensionRegistry);
     }
   };
 
-  public static com.google.protobuf.Parser<Namespace> parser() {
+  public static com.google.protobuf.Parser<Group> parser() {
     return PARSER;
   }
 
   @java.lang.Override
-  public com.google.protobuf.Parser<Namespace> getParserForType() {
+  public com.google.protobuf.Parser<Group> getParserForType() {
     return PARSER;
   }
 
-  public outland.feature.proto.Namespace getDefaultInstanceForType() {
+  public outland.feature.proto.Group getDefaultInstanceForType() {
     return DEFAULT_INSTANCE;
   }
 

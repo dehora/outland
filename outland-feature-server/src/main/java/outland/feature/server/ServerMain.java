@@ -33,8 +33,8 @@ import org.glassfish.jersey.server.filter.RolesAllowedDynamicFeature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import outland.feature.server.app.GuiceApplication;
-import outland.feature.server.namespaces.NamesapaceAuthService;
-import outland.feature.server.namespaces.AppModule;
+import outland.feature.server.groups.NamesapaceAuthService;
+import outland.feature.server.groups.GroupModule;
 import outland.feature.server.auth.AuthPrincipal;
 import outland.feature.server.auth.AuthConfiguration;
 import outland.feature.server.auth.AuthModule;
@@ -80,7 +80,7 @@ public class ServerMain extends GuiceApplication<ServerConfiguration> {
         new DynamoDbModule(configuration.aws),
         new AuthModule(configuration.auth),
         new FeatureModule(configuration.featureTable),
-        new AppModule()
+        new GroupModule()
     );
   }
 

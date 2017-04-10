@@ -11,7 +11,7 @@ public class TableConfiguration {
 
   @NotEmpty
   @JsonProperty
-  public String outlandAppsTable;
+  public String outlandGroupsTable;
 
   @NotEmpty
   @JsonProperty

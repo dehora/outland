@@ -18,28 +18,29 @@ import javax.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import outland.feature.server.features.TableConfiguration;
+import outland.feature.server.groups.DefaultGroupStorage;
 
-public class DynamoCreateNamespacesTableTask extends Task {
+public class DynamoCreateGroupsTableTask extends Task {
 
-  private static final Logger logger = LoggerFactory.getLogger(DynamoCreateNamespacesTableTask.class);
-  public static final String HASH_KEY = "ns_key";
+  private static final Logger logger = LoggerFactory.getLogger(DynamoCreateGroupsTableTask.class);
+  public static final String HASH_KEY = DefaultGroupStorage.HASH_KEY;
 
   private final AmazonDynamoDB amazonDynamoDB;
   private final TableConfiguration tableConfiguration;
 
   @Inject
-  public DynamoCreateNamespacesTableTask(
+  public DynamoCreateGroupsTableTask(
       AmazonDynamoDB amazonDynamoDB,
       TableConfiguration tableConfiguration
   ) {
-    super("DynamoCreateNamespacesTableTask");
+    super("DynamoCreateGroupsTableTask");
     this.amazonDynamoDB = amazonDynamoDB;
     this.tableConfiguration = tableConfiguration;
   }
 
   @Override public void execute(ImmutableMultimap<String, String> parameters, PrintWriter output)
       throws Exception {
-    createAppsTable(tableConfiguration.outlandAppsTable);
+    createAppsTable(tableConfiguration.outlandGroupsTable);
   }
 
   private void createAppsTable(String tableName) {

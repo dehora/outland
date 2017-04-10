@@ -36,7 +36,7 @@ import static outland.feature.server.StructLog.kvp;
 public class DefaultFeatureStorage implements FeatureStorage {
 
   private static final Logger logger = LoggerFactory.getLogger(DefaultFeatureStorage.class);
-  public static final String HASH_KEY = "ns_key";
+  public static final String HASH_KEY = "group_key";
   public static final String RANGE_KEY = "feature_key";
 
   static Map<String, Feature> features = Maps.newHashMap();
@@ -65,7 +65,7 @@ public class DefaultFeatureStorage implements FeatureStorage {
   @Override public Void createFeature(Feature feature) {
 
     final String key = feature.getKey();
-    final String namespace = feature.getNamespace();
+    final String group = feature.getGroup();
     final Item item = preparePutItem(feature);
 
     final PutItemSpec putItemSpec = new PutItemSpec()
@@ -94,7 +94,7 @@ public class DefaultFeatureStorage implements FeatureStorage {
     final PutItemOutcome outcome = cmd.execute();
 
     logger.info("{} /dynamodb_put_item_result=[{}]",
-        kvp("op", "createFeature", HASH_KEY, namespace, RANGE_KEY, key, "result", "ok"),
+        kvp("op", "createFeature", HASH_KEY, group, RANGE_KEY, key, "result", "ok"),
         outcome.getPutItemResult().toString());
 
     return null;
@@ -103,10 +103,10 @@ public class DefaultFeatureStorage implements FeatureStorage {
   @Override public Void
   updateFeature(Feature feature, FeatureVersion previousVersion) {
     logger.info("{}",
-        kvp("op", "updateFeature", HASH_KEY, feature.getNamespace(), RANGE_KEY, feature.getKey()));
+        kvp("op", "updateFeature", HASH_KEY, feature.getGroup(), RANGE_KEY, feature.getKey()));
 
     final String key = feature.getKey();
-    final String namespace = feature.getNamespace();
+    final String group = feature.getGroup();
     final Item item = preparePutItem(feature);
 
     final PutItemSpec putItemSpec = new PutItemSpec()
@@ -134,19 +134,19 @@ public class DefaultFeatureStorage implements FeatureStorage {
     final PutItemOutcome outcome = cmd.execute();
 
     logger.info("{} /dynamodb_update_item_result=[{}]",
-        kvp("op", "updateFeature", HASH_KEY, namespace, RANGE_KEY, key, "result", "ok"),
+        kvp("op", "updateFeature", HASH_KEY, group, RANGE_KEY, key, "result", "ok"),
         outcome.getPutItemResult().toString());
 
     return null;
   }
 
-  @Override public Optional<Feature> loadFeatureByKey(String namespace, String key) {
-    logger.info("{}", kvp("op", "loadFeatureByKey", HASH_KEY, namespace, RANGE_KEY, key));
+  @Override public Optional<Feature> loadFeatureByKey(String group, String key) {
+    logger.info("{}", kvp("op", "loadFeatureByKey", HASH_KEY, group, RANGE_KEY, key));
 
     Table table = dynamoDB.getTable(featureTableName);
 
     DynamoDbCommand<Item> cmd = new DynamoDbCommand<>("loadFeatureByKey",
-        () -> getItem(namespace, key, table),
+        () -> getItem(group, key, table),
         () -> {
           throw new RuntimeException("loadFeatureById");
         },
@@ -163,7 +163,7 @@ public class DefaultFeatureStorage implements FeatureStorage {
   private Item preparePutItem(Feature feature) {
     final String featureKey = feature.getKey();
     final String id = feature.getId();
-    final String namespace = feature.getNamespace();
+    final String group = feature.getGroup();
     final String json = Protobuf3Support.toJsonString(feature);
 
     final Map<String, String> owner = Maps.newHashMap();
@@ -181,7 +181,7 @@ public class DefaultFeatureStorage implements FeatureStorage {
     }
 
     final Item item = new Item()
-        .withString(HASH_KEY, namespace)
+        .withString(HASH_KEY, group)
         .withString(RANGE_KEY, featureKey)
         .withString("version_id", feature.getVersion().getId())
         .withNumber("version_timestamp", feature.getVersion().getTimestamp())
@@ -200,19 +200,19 @@ public class DefaultFeatureStorage implements FeatureStorage {
     return item;
   }
 
-  private Item getItem(String namespace, String key, Table table) {
-    return table.getItem(HASH_KEY, namespace, RANGE_KEY, key);
+  private Item getItem(String group, String key, Table table) {
+    return table.getItem(HASH_KEY, group, RANGE_KEY, key);
   }
 
-  @Override public List<Feature> loadFeatures(String namespace) {
-    logger.info("{}", kvp("op", "loadFeatures", "namespace", namespace));
+  @Override public List<Feature> loadFeatures(String group) {
+    logger.info("{}", kvp("op", "loadFeatures", "group", group));
     List<Feature> features = Lists.newArrayList();
 
     Table table = dynamoDB.getTable(featureTableName);
 
     QuerySpec querySpec = new QuerySpec()
-        .withKeyConditionExpression("ns_key = :k_ns_key")
-        .withValueMap(new ValueMap().withString(":k_ns_key", namespace))
+        .withKeyConditionExpression(HASH_KEY+" = :k_"+HASH_KEY)
+        .withValueMap(new ValueMap().withString(":k_"+HASH_KEY, group))
         .withConsistentRead(true);
 
     DynamoDbCommand<ItemCollection<QueryOutcome>> cmd = new DynamoDbCommand<>("loadFeatures",

@@ -20,13 +20,14 @@ import java.util.ArrayList;
 import javax.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import outland.feature.server.features.DefaultFeatureStorage;
 import outland.feature.server.features.TableConfiguration;
 
 public class DynamoCreateFeatureTableTask extends Task {
 
   private static final Logger logger = LoggerFactory.getLogger(DynamoCreateFeatureTableTask.class);
-  public static final String HASH_KEY = "ns_key";
-  public static final String RANGE_KEY = "feature_key";
+  public static final String HASH_KEY = DefaultFeatureStorage.HASH_KEY;
+  public static final String RANGE_KEY = DefaultFeatureStorage.RANGE_KEY;
   public static final String ATTR_ID = "id";
 
   private final AmazonDynamoDB amazonDynamoDB;

@@ -29,11 +29,11 @@ public class TestFeatureStorage implements FeatureStorage {
     return null;
   }
 
-  @Override public Optional<Feature> loadFeatureByKey(String appKey, String key) {
+  @Override public Optional<Feature> loadFeatureByKey(String group, String key) {
 
     Set<Map.Entry<String, Feature>> entries = features.entrySet();
     for (Map.Entry<String, Feature> entry : entries) {
-      if (entry.getValue().getKey().equals(key) && entry.getValue().getNamespace().equals(appKey)) {
+      if (entry.getValue().getKey().equals(key) && entry.getValue().getGroup().equals(group)) {
         return Optional.of(entry.getValue());
       }
     }
@@ -41,7 +41,7 @@ public class TestFeatureStorage implements FeatureStorage {
     return Optional.empty();
   }
 
-  @Override public List<Feature> loadFeatures(String appKey) {
+  @Override public List<Feature> loadFeatures(String group) {
 
     return features.values().stream().collect(Collectors.toList());
   }

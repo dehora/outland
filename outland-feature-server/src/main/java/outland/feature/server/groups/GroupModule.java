@@ -1,19 +1,19 @@
-package outland.feature.server.namespaces;
+package outland.feature.server.groups;
 
 import com.google.inject.AbstractModule;
 import javax.inject.Inject;
 
-public class AppModule extends AbstractModule {
+public class GroupModule extends AbstractModule {
 
   // depends on TableConfiguration being loaded by FeatureModule
 
   @Inject
-  public AppModule() {
+  public GroupModule() {
   }
 
   @Override protected void configure() {
-    bind(NamespaceService.class).to(DefaultNamespaceService.class).asEagerSingleton();
-    bind(NamespaceStorage.class).to(DefaultNamespaceStorage.class).asEagerSingleton();
+    bind(GroupService.class).to(DefaultGroupService.class).asEagerSingleton();
+    bind(GroupStorage.class).to(DefaultGroupStorage.class).asEagerSingleton();
     bind(NamesapaceAuthService.class).to(NamesapaceAuthServiceViaPlanBServer.class).asEagerSingleton();
   }
 }

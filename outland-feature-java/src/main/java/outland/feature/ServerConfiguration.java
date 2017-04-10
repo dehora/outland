@@ -15,7 +15,7 @@ public class ServerConfiguration {
   static final int REFRESH_AFTER_WRITE_S = 8;
 
   private URI baseURI;
-  private String defaultNamespace;
+  private String defaultGroup;
   private long connectTimeout = 5_000L;
   private long readTimeout = 3_000L;
   private boolean httpLoggingEnabled;
@@ -115,34 +115,34 @@ public class ServerConfiguration {
     return this;
   }
 
-  public String defaultNamespace() {
-    return defaultNamespace;
+  public String defaultGroup() {
+    return defaultGroup;
   }
 
   /**
-   * Configure a default namespace. All features are housed within a namespace.
+   * Configure a default group. All features are housed within a group.
    * <p>
    * This is used for {@link FeatureClient} and  {@link FeatureResource} calls that don't have
-   * the namespace as an argument. Enabling this does not interfere with calls which supply
-   * the namespace argument.
+   * the group as an argument. Enabling this does not interfere with calls which supply
+   * the group argument.
    * </p>
    *
-   * @param defaultNamespace the default namespace.
+   * @param defaultGroup the default group.
    * @return this.
    */
-  public ServerConfiguration defaultNamespace(String defaultNamespace) {
+  public ServerConfiguration defaultGroup(String defaultGroup) {
     /*
-     fast fail because a null namespace is logically ok as it means we expect to be called always
-      with the namespace/feature variants, but setting a null/empty is a bug.
+     fast fail because a null group is logically ok as it means we expect to be called always
+      with the group/feature variants, but setting a null/empty is a bug.
       */
-    if (Strings.isNullOrEmpty(defaultNamespace)) {
-      throw new FeatureException(Problem.configProblem("empty_namespace",
-          "Please configure a non-null and non-empty namespace."));
+    if (Strings.isNullOrEmpty(defaultGroup)) {
+      throw new FeatureException(Problem.configProblem("empty_group",
+          "Please configure a non-null and non-empty group."));
     }
 
-    // todo: reject junk once we define the legal namespace regex on the api
+    // todo: reject junk once we define the legal group regex on the api
 
-    this.defaultNamespace = defaultNamespace;
+    this.defaultGroup = defaultGroup;
     return this;
   }
 

@@ -56,21 +56,21 @@ class HttpCacheLoader extends CacheLoader<String, Feature> {
     return t;
   }
 
-  private Feature httpLoad(String namespace, String featureKey) {
-    logger.info("op=cache_load_from_api, namespace={}, feature_key={}", namespace, featureKey);
-    return resources.features().findByKey(namespace, featureKey);
+  private Feature httpLoad(String group, String featureKey) {
+    logger.info("op=cache_load_from_api, group={}, feature_key={}", group, featureKey);
+    return resources.features().findByKey(group, featureKey);
   }
 
-  private Feature httpLoad(String namespace, String featureKey, Feature oldValue) {
+  private Feature httpLoad(String group, String featureKey, Feature oldValue) {
     try {
-      logger.info("op=background_cache_load_from_api, namespace={}, feature_key={}", namespace, featureKey);
-      return resources.features().findByKey(namespace, featureKey);
+      logger.info("op=background_cache_load_from_api, group={}, feature_key={}", group, featureKey);
+      return resources.features().findByKey(group, featureKey);
     } catch (FeatureException e) {
       logger.error(
           String.format(
-              "op=background_cache_load_from_api, namespace=%s, feature_key=%s, "
+              "op=background_cache_load_from_api, group=%s, feature_key=%s, "
                   + "action=retaining_old_feature, err=%s",
-              namespace, featureKey, e.getMessage()));
+              group, featureKey, e.getMessage()));
       return oldValue;
     }
   }

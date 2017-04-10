@@ -9,7 +9,7 @@ class ResourceOptions {
   private final Map<String, Object> headers = new HashMap<>();
   private AuthorizationProvider provider;
   private String scope;
-  private String namespace;
+  private String group;
 
   public ResourceOptions securityTokenProvider(AuthorizationProvider provider) {
     FeatureException.throwIfNull(provider, "Please provide an AuthorizationProvider");
@@ -36,9 +36,9 @@ class ResourceOptions {
     return this;
   }
 
-  public ResourceOptions namespace(String namespace) {
-    FeatureException.throwIfNull(namespace, "Please provide a namespace");
-    this.namespace = namespace;
+  public ResourceOptions group(String group) {
+    FeatureException.throwIfNull(this.group, "Please provide a group");
+    this.group = group;
     return this;
   }
 
@@ -47,7 +47,7 @@ class ResourceOptions {
   }
 
   public Optional<Authorization> supplyToken() {
-    return provider.authorization(namespace, this.scope);
+    return provider.authorization(group, this.scope);
   }
 
   public String scope() {

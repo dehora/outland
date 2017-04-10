@@ -1,20 +1,20 @@
-package outland.feature.server.namespaces;
+package outland.feature.server.groups;
 
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import java.util.List;
 import outland.feature.proto.AccessCollection;
-import outland.feature.proto.Namespace;
+import outland.feature.proto.Group;
 import outland.feature.proto.MemberAccess;
 import outland.feature.proto.Owner;
 import outland.feature.proto.OwnerCollection;
 import outland.feature.proto.ServiceAccess;
 import outland.feature.server.features.Ulid;
 
-class NamespaceUpdateProcessor {
+class GroupUpdateProcessor {
 
-  List<ServiceAccess> mergeServices(Namespace namespace, ServiceAccess incoming) {
-    final AccessCollection existingGrants = namespace.getGranted();
+  List<ServiceAccess> mergeServices(Group group, ServiceAccess incoming) {
+    final AccessCollection existingGrants = group.getGranted();
     final List<ServiceAccess> existingGrantsList = existingGrants.getServicesList();
     final List<ServiceAccess> updateGrantList = Lists.newArrayList();
     boolean found = false;
@@ -33,8 +33,8 @@ class NamespaceUpdateProcessor {
     return updateGrantList;
   }
 
-  List<MemberAccess> mergeMembers(Namespace namespace, MemberAccess incoming) {
-    final AccessCollection existingGrants = namespace.getGranted();
+  List<MemberAccess> mergeMembers(Group group, MemberAccess incoming) {
+    final AccessCollection existingGrants = group.getGranted();
     final List<MemberAccess> existingGrantsList = existingGrants.getMembersList();
     final List<MemberAccess> updateGrantList = Lists.newArrayList();
     boolean found = false;
@@ -53,8 +53,8 @@ class NamespaceUpdateProcessor {
     return updateGrantList;
   }
 
-  List<Owner> mergeOwners(Namespace namespace, Owner incoming) {
-    final OwnerCollection existingOwners = namespace.getOwners();
+  List<Owner> mergeOwners(Group group, Owner incoming) {
+    final OwnerCollection existingOwners = group.getOwners();
     final List<Owner> existingOwnerList = existingOwners.getItemsList();
     final List<Owner> updateOwnerList = Lists.newArrayList();
     boolean found = false;

@@ -1,4 +1,4 @@
-package outland.feature.server.namespaces;
+package outland.feature.server.groups;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -38,8 +38,8 @@ public class NamesapaceAuthServiceViaPlanBServer implements NamesapaceAuthServic
   private static final String PLANB_FIELD_REALM = "realm";
 
   static {
-    PLANB_REALMS.put("/employees", NamespaceService.OWNER);
-    PLANB_REALMS.put("/services", NamespaceService.SERVICE);
+    PLANB_REALMS.put("/employees", GroupService.OWNER);
+    PLANB_REALMS.put("/services", GroupService.SERVICE);
   }
 
   private final OkHttpClient client;
@@ -99,7 +99,7 @@ public class NamesapaceAuthServiceViaPlanBServer implements NamesapaceAuthServic
       return null;
     }
 
-    String type = NamespaceService.SERVICE;
+    String type = GroupService.SERVICE;
 
     final Object realm = tokenInfo.get(PLANB_FIELD_REALM);
     if (realm != null) {

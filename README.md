@@ -20,23 +20,23 @@
 - [Quickstart](#quickstart)
   - [Server](#server)
     - [Start a Server with Docker](#start-a-server-with-docker)
-    - [Create a Namespace and some Features via the API](#create-a-namespace-and-some-features-via-the-api)
+    - [Create a Group and some Features via the API](#create-a-group-and-some-features-via-the-api)
     - [Enable a Feature](#enable-a-feature)
   - [Client](#client)
     - [Add the client library](#add-the-client-library)
     - [Evaluate a Feature](#evaluate-a-feature)
     - [Client Feature API](#client-feature-api)
 - [Outland Feature Flag Model](#outland-feature-flag-model)
-  - [Summary: Features and Namespaces](#summary-features-and-namespaces)
+  - [Summary: Features and Groups](#summary-features-and-groups)
   - [Features](#features)
   - [Feature Flags and Feature Options](#feature-flags-and-feature-options)
-  - [Namespace](#namespace)
-  - [Namespace Access](#namespace-access)
+  - [Group](#group)
+  - [Group Access](#group-access)
 - [Installation](#installation)
   - [Server](#server-1)
     - [Docker](#docker)
     - [Creating Tables in DynamoDB](#creating-tables-in-dynamodb)
-    - [Creating a sample Namespace and Features](#creating-a-sample-namespace-and-features)
+    - [Creating a sample Group and Features](#creating-a-sample-group-and-features)
     - [Configuring the Server](#configuring-the-server)
     - [Server API Authentication](#server-api-authentication)
   - [Client Installation](#client-installation)
@@ -142,43 +142,43 @@ This will:
  - Add the redis and dynamodb-local images and start them.
  - Start an Outland container on port 8180.
  - Create the dynamodb tables used by the server.
- - Seed the server with a namespace called `testnamespace`.
- - Add two feature flags to the namespace, `test-flag-1` and `test-option-1`. 
+ - Seed the server with a group called `testgroup`.
+ - Add two feature flags to the group, `test-flag-1` and `test-option-1`. 
  
  
-You can see the namespace's list of features via the API:
+You can see the group's list of features via the API:
 
 ```bash
-curl -v http://localhost:8180/features/testnamespace -u testconsole/service:letmein
+curl -v http://localhost:8180/features/testgroup -u testconsole/service:letmein
 ```
 
-As well as the Namespace itself and its grants:
+As well as the Group itself and its grants:
 
 ```bash
-curl -v http://localhost:8180/namespaces/testnamespace -u testconsole/service:letmein
+curl -v http://localhost:8180/groups/testgroup -u testconsole/service:letmein
 ```
 
 Dummy credentials are setup as a convenience in the folder's `.env` file, this is how the 
 `testconsole` service is given access (all API calls require authentication). 
 
-### Create a Namespace and some Features via the API
+### Create a Group and some Features via the API
 
-A _namespace_ is used to group features together and store information about which services are 
-granted accessed the namespace's features. Grants can be given to _services_ or _members_ (such as an 
-individual or team account). Every namespace also has one or more _owners_.
+A _group_ is used to group features together and store information about which services are 
+granted accessed the group's features. Grants can be given to _services_ or _members_ (such as an 
+individual or team account). Every group also has one or more _owners_.
 
-The example below creates an namespace called testnamespace-1 with two grants and an owner. The grants are 
+The example below creates an group called testgroup-1 with two grants and an owner. The grants are 
 given to  a service called testservice-1 and one to a user called testuser-1. The owner is 
-also testuser-1 - owners are just owners, and are not granted access to an namespace's features by 
+also testuser-1 - owners are just owners, and are not granted access to an group's features by 
 default. 
 
 ```bash
-curl -v -XPOST http://localhost:8180/namespaces   \
+curl -v -XPOST http://localhost:8180/groups   \
 -H "Content-type: application/json" \
 -u testconsole/service:letmein  -d'
 {
-  "key": "testnamespace-1"
-  ,"name": "Test Namespace One"
+  "key": "testgroup-1"
+  ,"name": "Test Group One"
   ,"owners": {
     "items":[{
       "name": "Test User One"
@@ -201,8 +201,8 @@ curl -v -XPOST http://localhost:8180/namespaces   \
 '
 ```
 
-Let's add a _feature_ to the namespace by posting the feature JSON to the server associating it with 
-the namespace's `key`. This one is a simple on/off flag:
+Let's add a _feature_ to the group by posting the feature JSON to the server associating it with 
+the group's `key`. This one is a simple on/off flag:
 
 ```bash
 curl -v http://localhost:8180/features \
@@ -211,7 +211,7 @@ curl -v http://localhost:8180/features \
 {
   "key": "testfeature-1"
   ,"description": "A test feature flag"
-  ,"namespace": "testnamespace-1"
+  ,"group": "testgroup-1"
   ,"options": {
     "option": "flag"
   },
@@ -236,7 +236,7 @@ curl -v http://localhost:8180/features \
 {
   "key": "testfeature-2"
   ,"description": "A test feature flag"
-  ,"namespace": "testnamespace-1"
+  ,"group": "testgroup-1"
   ,"options": {
     "option": "bool",
     "items":[
@@ -266,12 +266,12 @@ Features are off by default. Let's enable the first feature `testfeature-1` by s
 to on:
 
 ```bash
-curl -v -XPOST  http://localhost:8180/features/testnamespace-1/testfeature-1 \
+curl -v -XPOST  http://localhost:8180/features/testgroup-1/testfeature-1 \
 -H "Content-type: application/json" \
 -u testconsole/service:letmein -d'
 {
   "key": "testfeature-1"
-  ,"namespace": "testnamespace-1"
+  ,"group": "testgroup-1"
   ,"state": "on"
 }  
 '
@@ -288,12 +288,12 @@ Once the client is setup up as a dependency you can configure it as follows:
 ```java
   ServerConfiguration conf = new ServerConfiguration()
       .baseURI("http://localhost:8180")
-      .defaultNamespace("testnamespace-1");
+      .defaultGroup("testgroup-1");
 
   FeatureClient client = FeatureClient.newBuilder()
       .serverConfiguration(conf)
       .authorizationProvider(
-          (namespace, scope) -> Optional.of(new Authorization(Authorization.REALM_BASIC,
+          (group, scope) -> Optional.of(new Authorization(Authorization.REALM_BASIC,
               new String(Base64.getEncoder().encode(("testconsole/service:letmein").getBytes())))))
       .build();   
 ```
@@ -313,18 +313,18 @@ Now you can check one the features created by the seed script:
   }
 ```
 
-To access a feature in a particular namespace you can use the extended form of `enabled`:
+To access a feature in a particular group you can use the extended form of `enabled`:
 
 ```java
-  if (client.enabled("testnamespace-1", "testfeature-1")) {
+  if (client.enabled("testgroup-1", "testfeature-1")) {
     System.out.println(featureKey+": enabled");
   } else {
     System.out.println(featureKey+": disabled");
   }
 ```
 
-It's common to work with just one namespace so the short form exists as a handy convenience. The 
- short form takes its namespace from the `defaultNamespace` set via `ServerConfiguration`.
+It's common to work with just one group so the short form exists as a handy convenience. The 
+ short form takes its group from the `defaultGroup` set via `ServerConfiguration`.
 
 
 ### Client Feature API
@@ -335,7 +335,7 @@ You can manage features via the client via `FeatureResource`:
   FeatureResource features = client.resources().features();
 
   Feature feature = Feature.newBuilder()
-      .setNamespace("testnamespace-1")
+      .setGroup("testgroup-1")
       .setKey("testfeature-1")
       .setState(Feature.State.on)
       .build();
@@ -347,15 +347,15 @@ You can manage features via the client via `FeatureResource`:
 
 # Outland Feature Flag Model
 
-## Summary: Features and Namespaces
+## Summary: Features and Groups
 
 A _Feature_ is identified by a _key_, and can be in an _on_ or _off_ state. Every feature has an owner
 and a version.  As well as a state, Features may also have a set of _options_. These are evaluated 
 in the on state and one option is returned. Each option can have a weight that affects the chance 
 if it being returned.
 
-A _Namespace_ is a collection of features and also identified by a key. Every Namespace at 
-least one owner. A Feature always belongs to one Namespace. Namespaces also hold a list of services 
+A _Group_ is a collection of features and also identified by a key. Every Group at 
+least one owner. A Feature always belongs to one Group. Groups also hold a list of services 
 and team members that are allowed access its features. 
 
 ## Features
@@ -418,37 +418,37 @@ biases the evaluation. One time in ten the "red" option will be returned, two ti
 it'll be "green", and seven times out of ten it'll be "blue". This gives us a path beyond on/off 
 toggles to things like A/B testing and multi-armed bandits.
 
-## Namespace
+## Group
 
-A Namespace is a collection of features and every feature belongs to just one Namespace. Every 
-feature in a Namespace must have a unique key within the Namespace. 
+A Group is a collection of features and every feature belongs to just one Group. Every 
+feature in a Group must have a unique key within the Group. 
 
-The main goal of a Namespace is to allow features to be observed by multiple systems. For example 
-you might use a Namespace to group features together for an epic project such that it allows 
+The main goal of a Group is to allow features to be observed by multiple systems. For example 
+you might use a Group to group features together for an epic project such that it allows 
 those features to span multiple microservices owned by a few different teams. Or you may simply 
 want to make some features available to your backend server and your single page webapp.  
 
 Our experience is that the thing you want to develop often has multiple parts and often will 
 span multiple systems. It's inevitable some thing you want to build will cut across whatever 
-service boundaries you have in place, however well-considered they are. Namespaces allow you to 
+service boundaries you have in place, however well-considered they are. Groups allow you to 
 handle that and deal with requirements that are naturally divergent. 
 
-Every Namespace has one or more owners that can administrate the Namespace and act as point of 
+Every Group has one or more owners that can administrate the Group and act as point of 
 contact. 
  
-Finally, the Namespace construct enables multi-tenancy, allowing multiple teams to share the 
+Finally, the Group construct enables multi-tenancy, allowing multiple teams to share the 
 same Outland service. There's nothing to stop you running multiple Outland servers but it 
 can be nice to leverage shared infrastructure and reduce heavy lifting.
 
-## Namespace Access
+## Group Access
 
-As well as grouping features, an Namespace can _grant_ access to one or more services 
+As well as grouping features, an Group can _grant_ access to one or more services 
 (typically running systems), or to one or members (typically individual or teams). Grants allow 
-the Namespace owner to declare which services can see the Namespace's features.  We'll just refer 
+the Group owner to declare which services can see the Group's features.  We'll just refer 
 to both kinds as services for now but they are handled separately. 
 
-Once the service requesting access to a feature or namespace is authenticated it is checked to see 
-if it's in the grant list for the Namespace. If it is it has access to the feature state, 
+Once the service requesting access to a feature or group is authenticated it is checked to see 
+if it's in the grant list for the Group. If it is it has access to the feature state, 
 otherwise it won't be authorised. 
 
 Owners and grants are distinct - owners are not automatically given grants and are not looked 
@@ -476,18 +476,18 @@ The `create_tables` script in the [examples/all-in-one](https://github.com/dehor
 
 For online or production use, you can create the tables via the AWS Console and choose to change their names as described [here](https://github.com/dehora/outland/blob/master/outland-feature-docker/README.md).
 
-### Creating a sample Namespace and Features
+### Creating a sample Group and Features
 
-The `create_seed_namespace` will create a Namespace called `test-acme-namespace` with two example features. The script contains plain curl requests which you might find useful for seeing how to call the API. You can see the Namespace's list of features via the API:
+The `create_seed_group` will create a Group called `test-acme-group` with two example features. The script contains plain curl requests which you might find useful for seeing how to call the API. You can see the Group's list of features via the API:
 
 ```sh
-curl -v http://localhost:8180/features/test-acme-namespace -u testconsole/service:letmein
+curl -v http://localhost:8180/features/test-acme-group -u testconsole/service:letmein
 ```
 
-As well as the Namespace itself and its grants:
+As well as the Group itself and its grants:
 
 ```sh
-curl -v http://localhost:8180/namespaces/test-acme-namespace -u testconsole/service:letmein
+curl -v http://localhost:8180/groups/test-acme-group -u testconsole/service:letmein
 ```
 
 ### Configuring the Server

@@ -16,10 +16,10 @@ public class FeatureClientTest {
     ServerConfiguration serverConfiguration =
         new ServerConfiguration()
             .baseURI("http://localhost")
-            .defaultNamespace("the_app")
+            .defaultGroup("the_app")
             ;
 
-    assertTrue(serverConfiguration.defaultNamespace() != null);
+    assertTrue(serverConfiguration.defaultGroup() != null);
 
     // we can create a client without suppyling a default ns
     try {
@@ -39,7 +39,7 @@ public class FeatureClientTest {
     ServerConfiguration serverConfiguration =
         new ServerConfiguration()
             .baseURI("http://localhost")
-            .defaultNamespace("the_app");
+            .defaultGroup("the_app");
 
     final FeatureClient client = FeatureClient.newBuilder()
         .serverConfiguration(serverConfiguration)
@@ -91,7 +91,7 @@ public class FeatureClientTest {
       ServerConfiguration serverConfiguration =
           new ServerConfiguration()
               .baseURI("http://localhost")
-              .defaultNamespace("the_app");
+              .defaultGroup("the_app");
 
       client = FeatureClient.newBuilder()
           .featureStore(new FeatureStoreNone())

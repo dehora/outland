@@ -15,9 +15,9 @@ import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 import org.junit.Test;
-import outland.feature.server.namespaces.NamesapaceAuthService;
-import outland.feature.server.namespaces.NamesapaceAuthServiceViaPlanBServer;
-import outland.feature.server.namespaces.TestAppModule;
+import outland.feature.server.groups.NamesapaceAuthService;
+import outland.feature.server.groups.NamesapaceAuthServiceViaPlanBServer;
+import outland.feature.server.groups.TestAppModule;
 import outland.feature.server.features.VersionService;
 import outland.feature.server.features.Versions;
 
@@ -46,7 +46,7 @@ public class AuthTest {
 
     authConfiguration.basicAuthenticationKeys = serviceKey + "=" + apiKey;
     authConfiguration.basicEnabled=true;
-    authConfiguration.multipleNamespaceAccessList = "acme.ui";
+    authConfiguration.multipleGroupAccessList = "acme.ui";
 
     final Injector injector = Guice.createInjector(
         new AuthModule(authConfiguration),
@@ -55,12 +55,12 @@ public class AuthTest {
           @Override protected void configure() {
             bind(VersionService.class).to(Versions.class).asEagerSingleton();
             bind(NamesapaceAuthService.class).to(NamesapaceAuthServiceViaPlanBServer.class).asEagerSingleton();
-            List<String> multipleNamespaceAccessList = Lists.newArrayList();
-            multipleNamespaceAccessList.addAll(
-                Splitter.on(",").splitToList(authConfiguration.multipleNamespaceAccessList));
+            List<String> multipleGroupAccessList = Lists.newArrayList();
+            multipleGroupAccessList.addAll(
+                Splitter.on(",").splitToList(authConfiguration.multipleGroupAccessList));
             bind(new TypeLiteral<List<String>>() {
-            }).annotatedWith(Names.named("multipleNamespaceAccessList"))
-                .toInstance(multipleNamespaceAccessList);
+            }).annotatedWith(Names.named("multipleGroupAccessList"))
+                .toInstance(multipleGroupAccessList);
             bind(AccessControlSupport.class).asEagerSingleton();
           }
         }

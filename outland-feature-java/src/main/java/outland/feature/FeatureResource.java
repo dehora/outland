@@ -32,28 +32,28 @@ public interface FeatureResource {
   Feature update(Feature feature) throws FeatureException;
 
   /**
-   * Find a feature in the "default" namespace.
+   * Find a feature in the "default" group.
    * <p>
-   * This requires the {@link ServerConfiguration#defaultNamespace(String)} has been configured.
+   * This requires the {@link ServerConfiguration#defaultGroup(String)} has been configured.
    * Calling it without a configuration results in a {@link FeatureException}.
    * </p>
    *
    * @param featureKey the feature key.
    * @return the feature
-   * @throws FeatureException for a request error or missing default namespace
+   * @throws FeatureException for a request error or missing default group
    */
   Feature findByKey(String featureKey) throws FeatureException;
 
   /**
-   * Read features for the "default" namespace.
+   * Read features for the "default" group.
    * <p>
-   * This requires the {@link ServerConfiguration#defaultNamespace(String)} has been configured.
+   * This requires the {@link ServerConfiguration#defaultGroup(String)} has been configured.
    * Calling it without a configuration results in a {@link FeatureException}.
    * </p>
    *
    * @return the results in a collection.
-   * @throws FeatureException for a request error or missing default namespace
-   * @see ServerConfiguration#defaultNamespace
+   * @throws FeatureException for a request error or missing default group
+   * @see ServerConfiguration#defaultGroup
    * @throws FeatureException for a request error or null/empty arguments
    */
   FeatureCollection listFeatures() throws FeatureException;
@@ -69,33 +69,33 @@ public interface FeatureResource {
   FeatureCollection listFeaturesSince(long timestamp, TimeUnit timeUnit) throws FeatureException;
 
   /**
-   * Read features for a given namespace.
+   * Read features for a given group.
    *
-   * @param namespace the feature namespace.
+   * @param group the feature group.
    * @return the results in a collection.
    * @throws FeatureException for a request error or null/empty arguments
    */
-  FeatureCollection listFeatures(String namespace) throws FeatureException;
+  FeatureCollection listFeatures(String group) throws FeatureException;
 
   /**
-   * Find a feature in a  namespace.
+   * Find a feature in a  group.
    *
-   * @param namespace the feature namespace
+   * @param group the feature group
    * @param featureKey the feature key.
    * @return the feature
    * @throws FeatureException for a request error or null/empty arguments
    */
-  Feature findByKey(String namespace, String featureKey) throws FeatureException;
+  Feature findByKey(String group, String featureKey) throws FeatureException;
 
   /**
    * Read features that have been changed or created since a given time.
    *
-   * @param namespace the feature namespace
+   * @param group the feature group
    * @param timestamp the time to read as far back as (always UTC).
    * @param timeUnit the time unit.
    * @return the results in a collection.
    * @throws FeatureException for a request error or null/empty arguments
    */
-  FeatureCollection listFeaturesSince(String namespace, long timestamp, TimeUnit timeUnit)
+  FeatureCollection listFeaturesSince(String group, long timestamp, TimeUnit timeUnit)
       throws FeatureException;
 }

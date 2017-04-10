@@ -13,7 +13,7 @@ public class FeatureStoreLocalNull implements FeatureStoreLocal {
     return null;
   }
 
-  @Override public FeatureCollection findAll(String namespace) throws FeatureException {
+  @Override public FeatureCollection findAll(String group) throws FeatureException {
     return null;
   }
 

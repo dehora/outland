@@ -17,18 +17,18 @@ class FeatureResourceReal implements FeatureResource {
 
   private final ResourceProvider resourceProvider;
   private final AuthorizationProvider authorizationProvider;
-  private final String namespace;
+  private final String group;
   private final URI baseUri;
 
   FeatureResourceReal(
       ResourceProvider resourceProvider,
       AuthorizationProvider authorizationProvider,
-      String namespace,
+      String group,
       URI baseUri
   ) {
     this.resourceProvider = resourceProvider;
     this.authorizationProvider = authorizationProvider;
-    this.namespace = namespace;
+    this.group = group;
     this.baseUri = baseUri;
   }
 
@@ -49,13 +49,13 @@ class FeatureResourceReal implements FeatureResource {
 
   @Override public Feature update(Feature feature) {
     FeatureException.throwIfNull(feature, "Please supply a feature");
-    FeatureException.throwIfNull(feature.getNamespace(), "Please add a namespace key to the feature");
+    FeatureException.throwIfNull(feature.getGroup(), "Please add a group key to the feature");
     FeatureException.throwIfNull(feature.getKey(), "Please add a feature key to the feature");
 
     try {
       String url = UriBuilder.builder(baseUri)
           .path(PATH_FEATURES)
-          .path(feature.getNamespace())
+          .path(feature.getGroup())
           .path(feature.getKey())
           .buildString();
 
@@ -67,60 +67,60 @@ class FeatureResourceReal implements FeatureResource {
   }
 
   @Override public Feature findByKey(String featureKey) {
-    if(namespace == null) {
-      throw new FeatureException(Problem.configProblem("find_by_key_with_no_namespace",
-          "Find by key cannot be called with only a feature key and no default namespace configured. "
-              + "Please configure a default namespace or use the namespace/feature method."));
+    if(group == null) {
+      throw new FeatureException(Problem.configProblem("find_by_key_with_no_group",
+          "Find by key cannot be called with only a feature key and no default group configured. "
+              + "Please configure a default group or use the group/feature method."));
     }
 
     FeatureException.throwIfNull(featureKey, "Please supply a featureKey");
 
-    return findByKey(namespace, featureKey);
+    return findByKey(group, featureKey);
   }
 
   @Override public FeatureCollection listFeatures() {
-    if(namespace == null) {
-      throw new FeatureException(Problem.configProblem("list_features_multi_with_no_namespace",
-          "List features cannot be called with only a feature key and no default namespace configured."
-              + "Please configure a default namespace or use the namespace/feature method."));
+    if(group == null) {
+      throw new FeatureException(Problem.configProblem("list_features_multi_with_no_group",
+          "List features cannot be called with only a feature key and no default group configured."
+              + "Please configure a default group or use the group/feature method."));
     }
 
-    return listFeatures(namespace);
+    return listFeatures(group);
   }
 
   @Override public FeatureCollection listFeaturesSince(long timestamp, TimeUnit timeUnit) {
-    if(namespace ==  null) {
-      throw new FeatureException(Problem.configProblem("list_features_since_multi_with_no_ns_key",
-          "List features since cannot be called with only a feature key and no default namespace configured."
-              + "Please configure a default namespace or use the namespace/feature method."));
+    if(group ==  null) {
+      throw new FeatureException(Problem.configProblem("list_features_since_multi_with_no_group_key",
+          "List features since cannot be called with only a feature key and no default group configured."
+              + "Please configure a default group or use the group/feature method."));
     }
 
     FeatureException.throwIfNull(timeUnit, "Please supply a timeUnit");
 
-    return listFeaturesSince(namespace, timestamp, timeUnit);
+    return listFeaturesSince(group, timestamp, timeUnit);
   }
 
   @Override
-  public Feature findByKey(String namespace, String featureKey) {
-    FeatureException.throwIfNull(namespace, "Please supply a namespace");
+  public Feature findByKey(String group, String featureKey) {
+    FeatureException.throwIfNull(group, "Please supply a group");
     FeatureException.throwIfNull(featureKey, "Please supply a featureKey");
 
-    return findByKeyInner(namespace, featureKey);
+    return findByKeyInner(group, featureKey);
   }
 
   @Override
-  public FeatureCollection listFeatures(String namespace) {
-    FeatureException.throwIfNull(namespace, "Please supply a namespace");
+  public FeatureCollection listFeatures(String group) {
+    FeatureException.throwIfNull(group, "Please supply a group");
 
-    return listFeaturesInner(namespace);
+    return listFeaturesInner(group);
   }
 
   @Override
-  public FeatureCollection listFeaturesSince(String namespace, long timestamp, TimeUnit timeUnit) {
-    FeatureException.throwIfNull(namespace, "Please supply a namespace");
+  public FeatureCollection listFeaturesSince(String group, long timestamp, TimeUnit timeUnit) {
+    FeatureException.throwIfNull(group, "Please supply a group");
     FeatureException.throwIfNull(timeUnit, "Please supply a timeUnit");
 
-    return listFeaturesSinceInner(namespace, timestamp, timeUnit);
+    return listFeaturesSinceInner(group, timestamp, timeUnit);
   }
 
   private Feature findByKeyInner(String nsKey, String key) {
@@ -190,12 +190,12 @@ class FeatureResourceReal implements FeatureResource {
   private Response postRequest(String url, Feature feature) {
     return resourceProvider
         .newResource()
-        .requestThrowing(Resource.POST, url, prepareOptions(feature.getNamespace()), feature);
+        .requestThrowing(Resource.POST, url, prepareOptions(feature.getGroup()), feature);
   }
 
-  private ResourceOptions prepareOptions(String namespace) {
+  private ResourceOptions prepareOptions(String group) {
     return ResourceSupport.options(APPLICATION_JSON)
-        .namespace(namespace)
+        .group(group)
         .securityTokenProvider(authorizationProvider);
   }
 }
