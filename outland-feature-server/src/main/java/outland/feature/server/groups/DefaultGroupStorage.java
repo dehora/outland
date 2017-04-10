@@ -23,7 +23,6 @@ import javax.inject.Named;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import outland.feature.proto.Group;
-import outland.feature.server.app.GroupSupport;
 import outland.feature.server.features.DynamoDbCommand;
 import outland.feature.server.features.TableConfiguration;
 import outland.feature.server.hystrix.HystrixConfiguration;
@@ -39,8 +38,8 @@ public class DefaultGroupStorage implements GroupStorage {
   private final DynamoDB dynamoDB;
   private final String groupTableName;
   private final String groupGraphTableName;
-  private final HystrixConfiguration dynamodbNamespaceWriteHystrix;
-  private final HystrixConfiguration dynamodbNamespaceGraphWriteHystrix;
+  private final HystrixConfiguration dynamodbGroupWriteHystrix;
+  private final HystrixConfiguration dynamodbGraphWriteHystrix;
   private final HystrixConfiguration dynamodbNamespaceGraphQueryHystrix;
   private final MetricRegistry metrics;
   private final AmazonDynamoDB amazonDynamoDB;
@@ -49,8 +48,8 @@ public class DefaultGroupStorage implements GroupStorage {
   public DefaultGroupStorage(
       AmazonDynamoDB amazonDynamoDB,
       TableConfiguration tableConfiguration,
-      @Named("dynamodbNamespaceWriteHystrix") HystrixConfiguration dynamodbNamespaceWriteHystrix,
-      @Named("dynamodbNamespaceGraphWriteHystrix") HystrixConfiguration dynamodbNamespaceGraphWriteHystrix,
+      @Named("dynamodbGroupWriteHystrix") HystrixConfiguration dynamodbGroupWriteHystrix,
+      @Named("dynamodbGraphWriteHystrix") HystrixConfiguration dynamodbGraphWriteHystrix,
       @Named("dynamodbNamespaceGraphQueryHystrix") HystrixConfiguration dynamodbNamespaceGraphQueryHystrix,
       MetricRegistry metrics
   ) {
@@ -58,8 +57,8 @@ public class DefaultGroupStorage implements GroupStorage {
     this.dynamoDB = new DynamoDB(this.amazonDynamoDB);
     this.groupTableName = tableConfiguration.outlandGroupsTable;
     this.groupGraphTableName = tableConfiguration.outlandAppGraphTable;
-    this.dynamodbNamespaceWriteHystrix = dynamodbNamespaceWriteHystrix;
-    this.dynamodbNamespaceGraphWriteHystrix = dynamodbNamespaceGraphWriteHystrix;
+    this.dynamodbGroupWriteHystrix = dynamodbGroupWriteHystrix;
+    this.dynamodbGraphWriteHystrix = dynamodbGraphWriteHystrix;
     this.dynamodbNamespaceGraphQueryHystrix = dynamodbNamespaceGraphQueryHystrix;
     this.metrics = metrics;
   }
@@ -92,34 +91,34 @@ public class DefaultGroupStorage implements GroupStorage {
     return putItem(group, putItemOutcomeSupplier);
   }
 
-  private Item preparePutItem(Group app) {
-    String json = Protobuf3Support.toJsonString(app);
+  private Item preparePutItem(Group group) {
+    String json = Protobuf3Support.toJsonString(group);
 
     return new Item()
-        .withString("id", app.getId())
-        .withString(HASH_KEY, app.getKey())
-        .withString("name", app.getName())
+        .withString("id", group.getId())
+        .withString(HASH_KEY, group.getKey())
+        .withString("name", group.getName())
         .withString("json", json)
         .withString("v", "1")
-        .withString("created", app.getCreated())
-        .withString("updated", app.getUpdated());
+        .withString("created", group.getCreated())
+        .withString("updated", group.getUpdated());
   }
 
-  private Void putItem(Group app, Supplier<PutItemOutcome> putItemOutcomeSupplier) {
+  private Void putItem(Group group, Supplier<PutItemOutcome> putItemOutcomeSupplier) {
     DynamoDbCommand<PutItemOutcome> cmd = new DynamoDbCommand<>("save",
         putItemOutcomeSupplier,
         () -> {
           throw new RuntimeException("save");
         },
-        dynamodbNamespaceWriteHystrix,
+        dynamodbGroupWriteHystrix,
         metrics);
 
     PutItemOutcome outcome = cmd.execute();
 
     logger.info("{} /dynamodb_put_item_result=[{}]",
         kvp("op", "save",
-            "appid", app.getId(),
-            HASH_KEY, app.getKey(),
+            "group", group.getId(),
+            HASH_KEY, group.getKey(),
             "result", "ok"),
         outcome.getPutItemResult().toString());
 
@@ -139,7 +138,7 @@ public class DefaultGroupStorage implements GroupStorage {
         () -> {
           throw new RuntimeException("saveRelation");
         },
-        dynamodbNamespaceGraphWriteHystrix,
+        dynamodbGraphWriteHystrix,
         metrics);
 
     PutItemOutcome outcome = cmd.execute();
@@ -170,7 +169,7 @@ public class DefaultGroupStorage implements GroupStorage {
         () -> {
           throw new RuntimeException("removeRelation");
         },
-        dynamodbNamespaceGraphWriteHystrix,
+        dynamodbGraphWriteHystrix,
         metrics);
 
     final DeleteItemOutcome deleteItemOutcome = cmd.execute();

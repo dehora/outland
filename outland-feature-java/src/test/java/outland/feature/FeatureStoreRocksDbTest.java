@@ -42,7 +42,7 @@ public class FeatureStoreRocksDbTest {
     Feature feature1 = Feature.newBuilder().setKey("key1").setGroup("app1").build();
     Feature feature1_ = Feature.newBuilder().setKey("key10").setGroup("app1").build();
 
-    // this has an app id that also starts with app1 to check our scans don't match both
+    // this has a group id that also starts with app1 to check our scans don't match both
     Feature feature10 = Feature.newBuilder().setKey("key1").setGroup("app10").build();
     Feature feature10_ = Feature.newBuilder().setKey("key10").setGroup("app10").build();
 
@@ -91,7 +91,7 @@ public class FeatureStoreRocksDbTest {
     assertEquals("key2", featureCollection.getItems(0).getKey());
     assertEquals("app2", featureCollection.getItems(0).getGroup());
 
-    // add another app's feature
+    // add another groups's features
 
     Feature feature1 = Feature.newBuilder().setKey("key1").setGroup("app1").build();
     db1.put(feature1);

@@ -1,4 +1,4 @@
-package outland.feature.server.app;
+package outland.feature.server.groups;
 
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.util.JsonFormat;

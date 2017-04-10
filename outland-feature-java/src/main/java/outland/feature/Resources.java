@@ -10,18 +10,18 @@ public class Resources {
 
   private final AuthorizationProvider authorizationProvider;
   private final ResourceProvider resourceProvider;
-  private final String namespace;
+  private final String group;
   private final URI baseURI;
 
   Resources(
       ResourceProvider resourceProvider,
       AuthorizationProvider authorizationProvider,
-      String namespace,
+      String group,
       URI baseUri
   ) {
     this.resourceProvider = resourceProvider;
     this.authorizationProvider = authorizationProvider;
-    this.namespace = namespace;
+    this.group = group;
     this.baseURI = baseUri;
   }
 
@@ -34,7 +34,7 @@ public class Resources {
     return new FeatureResourceReal(
         resourceProvider,
         authorizationProvider,
-        namespace,
+        group,
         baseURI
     );
   }

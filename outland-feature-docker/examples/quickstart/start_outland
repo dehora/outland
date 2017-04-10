@@ -15,7 +15,7 @@ echo "Server ready, creating tables..."
 
 ./create_tables
 
-echo "Server tables done, creating seed app..."
+echo "Server tables done, creating seed group..."
 
 ./create_seed_app
 

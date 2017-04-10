@@ -4,12 +4,12 @@ class FeatureStoreKeys {
 
   private static final String DELIM = "@";
 
-  static String storageKey(String namespace, String featureKey) {
-    return storageKeyPrefix(namespace) + featureKey;
+  static String storageKey(String group, String featureKey) {
+    return storageKeyPrefix(group) + featureKey;
   }
 
-  static String storageKeyPrefix(String namespace) {
-    return namespace + DELIM;
+  static String storageKeyPrefix(String group) {
+    return group + DELIM;
   }
 
   static String[] storageKeySplit(String storageKey) {

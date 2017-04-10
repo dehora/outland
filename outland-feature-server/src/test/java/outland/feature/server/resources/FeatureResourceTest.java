@@ -136,7 +136,7 @@ public class FeatureResourceTest {
   public void testAuthFailures() {
 
     /*
-    The test server is configured to reflect the bearer token as the found app id and accept it
+    The test server is configured to reflect the bearer token as the found group id and accept it
     without performing a token check or lookup. These test the interface and not an underlying
     auth mechanism
      */

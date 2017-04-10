@@ -39,13 +39,13 @@ public class FeatureStoreRealTest {
     FeatureStoreReal fs = new FeatureStoreReal(client, rocks);
     try {
       fs.open();
-      assertFalse("should not call api server for multi app",
+      assertFalse("should not call api server for multi group",
           fs.loadFromApiAttempted.get());
-      assertFalse("should not load api server for multi app when api server down",
+      assertFalse("should not load api server for multi group when api server down",
           fs.loadFromApiSuccessful.get());
-      assertTrue("should call rocksdb for multi app and local enabled",
+      assertTrue("should call rocksdb for multi group and local enabled",
           fs.loadFromLocalAttempted.get());
-      assertTrue("should load rocksdb for multi app and local enabled",
+      assertTrue("should load rocksdb for multi group and local enabled",
           fs.loadFromLocalSuccessful.get());
     } catch (Exception e) {
       e.printStackTrace();
@@ -81,13 +81,13 @@ public class FeatureStoreRealTest {
     FeatureStoreReal fs = new FeatureStoreReal(client, rocks);
     try {
       fs.open();
-      assertFalse("should not call api server for multi app",
+      assertFalse("should not call api server for multi group",
           fs.loadFromApiAttempted.get());
-      assertFalse("should not load api server for multi app when api server down",
+      assertFalse("should not load api server for multi group when api server down",
           fs.loadFromApiSuccessful.get());
-      assertFalse("should not call rocksdb for multi app and local disabled",
+      assertFalse("should not call rocksdb for multi group and local disabled",
           fs.loadFromLocalAttempted.get());
-      assertFalse("should not load rocksdb for multi app and local disabled",
+      assertFalse("should not load rocksdb for multi group and local disabled",
           fs.loadFromLocalSuccessful.get());
     } catch (Exception e) {
       e.printStackTrace();
@@ -103,7 +103,7 @@ public class FeatureStoreRealTest {
         new ServerConfiguration()
             .baseURI("http://localhost")
             .localStoreEnabled(false) // disable rocks
-            .defaultGroup("anapp");
+            .defaultGroup("angroup");
 
     final FeatureClient client = FeatureClient.newBuilder()
         // set useless store and backing
@@ -121,13 +121,13 @@ public class FeatureStoreRealTest {
     FeatureStoreReal fs = new FeatureStoreReal(client, rocks);
     try {
       fs.open();
-      assertTrue("should call api server for single app",
+      assertTrue("should call api server for single group",
           fs.loadFromApiAttempted.get());
-      assertFalse("should not load api server for single app when api server down",
+      assertFalse("should not load api server for single group when api server down",
           fs.loadFromApiSuccessful.get());
-      assertFalse("should not call rocksdb for single app and local disabled",
+      assertFalse("should not call rocksdb for single group and local disabled",
           fs.loadFromLocalAttempted.get());
-      assertFalse("should not load rocksdb for single app and local disabled",
+      assertFalse("should not load rocksdb for single group and local disabled",
           fs.loadFromLocalSuccessful.get());
     } catch (Exception e) {
       e.printStackTrace();
@@ -143,7 +143,7 @@ public class FeatureStoreRealTest {
     ServerConfiguration serverConfiguration =
         new ServerConfiguration()
             .baseURI("http://localhost")
-            .defaultGroup("the_app");
+            .defaultGroup("the_group");
 
     final FeatureClient client = FeatureClient.newBuilder()
         // set useless store and backing
@@ -157,13 +157,13 @@ public class FeatureStoreRealTest {
     FeatureStoreReal fs = new FeatureStoreReal(client, none);
     try {
       fs.open();
-      assertTrue("should call api server for single app and local enabled",
+      assertTrue("should call api server for single group and local enabled",
           fs.loadFromApiAttempted.get());
-      assertFalse("should not load api server for single app when server down",
+      assertFalse("should not load api server for single group when server down",
           fs.loadFromApiSuccessful.get());
-      assertTrue("should call rocksdb for single app and local enabled",
+      assertTrue("should call rocksdb for single group and local enabled",
           fs.loadFromLocalAttempted.get());
-      assertFalse("should call rocksdb for single app and local enabled",
+      assertFalse("should call rocksdb for single group and local enabled",
           fs.loadFromLocalSuccessful.get());
     } catch (Exception e) {
       e.printStackTrace();
@@ -179,7 +179,7 @@ public class FeatureStoreRealTest {
     ServerConfiguration serverConfiguration =
         new ServerConfiguration()
             .baseURI("http://localhost")
-            .defaultGroup("the_app");
+            .defaultGroup("the_group");
 
     final FeatureClient client = FeatureClient.newBuilder()
         // set useless store and backing
@@ -193,14 +193,14 @@ public class FeatureStoreRealTest {
     FeatureStoreReal fs = new FeatureStoreReal(client, failing);
     try {
       fs.open();
-      assertTrue("should call api server for single app",
+      assertTrue("should call api server for single group",
           fs.loadFromApiAttempted.get());
-      assertFalse("should call api server for single app when api server down",
+      assertFalse("should call api server for single group when api server down",
           fs.loadFromApiSuccessful.get());
       assertTrue(
-          "should call local store for single app",
+          "should call local store for single group",
           fs.loadFromLocalAttempted.get());
-      assertFalse("should not load local store for single app when local store crashes",
+      assertFalse("should not load local store for single group when local store crashes",
           fs.loadFromLocalSuccessful.get());
     } catch (Exception e) {
       e.printStackTrace();
@@ -214,7 +214,7 @@ public class FeatureStoreRealTest {
     ServerConfiguration serverConfiguration =
         new ServerConfiguration()
             .baseURI("http://localhost")
-            .defaultGroup("the_app");
+            .defaultGroup("the_group");
 
     final FeatureClient client = FeatureClient.newBuilder()
         // storage requests are circumvented with exceptions
@@ -228,13 +228,13 @@ public class FeatureStoreRealTest {
     FeatureStoreReal fs = new FeatureStoreReal(client, rocks);
     try {
       fs.open();
-      assertTrue("should call api server for single app",
+      assertTrue("should call api server for single group",
           fs.loadFromApiAttempted.get());
-      assertFalse("should call api server for single app when api server down",
+      assertFalse("should call api server for single group when api server down",
           fs.loadFromApiSuccessful.get());
-      assertTrue("should call local store for single app",
+      assertTrue("should call local store for single group",
           fs.loadFromLocalAttempted.get());
-      assertTrue("should local local store for single app",
+      assertTrue("should local local store for single group",
           fs.loadFromLocalSuccessful.get());
     } catch (Exception e) {
       e.printStackTrace();
