@@ -18,8 +18,8 @@ import org.glassfish.jersey.logging.LoggingFeature;
 import org.junit.ClassRule;
 import org.junit.Test;
 import outland.feature.proto.AccessCollection;
-import outland.feature.proto.Namespace;
 import outland.feature.proto.Feature;
+import outland.feature.proto.Group;
 import outland.feature.proto.MemberAccess;
 import outland.feature.proto.Owner;
 import outland.feature.proto.OwnerCollection;
@@ -27,8 +27,8 @@ import outland.feature.proto.ServiceAccess;
 import outland.feature.server.Problem;
 import outland.feature.server.ServerConfiguration;
 import outland.feature.server.ServerMain;
-import outland.feature.server.namespaces.NamespaceService;
 import outland.feature.server.features.Ulid;
+import outland.feature.server.groups.GroupService;
 import outland.feature.server.protobuf.Protobuf3Support;
 
 import static junit.framework.TestCase.assertNull;
@@ -46,29 +46,29 @@ public class FeatureResourceTest {
   private String basicPassword = "topsecret";
   private Gson gson;
 
-  private final String seedNamespaceOneKey = "appOne";
+  private final String seedGroupOneKey = "appOne";
   private final String seedOwnerOne = "ownerOne";
   private final String seedServiceOne = "serviceOne";
   private final String seedMemberOne = "memberOne";
 
-  private final String seedNamespaceFooKey = "appFoo";
+  private final String seedGroupFooKey = "appFoo";
   private final String seedOwnerFoo = "ownerFoo";
   private final String seedServiceFoo = "serviceFoo";
   private final String seedMemberFoo = "memberFoo";
 
-  private final String seedNamespaceBarKey = "appBar";
+  private final String seedGroupBarKey = "appBar";
   private final String seedOwnerBar = "ownerBar";
   private final String seedServiceBar = "serviceBar";
   private final String seedMemberBar = "memberBar";
 
   private Injector injector;
-  private NamespaceService namespaceService;
+  private GroupService groupService;
 
   public FeatureResourceTest() {
     gson = new Gson();
     ServerMain application = APP.getApplication();
     injector = application.injector();
-    namespaceService = injector.getInstance(NamespaceService.class);
+    groupService = injector.getInstance(GroupService.class);
 
     /*
     create our seeds just once. we're not using a before class because we need APP to be
@@ -88,9 +88,9 @@ public class FeatureResourceTest {
         .setType("owner.collection")
         .addItems(Owner.newBuilder().setUsername(seedOwnerOne));
 
-    namespaceService.registerNamespace(
-        Namespace.newBuilder()
-            .setKey(seedNamespaceOneKey)
+    groupService.register(
+        Group.newBuilder()
+            .setKey(seedGroupOneKey)
             .setName("name")
             .setOwners(oc)
             .setGranted(builder.buildPartial())
@@ -105,9 +105,9 @@ public class FeatureResourceTest {
         .setType("owner.collection")
         .addItems(Owner.newBuilder().setUsername(seedOwnerFoo));
 
-    namespaceService.registerNamespace(
-        Namespace.newBuilder()
-            .setKey(seedNamespaceFooKey)
+    groupService.register(
+        Group.newBuilder()
+            .setKey(seedGroupFooKey)
             .setName("name")
             .setOwners(oc)
             .setGranted(builder.buildPartial())
@@ -122,9 +122,9 @@ public class FeatureResourceTest {
         .setType("owner.collection")
         .addItems(Owner.newBuilder().setUsername(seedOwnerBar));
 
-    namespaceService.registerNamespace(
-        Namespace.newBuilder()
-            .setKey(seedNamespaceBarKey)
+    groupService.register(
+        Group.newBuilder()
+            .setKey(seedGroupBarKey)
             .setName("name")
             .setOwners(oc)
             .setGranted(builder.buildPartial())
@@ -154,8 +154,8 @@ public class FeatureResourceTest {
         .setType("owner.collection")
         .addItems(Owner.newBuilder().setName("Jayne").setUsername("jayne"));
 
-    namespaceService.registerNamespace(
-        Namespace.newBuilder()
+    groupService.register(
+        Group.newBuilder()
             .setKey("testAuthFailures")
             .setName("name")
             .setOwners(oc)
@@ -174,7 +174,7 @@ public class FeatureResourceTest {
     assertTrue(response.getStatus() == 401);
     assertTrue(response.getHeaderString("WWW-Authenticate").contains("Basic"));
 
-    // mismatched auth header and url namespace ids return 401
+    // mismatched auth header and url group ids return 401
 
     JerseyClient clientWithAuth = ServerSuite.client()
         //.register(
@@ -207,7 +207,7 @@ public class FeatureResourceTest {
     JerseyClient client = createClient();
 
     final String featureKey = Ulid.random();
-    final String nsKey = seedNamespaceOneKey;
+    final String nsKey = seedGroupOneKey;
     final String serviceName = "unknownService";
 
     Response response = client.target(url + "/" + nsKey + "/" + featureKey)
@@ -231,7 +231,7 @@ public class FeatureResourceTest {
     JerseyClient client = createClient();
 
     final String featureKey = Ulid.random();
-    final String nsKey = seedNamespaceOneKey;
+    final String nsKey = seedGroupOneKey;
     final String serviceName = "unknownMember";
 
     Response response = client.target(url + "/" + nsKey + "/" + featureKey)
@@ -255,7 +255,7 @@ public class FeatureResourceTest {
     JerseyClient client = createClient();
 
     final String featureKey = Ulid.random();
-    final String nsKey = seedNamespaceOneKey;
+    final String nsKey = seedGroupOneKey;
     final String serviceName = "unknownMember";
     final String accessName = "unknownKind";
 
@@ -274,7 +274,7 @@ public class FeatureResourceTest {
   }
 
   @Test
-  public void testUpdateNonMatchingNamespaceKeyUrlAndDataCauses422() throws Exception {
+  public void testUpdateNonMatchingGroupKeyUrlAndDataCauses422() throws Exception {
 
     String url = createFeatureUrl();
     JerseyClient client = createClient();
@@ -282,11 +282,11 @@ public class FeatureResourceTest {
     // don't accept mismatched url and body even when authenticated
 
     String featureKey = Ulid.random();
-    Feature feature = buildTestFeature(seedNamespaceBarKey, featureKey);
+    Feature feature = buildTestFeature(seedGroupBarKey, featureKey);
     String jsonReq = Protobuf3Support.toJsonString(feature);
 
     // auth is performed relative to the url, so match it with a granted service
-    final String uri = url + "/" + seedNamespaceOneKey + "/" + featureKey;
+    final String uri = url + "/" + seedGroupOneKey + "/" + featureKey;
     final String basicAuth = seedServiceOne + "/service";
 
     Response response = client.target(uri)
@@ -300,8 +300,8 @@ public class FeatureResourceTest {
 
     final Problem problem = gson.fromJson(jsonRes, Problem.class);
     assertTrue(problem.status() == 422);
-    assertTrue(problem.detail().get().contains("url_nskey"));
-    assertTrue(problem.detail().get().contains("data_nskey"));
+    assertTrue(problem.detail().get().contains("url_group"));
+    assertTrue(problem.detail().get().contains("data_group"));
 
     assertEquals(Problem.CLIENT_TYPE, problem.type());
   }
@@ -309,7 +309,7 @@ public class FeatureResourceTest {
   @Test
   public void testUpdateNonMatchingFeatureUrlAndDataCauses422() throws Exception {
 
-    final String nsKey = seedNamespaceOneKey;
+    final String nsKey = seedGroupOneKey;
 
     String urlFeatureKey = Ulid.random();
     String dataFeatureKey = Ulid.random();
@@ -348,7 +348,7 @@ public class FeatureResourceTest {
 
     final String idempotencyKey = Ulid.random();
     String featureKey = Ulid.random();
-    Feature feature = buildTestFeature(seedNamespaceOneKey, featureKey);
+    Feature feature = buildTestFeature(seedGroupOneKey, featureKey);
     String featureJson = Protobuf3Support.toJsonString(feature);
 
     Response post = client.target(url)
@@ -384,9 +384,9 @@ public class FeatureResourceTest {
   @Test
   public void testPost() throws Exception {
 
-    final NamespaceService instance = injector.getInstance(NamespaceService.class);
+    final GroupService instance = injector.getInstance(GroupService.class);
 
-    final String nsKey = "testPostNamespaceKey";
+    final String nsKey = "testPostGroupKey";
     final String serviceKey = "testPostService";
 
     AccessCollection.Builder accessBuilder = AccessCollection.newBuilder();
@@ -398,8 +398,8 @@ public class FeatureResourceTest {
         .setType("owner.collection")
         .addItems(Owner.newBuilder().setName("Jayne").setUsername("jayne"));
 
-    instance.registerNamespace(
-        Namespace.newBuilder()
+    instance.register(
+        Group.newBuilder()
             .setKey(nsKey)
             .setName("name")
             .setOwners(oc)
@@ -445,7 +445,7 @@ public class FeatureResourceTest {
     JerseyClient client = createClient();
 
     String featureKey = "testUpdateFeatureKey";
-    Feature feature = buildTestFeature(seedNamespaceOneKey, featureKey);
+    Feature feature = buildTestFeature(seedGroupOneKey, featureKey);
     String featureJson = Protobuf3Support.toJsonString(feature);
 
     // create a feature
@@ -483,7 +483,7 @@ public class FeatureResourceTest {
 
     Feature update = builderRegister.build().toBuilder().setState(Feature.State.on).build();
     String featureUpdateJson = Protobuf3Support.toJsonString(update);
-    Response responseUpdate = client.target(url + "/" + seedNamespaceOneKey + "/" + featureKey)
+    Response responseUpdate = client.target(url + "/" + seedGroupOneKey + "/" + featureKey)
         .request()
         // this time update using a member
         .property(HTTP_AUTHENTICATION_BASIC_USERNAME, seedMemberOne + "/member")
@@ -509,7 +509,7 @@ public class FeatureResourceTest {
 
     // now read it back from the server and double check
 
-    Response responseGet = client.target(url + "/" + seedNamespaceOneKey + "/" + featureKey)
+    Response responseGet = client.target(url + "/" + seedGroupOneKey + "/" + featureKey)
         .request()
         // ask using a service's grant
         .property(HTTP_AUTHENTICATION_BASIC_USERNAME, seedServiceOne + "/service")
@@ -535,12 +535,12 @@ public class FeatureResourceTest {
   }
 
   @Test
-  public void testMissingNamespaceThrows404() throws Exception {
+  public void testMissingGroupThrows404() throws Exception {
 
     String url = createFeatureUrl();
     JerseyClient client = createClient();
 
-    String key = "testMissingNamespaceThrows404";
+    String key = "testMissingGroupThrows404";
     String nsKey = Ulid.random();
     String serviceCaller = seedServiceBar;
 
@@ -560,9 +560,9 @@ public class FeatureResourceTest {
   public void testOwnerIncomplete422() throws Exception {
 
     final String whitelisted = "whitelisted";
-    final String nsKey = "testOwnerIncomplete422Namespace";
+    final String nsKey = "testOwnerIncomplete422Group";
 
-    final NamespaceService instance = injector.getInstance(NamespaceService.class);
+    final GroupService instance = injector.getInstance(GroupService.class);
 
     AccessCollection.Builder accessBuilder = AccessCollection.newBuilder();
     final ArrayList<ServiceAccess> services = Lists.newArrayList();
@@ -573,8 +573,8 @@ public class FeatureResourceTest {
         .setType("owner.collection")
         .addItems(Owner.newBuilder().setName("Jayne").setUsername("jayne"));
 
-    instance.registerNamespace(
-        Namespace.newBuilder()
+    instance.register(
+        Group.newBuilder()
             .setKey(nsKey)
             .setName("name")
             .setOwners(oc)
@@ -589,7 +589,7 @@ public class FeatureResourceTest {
     Feature feature = Feature.newBuilder()
         .setKey(key)
         .setDescription("desc")
-        .setNamespace(nsKey)
+        .setGroup(nsKey)
         .build();
     ;
     String jsonReq = Protobuf3Support.toJsonString(feature);
@@ -612,8 +612,8 @@ public class FeatureResourceTest {
   @Test
   public void testDoubleCreatePostCauses409() throws Exception {
 
-    final NamespaceService instance = injector.getInstance(NamespaceService.class);
-    final String nsKey = "testDoubleCreatePostCauses409NamespaceKey";
+    final GroupService instance = injector.getInstance(GroupService.class);
+    final String nsKey = "testDoubleCreatePostCauses409GroupKey";
     final String serviceKey = "testDoubleCreatePostCauses409Service";
 
     final AccessCollection.Builder accessBuilder = AccessCollection.newBuilder();
@@ -625,8 +625,8 @@ public class FeatureResourceTest {
         .setType("owner.collection")
         .addItems(Owner.newBuilder().setName("Jayne").setUsername("jayne"));
 
-    instance.registerNamespace(
-        Namespace.newBuilder()
+    instance.register(
+        Group.newBuilder()
             .setKey(nsKey)
             .setName("name")
             .setOwners(oc)
@@ -673,7 +673,7 @@ public class FeatureResourceTest {
     return Feature.newBuilder()
         .setKey(key)
         .setDescription("desc")
-        .setNamespace(nsKey)
+        .setGroup(nsKey)
         .setOwner(owner)
         .build();
   }

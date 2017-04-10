@@ -41,37 +41,37 @@ public class ServerConfigurationTest {
 
       configuration.validate();
     } catch (FeatureException e) {
-      fail("non null namespace should be configurable");
+      fail("non null group should be configurable");
     }
 
     try {
       // regular string is ok
       configuration = new ServerConfiguration()
           .baseURI("http://localhost")
-          .defaultNamespace("myapp")
+          .defaultGroup("myapp")
       ;
       configuration.validate();
     } catch (FeatureException e) {
-      fail("non null namespace should be configurable");
+      fail("non null group should be configurable");
     }
 
     try {
       new ServerConfiguration()
           .baseURI("http://localhost")
-          .defaultNamespace(null)
+          .defaultGroup(null)
       ;
-      fail("null namespace should not be accepted");
+      fail("null group should not be accepted");
     } catch (FeatureException e) {
-      assertEquals("empty_namespace", e.problem().title());
+      assertEquals("empty_group", e.problem().title());
     }
 
     try {
       new ServerConfiguration()
           .baseURI("http://localhost")
-          .defaultNamespace("");
-      fail("empty namespace should not be accepted");
+          .defaultGroup("");
+      fail("empty group should not be accepted");
     } catch (FeatureException e) {
-      assertEquals("empty_namespace", e.problem().title());
+      assertEquals("empty_group", e.problem().title());
     }
   }
 }

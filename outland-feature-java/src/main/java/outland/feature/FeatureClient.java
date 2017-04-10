@@ -4,7 +4,6 @@ import com.codahale.metrics.MetricRegistry;
 import java.net.URI;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
-import javax.swing.text.html.Option;
 import okhttp3.OkHttpClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,14 +26,14 @@ public class FeatureClient {
   private final Resources resources;
   private final ContentSupport contentSupport;
   private final URI baseURI;
-  private final String defaultNamespace;
+  private final String defaultGroup;
   private final boolean localStoreEnabled;
   private final MetricRegistry metricRegistry;
 
   public FeatureClient(Builder builder) {
     this.serverConfiguration = builder.serverConfiguration;
     this.baseURI = serverConfiguration.baseURI();
-    this.defaultNamespace = serverConfiguration.defaultNamespace();
+    this.defaultGroup = serverConfiguration.defaultGroup();
     this.localStoreEnabled = serverConfiguration.localStoreEnabled();
     this.authorizationProvider = builder.authorizationProvider;
     this.resourceProvider = builder.resourceProvider;
@@ -43,7 +42,7 @@ public class FeatureClient {
     this.resources = new Resources(
         this.resourceProvider,
         this.authorizationProvider,
-        this.defaultNamespace,
+        this.defaultGroup,
         this.baseURI
     );
     FeatureStoreLocal localFeatureStore = builder.localFeatureStore;
@@ -74,8 +73,8 @@ public class FeatureClient {
   /**
    * Check and see if a feature is enabled.
    * <p>
-   * This is a convenience call for {@link #enabledFor(String, String)} where the namespace
-   * argument is taken from  {@link #defaultNamespace()}
+   * This is a convenience call for {@link #enabledFor(String, String)} where the group
+   * argument is taken from  {@link #defaultGroup()}
    * </p>
    * <p>
    * The client stores feature state locally in a cache, and will periodically refresh
@@ -103,7 +102,7 @@ public class FeatureClient {
    * @param featureKey the feature key defined for the feature
    * @return true if the feature is enabled. Returns false if the feature is not enabled, not known,
    * or there was an internal error.
-   * @throws FeatureException if the supplied featureKey is null, or, the default namespace has not
+   * @throws FeatureException if the supplied featureKey is null, or, the default group has not
    * been configured.
    */
   public boolean enabled(String featureKey) {
@@ -111,14 +110,14 @@ public class FeatureClient {
     FeatureException.throwIfNull(featureKey, "Please supply a feature key");
 
     //noinspection ConstantConditions
-    return enabledInner(defaultNamespace, featureKey);
+    return enabledInner(defaultGroup, featureKey);
   }
 
   /**
    * Check and see if a feature is enabled.
    * <p>
    * This is a convenience call for {@link #enabledForThrowing(String, String)}
-   * where the namespace argument is taken from  {@link #defaultNamespace()}.
+   * where the group argument is taken from  {@link #defaultGroup()}.
    * </p>
    * <p>
    * This is same as {@link #enabled(String)} except it will throw a {@link FeatureException}
@@ -128,7 +127,7 @@ public class FeatureClient {
    * @param featureKey the feature key defined for the feature
    * @return true if the feature is enabled ({@link Feature.State#on}). Returns false if the feature
    * is not enabled ({@link Feature.State#off}).
-   * @throws FeatureException if the supplied featureKey is null, the default namespace has not been
+   * @throws FeatureException if the supplied featureKey is null, the default group has not been
    * configured, the feature does not exist or there was an internal error.
    */
   public boolean enabledThrowing(String featureKey)
@@ -137,7 +136,7 @@ public class FeatureClient {
     FeatureException.throwIfNull(featureKey, "Please supply a feature key");
 
     //noinspection ConstantConditions
-    return enabledThrowingInner(defaultNamespace, featureKey);
+    return enabledThrowingInner(defaultGroup, featureKey);
   }
 
   /**
@@ -165,18 +164,18 @@ public class FeatureClient {
    * want to throw an exception for a missing feature, use {@link #enabledThrowing}.
    * </p>
    *
-   * @param namespace the namespace the feature belongs to.
+   * @param group the group the feature belongs to.
    * @param featureKey the feature key defined for the feature
    * @return true if the feature is enabled. Returns false if the feature is not enabled, not known,
    * or there was an internal error.
-   * @throws FeatureException if the supplied featureKey is null, or, the default namespace has not
+   * @throws FeatureException if the supplied featureKey is null, or, the default group has not
    * been configured.
    */
-  public boolean enabledFor(String namespace, String featureKey) {
-    FeatureException.throwIfNull(namespace, "Please supply a defaultNamespace");
+  public boolean enabledFor(String group, String featureKey) {
+    FeatureException.throwIfNull(group, "Please supply a defaultGroup");
     FeatureException.throwIfNull(featureKey, "Please supply a featureKey");
 
-    return enabledInner(namespace, featureKey);
+    return enabledInner(group, featureKey);
   }
 
   /**
@@ -186,18 +185,18 @@ public class FeatureClient {
    * {@link FeatureException} if the feature does not exist or there is an internal exception.
    * </p>
    *
-   * @param namespace the namespace the feature belongs to.
+   * @param group the group the feature belongs to.
    * @param featureKey the feature key defined for the feature
    * @return true if the feature is enabled ({@link Feature.State#on}). Returns false if the feature
    * is not enabled ({@link Feature.State#off}).
-   * @throws FeatureException if the supplied featureKey is null, the default namespace has not been
+   * @throws FeatureException if the supplied featureKey is null, the default group has not been
    * configured, the feature does not exist or there was an internal error.
    */
-  public boolean enabledForThrowing(String namespace, String featureKey) {
-    FeatureException.throwIfNull(namespace, "Please supply a defaultNamespace");
+  public boolean enabledForThrowing(String group, String featureKey) {
+    FeatureException.throwIfNull(group, "Please supply a defaultGroup");
     FeatureException.throwIfNull(featureKey, "Please supply a featureKey");
 
-    return enabledThrowingInner(namespace, featureKey);
+    return enabledThrowingInner(group, featureKey);
   }
 
   /**
@@ -261,8 +260,8 @@ public class FeatureClient {
     return baseURI;
   }
 
-  String defaultNamespace() {
-    return defaultNamespace;
+  String defaultGroup() {
+    return defaultGroup;
   }
 
   @VisibleForTesting
@@ -271,16 +270,16 @@ public class FeatureClient {
   }
 
   private void throwIfNoDefaultNamespace() {
-    if (defaultNamespace == null) {
-      throw new FeatureException(Problem.configProblem("enabled_check_with_no_namespace",
-          "A feature flag check with no namespace cannot be called without configuring "
-              + "a default namespace first. "
-              + "Please set the default namespace or use the namespace plus feature key variant."));
+    if (defaultGroup == null) {
+      throw new FeatureException(Problem.configProblem("enabled_check_with_no_group",
+          "A feature flag check with no group cannot be called without configuring "
+              + "a default group first. "
+              + "Please set the default group or use the group plus feature key variant."));
     }
   }
 
-  private boolean enabledInner(String namespace, String featureKey) {
-    final Optional<Feature> maybe = featureStore.find(namespace, featureKey);
+  private boolean enabledInner(String group, String featureKey) {
+    final Optional<Feature> maybe = featureStore.find(group, featureKey);
 
     if (!maybe.isPresent()) {
       return false;
@@ -299,15 +298,15 @@ public class FeatureClient {
     return false;
   }
 
-  private boolean enabledThrowingInner(String namespace, String featureKey) {
-    final Optional<Feature> maybe = featureStore.find(namespace, featureKey);
+  private boolean enabledThrowingInner(String group, String featureKey) {
+    final Optional<Feature> maybe = featureStore.find(group, featureKey);
 
     if (!maybe.isPresent()) {
       throw new FeatureException(
           Problem.noSuchFeature("feature_not_found",
               String.format(
-                  "feature %s for defaultNamespace %s was not found and raising an error was requested",
-                  featureKey, namespace)));
+                  "feature %s for defaultGroup %s was not found and raising an error was requested",
+                  featureKey, group)));
     }
 
     final Feature feature = maybe.get();

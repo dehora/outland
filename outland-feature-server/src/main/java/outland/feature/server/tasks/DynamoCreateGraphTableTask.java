@@ -17,23 +17,23 @@ import java.util.List;
 import javax.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import outland.feature.server.namespaces.NamespaceStorage;
+import outland.feature.server.groups.GroupStorage;
 import outland.feature.server.features.TableConfiguration;
 
-public class DynamoCreateNamespaceGraphTableTask extends Task {
+public class DynamoCreateGraphTableTask extends Task {
 
   private static final Logger logger =
-      LoggerFactory.getLogger(DynamoCreateNamespaceGraphTableTask.class);
+      LoggerFactory.getLogger(DynamoCreateGraphTableTask.class);
 
   private final AmazonDynamoDB dynamoDB;
   private final TableConfiguration tableConfiguration;
 
   @Inject
-  public DynamoCreateNamespaceGraphTableTask(
+  public DynamoCreateGraphTableTask(
       AmazonDynamoDB dynamoDB,
       TableConfiguration tableConfiguration
   ) {
-    super("DynamoCreateNamespaceGraphTableTask");
+    super("DynamoCreateGraphTableTask");
     this.dynamoDB = dynamoDB;
     this.tableConfiguration = tableConfiguration;
   }
@@ -45,8 +45,8 @@ public class DynamoCreateNamespaceGraphTableTask extends Task {
 
   private void createAppGraphTable(String tableName) {
 
-    final String subjectKey = NamespaceStorage.SUBJECT_KEY;
-    final String objectRelationKey = NamespaceStorage.OBJECT_RELATION_KEY;
+    final String subjectKey = GroupStorage.SUBJECT_KEY;
+    final String objectRelationKey = GroupStorage.OBJECT_RELATION_KEY;
 
     final AttributeDefinition subjectDefn =
         new AttributeDefinition().withAttributeName(subjectKey)

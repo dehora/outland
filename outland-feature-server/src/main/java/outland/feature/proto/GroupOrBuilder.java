@@ -3,8 +3,8 @@
 
 package outland.feature.proto;
 
-public interface NamespaceOrBuilder extends
-    // @@protoc_insertion_point(interface_extends:outland.Namespace)
+public interface GroupOrBuilder extends
+    // @@protoc_insertion_point(interface_extends:outland.Group)
     com.google.protobuf.MessageOrBuilder {
 
   /**

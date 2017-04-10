@@ -41,7 +41,7 @@ public class AuthConfiguration {
 
   @NotNull
   @JsonProperty
-  String multipleNamespaceAccessList = "";
+  String multipleGroupAccessList = "";
 
   @NotEmpty
   @JsonProperty
