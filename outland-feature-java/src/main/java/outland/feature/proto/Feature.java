@@ -15,6 +15,7 @@ public  final class Feature extends
     super(builder);
   }
   private Feature() {
+    type_ = "";
     id_ = "";
     key_ = "";
     group_ = "";
@@ -22,7 +23,6 @@ public  final class Feature extends
     description_ = "";
     created_ = "";
     updated_ = "";
-    type_ = "";
   }
 
   @java.lang.Override
@@ -106,10 +106,10 @@ public  final class Feature extends
             break;
           }
           case 74: {
-            if (!((mutable_bitField0_ & 0x00000100) == 0x00000100)) {
+            if (!((mutable_bitField0_ & 0x00000200) == 0x00000200)) {
               properties_ = com.google.protobuf.MapField.newMapField(
                   PropertiesDefaultEntryHolder.defaultEntry);
-              mutable_bitField0_ |= 0x00000100;
+              mutable_bitField0_ |= 0x00000200;
             }
             com.google.protobuf.MapEntry<java.lang.String, java.lang.String>
             properties = input.readMessage(
@@ -147,6 +147,19 @@ public  final class Feature extends
             java.lang.String s = input.readStringRequireUtf8();
 
             type_ = s;
+            break;
+          }
+          case 114: {
+            outland.feature.proto.NamespaceFeatureCollection.Builder subBuilder = null;
+            if (namespaced_ != null) {
+              subBuilder = namespaced_.toBuilder();
+            }
+            namespaced_ = input.readMessage(outland.feature.proto.NamespaceFeatureCollection.parser(), extensionRegistry);
+            if (subBuilder != null) {
+              subBuilder.mergeFrom(namespaced_);
+              namespaced_ = subBuilder.buildPartial();
+            }
+
             break;
           }
         }
@@ -291,6 +304,40 @@ public  final class Feature extends
   }
 
   private int bitField0_;
+  public static final int TYPE_FIELD_NUMBER = 13;
+  private volatile java.lang.Object type_;
+  /**
+   * <code>optional string type = 13;</code>
+   */
+  public java.lang.String getType() {
+    java.lang.Object ref = type_;
+    if (ref instanceof java.lang.String) {
+      return (java.lang.String) ref;
+    } else {
+      com.google.protobuf.ByteString bs = 
+          (com.google.protobuf.ByteString) ref;
+      java.lang.String s = bs.toStringUtf8();
+      type_ = s;
+      return s;
+    }
+  }
+  /**
+   * <code>optional string type = 13;</code>
+   */
+  public com.google.protobuf.ByteString
+      getTypeBytes() {
+    java.lang.Object ref = type_;
+    if (ref instanceof java.lang.String) {
+      com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString.copyFromUtf8(
+              (java.lang.String) ref);
+      type_ = b;
+      return b;
+    } else {
+      return (com.google.protobuf.ByteString) ref;
+    }
+  }
+
   public static final int ID_FIELD_NUMBER = 1;
   private volatile java.lang.Object id_;
   /**
@@ -650,38 +697,25 @@ public  final class Feature extends
     return getVersion();
   }
 
-  public static final int TYPE_FIELD_NUMBER = 13;
-  private volatile java.lang.Object type_;
+  public static final int NAMESPACED_FIELD_NUMBER = 14;
+  private outland.feature.proto.NamespaceFeatureCollection namespaced_;
   /**
-   * <code>optional string type = 13;</code>
+   * <code>optional .outland.NamespaceFeatureCollection namespaced = 14;</code>
    */
-  public java.lang.String getType() {
-    java.lang.Object ref = type_;
-    if (ref instanceof java.lang.String) {
-      return (java.lang.String) ref;
-    } else {
-      com.google.protobuf.ByteString bs = 
-          (com.google.protobuf.ByteString) ref;
-      java.lang.String s = bs.toStringUtf8();
-      type_ = s;
-      return s;
-    }
+  public boolean hasNamespaced() {
+    return namespaced_ != null;
   }
   /**
-   * <code>optional string type = 13;</code>
+   * <code>optional .outland.NamespaceFeatureCollection namespaced = 14;</code>
    */
-  public com.google.protobuf.ByteString
-      getTypeBytes() {
-    java.lang.Object ref = type_;
-    if (ref instanceof java.lang.String) {
-      com.google.protobuf.ByteString b = 
-          com.google.protobuf.ByteString.copyFromUtf8(
-              (java.lang.String) ref);
-      type_ = b;
-      return b;
-    } else {
-      return (com.google.protobuf.ByteString) ref;
-    }
+  public outland.feature.proto.NamespaceFeatureCollection getNamespaced() {
+    return namespaced_ == null ? outland.feature.proto.NamespaceFeatureCollection.getDefaultInstance() : namespaced_;
+  }
+  /**
+   * <code>optional .outland.NamespaceFeatureCollection namespaced = 14;</code>
+   */
+  public outland.feature.proto.NamespaceFeatureCollectionOrBuilder getNamespacedOrBuilder() {
+    return getNamespaced();
   }
 
   private byte memoizedIsInitialized = -1;
@@ -738,6 +772,9 @@ public  final class Feature extends
     if (!getTypeBytes().isEmpty()) {
       com.google.protobuf.GeneratedMessageV3.writeString(output, 13, type_);
     }
+    if (namespaced_ != null) {
+      output.writeMessage(14, getNamespaced());
+    }
   }
 
   public int getSerializedSize() {
@@ -792,6 +829,10 @@ public  final class Feature extends
     if (!getTypeBytes().isEmpty()) {
       size += com.google.protobuf.GeneratedMessageV3.computeStringSize(13, type_);
     }
+    if (namespaced_ != null) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeMessageSize(14, getNamespaced());
+    }
     memoizedSize = size;
     return size;
   }
@@ -808,6 +849,8 @@ public  final class Feature extends
     outland.feature.proto.Feature other = (outland.feature.proto.Feature) obj;
 
     boolean result = true;
+    result = result && getType()
+        .equals(other.getType());
     result = result && getId()
         .equals(other.getId());
     result = result && getKey()
@@ -838,8 +881,11 @@ public  final class Feature extends
       result = result && getVersion()
           .equals(other.getVersion());
     }
-    result = result && getType()
-        .equals(other.getType());
+    result = result && (hasNamespaced() == other.hasNamespaced());
+    if (hasNamespaced()) {
+      result = result && getNamespaced()
+          .equals(other.getNamespaced());
+    }
     return result;
   }
 
@@ -850,6 +896,8 @@ public  final class Feature extends
     }
     int hash = 41;
     hash = (19 * hash) + getDescriptorForType().hashCode();
+    hash = (37 * hash) + TYPE_FIELD_NUMBER;
+    hash = (53 * hash) + getType().hashCode();
     hash = (37 * hash) + ID_FIELD_NUMBER;
     hash = (53 * hash) + getId().hashCode();
     hash = (37 * hash) + KEY_FIELD_NUMBER;
@@ -880,8 +928,10 @@ public  final class Feature extends
       hash = (37 * hash) + VERSION_FIELD_NUMBER;
       hash = (53 * hash) + getVersion().hashCode();
     }
-    hash = (37 * hash) + TYPE_FIELD_NUMBER;
-    hash = (53 * hash) + getType().hashCode();
+    if (hasNamespaced()) {
+      hash = (37 * hash) + NAMESPACED_FIELD_NUMBER;
+      hash = (53 * hash) + getNamespaced().hashCode();
+    }
     hash = (29 * hash) + unknownFields.hashCode();
     memoizedHashCode = hash;
     return hash;
@@ -1022,6 +1072,8 @@ public  final class Feature extends
     }
     public Builder clear() {
       super.clear();
+      type_ = "";
+
       id_ = "";
 
       key_ = "";
@@ -1055,8 +1107,12 @@ public  final class Feature extends
         version_ = null;
         versionBuilder_ = null;
       }
-      type_ = "";
-
+      if (namespacedBuilder_ == null) {
+        namespaced_ = null;
+      } else {
+        namespaced_ = null;
+        namespacedBuilder_ = null;
+      }
       return this;
     }
 
@@ -1081,6 +1137,7 @@ public  final class Feature extends
       outland.feature.proto.Feature result = new outland.feature.proto.Feature(this);
       int from_bitField0_ = bitField0_;
       int to_bitField0_ = 0;
+      result.type_ = type_;
       result.id_ = id_;
       result.key_ = key_;
       result.group_ = group_;
@@ -1105,7 +1162,11 @@ public  final class Feature extends
       } else {
         result.version_ = versionBuilder_.build();
       }
-      result.type_ = type_;
+      if (namespacedBuilder_ == null) {
+        result.namespaced_ = namespaced_;
+      } else {
+        result.namespaced_ = namespacedBuilder_.build();
+      }
       result.bitField0_ = to_bitField0_;
       onBuilt();
       return result;
@@ -1148,6 +1209,10 @@ public  final class Feature extends
 
     public Builder mergeFrom(outland.feature.proto.Feature other) {
       if (other == outland.feature.proto.Feature.getDefaultInstance()) return this;
+      if (!other.getType().isEmpty()) {
+        type_ = other.type_;
+        onChanged();
+      }
       if (!other.getId().isEmpty()) {
         id_ = other.id_;
         onChanged();
@@ -1186,9 +1251,8 @@ public  final class Feature extends
       if (other.hasVersion()) {
         mergeVersion(other.getVersion());
       }
-      if (!other.getType().isEmpty()) {
-        type_ = other.type_;
-        onChanged();
+      if (other.hasNamespaced()) {
+        mergeNamespaced(other.getNamespaced());
       }
       onChanged();
       return this;
@@ -1216,6 +1280,75 @@ public  final class Feature extends
       return this;
     }
     private int bitField0_;
+
+    private java.lang.Object type_ = "";
+    /**
+     * <code>optional string type = 13;</code>
+     */
+    public java.lang.String getType() {
+      java.lang.Object ref = type_;
+      if (!(ref instanceof java.lang.String)) {
+        com.google.protobuf.ByteString bs =
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        type_ = s;
+        return s;
+      } else {
+        return (java.lang.String) ref;
+      }
+    }
+    /**
+     * <code>optional string type = 13;</code>
+     */
+    public com.google.protobuf.ByteString
+        getTypeBytes() {
+      java.lang.Object ref = type_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        type_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+    /**
+     * <code>optional string type = 13;</code>
+     */
+    public Builder setType(
+        java.lang.String value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  
+      type_ = value;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>optional string type = 13;</code>
+     */
+    public Builder clearType() {
+      
+      type_ = getDefaultInstance().getType();
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>optional string type = 13;</code>
+     */
+    public Builder setTypeBytes(
+        com.google.protobuf.ByteString value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+      
+      type_ = value;
+      onChanged();
+      return this;
+    }
 
     private java.lang.Object id_ = "";
     /**
@@ -2145,73 +2278,121 @@ public  final class Feature extends
       return versionBuilder_;
     }
 
-    private java.lang.Object type_ = "";
+    private outland.feature.proto.NamespaceFeatureCollection namespaced_ = null;
+    private com.google.protobuf.SingleFieldBuilderV3<
+        outland.feature.proto.NamespaceFeatureCollection, outland.feature.proto.NamespaceFeatureCollection.Builder, outland.feature.proto.NamespaceFeatureCollectionOrBuilder> namespacedBuilder_;
     /**
-     * <code>optional string type = 13;</code>
+     * <code>optional .outland.NamespaceFeatureCollection namespaced = 14;</code>
      */
-    public java.lang.String getType() {
-      java.lang.Object ref = type_;
-      if (!(ref instanceof java.lang.String)) {
-        com.google.protobuf.ByteString bs =
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        type_ = s;
-        return s;
+    public boolean hasNamespaced() {
+      return namespacedBuilder_ != null || namespaced_ != null;
+    }
+    /**
+     * <code>optional .outland.NamespaceFeatureCollection namespaced = 14;</code>
+     */
+    public outland.feature.proto.NamespaceFeatureCollection getNamespaced() {
+      if (namespacedBuilder_ == null) {
+        return namespaced_ == null ? outland.feature.proto.NamespaceFeatureCollection.getDefaultInstance() : namespaced_;
       } else {
-        return (java.lang.String) ref;
+        return namespacedBuilder_.getMessage();
       }
     }
     /**
-     * <code>optional string type = 13;</code>
+     * <code>optional .outland.NamespaceFeatureCollection namespaced = 14;</code>
      */
-    public com.google.protobuf.ByteString
-        getTypeBytes() {
-      java.lang.Object ref = type_;
-      if (ref instanceof String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        type_ = b;
-        return b;
+    public Builder setNamespaced(outland.feature.proto.NamespaceFeatureCollection value) {
+      if (namespacedBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        namespaced_ = value;
+        onChanged();
       } else {
-        return (com.google.protobuf.ByteString) ref;
+        namespacedBuilder_.setMessage(value);
+      }
+
+      return this;
+    }
+    /**
+     * <code>optional .outland.NamespaceFeatureCollection namespaced = 14;</code>
+     */
+    public Builder setNamespaced(
+        outland.feature.proto.NamespaceFeatureCollection.Builder builderForValue) {
+      if (namespacedBuilder_ == null) {
+        namespaced_ = builderForValue.build();
+        onChanged();
+      } else {
+        namespacedBuilder_.setMessage(builderForValue.build());
+      }
+
+      return this;
+    }
+    /**
+     * <code>optional .outland.NamespaceFeatureCollection namespaced = 14;</code>
+     */
+    public Builder mergeNamespaced(outland.feature.proto.NamespaceFeatureCollection value) {
+      if (namespacedBuilder_ == null) {
+        if (namespaced_ != null) {
+          namespaced_ =
+            outland.feature.proto.NamespaceFeatureCollection.newBuilder(namespaced_).mergeFrom(value).buildPartial();
+        } else {
+          namespaced_ = value;
+        }
+        onChanged();
+      } else {
+        namespacedBuilder_.mergeFrom(value);
+      }
+
+      return this;
+    }
+    /**
+     * <code>optional .outland.NamespaceFeatureCollection namespaced = 14;</code>
+     */
+    public Builder clearNamespaced() {
+      if (namespacedBuilder_ == null) {
+        namespaced_ = null;
+        onChanged();
+      } else {
+        namespaced_ = null;
+        namespacedBuilder_ = null;
+      }
+
+      return this;
+    }
+    /**
+     * <code>optional .outland.NamespaceFeatureCollection namespaced = 14;</code>
+     */
+    public outland.feature.proto.NamespaceFeatureCollection.Builder getNamespacedBuilder() {
+      
+      onChanged();
+      return getNamespacedFieldBuilder().getBuilder();
+    }
+    /**
+     * <code>optional .outland.NamespaceFeatureCollection namespaced = 14;</code>
+     */
+    public outland.feature.proto.NamespaceFeatureCollectionOrBuilder getNamespacedOrBuilder() {
+      if (namespacedBuilder_ != null) {
+        return namespacedBuilder_.getMessageOrBuilder();
+      } else {
+        return namespaced_ == null ?
+            outland.feature.proto.NamespaceFeatureCollection.getDefaultInstance() : namespaced_;
       }
     }
     /**
-     * <code>optional string type = 13;</code>
+     * <code>optional .outland.NamespaceFeatureCollection namespaced = 14;</code>
      */
-    public Builder setType(
-        java.lang.String value) {
-      if (value == null) {
-    throw new NullPointerException();
-  }
-  
-      type_ = value;
-      onChanged();
-      return this;
-    }
-    /**
-     * <code>optional string type = 13;</code>
-     */
-    public Builder clearType() {
-      
-      type_ = getDefaultInstance().getType();
-      onChanged();
-      return this;
-    }
-    /**
-     * <code>optional string type = 13;</code>
-     */
-    public Builder setTypeBytes(
-        com.google.protobuf.ByteString value) {
-      if (value == null) {
-    throw new NullPointerException();
-  }
-  checkByteStringIsUtf8(value);
-      
-      type_ = value;
-      onChanged();
-      return this;
+    private com.google.protobuf.SingleFieldBuilderV3<
+        outland.feature.proto.NamespaceFeatureCollection, outland.feature.proto.NamespaceFeatureCollection.Builder, outland.feature.proto.NamespaceFeatureCollectionOrBuilder> 
+        getNamespacedFieldBuilder() {
+      if (namespacedBuilder_ == null) {
+        namespacedBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+            outland.feature.proto.NamespaceFeatureCollection, outland.feature.proto.NamespaceFeatureCollection.Builder, outland.feature.proto.NamespaceFeatureCollectionOrBuilder>(
+                getNamespaced(),
+                getParentForChildren(),
+                isClean());
+        namespaced_ = null;
+      }
+      return namespacedBuilder_;
     }
     public final Builder setUnknownFields(
         final com.google.protobuf.UnknownFieldSet unknownFields) {

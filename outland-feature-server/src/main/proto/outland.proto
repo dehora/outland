@@ -54,7 +54,32 @@ message OptionCollection {
     repeated FeatureOption items = 4;
 }
 
+message FeatureData {
+    string id = 1;
+    string key = 10;
+    enum State {
+        none = 0;
+        off = 1;
+        on = 2;
+    }
+    State state = 11;
+    OptionCollection options = 12;
+    FeatureVersion version = 13;
+}
+
+message NamespaceFeature {
+    string type = 1;
+    string namespace = 10;
+    FeatureData feature = 11;
+}
+
+message NamespaceFeatureCollection {
+    string type = 1;
+    repeated NamespaceFeature items = 2;
+}
+
 message Feature {
+    string type = 13;
     string id = 1;
     string key = 2;
     string group = 3;
@@ -71,7 +96,7 @@ message Feature {
     map<string, string> properties = 9;
     OptionCollection options = 10;
     FeatureVersion version = 12;
-    string type = 13;
+    NamespaceFeatureCollection namespaced = 14;
 }
 
 message FeatureCollection {

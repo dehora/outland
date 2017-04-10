@@ -8,6 +8,16 @@ public interface FeatureOrBuilder extends
     com.google.protobuf.MessageOrBuilder {
 
   /**
+   * <code>optional string type = 13;</code>
+   */
+  java.lang.String getType();
+  /**
+   * <code>optional string type = 13;</code>
+   */
+  com.google.protobuf.ByteString
+      getTypeBytes();
+
+  /**
    * <code>optional string id = 1;</code>
    */
   java.lang.String getId();
@@ -150,12 +160,15 @@ public interface FeatureOrBuilder extends
   outland.feature.proto.FeatureVersionOrBuilder getVersionOrBuilder();
 
   /**
-   * <code>optional string type = 13;</code>
+   * <code>optional .outland.NamespaceFeatureCollection namespaced = 14;</code>
    */
-  java.lang.String getType();
+  boolean hasNamespaced();
   /**
-   * <code>optional string type = 13;</code>
+   * <code>optional .outland.NamespaceFeatureCollection namespaced = 14;</code>
    */
-  com.google.protobuf.ByteString
-      getTypeBytes();
+  outland.feature.proto.NamespaceFeatureCollection getNamespaced();
+  /**
+   * <code>optional .outland.NamespaceFeatureCollection namespaced = 14;</code>
+   */
+  outland.feature.proto.NamespaceFeatureCollectionOrBuilder getNamespacedOrBuilder();
 }
