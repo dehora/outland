@@ -16,7 +16,7 @@ import org.glassfish.jersey.logging.LoggingFeature;
 import org.junit.ClassRule;
 import org.junit.Test;
 import outland.feature.proto.AccessCollection;
-import outland.feature.proto.Namespace;
+import outland.feature.proto.Group;
 import outland.feature.proto.Owner;
 import outland.feature.proto.OwnerCollection;
 import outland.feature.proto.ServiceAccess;
@@ -29,7 +29,7 @@ import static junit.framework.TestCase.assertTrue;
 import static org.glassfish.jersey.client.authentication.HttpAuthenticationFeature.HTTP_AUTHENTICATION_BASIC_PASSWORD;
 import static org.glassfish.jersey.client.authentication.HttpAuthenticationFeature.HTTP_AUTHENTICATION_BASIC_USERNAME;
 
-public class NamespaceResourceTest {
+public class GroupResourceTest {
 
   @ClassRule public static final DropwizardAppRule<ServerConfiguration> APP = ServerSuite.APP;
 
@@ -38,7 +38,7 @@ public class NamespaceResourceTest {
 
   private final static Gson gson = new Gson();
 
-  public NamespaceResourceTest() {
+  public GroupResourceTest() {
   }
 
   private JerseyInvocation.Builder buildAuthorisedClient(String url) {
@@ -51,7 +51,7 @@ public class NamespaceResourceTest {
 
   @Test
   public void testInvalidContentCauses422() throws Exception {
-    String invalid = TestSupport.load("json/namespace-invalid-owner.json");
+    String invalid = TestSupport.load("json/group-invalid-owner.json");
     final String url = createAppUrl();
 
     final Response response =
@@ -76,7 +76,7 @@ public class NamespaceResourceTest {
     OwnerCollection.Builder oc = OwnerCollection.newBuilder()
         .setType("owner.collection")
         .addItems(Owner.newBuilder().setName("Jayne").setUsername("jayne"));
-    final Namespace namespace = Namespace.newBuilder()
+    final Group group = Group.newBuilder()
         .setKey(appKey)
         .setName("name")
         .setOwners(oc)
@@ -86,7 +86,7 @@ public class NamespaceResourceTest {
     final String url = createAppUrl();
     final JerseyClient client = createClient();
 
-    final String jsonReq = Protobuf3Support.toJsonString(namespace);
+    final String jsonReq = Protobuf3Support.toJsonString(group);
 
     final Response post = client.target(url)
         .request()
@@ -106,11 +106,11 @@ public class NamespaceResourceTest {
     final String jsonRes = postAgain.readEntity(String.class);
     final Problem problem = gson.fromJson(jsonRes, Problem.class);
     assertTrue(problem.status() == 409);
-    assertTrue(problem.title().contains("conflict_namespace_already_exists"));
+    assertTrue(problem.title().contains("conflict_group_already_exists"));
   }
 
   private String createAppUrl() {
-    return "http://localhost:" + APP.getLocalPort() + "/namespaces";
+    return "http://localhost:" + APP.getLocalPort() + "/groups";
   }
 
   private JerseyClient createClient() {

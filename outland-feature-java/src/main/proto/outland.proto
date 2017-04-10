@@ -59,7 +59,7 @@ message OptionCollection {
 message Feature {
     string id = 1;
     string key = 2;
-    string namespace = 3;
+    string group = 3;
     enum State {
         none = 0;
         off = 1;
@@ -78,7 +78,7 @@ message Feature {
 
 message FeatureCollection {
     string type = 1;
-    string namespace = 2;
+    string group = 2;
     repeated Feature items = 3;
 }
 
@@ -103,7 +103,7 @@ message AccessCollection {
     repeated MemberAccess members = 11;
 }
 
-message Namespace {
+message Group {
     string type = 8;
     string id = 1;
     string key = 2;

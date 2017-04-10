@@ -18,14 +18,14 @@ public interface FeatureCollectionOrBuilder extends
       getTypeBytes();
 
   /**
-   * <code>optional string namespace = 2;</code>
+   * <code>optional string group = 2;</code>
    */
-  java.lang.String getNamespace();
+  java.lang.String getGroup();
   /**
-   * <code>optional string namespace = 2;</code>
+   * <code>optional string group = 2;</code>
    */
   com.google.protobuf.ByteString
-      getNamespaceBytes();
+      getGroupBytes();
 
   /**
    * <code>repeated .outland.Feature items = 3;</code>

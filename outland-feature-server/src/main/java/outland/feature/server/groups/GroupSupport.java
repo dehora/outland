@@ -1,15 +1,15 @@
-package outland.feature.server.app;
+package outland.feature.server.groups;
 
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.util.JsonFormat;
-import outland.feature.proto.Namespace;
+import outland.feature.proto.Group;
 
-public class NamespaceSupport {
+public class GroupSupport {
 
-  public static Namespace toApp(String json) {
+  public static Group toApp(String json) {
 
     try {
-      Namespace.Builder builder = Namespace.newBuilder();
+      Group.Builder builder = Group.newBuilder();
       JsonFormat.parser().ignoringUnknownFields().merge(json, builder);
       return builder.build();
     } catch (InvalidProtocolBufferException e) {

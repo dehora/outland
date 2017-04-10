@@ -4,15 +4,15 @@
 service="testconsole/service"
 api_key="letmein"
 
-ikey_app="idemkey_testapp"
+ikey_app="idemkey_test"
 
-curl -i http://localhost:8180/namespaces \
+curl -i http://localhost:8180/group \
 -u ${service}:${api_key} \
 -H "Content-type: application/json" \
 -H "Idempotency-Key: ${ikey_app}" \
 -d'
 {
-	"key": "testnamespace",
+	"key": "testgroup",
 	"name": "My Namespace",
 	"owners": {
 	  "items":[{
@@ -37,7 +37,7 @@ curl -i http://localhost:8180/namespaces \
 
 echo "Namespace created, adding some feature flags"
 
-ikey_f1="idemkey_testnamespace_f1"
+ikey_f1="idemkey_testgroup_f1"
 
 curl -i http://localhost:8180/features \
 -u ${service}:${api_key} \
@@ -47,7 +47,7 @@ curl -i http://localhost:8180/features \
 {
 	"key": "test-flag-1",
 	"description": "A feature flag",
-	"namespace": "testnamespace",
+	"group": "testgroup",
 	"owner": {
 		"username": "acme",
 		"email": "acme@example.org"
@@ -55,7 +55,7 @@ curl -i http://localhost:8180/features \
 }
 '
 
-ikey_f2="idemkey_testnamespace_f21"
+ikey_f2="idemkey_testgroup_f21"
 
 curl -i http://localhost:8180/features \
 -u ${service}:${api_key} \
@@ -65,7 +65,7 @@ curl -i http://localhost:8180/features \
 {
 	"key": "test-option-1",
 	"description": "A weighted feature",
-	"namespace": "testnamespace",
+	"group": "testgroup",
 	"options": {
 	  "option": "bool",
 	  "items": [{

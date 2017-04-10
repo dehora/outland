@@ -1,4 +1,4 @@
-package outland.feature.server.namespaces;
+package outland.feature.server.groups;
 
 import java.util.Optional;
 import outland.feature.server.auth.AuthPrincipal;

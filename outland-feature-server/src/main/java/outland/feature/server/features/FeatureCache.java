@@ -6,15 +6,15 @@ import outland.feature.proto.Feature;
 
 public interface FeatureCache {
 
-  String buildCacheKeyByFeatureKey(String nsKey, String featureKey);
+  String buildCacheKeyByFeatureKey(String group, String featureKey);
 
   Void addToCache(Feature feature);
 
-  Optional<Map<String, String>> getCacheSet(String nsKey);
+  Optional<Map<String, String>> getCacheSet(String group);
 
   Optional<Feature> findInCache(String key);
 
-  Void flushCache(String nsKey, String featureKey, String id);
+  Void flushCache(String group, String featureKey, String id);
 
   Void flushAll();
 }

@@ -28,14 +28,14 @@ public interface FeatureOrBuilder extends
       getKeyBytes();
 
   /**
-   * <code>optional string namespace = 3;</code>
+   * <code>optional string group = 3;</code>
    */
-  java.lang.String getNamespace();
+  java.lang.String getGroup();
   /**
-   * <code>optional string namespace = 3;</code>
+   * <code>optional string group = 3;</code>
    */
   com.google.protobuf.ByteString
-      getNamespaceBytes();
+      getGroupBytes();
 
   /**
    * <code>optional .outland.Feature.State state = 4;</code>

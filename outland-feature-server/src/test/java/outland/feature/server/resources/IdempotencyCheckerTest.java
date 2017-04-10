@@ -13,7 +13,7 @@ import outland.feature.server.redis.RedisServersConfiguration;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-public class IdempotencyCheckerTest {
+public class  IdempotencyCheckerTest {
 
   @Test
   public void testCheck() {

@@ -28,7 +28,7 @@ public interface FeatureStorage {
 
   Void updateFeature(Feature feature, FeatureVersion previousVersion);
 
-  Optional<Feature> loadFeatureByKey(String appKey, String key);
+  Optional<Feature> loadFeatureByKey(String group, String key);
 
-  List<Feature> loadFeatures(String appKey);
+  List<Feature> loadFeatures(String group);
 }

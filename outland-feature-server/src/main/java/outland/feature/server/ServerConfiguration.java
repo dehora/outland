@@ -51,11 +51,11 @@ public class ServerConfiguration extends Configuration {
 
   @NotNull
   @JsonProperty
-  public HystrixConfiguration dynamodbNamespaceGraphWriteHystrix = new HystrixConfiguration();
+  public HystrixConfiguration dynamodbGraphWriteHystrix = new HystrixConfiguration();
 
   @NotNull
   @JsonProperty
-  public HystrixConfiguration dynamodbNamespaceWriteHystrix = new HystrixConfiguration();
+  public HystrixConfiguration dynamodbGroupWriteHystrix = new HystrixConfiguration();
 
   @NotNull
   @JsonProperty

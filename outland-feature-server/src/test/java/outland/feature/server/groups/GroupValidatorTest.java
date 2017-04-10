@@ -1,18 +1,18 @@
-package outland.feature.server.namespaces;
+package outland.feature.server.groups;
 
 import org.junit.Test;
-import outland.feature.proto.Namespace;
+import outland.feature.proto.Group;
 import outland.feature.proto.Owner;
 import outland.feature.proto.OwnerCollection;
 import outland.feature.server.ServiceException;
 
 import static org.junit.Assert.*;
 
-public class NamespaceValidatorTest {
+public class GroupValidatorTest {
 
   @Test
-  public void validateAppRegistrationThrowingOk() {
-    Namespace.Builder builder = Namespace.newBuilder();
+  public void validateRegistrationThrowingOk() {
+    Group.Builder builder = Group.newBuilder();
 
     OwnerCollection.Builder oc = OwnerCollection.newBuilder()
         .setType("owner.collection")
@@ -23,7 +23,7 @@ public class NamespaceValidatorTest {
         .setName("ns 1");
 
     try {
-      new NamespaceValidator().validateNamespaceRegistrationThrowing(builder.build());
+      new GroupValidator().validateRegistrationThrowing(builder.build());
     } catch (ServiceException e) {
       fail();
     }
@@ -35,48 +35,48 @@ public class NamespaceValidatorTest {
    */
 
   @Test
-  public void validateAppRegistrationThrowingNoOwner() {
-    Namespace.Builder builder = Namespace.newBuilder();
-    callValidate(builder, "no_owner_for_namespace", 422);
+  public void validateRegistrationThrowingNoOwner() {
+    Group.Builder builder = Group.newBuilder();
+    callValidate(builder, "no_owner_for_group", 422);
   }
 
   @Test
-  public void validateAppRegistrationThrowingJunkOwner() {
-    Namespace.Builder builder = Namespace.newBuilder();
+  public void validateRegistrationThrowingJunkOwner() {
+    Group.Builder builder = Group.newBuilder();
     OwnerCollection.Builder oc = OwnerCollection.newBuilder()
         .setType("owner.collection")
         .addItems(Owner.newBuilder().setName("Bob"));
     builder.setOwners(oc);
 
-    callValidate(builder, "incomplete_owner_for_namespace", 422);
+    callValidate(builder, "incomplete_owner_for_group", 422);
   }
 
   @Test
-  public void validateAppRegistrationThrowingNoKey() {
-    Namespace.Builder builder = Namespace.newBuilder();
+  public void validateRegistrationThrowingNoKey() {
+    Group.Builder builder = Group.newBuilder();
     OwnerCollection.Builder oc = OwnerCollection.newBuilder()
         .setType("owner.collection")
         .addItems(Owner.newBuilder().setName("Bob").setUsername("bob"));
     builder.setOwners(oc);
 
-    callValidate(builder, "missing_key_for_namespace", 422);
+    callValidate(builder, "missing_key_for_group", 422);
   }
 
   @Test
-  public void validateAppRegistrationThrowingNoName() {
-    Namespace.Builder builder = Namespace.newBuilder();
+  public void validateRegistrationThrowingNoName() {
+    Group.Builder builder = Group.newBuilder();
     OwnerCollection.Builder oc = OwnerCollection.newBuilder()
         .setType("owner.collection")
         .addItems(Owner.newBuilder().setName("Bob").setUsername("bob"));
     builder.setOwners(oc)
         .setKey("key1");
 
-    callValidate(builder, "missing_name_for_namespace", 422);
+    callValidate(builder, "missing_name_for_group", 422);
   }
 
-  private void callValidate(Namespace.Builder builder, String expectedTitle, int expectedCode) {
+  private void callValidate(Group.Builder builder, String expectedTitle, int expectedCode) {
     try {
-      new NamespaceValidator().validateNamespaceRegistrationThrowing(builder.build());
+      new GroupValidator().validateRegistrationThrowing(builder.build());
       fail();
     } catch (ServiceException e) {
       assertEquals(expectedCode, e.problem().status());
