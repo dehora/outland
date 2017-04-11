@@ -9,6 +9,7 @@ import com.google.common.collect.Ordering;
 import com.google.protobuf.TextFormat;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -18,8 +19,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import outland.feature.proto.Feature;
 import outland.feature.proto.FeatureCollection;
+import outland.feature.proto.FeatureData;
 import outland.feature.proto.FeatureOption;
 import outland.feature.proto.FeatureVersion;
+import outland.feature.proto.NamespaceFeature;
+import outland.feature.proto.NamespaceFeatureCollection;
 import outland.feature.proto.OptionCollection;
 import outland.feature.proto.OptionType;
 import outland.feature.proto.Owner;
@@ -96,6 +100,9 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
     builder.clearOwner();
     applyOwnerRegister(registering, builder);
 
+    builder.clearNamespaced();
+    applyFeatureNamespaceRegister(registering, builder);
+
     Feature feature = builder.build();
 
     timed(saveFeatureTimer, () -> featureStorage.createFeature(feature));
@@ -139,7 +146,7 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
     Feature.Builder wipBuilder = found.toBuilder()
         .mergeFrom(updates)
         .setUpdated(now);
-    
+
     // can't change some values in update
     wipBuilder.setType("feature");
     wipBuilder.setCreated(found.getCreated());
@@ -151,7 +158,8 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
     applyVersion(updates, wipBuilder);
 
     // process options if we received some
-    if (updates.getOptions().getOption().equals(OptionType.bool) && updates.getOptions().getItemsCount() != 0) {
+    if (updates.getOptions().getOption().equals(OptionType.bool)
+        && updates.getOptions().getItemsCount() != 0) {
 
       // clear out options, we can rebuild them
       wipBuilder.clearOptions();
@@ -168,7 +176,7 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
       wipBuilder.setOptions(wipOptionsBuilder);
     }
 
-    if(updates.hasOwner()) {
+    if (updates.hasOwner()) {
       Owner foundOwner = found.getOwner();
       wipBuilder.clearOwner();
       applyOwnerUpdate(updates, foundOwner, wipBuilder);
@@ -177,6 +185,11 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
     // a value other than none indicates the client sent something
     if (!updates.getState().equals(Feature.State.none)) {
       wipBuilder.setState(updates.getState());
+    }
+
+    // process namespaces if we received some
+    if(updates.hasNamespaced()) {
+      applyFeatureNamespaceUpdate(found, updates, wipBuilder);
     }
 
     Feature updated = wipBuilder.build();
@@ -295,7 +308,7 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
 
   @Override public FeatureCollection loadFeaturesChangedSince(String group, OffsetDateTime since) {
 
-     logger.info("{}", kvp("op", "loadFeaturesSince", "group", group, "since", since));
+    logger.info("{}", kvp("op", "loadFeaturesSince", "group", group, "since", since));
 
     FeatureCollection collection = loadFeatures(group);
 
@@ -328,12 +341,109 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
     return featureCollection;
   }
 
+  @Override public Feature add(Feature feature, NamespaceFeature namespaceFeature) {
+
+    FeatureUpdateProcessor processor = new FeatureUpdateProcessor(versionService);
+    final List<NamespaceFeature> namespaceFeatures =
+        processor.buildMergedNamespaceFeatures(feature, namespaceFeature);
+
+    final NamespaceFeatureCollection.Builder builder = NamespaceFeatureCollection.newBuilder();
+    builder.setType("namespace.feature.collection").addAllItems(namespaceFeatures);
+
+    final Feature.Builder wipBuilder = feature.toBuilder()
+        .clearNamespaced()
+        .setNamespaced(builder);
+
+
+    final FeatureVersion foundVersion = feature.getVersion();
+
+    String now = FeatureService.asString(OffsetDateTime.now());
+    wipBuilder.setUpdated(now);
+
+    applyVersion(feature, wipBuilder);
+
+    Feature updated = wipBuilder.build();
+
+    FeatureValidator featureValidator = new FeatureValidator();
+    featureValidator.validateFeatureRegistrationThrowing(updated);
+    timed(updateFeatureTimer, () -> featureStorage.updateFeature(updated, foundVersion));
+    logger.info("{} /updated_feature_namespace=[{}]",
+        kvp("op", "updateFeatureNamespace",
+            "group", feature.getGroup(),
+            "feature_key", feature.getKey(),
+            "namespace", namespaceFeature.getNamespace()
+        ), TextFormat.shortDebugString(updated));
+
+    addToCache(updated);
+    return updated;
+  }
+
+  @Override public Feature removeNamespaceFeature(String group, String featureKey,
+      String namespace) {
+    final Optional<Feature> maybe = loadFeatureByKey(group, featureKey);
+
+    if(! maybe.isPresent()) {
+      return  null;
+    }
+
+    final Feature feature = maybe.get();
+
+    final NamespaceFeatureCollection namespaced = feature.getNamespaced();
+
+    final ArrayList<NamespaceFeature> namespaceFeatures =
+        Lists.newArrayList(namespaced.getItemsList());
+
+    NamespaceFeature namespaceFeature = null;
+    final Iterator<NamespaceFeature> iterator = namespaceFeatures.iterator();
+    while (iterator.hasNext()) {
+      NamespaceFeature next = iterator.next();
+      if(next.getNamespace().equals(namespace)) {
+        namespaceFeature = next;
+        iterator.remove();
+        break;
+      }
+    }
+
+    if(namespaceFeature == null) {
+      return null;
+    }
+
+    final NamespaceFeatureCollection.Builder nfcBuilder = NamespaceFeatureCollection.newBuilder()
+        .setType("namespace.feature.collection")
+        .addAllItems(namespaceFeatures);
+
+    final Feature.Builder wipBuilder = feature.toBuilder()
+        .clearNamespaced()
+        .setNamespaced(nfcBuilder);
+
+    final FeatureVersion foundVersion = feature.getVersion();
+    applyVersion(feature, wipBuilder);
+    wipBuilder.setUpdated(FeatureService.asString(OffsetDateTime.now()));
+
+    final Feature updated = wipBuilder.build();
+
+    FeatureValidator featureValidator = new FeatureValidator();
+    featureValidator.validateFeatureRegistrationThrowing(updated);
+
+    timed(updateFeatureTimer, () -> featureStorage.updateFeature(updated, foundVersion));
+
+    logger.info("{} /updated_feature_namespace=[{}]",
+        kvp("op", "removeNamespaceFeature",
+            "group", feature.getGroup(),
+            "feature_key", feature.getKey(),
+            "namespace", namespaceFeature.getNamespace()
+        ), TextFormat.shortDebugString(updated));
+
+    addToCache(updated);
+    return updated;
+  }
+
   private List<FeatureOption> applyOptionsUpdate(Feature updated, Feature found) {
 
     final ArrayList<FeatureOption> results = Lists.newArrayList();
 
     // nothing in the update, return what we have
-    if(updated.getOptions().getItemsCount() == 0) {
+    if (updated.getOptions().getItemsCount() == 0) {
       results.addAll(found.getOptions().getItemsList());
       return results;
     }
@@ -358,6 +468,103 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
     return results;
   }
 
+  private void applyFeatureNamespaceUpdate(
+      Feature existing, Feature incoming, Feature.Builder wipBuilder) {
+
+    if(! incoming.hasNamespaced()) {
+      return;
+    }
+
+    wipBuilder.clearNamespaced();
+
+    FeatureUpdateProcessor processor = new FeatureUpdateProcessor(versionService);
+    List<NamespaceFeature> merged = processor.buildMergedNamespaceFeatures(existing, incoming);
+
+    final NamespaceFeatureCollection.Builder nfcBuilder = NamespaceFeatureCollection.newBuilder()
+        .setType("namespace.feature.collection")
+        .addAllItems(merged);
+
+    wipBuilder.setNamespaced(nfcBuilder);
+  }
+
+  private void applyNamespaceFeatureOptionsRegister(
+      NamespaceFeature incoming, FeatureData.Builder featureDataBuilder) {
+
+    if (incoming.getFeature().getOptions().getOption().equals(OptionType.flag)) {
+      // flags don't have weighted options
+      return;
+    }
+
+    OptionCollection.Builder optionCollectionBuilder = OptionCollection.newBuilder();
+    optionCollectionBuilder.setMaxweight(DEFAULT_MAXWEIGHT);
+    optionCollectionBuilder.setType("options.collection");
+    optionCollectionBuilder.setOption(incoming.getFeature().getOptions().getOption());
+
+    if (incoming.getFeature().getOptions().getOption().equals(OptionType.bool)) {
+
+      if (incoming.getFeature().getOptions().getItemsCount() != 0) {
+
+        final List<FeatureOption> options = incoming.getFeature().getOptions().getItemsList();
+        applyBooleanOptions(optionCollectionBuilder, options);
+        featureDataBuilder.setOptions(optionCollectionBuilder);
+      }
+    }
+  }
+
+  private void applyBooleanOptions(OptionCollection.Builder collectionBuilder,
+      List<FeatureOption> options) {
+    for (FeatureOption option : options) {
+      final FeatureOption.Builder optionBuilder = FeatureOption.newBuilder().mergeFrom(option);
+      optionBuilder.setType("option");
+      optionBuilder.setId("opt_" + Ulid.random());
+      optionBuilder.setOption(OptionType.bool);
+      collectionBuilder.addItems(optionBuilder);
+    }
+  }
+
+  private void applyFeatureNamespaceRegister(Feature registering, Feature.Builder builder) {
+
+    if(! registering.hasNamespaced()) {
+      return;
+    }
+
+    final FeatureUpdateProcessor processor = new FeatureUpdateProcessor(versionService);
+
+    final NamespaceFeatureCollection registeringNamespaced = registering.getNamespaced();
+    final List<NamespaceFeature> incomingFeaturesList = registeringNamespaced.getItemsList();
+    final ArrayList<NamespaceFeature> registeringNamespaceFeatures = Lists.newArrayList();
+
+    for (NamespaceFeature incoming : incomingFeaturesList) {
+
+      final FeatureData.Builder featureDataBuilder = FeatureData.newBuilder()
+          .mergeFrom(incoming.getFeature())
+          .setId("nsfeature_" + Ulid.random())
+          .setVersion(processor.buildNextFeatureVersion())
+          .setKey(incoming.getFeature().getKey())
+          // always off on create
+          .setState(FeatureData.State.off) ;
+
+      featureDataBuilder.clearOptions();
+      applyNamespaceFeatureOptionsRegister(incoming, featureDataBuilder);
+
+      final NamespaceFeature.Builder namespaceFeatureBuilder = NamespaceFeature.newBuilder();
+
+      namespaceFeatureBuilder.mergeFrom(incoming)
+          .setType("namespace.feature")
+          .setNamespace(incoming.getNamespace())
+          .setFeature(featureDataBuilder);
+
+      registeringNamespaceFeatures.add(namespaceFeatureBuilder.buildPartial());
+    }
+
+    NamespaceFeatureCollection.Builder nfcBuilder = NamespaceFeatureCollection.newBuilder()
+        .setType("namespace.feature.collection")
+        .addAllItems(registeringNamespaceFeatures);
+
+    builder.setNamespaced(nfcBuilder);
+
+  }
+
   private void applyOptionsRegister(Feature feature, Feature.Builder builder) {
 
     if (feature.getOptions().getOption().equals(OptionType.flag)) {
@@ -374,18 +581,8 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
       if (feature.getOptions().getItemsCount() != 0) {
 
         final List<FeatureOption> options = feature.getOptions().getItemsList();
-
-        for (FeatureOption option : options) {
-          final FeatureOption.Builder optionBuilder = FeatureOption.newBuilder().mergeFrom(option);
-          optionBuilder.setType("option");
-          optionBuilder.setId("opt_" + Ulid.random());
-          optionBuilder.setOption(OptionType.bool);
-          collectionBuilder.addItems(optionBuilder);
-        }
-
+        applyBooleanOptions(collectionBuilder, options);
         builder.setOptions(collectionBuilder);
-
-
       } else {
 
         collectionBuilder.addItems(FeatureOption.newBuilder()
@@ -453,11 +650,15 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
       next = versionService.nextVersion();
     }
 
-    builder.setVersion(FeatureVersion.newBuilder()
+    builder.setVersion(buildVersion(next));
+  }
+
+  private FeatureVersion.Builder buildVersion(VersionService.HybridLogicalTimestamp next) {
+    return FeatureVersion.newBuilder()
         .setType("hlcver")
         .setCounter(next.counter())
         .setTimestamp(next.logicalTime())
-        .setId(next.id()));
+        .setId(next.id());
   }
 
   private void addAllToCache(String group, List<Feature> features) {
