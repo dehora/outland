@@ -50,7 +50,7 @@ public class AccessControlSupport {
     }
   }
 
-  public void throwUnlessGrantedFor(AuthPrincipal authPrincipal, String appKey)
+  public void throwUnlessGrantedFor(AuthPrincipal authPrincipal, String group)
       throws AuthenticationException {
 
     if (multipleGroupAccessList.contains(authPrincipal.identifier())) {
@@ -63,11 +63,11 @@ public class AccessControlSupport {
       throw new AuthenticationException("Unknown access type "+ authPrincipal.type());
     }
 
-    if (GroupService.MEMBER.equals(authPrincipal.type()) && !memberHasGrant(authPrincipal, appKey)) {
+    if (GroupService.MEMBER.equals(authPrincipal.type()) && !memberHasGrant(authPrincipal, group)) {
       throw new AuthenticationException("Member not authenticated");
     }
 
-    if (GroupService.SERVICE.equals(authPrincipal.type()) && !serviceHasGrant(authPrincipal, appKey)) {
+    if (GroupService.SERVICE.equals(authPrincipal.type()) && !serviceHasGrant(authPrincipal, group)) {
       throw new AuthenticationException("Service not authenticated");
     }
   }

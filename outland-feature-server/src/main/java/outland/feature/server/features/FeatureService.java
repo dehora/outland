@@ -5,6 +5,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 import outland.feature.proto.Feature;
 import outland.feature.proto.FeatureCollection;
+import outland.feature.proto.NamespaceFeature;
 
 public interface FeatureService {
 
@@ -27,4 +28,8 @@ public interface FeatureService {
   FeatureCollection loadFeatures(String group);
 
   FeatureCollection loadFeaturesChangedSince(String group, OffsetDateTime since);
+
+  Feature add(Feature feature, NamespaceFeature namespaceFeature);
+
+  Feature removeNamespaceFeature(String group, String featureKey, String namespace);
 }

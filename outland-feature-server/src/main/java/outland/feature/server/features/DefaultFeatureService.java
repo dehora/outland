@@ -9,6 +9,7 @@ import com.google.common.collect.Ordering;
 import com.google.protobuf.TextFormat;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -20,6 +21,8 @@ import outland.feature.proto.Feature;
 import outland.feature.proto.FeatureCollection;
 import outland.feature.proto.FeatureOption;
 import outland.feature.proto.FeatureVersion;
+import outland.feature.proto.NamespaceFeature;
+import outland.feature.proto.NamespaceFeatureCollection;
 import outland.feature.proto.OptionCollection;
 import outland.feature.proto.OptionType;
 import outland.feature.proto.Owner;
@@ -139,7 +142,7 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
     Feature.Builder wipBuilder = found.toBuilder()
         .mergeFrom(updates)
         .setUpdated(now);
-    
+
     // can't change some values in update
     wipBuilder.setType("feature");
     wipBuilder.setCreated(found.getCreated());
@@ -151,7 +154,8 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
     applyVersion(updates, wipBuilder);
 
     // process options if we received some
-    if (updates.getOptions().getOption().equals(OptionType.bool) && updates.getOptions().getItemsCount() != 0) {
+    if (updates.getOptions().getOption().equals(OptionType.bool)
+        && updates.getOptions().getItemsCount() != 0) {
 
       // clear out options, we can rebuild them
       wipBuilder.clearOptions();
@@ -168,7 +172,7 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
       wipBuilder.setOptions(wipOptionsBuilder);
     }
 
-    if(updates.hasOwner()) {
+    if (updates.hasOwner()) {
       Owner foundOwner = found.getOwner();
       wipBuilder.clearOwner();
       applyOwnerUpdate(updates, foundOwner, wipBuilder);
@@ -178,6 +182,8 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
     if (!updates.getState().equals(Feature.State.none)) {
       wipBuilder.setState(updates.getState());
     }
+
+    // todo: process namespaces
 
     Feature updated = wipBuilder.build();
 
@@ -295,7 +301,7 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
 
   @Override public FeatureCollection loadFeaturesChangedSince(String group, OffsetDateTime since) {
 
-     logger.info("{}", kvp("op", "loadFeaturesSince", "group", group, "since", since));
+    logger.info("{}", kvp("op", "loadFeaturesSince", "group", group, "since", since));
 
     FeatureCollection collection = loadFeatures(group);
 
@@ -328,12 +334,109 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
     return featureCollection;
   }
 
+  @Override public Feature add(Feature feature, NamespaceFeature namespaceFeature) {
+
+    FeatureUpdateProcessor processor = new FeatureUpdateProcessor(versionService);
+    final List<NamespaceFeature> namespaceFeatures =
+        processor.mergeNamespaceFeatures(feature, namespaceFeature);
+
+    final NamespaceFeatureCollection.Builder builder = NamespaceFeatureCollection.newBuilder();
+    builder.setType("namespace.feature.collection").addAllItems(namespaceFeatures);
+
+    final Feature.Builder wipBuilder = feature.toBuilder()
+        .clearNamespaced()
+        .setNamespaced(builder);
+
+
+    final FeatureVersion foundVersion = feature.getVersion();
+
+    String now = FeatureService.asString(OffsetDateTime.now());
+    wipBuilder.setUpdated(now);
+
+    applyVersion(feature, wipBuilder);
+
+    Feature updated = wipBuilder.build();
+
+    FeatureValidator featureValidator = new FeatureValidator();
+    featureValidator.validateFeatureRegistrationThrowing(updated);
+    timed(updateFeatureTimer, () -> featureStorage.updateFeature(updated, foundVersion));
+    logger.info("{} /updated_feature_namespace=[{}]",
+        kvp("op", "updateFeatureNamespace",
+            "group", feature.getGroup(),
+            "feature_key", feature.getKey(),
+            "namespace", namespaceFeature.getNamespace()
+        ), TextFormat.shortDebugString(updated));
+
+    addToCache(updated);
+    return updated;
+  }
+
+  @Override public Feature removeNamespaceFeature(String group, String featureKey,
+      String namespace) {
+    final Optional<Feature> maybe = loadFeatureByKey(group, featureKey);
+
+    if(! maybe.isPresent()) {
+      return  null;
+    }
+
+    final Feature feature = maybe.get();
+
+    final NamespaceFeatureCollection namespaced = feature.getNamespaced();
+
+    final ArrayList<NamespaceFeature> namespaceFeatures =
+        Lists.newArrayList(namespaced.getItemsList());
+
+    NamespaceFeature namespaceFeature = null;
+    final Iterator<NamespaceFeature> iterator = namespaceFeatures.iterator();
+    while (iterator.hasNext()) {
+      NamespaceFeature next = iterator.next();
+      if(next.getNamespace().equals(namespace)) {
+        namespaceFeature = next;
+        iterator.remove();
+        break;
+      }
+    }
+
+    if(namespaceFeature == null) {
+      return null;
+    }
+
+    final NamespaceFeatureCollection.Builder nfcBuilder = NamespaceFeatureCollection.newBuilder()
+        .setType("namespace.feature.collection")
+        .addAllItems(namespaceFeatures);
+
+    final Feature.Builder wipBuilder = feature.toBuilder()
+        .clearNamespaced()
+        .setNamespaced(nfcBuilder);
+
+    final FeatureVersion foundVersion = feature.getVersion();
+    applyVersion(feature, wipBuilder);
+    wipBuilder.setUpdated(FeatureService.asString(OffsetDateTime.now()));
+
+    final Feature updated = wipBuilder.build();
+
+    FeatureValidator featureValidator = new FeatureValidator();
+    featureValidator.validateFeatureRegistrationThrowing(updated);
+
+    timed(updateFeatureTimer, () -> featureStorage.updateFeature(updated, foundVersion));
+
+    logger.info("{} /updated_feature_namespace=[{}]",
+        kvp("op", "removeNamespaceFeature",
+            "group", feature.getGroup(),
+            "feature_key", feature.getKey(),
+            "namespace", namespaceFeature.getNamespace()
+        ), TextFormat.shortDebugString(updated));
+
+    addToCache(updated);
+    return updated;
+  }
+
   private List<FeatureOption> applyOptionsUpdate(Feature updated, Feature found) {
 
     final ArrayList<FeatureOption> results = Lists.newArrayList();
 
     // nothing in the update, return what we have
-    if(updated.getOptions().getItemsCount() == 0) {
+    if (updated.getOptions().getItemsCount() == 0) {
       results.addAll(found.getOptions().getItemsList());
       return results;
     }
@@ -384,8 +487,6 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
         }
 
         builder.setOptions(collectionBuilder);
-
-
       } else {
 
         collectionBuilder.addItems(FeatureOption.newBuilder()
@@ -453,11 +554,15 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
       next = versionService.nextVersion();
     }
 
-    builder.setVersion(FeatureVersion.newBuilder()
+    builder.setVersion(buildVersion(next));
+  }
+
+  private FeatureVersion.Builder buildVersion(VersionService.HybridLogicalTimestamp next) {
+    return FeatureVersion.newBuilder()
         .setType("hlcver")
         .setCounter(next.counter())
         .setTimestamp(next.logicalTime())
-        .setId(next.id()));
+        .setId(next.id());
   }
 
   private void addAllToCache(String group, List<Feature> features) {
