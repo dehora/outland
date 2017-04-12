@@ -6,7 +6,7 @@ buildscript {
     maven { url "http://download.java.net/maven/2/" }
   }
   dependencies {
-    classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.0'
+    classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.1'
   }
 }
 
@@ -41,9 +41,20 @@ dependencies {
 
 
 protobuf {
-  generatedFilesBaseDir = "$projectDir/src"
+  generatedFilesBaseDir = "$projectDir/gen"
   protoc {
     artifact = project.libs.protoc
+  }
+}
+
+clean {
+  delete protobuf.generatedFilesBaseDir
+}
+
+idea {
+  module {
+    sourceDirs += file("${protobuf.generatedFilesBaseDir}/main/java");
+    sourceDirs += file("${protobuf.generatedFilesBaseDir}/main/proto");
   }
 }
 
