@@ -36,8 +36,8 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
 
   private static final Ordering<Feature> byUpdatedOrdering = new Ordering<Feature>() {
     public int compare(Feature left, Feature right) {
-      OffsetDateTime dtRight = FeatureService.asOffsetDateTime(right.getUpdated());
-      OffsetDateTime dtLeft = FeatureService.asOffsetDateTime(left.getUpdated());
+      OffsetDateTime dtRight = TimeSupport.asOffsetDateTime(right.getUpdated());
+      OffsetDateTime dtLeft = TimeSupport.asOffsetDateTime(left.getUpdated());
       return dtRight.compareTo(dtLeft);
     }
   };
@@ -96,7 +96,7 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
 
     OffsetDateTime now = OffsetDateTime.now();
     String id = "feat_" + Ulid.random(now.toInstant().toEpochMilli());
-    String created = FeatureService.asString(now);
+    String created = TimeSupport.asString(now);
 
     Feature.Builder builder = registering.toBuilder();
     builder.setType("feature");
@@ -130,7 +130,7 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
     // catch bad input before merging
     featureValidator.validateFeatureUpdateThrowing(updates);
 
-    String now = FeatureService.asString(OffsetDateTime.now());
+    String now = TimeSupport.asString(OffsetDateTime.now());
     Optional<Feature> maybeFound =
         timed(loadFeatureByKeyTimer, () -> featureStorage.loadFeatureByKey(group, featureKey));
 
@@ -320,7 +320,7 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
 
     List<Feature> list = collection.getItemsList();
     for (Feature feature : list) {
-      OffsetDateTime time = FeatureService.asOffsetDateTime(feature.getUpdated());
+      OffsetDateTime time = TimeSupport.asOffsetDateTime(feature.getUpdated());
       if (time.isAfter(since)) {
         sinceList.add(feature);
       }
@@ -365,7 +365,7 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
 
     final FeatureVersion foundVersion = feature.getVersion();
 
-    String now = FeatureService.asString(OffsetDateTime.now());
+    String now = TimeSupport.asString(OffsetDateTime.now());
     wipBuilder.setUpdated(now);
 
     applyVersion(feature, wipBuilder);
@@ -426,7 +426,7 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
 
     final FeatureVersion foundVersion = feature.getVersion();
     applyVersion(feature, wipBuilder);
-    wipBuilder.setUpdated(FeatureService.asString(OffsetDateTime.now()));
+    wipBuilder.setUpdated(TimeSupport.asString(OffsetDateTime.now()));
 
     final Feature updated = wipBuilder.build();
 
