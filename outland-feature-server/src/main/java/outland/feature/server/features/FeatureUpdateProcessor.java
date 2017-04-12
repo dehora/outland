@@ -4,7 +4,6 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -53,7 +52,7 @@ public class FeatureUpdateProcessor {
         validator.validateFeatureDataMergeCandidates(existingFeatureData, incomingFeatureData);
         updateMap.put(incoming.getNamespace(), mergeNamespaceFeature(existing, incoming));
       } else {
-        validator.validateFeatureDataNewCandidate(existingFeature, incoming);
+        validator.validateFeatureDataNewCandidateThrowing(existingFeature, incoming);
         updateMap.put(incoming.getNamespace(), prepareNewNamespaceFeature(incoming));
       }
     }

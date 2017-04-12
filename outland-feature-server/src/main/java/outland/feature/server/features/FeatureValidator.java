@@ -8,7 +8,6 @@ import outland.feature.proto.Feature;
 import outland.feature.proto.FeatureData;
 import outland.feature.proto.FeatureOption;
 import outland.feature.proto.NamespaceFeature;
-import outland.feature.proto.NamespaceFeatureCollection;
 import outland.feature.proto.OptionCollection;
 import outland.feature.proto.OptionType;
 import outland.feature.proto.Owner;
@@ -19,7 +18,7 @@ class FeatureValidator {
 
   void validateFeatureUpdateThrowing(Feature feature) throws ServiceException {
 
-    if(OptionType.flag != feature.getOptions().getOption()) {
+    if (OptionType.flag != feature.getOptions().getOption()) {
       validateOptionsHaveIdsThrowing(feature);
     }
     validateKeysThrowing(feature);
@@ -29,10 +28,9 @@ class FeatureValidator {
       // only validate options if they're sent and we're not a flag type
       validateOptionsThrowing(feature.getOptions());
 
-      if(feature.hasNamespaced()) {
+      if (feature.hasNamespaced()) {
         validateNamespaceFeaturesThrowing(feature);
       }
-
     }
   }
 
@@ -41,6 +39,10 @@ class FeatureValidator {
     validateOwnerThrowing(feature);
     validateKeysThrowing(feature);
     validateOptionsThrowing(feature.getOptions());
+
+    if (feature.hasNamespaced()) {
+      validateNamespaceFeaturesThrowing(feature);
+    }
   }
 
   void validateOptionsThrowing(OptionCollection options) {
@@ -48,7 +50,7 @@ class FeatureValidator {
       validateBooleanOptionsThrowing(options);
     }
 
-    if(OptionType.flag != options.getOption()) {
+    if (OptionType.flag != options.getOption()) {
       validateWeightsThrowing(options);
     }
   }
@@ -57,48 +59,39 @@ class FeatureValidator {
 
     final List<NamespaceFeature> itemsList = feature.getNamespaced().getItemsList();
     for (NamespaceFeature namespaceFeature : itemsList) {
-
-      if (!feature.getKey().equals(namespaceFeature.getFeature().getKey())) {
-        throw new ServiceException(Problem.clientProblem("wrong_key_for_namespace_feature",
-            "A namespace must have the same key as its feature name", 422));
-      }
-
-      if(namespaceFeature.getFeature().hasOptions()) {
-        validateOptionsThrowing(namespaceFeature.getFeature().getOptions());
-      }
+      validateFeatureDataNewCandidateThrowing(feature, namespaceFeature);
     }
   }
 
   void validateBooleanOptionsThrowing(OptionCollection options) {
 
-    if(options.getItemsCount() != 2) {
+    if (options.getItemsCount() != 2) {
       throw new ServiceException(Problem.clientProblem("wrong_options_for_bool_feature",
           "A bool option must have two options", 422));
     }
 
     options.getItemsList().forEach(option -> {
       final String name = option.getName();
-      if(!"true".equals(name) && !"false".equals(name)) {
+      if (!"true".equals(name) && !"false".equals(name)) {
         throw new ServiceException(Problem.clientProblem("wrong_name_for_bool_feature",
             "A bool option must have a name of 'true' or 'false'", 422));
       }
 
       final String value = option.getValue();
-      if(!"true".equals(value) && !"false".equals(value)) {
+      if (!"true".equals(value) && !"false".equals(value)) {
         throw new ServiceException(Problem.clientProblem("wrong_value_for_bool_feature",
             "A bool option must have a value of 'true' or 'false'", 422));
       }
 
-      if("true".equals(value) && ! "true".equals(name)) {
+      if ("true".equals(value) && !"true".equals(name)) {
         throw new ServiceException(Problem.clientProblem("mismatched_name_value_for_bool_feature",
             "A bool option must have a value of 'true' and a name of 'true'", 422));
       }
 
-      if("false".equals(value) && ! "false".equals(name)) {
+      if ("false".equals(value) && !"false".equals(name)) {
         throw new ServiceException(Problem.clientProblem("mismatched_name_value_for_bool_feature",
             "A bool option must have a value of 'false' and a name of 'false'", 422));
       }
-
     });
   }
 
@@ -119,11 +112,29 @@ class FeatureValidator {
 
   void validateFeatureDataKeysMatch(FeatureData existing, FeatureData update) {
 
-    if(!existing.getKey().equals(update.getKey())) {
+    final String existingKey = existing.getKey();
+    final String updateKey = update.getKey();
+
+    validateKeysMatch(existingKey, updateKey);
+  }
+
+  void validateFeatureDataNewCandidateThrowing(Feature existingFeature, NamespaceFeature incoming) {
+
+    validateKeysMatch(existingFeature.getKey(), incoming.getFeature().getKey());
+
+    final OptionType existingOptionType = existingFeature.getOptions().getOption();
+
+    final OptionCollection incomingOptions = incoming.getFeature().getOptions();
+    final OptionType incomingOptionType = incomingOptions.getOption();
+
+    if(! existingOptionType.equals(incomingOptionType)) {
       throw new ServiceException(
-          Problem.clientProblem("feature_keys_mismatch", "feature data keys must be the same",
+          Problem.clientProblem("namespace_feature_option_mismatch",
+              "namespace feature option type must be the same as the parent feature's",
               422));
     }
+
+    validateOptionsThrowing(incomingOptions);
   }
 
   void validateOptionIdsForUpdate(OptionCollection existing, OptionCollection update) {
@@ -138,7 +149,7 @@ class FeatureValidator {
     final Set<String> secondSet =
         update.getItemsList().stream().map(FeatureOption::getId).collect(Collectors.toSet());
 
-    if(! firstSet.equals(secondSet)) {
+    if (!firstSet.equals(secondSet)) {
       throw new ServiceException(
           Problem.clientProblem("option_ids_mismatch", "option ids must be the same",
               422));
@@ -160,7 +171,7 @@ class FeatureValidator {
   }
 
   private void validateOwnerThrowing(Feature feature) {
-    if (! feature.hasOwner()) {
+    if (!feature.hasOwner()) {
       throw new ServiceException(Problem.clientProblem("no_owner_for_feature",
           "A feature must have an owner", 422));
     }
@@ -194,11 +205,12 @@ class FeatureValidator {
     });
   }
 
-  public void validateNamespaceFeatureCollection(NamespaceFeatureCollection updateNamespaced) {
-
-  }
-
-  public void validateFeatureDataNewCandidate(Feature existingFeature, NamespaceFeature incoming) {
-
+  private void validateKeysMatch(String existingFeatureKey, String incomingKey) {
+    if (!existingFeatureKey.equals(incomingKey)) {
+      throw new ServiceException(
+          Problem.clientProblem("namespace_feature_keys_mismatch",
+              "namespace feature keys must be the same as the parent feature's",
+              422));
+    }
   }
 }
