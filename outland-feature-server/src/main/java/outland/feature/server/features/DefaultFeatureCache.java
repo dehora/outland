@@ -134,5 +134,4 @@ public class DefaultFeatureCache implements FeatureCache {
         hystrixConfiguration,
         metrics).execute();
   }
-
 }

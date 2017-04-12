@@ -16,5 +16,4 @@ public class TableConfiguration {
   @NotEmpty
   @JsonProperty
   public String outlandAppGraphTable;
-
 }

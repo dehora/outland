@@ -226,7 +226,8 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
   }
 
   private Feature update(Feature feature, List<NamespaceFeature> namespaceFeatures) {
-    final Feature updated = featureUpdateProcessor.prepareUpdateNamespaceFeatureThrowing(feature, namespaceFeatures);
+    final Feature updated =
+        featureUpdateProcessor.prepareUpdateNamespaceFeatureThrowing(feature, namespaceFeatures);
     timed(updateFeatureTimer, () -> featureStorage.updateFeature(updated, feature.getVersion()));
     addToCache(updated);
     return updated;

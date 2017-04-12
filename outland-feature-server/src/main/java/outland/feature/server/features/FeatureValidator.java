@@ -132,7 +132,7 @@ class FeatureValidator {
     final OptionCollection incomingOptions = incoming.getFeature().getOptions();
     final OptionType incomingOptionType = incomingOptions.getOption();
 
-    if(! existingOptionType.equals(incomingOptionType)) {
+    if (!existingOptionType.equals(incomingOptionType)) {
       throw new ServiceException(
           Problem.clientProblem("namespace_feature_option_mismatch",
               "namespace feature option type must be the same as the parent feature's",
