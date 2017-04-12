@@ -68,14 +68,14 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
     featureValidator = new FeatureValidator();
   }
 
-  @Override public Optional<Feature> registerFeature(Feature registering) {
+  @Override public Feature registerFeature(Feature registering) {
 
     logger.info("{} /feature[{}]", kvp("op", "registerFeature"), toString(registering));
 
     final Feature feature = featureRegisterProcessor.prepareNewFeature(registering);
     timed(saveFeatureTimer, () -> featureStorage.createFeature(feature));
     addToCache(feature);
-    return Optional.of(feature);
+    return feature;
   }
 
   @Override
