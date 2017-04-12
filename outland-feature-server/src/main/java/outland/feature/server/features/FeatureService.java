@@ -9,15 +9,6 @@ import outland.feature.proto.NamespaceFeature;
 
 public interface FeatureService {
 
-  DateTimeFormatter ISO = DateTimeFormatter.ISO_OFFSET_DATE_TIME;
-
-  static String asString(OffsetDateTime src) {
-    return ISO.format(src);
-  }
-
-  static OffsetDateTime asOffsetDateTime(String raw) {
-    return ISO.parse(raw, OffsetDateTime::from);
-  }
 
   Optional<Feature> registerFeature(Feature feature);
 
