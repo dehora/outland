@@ -115,7 +115,7 @@ public class DefaultVersionServiceTest {
     assertEquals(newerIncoming.logicalTime(), versionUpdate.logicalTime());
     assertTrue(newerIncoming.counter() == versionUpdate.counter() - 1);
 
-    // moved ahead from our last nextVersion
+    // moved ahead from our last nextFeatureVersion
     assertTrue(versionUpdate.logicalTime() > nextVersion.logicalTime());
   }
 

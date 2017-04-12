@@ -4,6 +4,7 @@ import org.junit.Test;
 import outland.feature.proto.Group;
 import outland.feature.proto.Owner;
 import outland.feature.proto.OwnerCollection;
+import outland.feature.server.Names;
 import outland.feature.server.ServiceException;
 
 import static org.junit.Assert.*;
@@ -15,7 +16,7 @@ public class GroupValidatorTest {
     Group.Builder builder = Group.newBuilder();
 
     OwnerCollection.Builder oc = OwnerCollection.newBuilder()
-        .setType("owner.collection")
+        .setType(Names.ownerCollectionType())
         .addItems(Owner.newBuilder().setName("Bob").setUsername("bob"));
 
     builder.setOwners(oc)
@@ -44,7 +45,7 @@ public class GroupValidatorTest {
   public void validateRegistrationThrowingJunkOwner() {
     Group.Builder builder = Group.newBuilder();
     OwnerCollection.Builder oc = OwnerCollection.newBuilder()
-        .setType("owner.collection")
+        .setType(Names.ownerCollectionType())
         .addItems(Owner.newBuilder().setName("Bob"));
     builder.setOwners(oc);
 
@@ -55,7 +56,7 @@ public class GroupValidatorTest {
   public void validateRegistrationThrowingNoKey() {
     Group.Builder builder = Group.newBuilder();
     OwnerCollection.Builder oc = OwnerCollection.newBuilder()
-        .setType("owner.collection")
+        .setType(Names.ownerCollectionType())
         .addItems(Owner.newBuilder().setName("Bob").setUsername("bob"));
     builder.setOwners(oc);
 
@@ -66,7 +67,7 @@ public class GroupValidatorTest {
   public void validateRegistrationThrowingNoName() {
     Group.Builder builder = Group.newBuilder();
     OwnerCollection.Builder oc = OwnerCollection.newBuilder()
-        .setType("owner.collection")
+        .setType(Names.ownerCollectionType())
         .addItems(Owner.newBuilder().setName("Bob").setUsername("bob"));
     builder.setOwners(oc)
         .setKey("key1");

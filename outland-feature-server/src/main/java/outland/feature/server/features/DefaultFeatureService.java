@@ -20,6 +20,7 @@ import outland.feature.proto.Feature;
 import outland.feature.proto.FeatureCollection;
 import outland.feature.proto.NamespaceFeature;
 import outland.feature.proto.NamespaceFeatureCollection;
+import outland.feature.server.Names;
 
 import static outland.feature.server.StructLog.kvp;
 
@@ -133,7 +134,7 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
     logger.info("{}", kvp("op", "loadFeatures", "group", group));
 
     final FeatureCollection.Builder builder = FeatureCollection.newBuilder();
-    builder.setType("feature.list");
+    builder.setType(Names.featureCollectionType());
     builder.setGroup(group);
 
     final Optional<Map<String, String>> cacheSet = timed(loadFeaturesCacheTimer,
@@ -179,7 +180,7 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
     return FeatureCollection.newBuilder()
         .addAllItems(sinceList)
         .setGroup(group)
-        .setType("feature.list")
+        .setType(Names.featureCollectionType())
         .build();
   }
 

@@ -13,7 +13,6 @@ import java.util.stream.Collectors;
 import outland.feature.proto.Feature;
 import outland.feature.proto.FeatureData;
 import outland.feature.proto.FeatureOption;
-import outland.feature.proto.FeatureVersion;
 import outland.feature.proto.NamespaceFeature;
 import outland.feature.proto.NamespaceFeatureCollection;
 import outland.feature.proto.OptionCollection;
@@ -40,12 +39,12 @@ class FeatureUpdateProcessor {
   Feature prepareUpdateNamespaceFeatureThrowing(Feature feature,
       List<NamespaceFeature> namespaceFeatures) {
     final NamespaceFeatureCollection.Builder nfcBuilder = NamespaceFeatureCollection.newBuilder()
-        .setType("namespace.feature.collection")
+        .setType(Names.namespaceFeatureCollectionType())
         .addAllItems(namespaceFeatures);
     final Feature.Builder featureBuilder = feature.toBuilder()
         .clearNamespaces()
         .setNamespaces(nfcBuilder);
-    featureBuilder.setVersion(versionSupport.generateVersion(feature));
+    featureBuilder.setVersion(versionSupport.nextFeatureVersion(feature));
     featureBuilder.setUpdated(timeNow());
     final Feature updated = featureBuilder.build();
     featureValidator.validateFeatureRegistrationThrowing(updated);
@@ -65,13 +64,13 @@ class FeatureUpdateProcessor {
         .setUpdated(now);
 
     // can't change some values in update
-    wipBuilder.setType("feature");
+    wipBuilder.setType(Names.featureType());
     wipBuilder.setCreated(existing.getCreated());
     wipBuilder.setId(existing.getId());
     wipBuilder.setGroup(existing.getGroup());
     wipBuilder.setKey(existing.getKey());
 
-    wipBuilder.setVersion(versionSupport.generateVersion(incoming));
+    wipBuilder.setVersion(versionSupport.nextFeatureVersion(incoming));
 
     // process options if we received some
     if (incoming.getOptions().getOption().equals(OptionType.bool)
@@ -86,7 +85,7 @@ class FeatureUpdateProcessor {
 
       // can't change some values in update
       wipOptionsBuilder.setOption(existing.getOptions().getOption());
-      wipOptionsBuilder.setType("options.collection");
+      wipOptionsBuilder.setType(Names.optionCollectionType());
       wipOptionsBuilder.setMaxweight(DEFAULT_MAXWEIGHT);
 
       wipBuilder.setOptions(wipOptionsBuilder);
@@ -190,14 +189,14 @@ class FeatureUpdateProcessor {
             && !updateOwner.getUsername().equals(foundOwner.getEmail()))) {
       // treat as new owner
       final Owner.Builder replacementOwnerBuilder = updateOwner.toBuilder();
-      replacementOwnerBuilder.setType("featureowner");
+      replacementOwnerBuilder.setType(Names.ownerType());
       replacementOwnerBuilder.setId(Names.owner());
       builder.setOwner(replacementOwnerBuilder.buildPartial());
     } else {
 
       final Owner.Builder wipOwnerBuilder = foundOwner.toBuilder().mergeFrom(updateOwner);
       // some fields can't be changed
-      wipOwnerBuilder.setType("featureowner");
+      wipOwnerBuilder.setType(Names.ownerType());
       wipOwnerBuilder.setId(foundOwner.getId());
 
       builder.setOwner(wipOwnerBuilder.buildPartial());
@@ -217,7 +216,7 @@ class FeatureUpdateProcessor {
     List<NamespaceFeature> merged = processor.buildMergedNamespaceFeatures(existing, incoming);
 
     final NamespaceFeatureCollection.Builder nfcBuilder = NamespaceFeatureCollection.newBuilder()
-        .setType("namespace.feature.collection")
+        .setType(Names.namespaceFeatureCollectionType())
         .addAllItems(merged);
 
     wipBuilder.setNamespaces(nfcBuilder);
@@ -270,14 +269,14 @@ class FeatureUpdateProcessor {
 
     final FeatureData.Builder featureDataBuilder = incomingFeatureData.toBuilder()
         .setId(Names.namespaceFeature())
-        .setVersion(buildNextFeatureVersion())
+        .setVersion(versionSupport.nextFeatureVersion())
         .setKey(incomingFeatureData.getKey())
         // always off on create
         .setState(FeatureData.State.off);
 
     if (incomingFeatureData.getOptions().getOption().equals(OptionType.flag)) {
       return incoming.toBuilder()
-          .setType("namespace.feature")
+          .setType(Names.namespaceFeatureType())
           .setFeature(featureDataBuilder)
           .build();
     }
@@ -286,7 +285,7 @@ class FeatureUpdateProcessor {
 
     OptionCollection.Builder optionCollectionBuilder = OptionCollection.newBuilder();
     optionCollectionBuilder.setMaxweight(DEFAULT_MAXWEIGHT);
-    optionCollectionBuilder.setType("options.collection");
+    optionCollectionBuilder.setType(Names.optionCollectionType());
     optionCollectionBuilder.setOption(incomingFeatureData.getOptions().getOption());
 
     if (incomingFeatureData.getOptions().getOption().equals(OptionType.bool)) {
@@ -299,7 +298,7 @@ class FeatureUpdateProcessor {
     }
 
     return incoming.toBuilder()
-        .setType("namespace.feature")
+        .setType(Names.namespaceFeatureType())
         .setFeature(featureDataBuilder)
         .build();
   }
@@ -328,7 +327,7 @@ class FeatureUpdateProcessor {
 
       // can't change some values in update
       wipOptionsBuilder.setOption(existingFeatureData.getOptions().getOption());
-      wipOptionsBuilder.setType("options.collection");
+      wipOptionsBuilder.setType(Names.optionCollectionType());
       wipOptionsBuilder.setMaxweight(DEFAULT_MAXWEIGHT);
 
       featureDataBuilder.setOptions(wipOptionsBuilder);
@@ -344,46 +343,7 @@ class FeatureUpdateProcessor {
     return existing.toBuilder()
         .mergeFrom(incoming)
         .setId(existing.getId())
-        .setVersion(nextFeatureVersion(existing.getVersion()));
-  }
-
-  private FeatureVersion nextFeatureVersion(FeatureVersion version) {
-    return buildNextFeatureVersion(buildNextHybridLogicalTimestamp(version));
-  }
-
-  private FeatureVersion buildNextFeatureVersion(
-      VersionService.HybridLogicalTimestamp nextVersion) {
-    return FeatureVersion.newBuilder()
-        .setType("hlcver")
-        .setCounter(nextVersion.counter())
-        .setTimestamp(nextVersion.logicalTime())
-        .setId(nextVersion.id())
-        .build()
-        ;
-  }
-
-  FeatureVersion buildNextFeatureVersion() {
-
-    final VersionService.HybridLogicalTimestamp timestamp = buildNextHybridLogicalTimestamp();
-
-    return FeatureVersion.newBuilder()
-        .setType("hlcver")
-        .setCounter(timestamp.counter())
-        .setTimestamp(timestamp.logicalTime())
-        .setId(timestamp.id())
-        .build()
-        ;
-  }
-
-  private VersionService.HybridLogicalTimestamp buildNextHybridLogicalTimestamp() {
-    return versionService.nextVersion();
-  }
-
-  private VersionService.HybridLogicalTimestamp buildNextHybridLogicalTimestamp(
-      FeatureVersion version) {
-    return versionService.nextVersionUpdate(new VersionService.HybridLogicalTimestamp(
-        version.getTimestamp(),
-        version.getCounter()));
+        .setVersion(versionSupport.nextFeatureVersion(existing.getVersion()));
   }
 
   private boolean isMatching(NamespaceFeature existing, NamespaceFeature incoming) {
