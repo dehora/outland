@@ -34,12 +34,8 @@ public class AuthPrincipal implements Principal {
     return identifier;
   }
 
-  @Override public String toString() {
-    return MoreObjects.toStringHelper(this)
-        .add("type", type)
-        .add("identifier", identifier)
-        .add("scopes", scopes)
-        .toString();
+  @Override public int hashCode() {
+    return Objects.hash(type, identifier, scopes);
   }
 
   @Override public boolean equals(Object o) {
@@ -51,7 +47,11 @@ public class AuthPrincipal implements Principal {
         Objects.equals(scopes, that.scopes);
   }
 
-  @Override public int hashCode() {
-    return Objects.hash(type, identifier, scopes);
+  @Override public String toString() {
+    return MoreObjects.toStringHelper(this)
+        .add("type", type)
+        .add("identifier", identifier)
+        .add("scopes", scopes)
+        .toString();
   }
 }

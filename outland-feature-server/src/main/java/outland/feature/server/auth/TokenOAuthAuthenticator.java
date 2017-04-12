@@ -5,7 +5,8 @@ import java.util.Optional;
 import javax.inject.Inject;
 import outland.feature.server.groups.NamesapaceAuthService;
 
-public class TokenOAuthAuthenticator implements io.dropwizard.auth.Authenticator<String, AuthPrincipal> {
+public class TokenOAuthAuthenticator
+    implements io.dropwizard.auth.Authenticator<String, AuthPrincipal> {
 
   private final NamesapaceAuthService namesapaceAuthService;
 
@@ -16,7 +17,8 @@ public class TokenOAuthAuthenticator implements io.dropwizard.auth.Authenticator
     this.namesapaceAuthService = namesapaceAuthService;
   }
 
-  @Override public Optional<AuthPrincipal> authenticate(String credentials) throws AuthenticationException {
+  @Override public Optional<AuthPrincipal> authenticate(String credentials)
+      throws AuthenticationException {
     return namesapaceAuthService.authenticate(credentials, NamesapaceAuthService.BEARER);
   }
 }

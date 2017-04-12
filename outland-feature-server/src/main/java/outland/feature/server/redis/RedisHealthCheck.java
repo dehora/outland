@@ -30,7 +30,7 @@ public class RedisHealthCheck extends HealthCheck {
       try {
         jedis = redisProvider.get();
 
-        final String key = "healthcheck:"+redisProvider.getName();
+        final String key = "healthcheck:" + redisProvider.getName();
         final int ttl = 3600;
         final String checkString = String.format("%d", System.currentTimeMillis());
         jedis.lpush(key, checkString);

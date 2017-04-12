@@ -20,21 +20,20 @@ import outland.feature.proto.MemberAccess;
 import outland.feature.proto.Owner;
 import outland.feature.proto.OwnerCollection;
 import outland.feature.proto.ServiceAccess;
+import outland.feature.server.Names;
 import outland.feature.server.Problem;
 import outland.feature.server.ServiceException;
 import outland.feature.server.features.MetricsTimer;
-import outland.feature.server.Names;
 import outland.feature.server.features.VersionService;
 
 import static outland.feature.server.StructLog.kvp;
 
 public class DefaultGroupService implements GroupService, MetricsTimer {
 
-  private static final Logger logger = LoggerFactory.getLogger(DefaultGroupService.class);
   public static final String SUBJECT_TYPE = "group";
   public static final String REL_MARK = "rel.";
   public static final String INV_MARK = "inv.";
-
+  private static final Logger logger = LoggerFactory.getLogger(DefaultGroupService.class);
   private final GroupStorage groupStorage;
   private final VersionService versionService;
   private final GroupUpdateProcessor groupUpdateProcessor;
@@ -67,7 +66,8 @@ public class DefaultGroupService implements GroupService, MetricsTimer {
   @Override public Group update(Group group) {
     logger.info("{} /group[{}]", kvp("op", "update"), TextFormat.shortDebugString(group));
 
-    return processUpdate(group, builder -> {});
+    return processUpdate(group, builder -> {
+    });
   }
 
   @Override public Group add(Group group, ServiceAccess service) {
@@ -107,8 +107,8 @@ public class DefaultGroupService implements GroupService, MetricsTimer {
 
   @Override public Group removeServiceAccess(Group group, String serviceKey) {
 
-    if(serviceKey == null) {
-      return  group;
+    if (serviceKey == null) {
+      return group;
     }
 
     final List<ServiceAccess> servicesList = group.getGranted().getServicesList();
@@ -124,7 +124,7 @@ public class DefaultGroupService implements GroupService, MetricsTimer {
       }
     }
 
-    if(service == null) {
+    if (service == null) {
       return group;
     }
 
@@ -148,8 +148,8 @@ public class DefaultGroupService implements GroupService, MetricsTimer {
   }
 
   @Override public Group removeMemberAccess(Group group, String memberKey) {
-    if(memberKey == null) {
-      return  group;
+    if (memberKey == null) {
+      return group;
     }
 
     final List<MemberAccess> ownersList = group.getGranted().getMembersList();
@@ -159,20 +159,20 @@ public class DefaultGroupService implements GroupService, MetricsTimer {
 
     while (iterator.hasNext()) {
       MemberAccess next = iterator.next();
-      if(memberKey.equals(next.getUsername())) {
-        MemberAccess  = next;
+      if (memberKey.equals(next.getUsername())) {
+        MemberAccess = next;
         iterator.remove();
         break;
       }
 
-      if(memberKey.equals(next.getEmail())) {
-        MemberAccess  = next;
+      if (memberKey.equals(next.getEmail())) {
+        MemberAccess = next;
         iterator.remove();
         break;
       }
     }
 
-    if(MemberAccess == null) {
+    if (MemberAccess == null) {
       return group;
     }
 
@@ -192,17 +192,16 @@ public class DefaultGroupService implements GroupService, MetricsTimer {
     updateNamespaceInner(updated);
     removeMemberFromGraph(updated, MemberAccess);
     return updated;
-
   }
 
   @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
   @Override public Group removeOwner(Group group, String ownerKey) {
 
-    if(ownerKey == null) {
+    if (ownerKey == null) {
       return group;
     }
 
-    if(group.getOwners().getItemsCount() == 1) {
+    if (group.getOwners().getItemsCount() == 1) {
       throw new ServiceException(Problem.clientProblem("at_least_one_owner",
           "only one owner remaining, refusing to remove", 422));
     }
@@ -214,20 +213,20 @@ public class DefaultGroupService implements GroupService, MetricsTimer {
 
     while (iterator.hasNext()) {
       Owner next = iterator.next();
-      if(ownerKey.equals(next.getUsername())) {
-        owner  = next;
+      if (ownerKey.equals(next.getUsername())) {
+        owner = next;
         iterator.remove();
         break;
       }
 
-      if(ownerKey.equals(next.getEmail())) {
-        owner  = next;
+      if (ownerKey.equals(next.getEmail())) {
+        owner = next;
         iterator.remove();
         break;
       }
     }
 
-    if(owner == null) {
+    if (owner == null) {
       return group;
     }
 
@@ -306,7 +305,9 @@ public class DefaultGroupService implements GroupService, MetricsTimer {
     AccessCollection.Builder accessCollectionBuilder = newGrantCollectionBuilder();
 
     List<ServiceAccess> servicesReady = Lists.newArrayList();
-    group.getGranted().getServicesList().forEach(service -> servicesReady.add(prepareService(service)));
+    group.getGranted()
+        .getServicesList()
+        .forEach(service -> servicesReady.add(prepareService(service)));
     accessCollectionBuilder.addAllServices(servicesReady);
 
     List<MemberAccess> memberReady = Lists.newArrayList();
@@ -407,13 +408,13 @@ public class DefaultGroupService implements GroupService, MetricsTimer {
     final String subjectKey = group.getKey();
     final String objectType = GroupService.MEMBER;
 
-    if(! Strings.isNullOrEmpty(member.getUsername())) {
+    if (!Strings.isNullOrEmpty(member.getUsername())) {
       final String objectKey = member.getUsername();
       saveGraphRelation(
           group, relation, subjectType, subjectKey, objectType, objectKey, saveOwnerTimer);
     }
 
-    if(! Strings.isNullOrEmpty(member.getEmail())) {
+    if (!Strings.isNullOrEmpty(member.getEmail())) {
       final String objectKey = member.getEmail();
       saveGraphRelation(
           group, relation, subjectType, subjectKey, objectType, objectKey, saveOwnerTimer);
@@ -426,18 +427,17 @@ public class DefaultGroupService implements GroupService, MetricsTimer {
     final String subjectKey = group.getKey();
     final String objectType = GroupService.OWNER;
 
-    if(! Strings.isNullOrEmpty(owner.getUsername())) {
+    if (!Strings.isNullOrEmpty(owner.getUsername())) {
       final String objectKey = owner.getUsername();
       saveGraphRelation(
           group, relation, subjectType, subjectKey, objectType, objectKey, saveOwnerTimer);
     }
 
-    if(! Strings.isNullOrEmpty(owner.getEmail())) {
+    if (!Strings.isNullOrEmpty(owner.getEmail())) {
       final String objectKey = owner.getEmail();
       saveGraphRelation(
           group, relation, subjectType, subjectKey, objectType, objectKey, saveOwnerTimer);
     }
-
   }
 
   private void saveGraphRelation(
@@ -489,13 +489,13 @@ public class DefaultGroupService implements GroupService, MetricsTimer {
     final String subjectKey = group.getKey();
     final String objectType = GroupService.OWNER;
 
-    if(! Strings.isNullOrEmpty(owner.getUsername())) {
+    if (!Strings.isNullOrEmpty(owner.getUsername())) {
       final String objectKey = owner.getUsername();
       removeGraphRelation(
           group, relation, subjectType, subjectKey, objectType, objectKey, saveOwnerTimer);
     }
 
-    if(! Strings.isNullOrEmpty(owner.getEmail())) {
+    if (!Strings.isNullOrEmpty(owner.getEmail())) {
       final String objectKey = owner.getEmail();
       removeGraphRelation(
           group, relation, subjectType, subjectKey, objectType, objectKey, saveOwnerTimer);
@@ -508,13 +508,13 @@ public class DefaultGroupService implements GroupService, MetricsTimer {
     final String subjectKey = group.getKey();
     final String objectType = GroupService.MEMBER;
 
-    if(! Strings.isNullOrEmpty(member.getUsername())) {
+    if (!Strings.isNullOrEmpty(member.getUsername())) {
       final String objectKey = member.getUsername();
       removeGraphRelation(
           group, relation, subjectType, subjectKey, objectType, objectKey, saveOwnerTimer);
     }
 
-    if(! Strings.isNullOrEmpty(member.getEmail())) {
+    if (!Strings.isNullOrEmpty(member.getEmail())) {
       final String objectKey = member.getEmail();
       removeGraphRelation(
           group, relation, subjectType, subjectKey, objectType, objectKey, saveOwnerTimer);

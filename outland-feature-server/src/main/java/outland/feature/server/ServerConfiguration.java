@@ -60,5 +60,4 @@ public class ServerConfiguration extends Configuration {
   @NotNull
   @JsonProperty
   public HystrixConfiguration dynamodbNamespaceGraphQueryHystrix = new HystrixConfiguration();
-
 }

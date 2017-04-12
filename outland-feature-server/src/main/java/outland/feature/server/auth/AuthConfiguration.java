@@ -1,9 +1,7 @@
 package outland.feature.server.auth;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.google.common.collect.Lists;
 import java.net.URI;
-import java.util.List;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -38,14 +36,12 @@ public class AuthConfiguration {
   @Max(3600L)
   @JsonProperty
   public long oauthCacheTokenSeconds = 60;
-
-  @NotNull
-  @JsonProperty
-  String multipleGroupAccessList = "";
-
   @NotEmpty
   @JsonProperty
   public RemoteOAuthServerConfiguration remoteOAuthServer = new RemoteOAuthServerConfiguration();
+  @NotNull
+  @JsonProperty
+  String multipleGroupAccessList = "";
 
   static class RemoteOAuthServerConfiguration {
 
@@ -63,5 +59,4 @@ public class AuthConfiguration {
     @JsonProperty
     long readTimeout = 1_000L;
   }
-
 }

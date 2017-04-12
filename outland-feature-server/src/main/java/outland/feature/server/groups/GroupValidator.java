@@ -30,5 +30,4 @@ class GroupValidator {
           "A group must have a name", 422));
     }
   }
-
 }

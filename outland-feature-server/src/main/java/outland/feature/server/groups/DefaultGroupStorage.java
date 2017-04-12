@@ -32,9 +32,8 @@ import static outland.feature.server.StructLog.kvp;
 
 public class DefaultGroupStorage implements GroupStorage {
 
-  private static final Logger logger = LoggerFactory.getLogger(DefaultGroupStorage.class);
   public static final String HASH_KEY = "group_key";
-
+  private static final Logger logger = LoggerFactory.getLogger(DefaultGroupStorage.class);
   private final DynamoDB dynamoDB;
   private final String groupTableName;
   private final String groupGraphTableName;
@@ -50,7 +49,8 @@ public class DefaultGroupStorage implements GroupStorage {
       TableConfiguration tableConfiguration,
       @Named("dynamodbGroupWriteHystrix") HystrixConfiguration dynamodbGroupWriteHystrix,
       @Named("dynamodbGraphWriteHystrix") HystrixConfiguration dynamodbGraphWriteHystrix,
-      @Named("dynamodbNamespaceGraphQueryHystrix") HystrixConfiguration dynamodbNamespaceGraphQueryHystrix,
+      @Named("dynamodbNamespaceGraphQueryHystrix")
+          HystrixConfiguration dynamodbNamespaceGraphQueryHystrix,
       MetricRegistry metrics
   ) {
     this.amazonDynamoDB = amazonDynamoDB;
@@ -76,7 +76,8 @@ public class DefaultGroupStorage implements GroupStorage {
       try {
         return table.putItem(putItemSpec);
       } catch (ConditionalCheckFailedException e) {
-        logger.error("err=conflict_group_already_exists ns_key={} {}", group.getKey(), e.getMessage());
+        logger.error("err=conflict_group_already_exists ns_key={} {}", group.getKey(),
+            e.getMessage());
         throwConflictAlreadyExists(group);
         return null;
       }
@@ -89,40 +90,6 @@ public class DefaultGroupStorage implements GroupStorage {
     Table table = dynamoDB.getTable(groupTableName);
     final Supplier<PutItemOutcome> putItemOutcomeSupplier = () -> table.putItem(item);
     return putItem(group, putItemOutcomeSupplier);
-  }
-
-  private Item preparePutItem(Group group) {
-    String json = Protobuf3Support.toJsonString(group);
-
-    return new Item()
-        .withString("id", group.getId())
-        .withString(HASH_KEY, group.getKey())
-        .withString("name", group.getName())
-        .withString("json", json)
-        .withString("v", "1")
-        .withString("created", group.getCreated())
-        .withString("updated", group.getUpdated());
-  }
-
-  private Void putItem(Group group, Supplier<PutItemOutcome> putItemOutcomeSupplier) {
-    DynamoDbCommand<PutItemOutcome> cmd = new DynamoDbCommand<>("save",
-        putItemOutcomeSupplier,
-        () -> {
-          throw new RuntimeException("save");
-        },
-        dynamodbGroupWriteHystrix,
-        metrics);
-
-    PutItemOutcome outcome = cmd.execute();
-
-    logger.info("{} /dynamodb_put_item_result=[{}]",
-        kvp("op", "save",
-            "group", group.getId(),
-            HASH_KEY, group.getKey(),
-            "result", "ok"),
-        outcome.getPutItemResult().toString());
-
-    return null;
   }
 
   @Override public Void saveRelation(Group group, String relationHashKey, String relationRangeKey) {
@@ -155,7 +122,8 @@ public class DefaultGroupStorage implements GroupStorage {
     return null;
   }
 
-  @Override public Void removeRelation(Group group, String relationHashKey, String relationRangeKey) {
+  @Override
+  public Void removeRelation(Group group, String relationHashKey, String relationRangeKey) {
 
     Table table = dynamoDB.getTable(groupGraphTableName);
 
@@ -207,14 +175,14 @@ public class DefaultGroupStorage implements GroupStorage {
         metrics);
 
     // can't use getLastLowLevelResult directly; it's false unless the outcome is iterated first :|
-      return cmd.execute().iterator().hasNext();
+    return cmd.execute().iterator().hasNext();
   }
 
   @Override public Optional<Group> loadByKey(String key) {
     Table table = dynamoDB.getTable(this.groupTableName);
 
     QuerySpec querySpec = new QuerySpec()
-        .withKeyConditionExpression(HASH_KEY+" = :k_app_key")
+        .withKeyConditionExpression(HASH_KEY + " = :k_app_key")
         .withValueMap(new ValueMap()
             .withString(":k_app_key", key)
         )
@@ -236,7 +204,40 @@ public class DefaultGroupStorage implements GroupStorage {
     }
 
     return Optional.empty();
+  }
 
+  private Item preparePutItem(Group group) {
+    String json = Protobuf3Support.toJsonString(group);
+
+    return new Item()
+        .withString("id", group.getId())
+        .withString(HASH_KEY, group.getKey())
+        .withString("name", group.getName())
+        .withString("json", json)
+        .withString("v", "1")
+        .withString("created", group.getCreated())
+        .withString("updated", group.getUpdated());
+  }
+
+  private Void putItem(Group group, Supplier<PutItemOutcome> putItemOutcomeSupplier) {
+    DynamoDbCommand<PutItemOutcome> cmd = new DynamoDbCommand<>("save",
+        putItemOutcomeSupplier,
+        () -> {
+          throw new RuntimeException("save");
+        },
+        dynamodbGroupWriteHystrix,
+        metrics);
+
+    PutItemOutcome outcome = cmd.execute();
+
+    logger.info("{} /dynamodb_put_item_result=[{}]",
+        kvp("op", "save",
+            "group", group.getId(),
+            HASH_KEY, group.getKey(),
+            "result", "ok"),
+        outcome.getPutItemResult().toString());
+
+    return null;
   }
 
   private ItemCollection<QueryOutcome> queryTable(Table table, QuerySpec querySpec) {

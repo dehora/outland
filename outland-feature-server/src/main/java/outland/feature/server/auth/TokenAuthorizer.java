@@ -13,14 +13,14 @@ public class TokenAuthorizer implements io.dropwizard.auth.Authorizer<AuthPrinci
     this.serviceConfiguration = authConfiguration;
   }
 
-
   @Override public boolean authorize(AuthPrincipal principal, String role) {
 
-    if(AuthConfiguration.SCOPE_OAUTH_POLICY_DISABLED.equals(serviceConfiguration.oauthScopePolicy)) {
+    if (AuthConfiguration.SCOPE_OAUTH_POLICY_DISABLED.equals(
+        serviceConfiguration.oauthScopePolicy)) {
       return true;
     }
 
-    if(principal.scopes().contains(WILDCARD_SCOPE)) {
+    if (principal.scopes().contains(WILDCARD_SCOPE)) {
       return true;
     }
 

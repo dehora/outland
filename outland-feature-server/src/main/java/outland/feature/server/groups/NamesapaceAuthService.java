@@ -8,5 +8,4 @@ public interface NamesapaceAuthService {
   String BEARER = "Bearer";
 
   Optional<AuthPrincipal> authenticate(String credentials, String tokenType);
-
 }

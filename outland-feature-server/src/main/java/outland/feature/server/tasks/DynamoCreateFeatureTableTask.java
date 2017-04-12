@@ -25,11 +25,10 @@ import outland.feature.server.features.TableConfiguration;
 
 public class DynamoCreateFeatureTableTask extends Task {
 
-  private static final Logger logger = LoggerFactory.getLogger(DynamoCreateFeatureTableTask.class);
   public static final String HASH_KEY = DefaultFeatureStorage.HASH_KEY;
   public static final String RANGE_KEY = DefaultFeatureStorage.RANGE_KEY;
   public static final String ATTR_ID = "id";
-
+  private static final Logger logger = LoggerFactory.getLogger(DynamoCreateFeatureTableTask.class);
   private final AmazonDynamoDB amazonDynamoDB;
   private final String tableName;
 
@@ -79,7 +78,8 @@ public class DynamoCreateFeatureTableTask extends Task {
     final ArrayList<KeySchemaElement> indexKeySchema = new ArrayList<>();
     indexKeySchema.add(
         new KeySchemaElement().withAttributeName(HASH_KEY).withKeyType(KeyType.HASH));
-    indexKeySchema.add(new KeySchemaElement().withAttributeName(ATTR_ID).withKeyType(KeyType.RANGE));
+    indexKeySchema.add(
+        new KeySchemaElement().withAttributeName(ATTR_ID).withKeyType(KeyType.RANGE));
 
     final Projection projection = new Projection().withProjectionType(ProjectionType.INCLUDE);
     final ArrayList<String> indexColumns = new ArrayList<>();

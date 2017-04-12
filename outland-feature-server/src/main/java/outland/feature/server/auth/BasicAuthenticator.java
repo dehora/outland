@@ -1,9 +1,7 @@
 package outland.feature.server.auth;
 
-import com.google.common.collect.Lists;
 import io.dropwizard.auth.AuthenticationException;
 import io.dropwizard.auth.basic.BasicCredentials;
-import java.util.List;
 import java.util.Optional;
 import javax.inject.Inject;
 

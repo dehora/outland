@@ -22,9 +22,8 @@ import outland.feature.server.groups.DefaultGroupStorage;
 
 public class DynamoCreateGroupsTableTask extends Task {
 
-  private static final Logger logger = LoggerFactory.getLogger(DynamoCreateGroupsTableTask.class);
   public static final String HASH_KEY = DefaultGroupStorage.HASH_KEY;
-
+  private static final Logger logger = LoggerFactory.getLogger(DynamoCreateGroupsTableTask.class);
   private final AmazonDynamoDB amazonDynamoDB;
   private final TableConfiguration tableConfiguration;
 
@@ -65,8 +64,7 @@ public class DynamoCreateGroupsTableTask extends Task {
             .withTableName(tableName)
             .withKeySchema(tableKeySchema)
             .withAttributeDefinitions(tableAttributeDefinitions)
-            .withProvisionedThroughput(tableProvisionedThroughput)
-        ;
+            .withProvisionedThroughput(tableProvisionedThroughput);
 
     final TableDescription tableDescription =
         amazonDynamoDB.createTable(createTableRequest).getTableDescription();
