@@ -19,6 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import outland.feature.proto.Feature;
 import outland.feature.proto.FeatureCollection;
+import outland.feature.proto.FeatureData;
 import outland.feature.proto.FeatureOption;
 import outland.feature.proto.FeatureVersion;
 import outland.feature.proto.NamespaceFeature;
@@ -98,6 +99,9 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
 
     builder.clearOwner();
     applyOwnerRegister(registering, builder);
+
+    builder.clearNamespaced();
+    applyFeatureNamespaceRegister(registering, builder);
 
     Feature feature = builder.build();
 
@@ -183,7 +187,10 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
       wipBuilder.setState(updates.getState());
     }
 
-    // todo: process namespaces
+    // process namespaces if we received some
+    if(updates.hasNamespaced()) {
+      applyFeatureNamespaceUpdate(found, updates, wipBuilder);
+    }
 
     Feature updated = wipBuilder.build();
 
@@ -338,7 +345,7 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
 
     FeatureUpdateProcessor processor = new FeatureUpdateProcessor(versionService);
     final List<NamespaceFeature> namespaceFeatures =
-        processor.mergeNamespaceFeatures(feature, namespaceFeature);
+        processor.buildMergedNamespaceFeatures(feature, namespaceFeature);
 
     final NamespaceFeatureCollection.Builder builder = NamespaceFeatureCollection.newBuilder();
     builder.setType("namespace.feature.collection").addAllItems(namespaceFeatures);
@@ -461,6 +468,103 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
     return results;
   }
 
+  private void applyFeatureNamespaceUpdate(
+      Feature existing, Feature incoming, Feature.Builder wipBuilder) {
+
+    if(! incoming.hasNamespaced()) {
+      return;
+    }
+
+    wipBuilder.clearNamespaced();
+
+    FeatureUpdateProcessor processor = new FeatureUpdateProcessor(versionService);
+    List<NamespaceFeature> merged = processor.buildMergedNamespaceFeatures(existing, incoming);
+
+    final NamespaceFeatureCollection.Builder nfcBuilder = NamespaceFeatureCollection.newBuilder()
+        .setType("namespace.feature.collection")
+        .addAllItems(merged);
+
+    wipBuilder.setNamespaced(nfcBuilder);
+  }
+
+  private void applyNamespaceFeatureOptionsRegister(
+      NamespaceFeature incoming, FeatureData.Builder featureDataBuilder) {
+
+    if (incoming.getFeature().getOptions().getOption().equals(OptionType.flag)) {
+      // flags don't have weighted options
+      return;
+    }
+
+    OptionCollection.Builder optionCollectionBuilder = OptionCollection.newBuilder();
+    optionCollectionBuilder.setMaxweight(DEFAULT_MAXWEIGHT);
+    optionCollectionBuilder.setType("options.collection");
+    optionCollectionBuilder.setOption(incoming.getFeature().getOptions().getOption());
+
+    if (incoming.getFeature().getOptions().getOption().equals(OptionType.bool)) {
+
+      if (incoming.getFeature().getOptions().getItemsCount() != 0) {
+
+        final List<FeatureOption> options = incoming.getFeature().getOptions().getItemsList();
+        applyBooleanOptions(optionCollectionBuilder, options);
+        featureDataBuilder.setOptions(optionCollectionBuilder);
+      }
+    }
+  }
+
+  private void applyBooleanOptions(OptionCollection.Builder collectionBuilder,
+      List<FeatureOption> options) {
+    for (FeatureOption option : options) {
+      final FeatureOption.Builder optionBuilder = FeatureOption.newBuilder().mergeFrom(option);
+      optionBuilder.setType("option");
+      optionBuilder.setId("opt_" + Ulid.random());
+      optionBuilder.setOption(OptionType.bool);
+      collectionBuilder.addItems(optionBuilder);
+    }
+  }
+
+  private void applyFeatureNamespaceRegister(Feature registering, Feature.Builder builder) {
+
+    if(! registering.hasNamespaced()) {
+      return;
+    }
+
+    final FeatureUpdateProcessor processor = new FeatureUpdateProcessor(versionService);
+
+    final NamespaceFeatureCollection registeringNamespaced = registering.getNamespaced();
+    final List<NamespaceFeature> incomingFeaturesList = registeringNamespaced.getItemsList();
+    final ArrayList<NamespaceFeature> registeringNamespaceFeatures = Lists.newArrayList();
+
+    for (NamespaceFeature incoming : incomingFeaturesList) {
+
+      final FeatureData.Builder featureDataBuilder = FeatureData.newBuilder()
+          .mergeFrom(incoming.getFeature())
+          .setId("nsfeature_" + Ulid.random())
+          .setVersion(processor.buildNextFeatureVersion())
+          .setKey(incoming.getFeature().getKey())
+          // always off on create
+          .setState(FeatureData.State.off) ;
+
+      featureDataBuilder.clearOptions();
+      applyNamespaceFeatureOptionsRegister(incoming, featureDataBuilder);
+
+      final NamespaceFeature.Builder namespaceFeatureBuilder = NamespaceFeature.newBuilder();
+
+      namespaceFeatureBuilder.mergeFrom(incoming)
+          .setType("namespace.feature")
+          .setNamespace(incoming.getNamespace())
+          .setFeature(featureDataBuilder);
+
+      registeringNamespaceFeatures.add(namespaceFeatureBuilder.buildPartial());
+    }
+
+    NamespaceFeatureCollection.Builder nfcBuilder = NamespaceFeatureCollection.newBuilder()
+        .setType("namespace.feature.collection")
+        .addAllItems(registeringNamespaceFeatures);
+
+    builder.setNamespaced(nfcBuilder);
+
+  }
+
   private void applyOptionsRegister(Feature feature, Feature.Builder builder) {
 
     if (feature.getOptions().getOption().equals(OptionType.flag)) {
@@ -477,15 +581,7 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
       if (feature.getOptions().getItemsCount() != 0) {
 
         final List<FeatureOption> options = feature.getOptions().getItemsList();
-
-        for (FeatureOption option : options) {
-          final FeatureOption.Builder optionBuilder = FeatureOption.newBuilder().mergeFrom(option);
-          optionBuilder.setType("option");
-          optionBuilder.setId("opt_" + Ulid.random());
-          optionBuilder.setOption(OptionType.bool);
-          collectionBuilder.addItems(optionBuilder);
-        }
-
+        applyBooleanOptions(collectionBuilder, options);
         builder.setOptions(collectionBuilder);
       } else {
 
