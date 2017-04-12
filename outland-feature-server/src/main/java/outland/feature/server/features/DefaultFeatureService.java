@@ -41,6 +41,7 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
   private final VersionService versionService;
   private final FeatureRegisterProcessor featureRegisterProcessor;
   private final FeatureUpdateProcessor featureUpdateProcessor;
+  private final VersionSupport versionSupport;
 
   private Timer saveFeatureTimer;
   private Timer updateFeatureTimer;
@@ -66,6 +67,7 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
     this.versionService = versionService;
     this.featureRegisterProcessor = new FeatureRegisterProcessor(versionService);
     this.featureUpdateProcessor = new FeatureUpdateProcessor(versionService);
+    this.versionSupport = new VersionSupport(versionService);
     configureMetrics(metrics);
   }
 
@@ -273,10 +275,9 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
     String now = TimeSupport.asString(OffsetDateTime.now());
     wipBuilder.setUpdated(now);
 
-    applyVersion(feature, wipBuilder);
+    versionSupport.applyVersion(feature, wipBuilder);
 
     Feature updated = wipBuilder.build();
-
 
     featureValidator.validateFeatureRegistrationThrowing(updated);
     timed(updateFeatureTimer, () -> featureStorage.updateFeature(updated, foundVersion));
@@ -327,7 +328,7 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
         .setNamespaces(nfcBuilder);
 
     final FeatureVersion foundVersion = feature.getVersion();
-    applyVersion(feature, wipBuilder);
+    versionSupport.applyVersion(feature, wipBuilder);
     wipBuilder.setUpdated(TimeSupport.asString(OffsetDateTime.now()));
 
     final Feature updated = wipBuilder.build();
@@ -346,28 +347,6 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
 
     addToCache(updated);
     return updated;
-  }
-
-  private void applyVersion(Feature registering, Feature.Builder builder) {
-
-    VersionService.HybridLogicalTimestamp next;
-    if (registering.hasVersion()) {
-      next = versionService.nextVersionUpdate(new VersionService.HybridLogicalTimestamp(
-          registering.getVersion().getTimestamp(),
-          registering.getVersion().getCounter()));
-    } else {
-      next = versionService.nextVersion();
-    }
-
-    builder.setVersion(buildVersion(next));
-  }
-
-  private FeatureVersion.Builder buildVersion(VersionService.HybridLogicalTimestamp next) {
-    return FeatureVersion.newBuilder()
-        .setType("hlcver")
-        .setCounter(next.counter())
-        .setTimestamp(next.logicalTime())
-        .setId(next.id());
   }
 
   private void addAllToCache(String group, List<Feature> features) {
