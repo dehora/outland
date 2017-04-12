@@ -6,9 +6,9 @@ import org.slf4j.LoggerFactory;
 
 import static outland.feature.server.StructLog.kvp;
 
-public class Versions implements VersionService {
+public class DefaultVersionService implements VersionService {
 
-  private static final Logger logger = LoggerFactory.getLogger(Versions.class);
+  private static final Logger logger = LoggerFactory.getLogger(DefaultVersionService.class);
 
   private static final long ONE_HOUR_MICROSECONDS = 3600L * 1000L * 1000L;
 
@@ -21,14 +21,14 @@ public class Versions implements VersionService {
   private final AtomicLong localTime;
   private final AtomicLong localCounter;
 
-  Versions(Clock clock) {
+  DefaultVersionService(Clock clock) {
     this.clock = clock;
     // todo: accept these as values, to allow us to memo logicalTime from previous starts
     localTime = new AtomicLong(clock.timestampMicros());
     localCounter = new AtomicLong(INITIAL_COUNTER);
   }
 
-  Versions() {
+  DefaultVersionService() {
     this(new SystemClock());
   }
 
