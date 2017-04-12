@@ -343,6 +343,10 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
 
   @Override public Feature add(Feature feature, NamespaceFeature namespaceFeature) {
 
+    FeatureValidator featureValidator = new FeatureValidator();
+
+    featureValidator.validateFeatureDataNewCandidateThrowing(feature, namespaceFeature);
+
     FeatureUpdateProcessor processor = new FeatureUpdateProcessor(versionService);
     final List<NamespaceFeature> namespaceFeatures =
         processor.buildMergedNamespaceFeatures(feature, namespaceFeature);
@@ -364,7 +368,7 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
 
     Feature updated = wipBuilder.build();
 
-    FeatureValidator featureValidator = new FeatureValidator();
+
     featureValidator.validateFeatureRegistrationThrowing(updated);
     timed(updateFeatureTimer, () -> featureStorage.updateFeature(updated, foundVersion));
     logger.info("{} /updated_feature_namespace=[{}]",
