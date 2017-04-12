@@ -14,7 +14,7 @@ public class Names {
   }
 
   public static String namespaceFeature() {
-    return "nsfeature_" + Ulid.random();
+    return "nsfeat_" + Ulid.random();
   }
 
   public static String option() {
@@ -30,7 +30,7 @@ public class Names {
   }
 
   public static String group(OffsetDateTime time) {
-    return "group_" + Ulid.random(time.toInstant().toEpochMilli());
+    return "grp_" + Ulid.random(time.toInstant().toEpochMilli());
   }
 
   public static String ownerType() {
@@ -38,7 +38,7 @@ public class Names {
   }
 
   public static String versionType() {
-    return "hlcver";
+    return "version";
   }
 
   public static String memberType() {
@@ -54,7 +54,11 @@ public class Names {
   }
 
   public static String namespaceFeatureType() {
-    return "namespace.feature";
+    return "nsfeature";
+  }
+
+  public static String optionType() {
+    return "option";
   }
 
   public static String namespaceFeatureCollectionType() {
@@ -65,16 +69,12 @@ public class Names {
     return "access.collection";
   }
 
-  public static String optionType() {
-    return "option";
-  }
-
   public static String optionCollectionType() {
     return "option.collection";
   }
 
   public static String featureCollectionType() {
-    return "feature.list";
+    return "feature.collection";
   }
 
   public static String ownerCollectionType() {
