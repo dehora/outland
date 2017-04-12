@@ -19,7 +19,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import outland.feature.proto.Feature;
 import outland.feature.proto.FeatureCollection;
-import outland.feature.proto.FeatureData;
 import outland.feature.proto.FeatureOption;
 import outland.feature.proto.FeatureVersion;
 import outland.feature.proto.NamespaceFeature;
@@ -41,11 +40,11 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
       return dtRight.compareTo(dtLeft);
     }
   };
-  public static final int DEFAULT_MAXWEIGHT = 10_000;
 
   private final FeatureStorage featureStorage;
   private final FeatureCache featureCache;
   private final VersionService versionService;
+  private final FeatureRegisterProcessor featureRegisterProcessor;
 
   private Timer saveFeatureTimer;
   private Timer updateFeatureTimer;
@@ -69,6 +68,7 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
     this.featureStorage = featureStorage;
     this.featureCache = featureCache;
     this.versionService = versionService;
+    this.featureRegisterProcessor = new FeatureRegisterProcessor(versionService);
     configureMetrics(metrics);
   }
 
@@ -77,7 +77,7 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
     logger.info("{} /feature[{}]", kvp("op", "registerFeature"),
         TextFormat.shortDebugString(registering));
 
-    Feature feature = prepareNewFeature(registering);
+    Feature feature = featureRegisterProcessor.prepareNewFeature(registering);
 
     timed(saveFeatureTimer, () -> featureStorage.createFeature(feature));
 
@@ -86,36 +86,6 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
 
     addToCache(feature);
     return Optional.of(feature);
-  }
-
-  private Feature prepareNewFeature(Feature registering) {
-    FeatureValidator featureValidator = new FeatureValidator();
-
-    // catch bad input before merging
-    featureValidator.validateFeatureRegistrationThrowing(registering);
-
-    OffsetDateTime now = OffsetDateTime.now();
-    String id = "feat_" + Ulid.random(now.toInstant().toEpochMilli());
-    String created = TimeSupport.asString(now);
-
-    Feature.Builder builder = registering.toBuilder();
-    builder.setType("feature");
-    builder.setId(id);
-    builder.setCreated(created);
-    builder.setUpdated(builder.getCreated());
-    builder.setState(Feature.State.off); // always disabled on registerFeature
-
-    applyVersion(registering, builder);
-    builder.clearOptions();
-    applyOptionsRegister(registering, builder);
-
-    builder.clearOwner();
-    applyOwnerRegister(registering, builder);
-
-    builder.clearNamespaces();
-    applyFeatureNamespaceRegister(registering, builder);
-
-    return builder.build();
   }
 
   @Override
@@ -495,125 +465,6 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
     wipBuilder.setNamespaces(nfcBuilder);
   }
 
-  private void applyNamespaceFeatureOptionsRegister(
-      NamespaceFeature incoming, FeatureData.Builder featureDataBuilder) {
-
-    if (incoming.getFeature().getOptions().getOption().equals(OptionType.flag)) {
-      // flags don't have weighted options
-      return;
-    }
-
-    OptionCollection.Builder optionCollectionBuilder = OptionCollection.newBuilder();
-    optionCollectionBuilder.setMaxweight(DEFAULT_MAXWEIGHT);
-    optionCollectionBuilder.setType("options.collection");
-    optionCollectionBuilder.setOption(incoming.getFeature().getOptions().getOption());
-
-    if (incoming.getFeature().getOptions().getOption().equals(OptionType.bool)) {
-
-      if (incoming.getFeature().getOptions().getItemsCount() != 0) {
-
-        final List<FeatureOption> options = incoming.getFeature().getOptions().getItemsList();
-        applyBooleanOptions(optionCollectionBuilder, options);
-        featureDataBuilder.setOptions(optionCollectionBuilder);
-      }
-    }
-  }
-
-  private void applyBooleanOptions(OptionCollection.Builder collectionBuilder,
-      List<FeatureOption> options) {
-    for (FeatureOption option : options) {
-      final FeatureOption.Builder optionBuilder = FeatureOption.newBuilder().mergeFrom(option);
-      optionBuilder.setType("option");
-      optionBuilder.setId("opt_" + Ulid.random());
-      optionBuilder.setOption(OptionType.bool);
-      collectionBuilder.addItems(optionBuilder);
-    }
-  }
-
-  private void applyFeatureNamespaceRegister(Feature registering, Feature.Builder builder) {
-
-    if(! registering.hasNamespaces()) {
-      return;
-    }
-
-    final FeatureUpdateProcessor processor = new FeatureUpdateProcessor(versionService);
-
-    final NamespaceFeatureCollection registeringNamespaced = registering.getNamespaces();
-    final List<NamespaceFeature> incomingFeaturesList = registeringNamespaced.getItemsList();
-    final ArrayList<NamespaceFeature> registeringNamespaceFeatures = Lists.newArrayList();
-
-    for (NamespaceFeature incoming : incomingFeaturesList) {
-
-      final FeatureData.Builder featureDataBuilder = FeatureData.newBuilder()
-          .mergeFrom(incoming.getFeature())
-          .setId("nsfeature_" + Ulid.random())
-          .setVersion(processor.buildNextFeatureVersion())
-          .setKey(incoming.getFeature().getKey())
-          // always off on create
-          .setState(FeatureData.State.off) ;
-
-      featureDataBuilder.clearOptions();
-      applyNamespaceFeatureOptionsRegister(incoming, featureDataBuilder);
-
-      final NamespaceFeature.Builder namespaceFeatureBuilder = NamespaceFeature.newBuilder();
-
-      namespaceFeatureBuilder.mergeFrom(incoming)
-          .setType("namespace.feature")
-          .setNamespace(incoming.getNamespace())
-          .setFeature(featureDataBuilder);
-
-      registeringNamespaceFeatures.add(namespaceFeatureBuilder.buildPartial());
-    }
-
-    NamespaceFeatureCollection.Builder nfcBuilder = NamespaceFeatureCollection.newBuilder()
-        .setType("namespace.feature.collection")
-        .addAllItems(registeringNamespaceFeatures);
-
-    builder.setNamespaces(nfcBuilder);
-
-  }
-
-  private void applyOptionsRegister(Feature feature, Feature.Builder builder) {
-
-    if (feature.getOptions().getOption().equals(OptionType.flag)) {
-      // flags don't have weighted options
-      return;
-    }
-
-    OptionCollection.Builder collectionBuilder = OptionCollection.newBuilder();
-    collectionBuilder.setMaxweight(DEFAULT_MAXWEIGHT);
-    collectionBuilder.setType("options.collection");
-    collectionBuilder.setOption(feature.getOptions().getOption());
-
-    if (feature.getOptions().getOption().equals(OptionType.bool)) {
-      if (feature.getOptions().getItemsCount() != 0) {
-
-        final List<FeatureOption> options = feature.getOptions().getItemsList();
-        applyBooleanOptions(collectionBuilder, options);
-        builder.setOptions(collectionBuilder);
-      } else {
-
-        collectionBuilder.addItems(FeatureOption.newBuilder()
-            .setType("option")
-            .setId("opt_" + Ulid.random())
-            .setName("false")
-            .setValue("false")
-            .setOption(OptionType.bool)
-            .setWeight(5_000));
-
-        collectionBuilder.addItems(FeatureOption.newBuilder()
-            .setType("option")
-            .setId("opt_" + Ulid.random())
-            .setName("true")
-            .setValue("true")
-            .setOption(OptionType.bool)
-            .setWeight(5_000));
-
-        builder.setOptions(collectionBuilder);
-      }
-    }
-  }
-
   private void applyOwnerUpdate(Feature updates, Owner foundOwner, Feature.Builder builder) {
     final Owner updateOwner = updates.getOwner();
     new FeatureValidator().validateOwner(updateOwner);
@@ -637,14 +488,6 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
 
       builder.setOwner(wipOwnerBuilder.buildPartial());
     }
-  }
-
-  private void applyOwnerRegister(Feature registering, Feature.Builder builder) {
-    final Owner owner = registering.getOwner();
-    final Owner.Builder ownerBuilder = owner.toBuilder();
-    ownerBuilder.setType("featureowner");
-    ownerBuilder.setId("own_" + Ulid.random());
-    builder.setOwner(ownerBuilder.buildPartial());
   }
 
   private void applyVersion(Feature registering, Feature.Builder builder) {
