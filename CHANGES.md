@@ -1,5 +1,13 @@
 ### Changes
 
+### 0.0.10
+
+- Allows a feature to have one or more namespaced variants.
+
+- Renames namespace to group.
+
+- Returns 422 if the feature/group request content is invalid.
+
 ### 0.0.9
 
 - Replaces "app" concept with namespace in client
