@@ -8,56 +8,56 @@ public interface FeatureOptionOrBuilder extends
     com.google.protobuf.MessageOrBuilder {
 
   /**
-   * <code>optional string id = 1;</code>
+   * <code>optional string type = 1;</code>
+   */
+  java.lang.String getType();
+  /**
+   * <code>optional string type = 1;</code>
+   */
+  com.google.protobuf.ByteString
+      getTypeBytes();
+
+  /**
+   * <code>optional string id = 2;</code>
    */
   java.lang.String getId();
   /**
-   * <code>optional string id = 1;</code>
+   * <code>optional string id = 2;</code>
    */
   com.google.protobuf.ByteString
       getIdBytes();
 
   /**
-   * <code>optional .outland.OptionType option = 2;</code>
+   * <code>optional .outland.OptionType option = 10;</code>
    */
   int getOptionValue();
   /**
-   * <code>optional .outland.OptionType option = 2;</code>
+   * <code>optional .outland.OptionType option = 10;</code>
    */
   outland.feature.proto.OptionType getOption();
 
   /**
-   * <code>optional string name = 3;</code>
+   * <code>optional string name = 11;</code>
    */
   java.lang.String getName();
   /**
-   * <code>optional string name = 3;</code>
+   * <code>optional string name = 11;</code>
    */
   com.google.protobuf.ByteString
       getNameBytes();
 
   /**
-   * <code>optional string value = 4;</code>
+   * <code>optional string value = 12;</code>
    */
   java.lang.String getValue();
   /**
-   * <code>optional string value = 4;</code>
+   * <code>optional string value = 12;</code>
    */
   com.google.protobuf.ByteString
       getValueBytes();
 
   /**
-   * <code>optional int32 weight = 5;</code>
+   * <code>optional int32 weight = 13;</code>
    */
   int getWeight();
-
-  /**
-   * <code>optional string type = 6;</code>
-   */
-  java.lang.String getType();
-  /**
-   * <code>optional string type = 6;</code>
-   */
-  com.google.protobuf.ByteString
-      getTypeBytes();
 }

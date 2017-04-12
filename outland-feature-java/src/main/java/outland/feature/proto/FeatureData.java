@@ -15,6 +15,7 @@ public  final class FeatureData extends
     super(builder);
   }
   private FeatureData() {
+    type_ = "";
     id_ = "";
     key_ = "";
     state_ = 0;
@@ -46,6 +47,12 @@ public  final class FeatureData extends
             break;
           }
           case 10: {
+            java.lang.String s = input.readStringRequireUtf8();
+
+            type_ = s;
+            break;
+          }
+          case 18: {
             java.lang.String s = input.readStringRequireUtf8();
 
             id_ = s;
@@ -219,10 +226,44 @@ public  final class FeatureData extends
     // @@protoc_insertion_point(enum_scope:outland.FeatureData.State)
   }
 
-  public static final int ID_FIELD_NUMBER = 1;
+  public static final int TYPE_FIELD_NUMBER = 1;
+  private volatile java.lang.Object type_;
+  /**
+   * <code>optional string type = 1;</code>
+   */
+  public java.lang.String getType() {
+    java.lang.Object ref = type_;
+    if (ref instanceof java.lang.String) {
+      return (java.lang.String) ref;
+    } else {
+      com.google.protobuf.ByteString bs = 
+          (com.google.protobuf.ByteString) ref;
+      java.lang.String s = bs.toStringUtf8();
+      type_ = s;
+      return s;
+    }
+  }
+  /**
+   * <code>optional string type = 1;</code>
+   */
+  public com.google.protobuf.ByteString
+      getTypeBytes() {
+    java.lang.Object ref = type_;
+    if (ref instanceof java.lang.String) {
+      com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString.copyFromUtf8(
+              (java.lang.String) ref);
+      type_ = b;
+      return b;
+    } else {
+      return (com.google.protobuf.ByteString) ref;
+    }
+  }
+
+  public static final int ID_FIELD_NUMBER = 2;
   private volatile java.lang.Object id_;
   /**
-   * <code>optional string id = 1;</code>
+   * <code>optional string id = 2;</code>
    */
   public java.lang.String getId() {
     java.lang.Object ref = id_;
@@ -237,7 +278,7 @@ public  final class FeatureData extends
     }
   }
   /**
-   * <code>optional string id = 1;</code>
+   * <code>optional string id = 2;</code>
    */
   public com.google.protobuf.ByteString
       getIdBytes() {
@@ -357,8 +398,11 @@ public  final class FeatureData extends
 
   public void writeTo(com.google.protobuf.CodedOutputStream output)
                       throws java.io.IOException {
+    if (!getTypeBytes().isEmpty()) {
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 1, type_);
+    }
     if (!getIdBytes().isEmpty()) {
-      com.google.protobuf.GeneratedMessageV3.writeString(output, 1, id_);
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 2, id_);
     }
     if (!getKeyBytes().isEmpty()) {
       com.google.protobuf.GeneratedMessageV3.writeString(output, 10, key_);
@@ -379,8 +423,11 @@ public  final class FeatureData extends
     if (size != -1) return size;
 
     size = 0;
+    if (!getTypeBytes().isEmpty()) {
+      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, type_);
+    }
     if (!getIdBytes().isEmpty()) {
-      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, id_);
+      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, id_);
     }
     if (!getKeyBytes().isEmpty()) {
       size += com.google.protobuf.GeneratedMessageV3.computeStringSize(10, key_);
@@ -413,6 +460,8 @@ public  final class FeatureData extends
     outland.feature.proto.FeatureData other = (outland.feature.proto.FeatureData) obj;
 
     boolean result = true;
+    result = result && getType()
+        .equals(other.getType());
     result = result && getId()
         .equals(other.getId());
     result = result && getKey()
@@ -438,6 +487,8 @@ public  final class FeatureData extends
     }
     int hash = 41;
     hash = (19 * hash) + getDescriptorForType().hashCode();
+    hash = (37 * hash) + TYPE_FIELD_NUMBER;
+    hash = (53 * hash) + getType().hashCode();
     hash = (37 * hash) + ID_FIELD_NUMBER;
     hash = (53 * hash) + getId().hashCode();
     hash = (37 * hash) + KEY_FIELD_NUMBER;
@@ -570,6 +621,8 @@ public  final class FeatureData extends
     }
     public Builder clear() {
       super.clear();
+      type_ = "";
+
       id_ = "";
 
       key_ = "";
@@ -610,6 +663,7 @@ public  final class FeatureData extends
 
     public outland.feature.proto.FeatureData buildPartial() {
       outland.feature.proto.FeatureData result = new outland.feature.proto.FeatureData(this);
+      result.type_ = type_;
       result.id_ = id_;
       result.key_ = key_;
       result.state_ = state_;
@@ -664,6 +718,10 @@ public  final class FeatureData extends
 
     public Builder mergeFrom(outland.feature.proto.FeatureData other) {
       if (other == outland.feature.proto.FeatureData.getDefaultInstance()) return this;
+      if (!other.getType().isEmpty()) {
+        type_ = other.type_;
+        onChanged();
+      }
       if (!other.getId().isEmpty()) {
         id_ = other.id_;
         onChanged();
@@ -707,9 +765,78 @@ public  final class FeatureData extends
       return this;
     }
 
+    private java.lang.Object type_ = "";
+    /**
+     * <code>optional string type = 1;</code>
+     */
+    public java.lang.String getType() {
+      java.lang.Object ref = type_;
+      if (!(ref instanceof java.lang.String)) {
+        com.google.protobuf.ByteString bs =
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        type_ = s;
+        return s;
+      } else {
+        return (java.lang.String) ref;
+      }
+    }
+    /**
+     * <code>optional string type = 1;</code>
+     */
+    public com.google.protobuf.ByteString
+        getTypeBytes() {
+      java.lang.Object ref = type_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        type_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+    /**
+     * <code>optional string type = 1;</code>
+     */
+    public Builder setType(
+        java.lang.String value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  
+      type_ = value;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>optional string type = 1;</code>
+     */
+    public Builder clearType() {
+      
+      type_ = getDefaultInstance().getType();
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>optional string type = 1;</code>
+     */
+    public Builder setTypeBytes(
+        com.google.protobuf.ByteString value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+      
+      type_ = value;
+      onChanged();
+      return this;
+    }
+
     private java.lang.Object id_ = "";
     /**
-     * <code>optional string id = 1;</code>
+     * <code>optional string id = 2;</code>
      */
     public java.lang.String getId() {
       java.lang.Object ref = id_;
@@ -724,7 +851,7 @@ public  final class FeatureData extends
       }
     }
     /**
-     * <code>optional string id = 1;</code>
+     * <code>optional string id = 2;</code>
      */
     public com.google.protobuf.ByteString
         getIdBytes() {
@@ -740,7 +867,7 @@ public  final class FeatureData extends
       }
     }
     /**
-     * <code>optional string id = 1;</code>
+     * <code>optional string id = 2;</code>
      */
     public Builder setId(
         java.lang.String value) {
@@ -753,7 +880,7 @@ public  final class FeatureData extends
       return this;
     }
     /**
-     * <code>optional string id = 1;</code>
+     * <code>optional string id = 2;</code>
      */
     public Builder clearId() {
       
@@ -762,7 +889,7 @@ public  final class FeatureData extends
       return this;
     }
     /**
-     * <code>optional string id = 1;</code>
+     * <code>optional string id = 2;</code>
      */
     public Builder setIdBytes(
         com.google.protobuf.ByteString value) {

@@ -51,13 +51,13 @@ public  final class FeatureCollection extends
             type_ = s;
             break;
           }
-          case 18: {
+          case 82: {
             java.lang.String s = input.readStringRequireUtf8();
 
             group_ = s;
             break;
           }
-          case 26: {
+          case 90: {
             if (!((mutable_bitField0_ & 0x00000004) == 0x00000004)) {
               items_ = new java.util.ArrayList<outland.feature.proto.Feature>();
               mutable_bitField0_ |= 0x00000004;
@@ -127,10 +127,10 @@ public  final class FeatureCollection extends
     }
   }
 
-  public static final int GROUP_FIELD_NUMBER = 2;
+  public static final int GROUP_FIELD_NUMBER = 10;
   private volatile java.lang.Object group_;
   /**
-   * <code>optional string group = 2;</code>
+   * <code>optional string group = 10;</code>
    */
   public java.lang.String getGroup() {
     java.lang.Object ref = group_;
@@ -145,7 +145,7 @@ public  final class FeatureCollection extends
     }
   }
   /**
-   * <code>optional string group = 2;</code>
+   * <code>optional string group = 10;</code>
    */
   public com.google.protobuf.ByteString
       getGroupBytes() {
@@ -161,35 +161,35 @@ public  final class FeatureCollection extends
     }
   }
 
-  public static final int ITEMS_FIELD_NUMBER = 3;
+  public static final int ITEMS_FIELD_NUMBER = 11;
   private java.util.List<outland.feature.proto.Feature> items_;
   /**
-   * <code>repeated .outland.Feature items = 3;</code>
+   * <code>repeated .outland.Feature items = 11;</code>
    */
   public java.util.List<outland.feature.proto.Feature> getItemsList() {
     return items_;
   }
   /**
-   * <code>repeated .outland.Feature items = 3;</code>
+   * <code>repeated .outland.Feature items = 11;</code>
    */
   public java.util.List<? extends outland.feature.proto.FeatureOrBuilder> 
       getItemsOrBuilderList() {
     return items_;
   }
   /**
-   * <code>repeated .outland.Feature items = 3;</code>
+   * <code>repeated .outland.Feature items = 11;</code>
    */
   public int getItemsCount() {
     return items_.size();
   }
   /**
-   * <code>repeated .outland.Feature items = 3;</code>
+   * <code>repeated .outland.Feature items = 11;</code>
    */
   public outland.feature.proto.Feature getItems(int index) {
     return items_.get(index);
   }
   /**
-   * <code>repeated .outland.Feature items = 3;</code>
+   * <code>repeated .outland.Feature items = 11;</code>
    */
   public outland.feature.proto.FeatureOrBuilder getItemsOrBuilder(
       int index) {
@@ -212,10 +212,10 @@ public  final class FeatureCollection extends
       com.google.protobuf.GeneratedMessageV3.writeString(output, 1, type_);
     }
     if (!getGroupBytes().isEmpty()) {
-      com.google.protobuf.GeneratedMessageV3.writeString(output, 2, group_);
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 10, group_);
     }
     for (int i = 0; i < items_.size(); i++) {
-      output.writeMessage(3, items_.get(i));
+      output.writeMessage(11, items_.get(i));
     }
   }
 
@@ -228,11 +228,11 @@ public  final class FeatureCollection extends
       size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, type_);
     }
     if (!getGroupBytes().isEmpty()) {
-      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, group_);
+      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(10, group_);
     }
     for (int i = 0; i < items_.size(); i++) {
       size += com.google.protobuf.CodedOutputStream
-        .computeMessageSize(3, items_.get(i));
+        .computeMessageSize(11, items_.get(i));
     }
     memoizedSize = size;
     return size;
@@ -612,7 +612,7 @@ public  final class FeatureCollection extends
 
     private java.lang.Object group_ = "";
     /**
-     * <code>optional string group = 2;</code>
+     * <code>optional string group = 10;</code>
      */
     public java.lang.String getGroup() {
       java.lang.Object ref = group_;
@@ -627,7 +627,7 @@ public  final class FeatureCollection extends
       }
     }
     /**
-     * <code>optional string group = 2;</code>
+     * <code>optional string group = 10;</code>
      */
     public com.google.protobuf.ByteString
         getGroupBytes() {
@@ -643,7 +643,7 @@ public  final class FeatureCollection extends
       }
     }
     /**
-     * <code>optional string group = 2;</code>
+     * <code>optional string group = 10;</code>
      */
     public Builder setGroup(
         java.lang.String value) {
@@ -656,7 +656,7 @@ public  final class FeatureCollection extends
       return this;
     }
     /**
-     * <code>optional string group = 2;</code>
+     * <code>optional string group = 10;</code>
      */
     public Builder clearGroup() {
       
@@ -665,7 +665,7 @@ public  final class FeatureCollection extends
       return this;
     }
     /**
-     * <code>optional string group = 2;</code>
+     * <code>optional string group = 10;</code>
      */
     public Builder setGroupBytes(
         com.google.protobuf.ByteString value) {
@@ -692,7 +692,7 @@ public  final class FeatureCollection extends
         outland.feature.proto.Feature, outland.feature.proto.Feature.Builder, outland.feature.proto.FeatureOrBuilder> itemsBuilder_;
 
     /**
-     * <code>repeated .outland.Feature items = 3;</code>
+     * <code>repeated .outland.Feature items = 11;</code>
      */
     public java.util.List<outland.feature.proto.Feature> getItemsList() {
       if (itemsBuilder_ == null) {
@@ -702,7 +702,7 @@ public  final class FeatureCollection extends
       }
     }
     /**
-     * <code>repeated .outland.Feature items = 3;</code>
+     * <code>repeated .outland.Feature items = 11;</code>
      */
     public int getItemsCount() {
       if (itemsBuilder_ == null) {
@@ -712,7 +712,7 @@ public  final class FeatureCollection extends
       }
     }
     /**
-     * <code>repeated .outland.Feature items = 3;</code>
+     * <code>repeated .outland.Feature items = 11;</code>
      */
     public outland.feature.proto.Feature getItems(int index) {
       if (itemsBuilder_ == null) {
@@ -722,7 +722,7 @@ public  final class FeatureCollection extends
       }
     }
     /**
-     * <code>repeated .outland.Feature items = 3;</code>
+     * <code>repeated .outland.Feature items = 11;</code>
      */
     public Builder setItems(
         int index, outland.feature.proto.Feature value) {
@@ -739,7 +739,7 @@ public  final class FeatureCollection extends
       return this;
     }
     /**
-     * <code>repeated .outland.Feature items = 3;</code>
+     * <code>repeated .outland.Feature items = 11;</code>
      */
     public Builder setItems(
         int index, outland.feature.proto.Feature.Builder builderForValue) {
@@ -753,7 +753,7 @@ public  final class FeatureCollection extends
       return this;
     }
     /**
-     * <code>repeated .outland.Feature items = 3;</code>
+     * <code>repeated .outland.Feature items = 11;</code>
      */
     public Builder addItems(outland.feature.proto.Feature value) {
       if (itemsBuilder_ == null) {
@@ -769,7 +769,7 @@ public  final class FeatureCollection extends
       return this;
     }
     /**
-     * <code>repeated .outland.Feature items = 3;</code>
+     * <code>repeated .outland.Feature items = 11;</code>
      */
     public Builder addItems(
         int index, outland.feature.proto.Feature value) {
@@ -786,7 +786,7 @@ public  final class FeatureCollection extends
       return this;
     }
     /**
-     * <code>repeated .outland.Feature items = 3;</code>
+     * <code>repeated .outland.Feature items = 11;</code>
      */
     public Builder addItems(
         outland.feature.proto.Feature.Builder builderForValue) {
@@ -800,7 +800,7 @@ public  final class FeatureCollection extends
       return this;
     }
     /**
-     * <code>repeated .outland.Feature items = 3;</code>
+     * <code>repeated .outland.Feature items = 11;</code>
      */
     public Builder addItems(
         int index, outland.feature.proto.Feature.Builder builderForValue) {
@@ -814,7 +814,7 @@ public  final class FeatureCollection extends
       return this;
     }
     /**
-     * <code>repeated .outland.Feature items = 3;</code>
+     * <code>repeated .outland.Feature items = 11;</code>
      */
     public Builder addAllItems(
         java.lang.Iterable<? extends outland.feature.proto.Feature> values) {
@@ -829,7 +829,7 @@ public  final class FeatureCollection extends
       return this;
     }
     /**
-     * <code>repeated .outland.Feature items = 3;</code>
+     * <code>repeated .outland.Feature items = 11;</code>
      */
     public Builder clearItems() {
       if (itemsBuilder_ == null) {
@@ -842,7 +842,7 @@ public  final class FeatureCollection extends
       return this;
     }
     /**
-     * <code>repeated .outland.Feature items = 3;</code>
+     * <code>repeated .outland.Feature items = 11;</code>
      */
     public Builder removeItems(int index) {
       if (itemsBuilder_ == null) {
@@ -855,14 +855,14 @@ public  final class FeatureCollection extends
       return this;
     }
     /**
-     * <code>repeated .outland.Feature items = 3;</code>
+     * <code>repeated .outland.Feature items = 11;</code>
      */
     public outland.feature.proto.Feature.Builder getItemsBuilder(
         int index) {
       return getItemsFieldBuilder().getBuilder(index);
     }
     /**
-     * <code>repeated .outland.Feature items = 3;</code>
+     * <code>repeated .outland.Feature items = 11;</code>
      */
     public outland.feature.proto.FeatureOrBuilder getItemsOrBuilder(
         int index) {
@@ -872,7 +872,7 @@ public  final class FeatureCollection extends
       }
     }
     /**
-     * <code>repeated .outland.Feature items = 3;</code>
+     * <code>repeated .outland.Feature items = 11;</code>
      */
     public java.util.List<? extends outland.feature.proto.FeatureOrBuilder> 
          getItemsOrBuilderList() {
@@ -883,14 +883,14 @@ public  final class FeatureCollection extends
       }
     }
     /**
-     * <code>repeated .outland.Feature items = 3;</code>
+     * <code>repeated .outland.Feature items = 11;</code>
      */
     public outland.feature.proto.Feature.Builder addItemsBuilder() {
       return getItemsFieldBuilder().addBuilder(
           outland.feature.proto.Feature.getDefaultInstance());
     }
     /**
-     * <code>repeated .outland.Feature items = 3;</code>
+     * <code>repeated .outland.Feature items = 11;</code>
      */
     public outland.feature.proto.Feature.Builder addItemsBuilder(
         int index) {
@@ -898,7 +898,7 @@ public  final class FeatureCollection extends
           index, outland.feature.proto.Feature.getDefaultInstance());
     }
     /**
-     * <code>repeated .outland.Feature items = 3;</code>
+     * <code>repeated .outland.Feature items = 11;</code>
      */
     public java.util.List<outland.feature.proto.Feature.Builder> 
          getItemsBuilderList() {

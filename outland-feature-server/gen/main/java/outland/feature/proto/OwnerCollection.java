@@ -50,7 +50,7 @@ public  final class OwnerCollection extends
             type_ = s;
             break;
           }
-          case 90: {
+          case 82: {
             if (!((mutable_bitField0_ & 0x00000002) == 0x00000002)) {
               items_ = new java.util.ArrayList<outland.feature.proto.Owner>();
               mutable_bitField0_ |= 0x00000002;
@@ -120,35 +120,35 @@ public  final class OwnerCollection extends
     }
   }
 
-  public static final int ITEMS_FIELD_NUMBER = 11;
+  public static final int ITEMS_FIELD_NUMBER = 10;
   private java.util.List<outland.feature.proto.Owner> items_;
   /**
-   * <code>repeated .outland.Owner items = 11;</code>
+   * <code>repeated .outland.Owner items = 10;</code>
    */
   public java.util.List<outland.feature.proto.Owner> getItemsList() {
     return items_;
   }
   /**
-   * <code>repeated .outland.Owner items = 11;</code>
+   * <code>repeated .outland.Owner items = 10;</code>
    */
   public java.util.List<? extends outland.feature.proto.OwnerOrBuilder> 
       getItemsOrBuilderList() {
     return items_;
   }
   /**
-   * <code>repeated .outland.Owner items = 11;</code>
+   * <code>repeated .outland.Owner items = 10;</code>
    */
   public int getItemsCount() {
     return items_.size();
   }
   /**
-   * <code>repeated .outland.Owner items = 11;</code>
+   * <code>repeated .outland.Owner items = 10;</code>
    */
   public outland.feature.proto.Owner getItems(int index) {
     return items_.get(index);
   }
   /**
-   * <code>repeated .outland.Owner items = 11;</code>
+   * <code>repeated .outland.Owner items = 10;</code>
    */
   public outland.feature.proto.OwnerOrBuilder getItemsOrBuilder(
       int index) {
@@ -171,7 +171,7 @@ public  final class OwnerCollection extends
       com.google.protobuf.GeneratedMessageV3.writeString(output, 1, type_);
     }
     for (int i = 0; i < items_.size(); i++) {
-      output.writeMessage(11, items_.get(i));
+      output.writeMessage(10, items_.get(i));
     }
   }
 
@@ -185,7 +185,7 @@ public  final class OwnerCollection extends
     }
     for (int i = 0; i < items_.size(); i++) {
       size += com.google.protobuf.CodedOutputStream
-        .computeMessageSize(11, items_.get(i));
+        .computeMessageSize(10, items_.get(i));
     }
     memoizedSize = size;
     return size;
@@ -565,7 +565,7 @@ public  final class OwnerCollection extends
         outland.feature.proto.Owner, outland.feature.proto.Owner.Builder, outland.feature.proto.OwnerOrBuilder> itemsBuilder_;
 
     /**
-     * <code>repeated .outland.Owner items = 11;</code>
+     * <code>repeated .outland.Owner items = 10;</code>
      */
     public java.util.List<outland.feature.proto.Owner> getItemsList() {
       if (itemsBuilder_ == null) {
@@ -575,7 +575,7 @@ public  final class OwnerCollection extends
       }
     }
     /**
-     * <code>repeated .outland.Owner items = 11;</code>
+     * <code>repeated .outland.Owner items = 10;</code>
      */
     public int getItemsCount() {
       if (itemsBuilder_ == null) {
@@ -585,7 +585,7 @@ public  final class OwnerCollection extends
       }
     }
     /**
-     * <code>repeated .outland.Owner items = 11;</code>
+     * <code>repeated .outland.Owner items = 10;</code>
      */
     public outland.feature.proto.Owner getItems(int index) {
       if (itemsBuilder_ == null) {
@@ -595,7 +595,7 @@ public  final class OwnerCollection extends
       }
     }
     /**
-     * <code>repeated .outland.Owner items = 11;</code>
+     * <code>repeated .outland.Owner items = 10;</code>
      */
     public Builder setItems(
         int index, outland.feature.proto.Owner value) {
@@ -612,7 +612,7 @@ public  final class OwnerCollection extends
       return this;
     }
     /**
-     * <code>repeated .outland.Owner items = 11;</code>
+     * <code>repeated .outland.Owner items = 10;</code>
      */
     public Builder setItems(
         int index, outland.feature.proto.Owner.Builder builderForValue) {
@@ -626,7 +626,7 @@ public  final class OwnerCollection extends
       return this;
     }
     /**
-     * <code>repeated .outland.Owner items = 11;</code>
+     * <code>repeated .outland.Owner items = 10;</code>
      */
     public Builder addItems(outland.feature.proto.Owner value) {
       if (itemsBuilder_ == null) {
@@ -642,7 +642,7 @@ public  final class OwnerCollection extends
       return this;
     }
     /**
-     * <code>repeated .outland.Owner items = 11;</code>
+     * <code>repeated .outland.Owner items = 10;</code>
      */
     public Builder addItems(
         int index, outland.feature.proto.Owner value) {
@@ -659,7 +659,7 @@ public  final class OwnerCollection extends
       return this;
     }
     /**
-     * <code>repeated .outland.Owner items = 11;</code>
+     * <code>repeated .outland.Owner items = 10;</code>
      */
     public Builder addItems(
         outland.feature.proto.Owner.Builder builderForValue) {
@@ -673,7 +673,7 @@ public  final class OwnerCollection extends
       return this;
     }
     /**
-     * <code>repeated .outland.Owner items = 11;</code>
+     * <code>repeated .outland.Owner items = 10;</code>
      */
     public Builder addItems(
         int index, outland.feature.proto.Owner.Builder builderForValue) {
@@ -687,7 +687,7 @@ public  final class OwnerCollection extends
       return this;
     }
     /**
-     * <code>repeated .outland.Owner items = 11;</code>
+     * <code>repeated .outland.Owner items = 10;</code>
      */
     public Builder addAllItems(
         java.lang.Iterable<? extends outland.feature.proto.Owner> values) {
@@ -702,7 +702,7 @@ public  final class OwnerCollection extends
       return this;
     }
     /**
-     * <code>repeated .outland.Owner items = 11;</code>
+     * <code>repeated .outland.Owner items = 10;</code>
      */
     public Builder clearItems() {
       if (itemsBuilder_ == null) {
@@ -715,7 +715,7 @@ public  final class OwnerCollection extends
       return this;
     }
     /**
-     * <code>repeated .outland.Owner items = 11;</code>
+     * <code>repeated .outland.Owner items = 10;</code>
      */
     public Builder removeItems(int index) {
       if (itemsBuilder_ == null) {
@@ -728,14 +728,14 @@ public  final class OwnerCollection extends
       return this;
     }
     /**
-     * <code>repeated .outland.Owner items = 11;</code>
+     * <code>repeated .outland.Owner items = 10;</code>
      */
     public outland.feature.proto.Owner.Builder getItemsBuilder(
         int index) {
       return getItemsFieldBuilder().getBuilder(index);
     }
     /**
-     * <code>repeated .outland.Owner items = 11;</code>
+     * <code>repeated .outland.Owner items = 10;</code>
      */
     public outland.feature.proto.OwnerOrBuilder getItemsOrBuilder(
         int index) {
@@ -745,7 +745,7 @@ public  final class OwnerCollection extends
       }
     }
     /**
-     * <code>repeated .outland.Owner items = 11;</code>
+     * <code>repeated .outland.Owner items = 10;</code>
      */
     public java.util.List<? extends outland.feature.proto.OwnerOrBuilder> 
          getItemsOrBuilderList() {
@@ -756,14 +756,14 @@ public  final class OwnerCollection extends
       }
     }
     /**
-     * <code>repeated .outland.Owner items = 11;</code>
+     * <code>repeated .outland.Owner items = 10;</code>
      */
     public outland.feature.proto.Owner.Builder addItemsBuilder() {
       return getItemsFieldBuilder().addBuilder(
           outland.feature.proto.Owner.getDefaultInstance());
     }
     /**
-     * <code>repeated .outland.Owner items = 11;</code>
+     * <code>repeated .outland.Owner items = 10;</code>
      */
     public outland.feature.proto.Owner.Builder addItemsBuilder(
         int index) {
@@ -771,7 +771,7 @@ public  final class OwnerCollection extends
           index, outland.feature.proto.Owner.getDefaultInstance());
     }
     /**
-     * <code>repeated .outland.Owner items = 11;</code>
+     * <code>repeated .outland.Owner items = 10;</code>
      */
     public java.util.List<outland.feature.proto.Owner.Builder> 
          getItemsBuilderList() {

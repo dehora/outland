@@ -8,23 +8,25 @@ option java_outer_classname = "FeatureMessage";
 package outland;
 
 message Owner {
-    string id = 1;
-    string name = 2;
-    string username = 3;
-    string email = 4;
-    string type = 7;
+    string type = 1;
+    string id = 2;
+
+    string username = 10;
+    string email = 11;
+    string name = 12;
 }
 
 message OwnerCollection {
     string type = 1;
-    repeated Owner items = 11;
+
+    repeated Owner items = 10;
 }
 
 message FeatureVersion {
-    string id = 1;
-    int64 timestamp = 2;
-    int64 counter = 3;
-    string type = 4;
+    string type = 1;
+
+    int64 timestamp = 10;
+    int64 counter = 11;
 }
 
 enum OptionType {
@@ -39,23 +41,27 @@ enum OptionType {
 }
 
 message FeatureOption {
-    string id = 1;
-    OptionType option = 2;
-    string name = 3;
-    string value = 4;
-    int32 weight = 5;
-    string type = 6;
+    string type = 1;
+    string id = 2;
+
+    OptionType option = 10;
+    string name = 11;
+    string value = 12;
+    int32 weight = 13;
 }
 
 message OptionCollection {
     string type = 1;
-    OptionType option = 2;
-    int32 maxweight = 3;
-    repeated FeatureOption items = 4;
+
+    OptionType option = 10;
+    int32 maxweight = 11;
+    repeated FeatureOption items = 12;
 }
 
 message FeatureData {
-    string id = 1;
+    string type = 1;
+    string id = 2;
+
     string key = 10;
     enum State {
         none = 0;
@@ -69,45 +75,50 @@ message FeatureData {
 
 message NamespaceFeature {
     string type = 1;
+
     string namespace = 10;
     FeatureData feature = 11;
 }
 
 message NamespaceFeatureCollection {
     string type = 1;
-    repeated NamespaceFeature items = 2;
+
+    repeated NamespaceFeature items = 10;
 }
 
 message Feature {
-    string type = 13;
-    string id = 1;
-    string key = 2;
-    string group = 3;
+    string type = 1;
+    string id = 2;
+    string created = 3;
+    string updated = 4;
+    map<string, string> properties = 5;
+
+    string key = 10;
+    string group = 11;
     enum State {
         none = 0;
         off = 1;
         on = 2;
     }
-    State state = 4;
-    string description = 5;
-    string created = 6;
-    string updated = 7;
-    Owner owner = 8;
-    map<string, string> properties = 9;
-    OptionCollection options = 10;
-    FeatureVersion version = 12;
-    NamespaceFeatureCollection namespaces = 14;
+    State state = 12;
+    string description = 13;
+    Owner owner = 14;
+    OptionCollection options = 15;
+    FeatureVersion version = 16;
+    NamespaceFeatureCollection namespaces = 17;
 }
 
 message FeatureCollection {
     string type = 1;
-    string group = 2;
-    repeated Feature items = 3;
+
+    string group = 10;
+    repeated Feature items = 11;
 }
 
 message ServiceAccess {
     string type = 1;
     string id = 2;
+
     string name = 10;
     string key = 11;
 }
@@ -115,6 +126,7 @@ message ServiceAccess {
 message MemberAccess {
     string type = 1;
     string id = 2;
+
     string name = 10;
     string username = 11;
     string email = 12;
@@ -122,17 +134,20 @@ message MemberAccess {
 
 message AccessCollection {
     string type = 1;
+
     repeated ServiceAccess services = 10;
     repeated MemberAccess members = 11;
 }
 
 message Group {
-    string type = 8;
-    string id = 1;
-    string key = 2;
-    string name = 3;
-    string created = 6;
-    string updated = 7;
-    OwnerCollection owners = 5;
-    AccessCollection granted = 9;
+    string type = 1;
+    string id = 2;
+    string created = 3;
+    string updated = 4;
+    map<string, string> properties = 5;
+
+    string key = 10;
+    string name = 11;
+    OwnerCollection owners = 12;
+    AccessCollection granted = 13;
 }

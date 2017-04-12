@@ -8,11 +8,21 @@ public interface FeatureDataOrBuilder extends
     com.google.protobuf.MessageOrBuilder {
 
   /**
-   * <code>optional string id = 1;</code>
+   * <code>optional string type = 1;</code>
+   */
+  java.lang.String getType();
+  /**
+   * <code>optional string type = 1;</code>
+   */
+  com.google.protobuf.ByteString
+      getTypeBytes();
+
+  /**
+   * <code>optional string id = 2;</code>
    */
   java.lang.String getId();
   /**
-   * <code>optional string id = 1;</code>
+   * <code>optional string id = 2;</code>
    */
   com.google.protobuf.ByteString
       getIdBytes();

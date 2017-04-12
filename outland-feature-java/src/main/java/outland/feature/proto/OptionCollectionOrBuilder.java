@@ -18,39 +18,39 @@ public interface OptionCollectionOrBuilder extends
       getTypeBytes();
 
   /**
-   * <code>optional .outland.OptionType option = 2;</code>
+   * <code>optional .outland.OptionType option = 10;</code>
    */
   int getOptionValue();
   /**
-   * <code>optional .outland.OptionType option = 2;</code>
+   * <code>optional .outland.OptionType option = 10;</code>
    */
   outland.feature.proto.OptionType getOption();
 
   /**
-   * <code>optional int32 maxweight = 3;</code>
+   * <code>optional int32 maxweight = 11;</code>
    */
   int getMaxweight();
 
   /**
-   * <code>repeated .outland.FeatureOption items = 4;</code>
+   * <code>repeated .outland.FeatureOption items = 12;</code>
    */
   java.util.List<outland.feature.proto.FeatureOption> 
       getItemsList();
   /**
-   * <code>repeated .outland.FeatureOption items = 4;</code>
+   * <code>repeated .outland.FeatureOption items = 12;</code>
    */
   outland.feature.proto.FeatureOption getItems(int index);
   /**
-   * <code>repeated .outland.FeatureOption items = 4;</code>
+   * <code>repeated .outland.FeatureOption items = 12;</code>
    */
   int getItemsCount();
   /**
-   * <code>repeated .outland.FeatureOption items = 4;</code>
+   * <code>repeated .outland.FeatureOption items = 12;</code>
    */
   java.util.List<? extends outland.feature.proto.FeatureOptionOrBuilder> 
       getItemsOrBuilderList();
   /**
-   * <code>repeated .outland.FeatureOption items = 4;</code>
+   * <code>repeated .outland.FeatureOption items = 12;</code>
    */
   outland.feature.proto.FeatureOptionOrBuilder getItemsOrBuilder(
       int index);

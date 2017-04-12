@@ -111,13 +111,16 @@ public class DefaultFeatureStorage implements FeatureStorage {
 
     final PutItemSpec putItemSpec = new PutItemSpec()
         .withItem(item)
-        .withExpected(new Expected("version_id").eq(previousVersion.getId()));
+        .withExpected(
+            new Expected("version_timestamp").eq(previousVersion.getTimestamp()),
+            new Expected("version_counter").eq(previousVersion.getCounter())
+        );
 
     final Supplier<PutItemOutcome> putItemOutcomeSupplier = () -> {
       try {
         return dynamoDB.getTable(featureTableName).putItem(putItemSpec);
       } catch (ConditionalCheckFailedException e) {
-        logger.error("err=conflict_feature_version_mismatch ns_key={} {}", feature.getKey(),
+        logger.error("err=conflict_feature_version_mismatch feature_key={} {}", feature.getKey(),
             e.getMessage());
         throwConflictVersionMismatch(feature);
         return null;
@@ -212,7 +215,6 @@ public class DefaultFeatureStorage implements FeatureStorage {
     final Item item = new Item()
         .withString(HASH_KEY, group)
         .withString(RANGE_KEY, featureKey)
-        .withString("version_id", feature.getVersion().getId())
         .withNumber("version_timestamp", feature.getVersion().getTimestamp())
         .withNumber("version_counter", feature.getVersion().getCounter())
         .withString("id", id)

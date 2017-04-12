@@ -432,9 +432,6 @@ public class FeatureResourceTest {
     assertTrue(featJson.getId().startsWith("feat_"));
 
     assertTrue(featJson.getVersion() != null);
-    final String id = featJson.getVersion().getId();
-    assertTrue(id.startsWith("ver_"));
-    assertTrue(Ulid.isValid(id.substring(4)));
     assertEquals(0L, featJson.getVersion().getCounter());
     assertTrue(0L < featJson.getVersion().getTimestamp());
   }

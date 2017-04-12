@@ -52,18 +52,18 @@ public  final class OptionCollection extends
             type_ = s;
             break;
           }
-          case 16: {
+          case 80: {
             int rawValue = input.readEnum();
 
             option_ = rawValue;
             break;
           }
-          case 24: {
+          case 88: {
 
             maxweight_ = input.readInt32();
             break;
           }
-          case 34: {
+          case 98: {
             if (!((mutable_bitField0_ & 0x00000008) == 0x00000008)) {
               items_ = new java.util.ArrayList<outland.feature.proto.FeatureOption>();
               mutable_bitField0_ |= 0x00000008;
@@ -133,60 +133,60 @@ public  final class OptionCollection extends
     }
   }
 
-  public static final int OPTION_FIELD_NUMBER = 2;
+  public static final int OPTION_FIELD_NUMBER = 10;
   private int option_;
   /**
-   * <code>optional .outland.OptionType option = 2;</code>
+   * <code>optional .outland.OptionType option = 10;</code>
    */
   public int getOptionValue() {
     return option_;
   }
   /**
-   * <code>optional .outland.OptionType option = 2;</code>
+   * <code>optional .outland.OptionType option = 10;</code>
    */
   public outland.feature.proto.OptionType getOption() {
     outland.feature.proto.OptionType result = outland.feature.proto.OptionType.valueOf(option_);
     return result == null ? outland.feature.proto.OptionType.UNRECOGNIZED : result;
   }
 
-  public static final int MAXWEIGHT_FIELD_NUMBER = 3;
+  public static final int MAXWEIGHT_FIELD_NUMBER = 11;
   private int maxweight_;
   /**
-   * <code>optional int32 maxweight = 3;</code>
+   * <code>optional int32 maxweight = 11;</code>
    */
   public int getMaxweight() {
     return maxweight_;
   }
 
-  public static final int ITEMS_FIELD_NUMBER = 4;
+  public static final int ITEMS_FIELD_NUMBER = 12;
   private java.util.List<outland.feature.proto.FeatureOption> items_;
   /**
-   * <code>repeated .outland.FeatureOption items = 4;</code>
+   * <code>repeated .outland.FeatureOption items = 12;</code>
    */
   public java.util.List<outland.feature.proto.FeatureOption> getItemsList() {
     return items_;
   }
   /**
-   * <code>repeated .outland.FeatureOption items = 4;</code>
+   * <code>repeated .outland.FeatureOption items = 12;</code>
    */
   public java.util.List<? extends outland.feature.proto.FeatureOptionOrBuilder> 
       getItemsOrBuilderList() {
     return items_;
   }
   /**
-   * <code>repeated .outland.FeatureOption items = 4;</code>
+   * <code>repeated .outland.FeatureOption items = 12;</code>
    */
   public int getItemsCount() {
     return items_.size();
   }
   /**
-   * <code>repeated .outland.FeatureOption items = 4;</code>
+   * <code>repeated .outland.FeatureOption items = 12;</code>
    */
   public outland.feature.proto.FeatureOption getItems(int index) {
     return items_.get(index);
   }
   /**
-   * <code>repeated .outland.FeatureOption items = 4;</code>
+   * <code>repeated .outland.FeatureOption items = 12;</code>
    */
   public outland.feature.proto.FeatureOptionOrBuilder getItemsOrBuilder(
       int index) {
@@ -209,13 +209,13 @@ public  final class OptionCollection extends
       com.google.protobuf.GeneratedMessageV3.writeString(output, 1, type_);
     }
     if (option_ != outland.feature.proto.OptionType.flag.getNumber()) {
-      output.writeEnum(2, option_);
+      output.writeEnum(10, option_);
     }
     if (maxweight_ != 0) {
-      output.writeInt32(3, maxweight_);
+      output.writeInt32(11, maxweight_);
     }
     for (int i = 0; i < items_.size(); i++) {
-      output.writeMessage(4, items_.get(i));
+      output.writeMessage(12, items_.get(i));
     }
   }
 
@@ -229,15 +229,15 @@ public  final class OptionCollection extends
     }
     if (option_ != outland.feature.proto.OptionType.flag.getNumber()) {
       size += com.google.protobuf.CodedOutputStream
-        .computeEnumSize(2, option_);
+        .computeEnumSize(10, option_);
     }
     if (maxweight_ != 0) {
       size += com.google.protobuf.CodedOutputStream
-        .computeInt32Size(3, maxweight_);
+        .computeInt32Size(11, maxweight_);
     }
     for (int i = 0; i < items_.size(); i++) {
       size += com.google.protobuf.CodedOutputStream
-        .computeMessageSize(4, items_.get(i));
+        .computeMessageSize(12, items_.get(i));
     }
     memoizedSize = size;
     return size;
@@ -625,13 +625,13 @@ public  final class OptionCollection extends
 
     private int option_ = 0;
     /**
-     * <code>optional .outland.OptionType option = 2;</code>
+     * <code>optional .outland.OptionType option = 10;</code>
      */
     public int getOptionValue() {
       return option_;
     }
     /**
-     * <code>optional .outland.OptionType option = 2;</code>
+     * <code>optional .outland.OptionType option = 10;</code>
      */
     public Builder setOptionValue(int value) {
       option_ = value;
@@ -639,14 +639,14 @@ public  final class OptionCollection extends
       return this;
     }
     /**
-     * <code>optional .outland.OptionType option = 2;</code>
+     * <code>optional .outland.OptionType option = 10;</code>
      */
     public outland.feature.proto.OptionType getOption() {
       outland.feature.proto.OptionType result = outland.feature.proto.OptionType.valueOf(option_);
       return result == null ? outland.feature.proto.OptionType.UNRECOGNIZED : result;
     }
     /**
-     * <code>optional .outland.OptionType option = 2;</code>
+     * <code>optional .outland.OptionType option = 10;</code>
      */
     public Builder setOption(outland.feature.proto.OptionType value) {
       if (value == null) {
@@ -658,7 +658,7 @@ public  final class OptionCollection extends
       return this;
     }
     /**
-     * <code>optional .outland.OptionType option = 2;</code>
+     * <code>optional .outland.OptionType option = 10;</code>
      */
     public Builder clearOption() {
       
@@ -669,13 +669,13 @@ public  final class OptionCollection extends
 
     private int maxweight_ ;
     /**
-     * <code>optional int32 maxweight = 3;</code>
+     * <code>optional int32 maxweight = 11;</code>
      */
     public int getMaxweight() {
       return maxweight_;
     }
     /**
-     * <code>optional int32 maxweight = 3;</code>
+     * <code>optional int32 maxweight = 11;</code>
      */
     public Builder setMaxweight(int value) {
       
@@ -684,7 +684,7 @@ public  final class OptionCollection extends
       return this;
     }
     /**
-     * <code>optional int32 maxweight = 3;</code>
+     * <code>optional int32 maxweight = 11;</code>
      */
     public Builder clearMaxweight() {
       
@@ -706,7 +706,7 @@ public  final class OptionCollection extends
         outland.feature.proto.FeatureOption, outland.feature.proto.FeatureOption.Builder, outland.feature.proto.FeatureOptionOrBuilder> itemsBuilder_;
 
     /**
-     * <code>repeated .outland.FeatureOption items = 4;</code>
+     * <code>repeated .outland.FeatureOption items = 12;</code>
      */
     public java.util.List<outland.feature.proto.FeatureOption> getItemsList() {
       if (itemsBuilder_ == null) {
@@ -716,7 +716,7 @@ public  final class OptionCollection extends
       }
     }
     /**
-     * <code>repeated .outland.FeatureOption items = 4;</code>
+     * <code>repeated .outland.FeatureOption items = 12;</code>
      */
     public int getItemsCount() {
       if (itemsBuilder_ == null) {
@@ -726,7 +726,7 @@ public  final class OptionCollection extends
       }
     }
     /**
-     * <code>repeated .outland.FeatureOption items = 4;</code>
+     * <code>repeated .outland.FeatureOption items = 12;</code>
      */
     public outland.feature.proto.FeatureOption getItems(int index) {
       if (itemsBuilder_ == null) {
@@ -736,7 +736,7 @@ public  final class OptionCollection extends
       }
     }
     /**
-     * <code>repeated .outland.FeatureOption items = 4;</code>
+     * <code>repeated .outland.FeatureOption items = 12;</code>
      */
     public Builder setItems(
         int index, outland.feature.proto.FeatureOption value) {
@@ -753,7 +753,7 @@ public  final class OptionCollection extends
       return this;
     }
     /**
-     * <code>repeated .outland.FeatureOption items = 4;</code>
+     * <code>repeated .outland.FeatureOption items = 12;</code>
      */
     public Builder setItems(
         int index, outland.feature.proto.FeatureOption.Builder builderForValue) {
@@ -767,7 +767,7 @@ public  final class OptionCollection extends
       return this;
     }
     /**
-     * <code>repeated .outland.FeatureOption items = 4;</code>
+     * <code>repeated .outland.FeatureOption items = 12;</code>
      */
     public Builder addItems(outland.feature.proto.FeatureOption value) {
       if (itemsBuilder_ == null) {
@@ -783,7 +783,7 @@ public  final class OptionCollection extends
       return this;
     }
     /**
-     * <code>repeated .outland.FeatureOption items = 4;</code>
+     * <code>repeated .outland.FeatureOption items = 12;</code>
      */
     public Builder addItems(
         int index, outland.feature.proto.FeatureOption value) {
@@ -800,7 +800,7 @@ public  final class OptionCollection extends
       return this;
     }
     /**
-     * <code>repeated .outland.FeatureOption items = 4;</code>
+     * <code>repeated .outland.FeatureOption items = 12;</code>
      */
     public Builder addItems(
         outland.feature.proto.FeatureOption.Builder builderForValue) {
@@ -814,7 +814,7 @@ public  final class OptionCollection extends
       return this;
     }
     /**
-     * <code>repeated .outland.FeatureOption items = 4;</code>
+     * <code>repeated .outland.FeatureOption items = 12;</code>
      */
     public Builder addItems(
         int index, outland.feature.proto.FeatureOption.Builder builderForValue) {
@@ -828,7 +828,7 @@ public  final class OptionCollection extends
       return this;
     }
     /**
-     * <code>repeated .outland.FeatureOption items = 4;</code>
+     * <code>repeated .outland.FeatureOption items = 12;</code>
      */
     public Builder addAllItems(
         java.lang.Iterable<? extends outland.feature.proto.FeatureOption> values) {
@@ -843,7 +843,7 @@ public  final class OptionCollection extends
       return this;
     }
     /**
-     * <code>repeated .outland.FeatureOption items = 4;</code>
+     * <code>repeated .outland.FeatureOption items = 12;</code>
      */
     public Builder clearItems() {
       if (itemsBuilder_ == null) {
@@ -856,7 +856,7 @@ public  final class OptionCollection extends
       return this;
     }
     /**
-     * <code>repeated .outland.FeatureOption items = 4;</code>
+     * <code>repeated .outland.FeatureOption items = 12;</code>
      */
     public Builder removeItems(int index) {
       if (itemsBuilder_ == null) {
@@ -869,14 +869,14 @@ public  final class OptionCollection extends
       return this;
     }
     /**
-     * <code>repeated .outland.FeatureOption items = 4;</code>
+     * <code>repeated .outland.FeatureOption items = 12;</code>
      */
     public outland.feature.proto.FeatureOption.Builder getItemsBuilder(
         int index) {
       return getItemsFieldBuilder().getBuilder(index);
     }
     /**
-     * <code>repeated .outland.FeatureOption items = 4;</code>
+     * <code>repeated .outland.FeatureOption items = 12;</code>
      */
     public outland.feature.proto.FeatureOptionOrBuilder getItemsOrBuilder(
         int index) {
@@ -886,7 +886,7 @@ public  final class OptionCollection extends
       }
     }
     /**
-     * <code>repeated .outland.FeatureOption items = 4;</code>
+     * <code>repeated .outland.FeatureOption items = 12;</code>
      */
     public java.util.List<? extends outland.feature.proto.FeatureOptionOrBuilder> 
          getItemsOrBuilderList() {
@@ -897,14 +897,14 @@ public  final class OptionCollection extends
       }
     }
     /**
-     * <code>repeated .outland.FeatureOption items = 4;</code>
+     * <code>repeated .outland.FeatureOption items = 12;</code>
      */
     public outland.feature.proto.FeatureOption.Builder addItemsBuilder() {
       return getItemsFieldBuilder().addBuilder(
           outland.feature.proto.FeatureOption.getDefaultInstance());
     }
     /**
-     * <code>repeated .outland.FeatureOption items = 4;</code>
+     * <code>repeated .outland.FeatureOption items = 12;</code>
      */
     public outland.feature.proto.FeatureOption.Builder addItemsBuilder(
         int index) {
@@ -912,7 +912,7 @@ public  final class OptionCollection extends
           index, outland.feature.proto.FeatureOption.getDefaultInstance());
     }
     /**
-     * <code>repeated .outland.FeatureOption items = 4;</code>
+     * <code>repeated .outland.FeatureOption items = 12;</code>
      */
     public java.util.List<outland.feature.proto.FeatureOption.Builder> 
          getItemsBuilderList() {
