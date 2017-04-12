@@ -18,25 +18,25 @@ public interface OwnerCollectionOrBuilder extends
       getTypeBytes();
 
   /**
-   * <code>repeated .outland.Owner items = 11;</code>
+   * <code>repeated .outland.Owner items = 10;</code>
    */
   java.util.List<outland.feature.proto.Owner> 
       getItemsList();
   /**
-   * <code>repeated .outland.Owner items = 11;</code>
+   * <code>repeated .outland.Owner items = 10;</code>
    */
   outland.feature.proto.Owner getItems(int index);
   /**
-   * <code>repeated .outland.Owner items = 11;</code>
+   * <code>repeated .outland.Owner items = 10;</code>
    */
   int getItemsCount();
   /**
-   * <code>repeated .outland.Owner items = 11;</code>
+   * <code>repeated .outland.Owner items = 10;</code>
    */
   java.util.List<? extends outland.feature.proto.OwnerOrBuilder> 
       getItemsOrBuilderList();
   /**
-   * <code>repeated .outland.Owner items = 11;</code>
+   * <code>repeated .outland.Owner items = 10;</code>
    */
   outland.feature.proto.OwnerOrBuilder getItemsOrBuilder(
       int index);

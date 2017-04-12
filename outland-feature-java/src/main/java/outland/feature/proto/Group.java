@@ -17,10 +17,10 @@ public  final class Group extends
   private Group() {
     type_ = "";
     id_ = "";
-    key_ = "";
-    name_ = "";
     created_ = "";
     updated_ = "";
+    key_ = "";
+    name_ = "";
   }
 
   @java.lang.Override
@@ -51,22 +51,52 @@ public  final class Group extends
           case 10: {
             java.lang.String s = input.readStringRequireUtf8();
 
-            id_ = s;
+            type_ = s;
             break;
           }
           case 18: {
             java.lang.String s = input.readStringRequireUtf8();
 
-            key_ = s;
+            id_ = s;
             break;
           }
           case 26: {
             java.lang.String s = input.readStringRequireUtf8();
 
-            name_ = s;
+            created_ = s;
+            break;
+          }
+          case 34: {
+            java.lang.String s = input.readStringRequireUtf8();
+
+            updated_ = s;
             break;
           }
           case 42: {
+            if (!((mutable_bitField0_ & 0x00000010) == 0x00000010)) {
+              properties_ = com.google.protobuf.MapField.newMapField(
+                  PropertiesDefaultEntryHolder.defaultEntry);
+              mutable_bitField0_ |= 0x00000010;
+            }
+            com.google.protobuf.MapEntry<java.lang.String, java.lang.String>
+            properties = input.readMessage(
+                PropertiesDefaultEntryHolder.defaultEntry.getParserForType(), extensionRegistry);
+            properties_.getMutableMap().put(properties.getKey(), properties.getValue());
+            break;
+          }
+          case 82: {
+            java.lang.String s = input.readStringRequireUtf8();
+
+            key_ = s;
+            break;
+          }
+          case 90: {
+            java.lang.String s = input.readStringRequireUtf8();
+
+            name_ = s;
+            break;
+          }
+          case 98: {
             outland.feature.proto.OwnerCollection.Builder subBuilder = null;
             if (owners_ != null) {
               subBuilder = owners_.toBuilder();
@@ -79,25 +109,7 @@ public  final class Group extends
 
             break;
           }
-          case 50: {
-            java.lang.String s = input.readStringRequireUtf8();
-
-            created_ = s;
-            break;
-          }
-          case 58: {
-            java.lang.String s = input.readStringRequireUtf8();
-
-            updated_ = s;
-            break;
-          }
-          case 66: {
-            java.lang.String s = input.readStringRequireUtf8();
-
-            type_ = s;
-            break;
-          }
-          case 74: {
+          case 106: {
             outland.feature.proto.AccessCollection.Builder subBuilder = null;
             if (granted_ != null) {
               subBuilder = granted_.toBuilder();
@@ -126,6 +138,17 @@ public  final class Group extends
     return outland.feature.proto.FeatureMessage.internal_static_outland_Group_descriptor;
   }
 
+  @SuppressWarnings({"rawtypes"})
+  protected com.google.protobuf.MapField internalGetMapField(
+      int number) {
+    switch (number) {
+      case 5:
+        return internalGetProperties();
+      default:
+        throw new RuntimeException(
+            "Invalid map field number: " + number);
+    }
+  }
   protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internalGetFieldAccessorTable() {
     return outland.feature.proto.FeatureMessage.internal_static_outland_Group_fieldAccessorTable
@@ -133,10 +156,11 @@ public  final class Group extends
             outland.feature.proto.Group.class, outland.feature.proto.Group.Builder.class);
   }
 
-  public static final int TYPE_FIELD_NUMBER = 8;
+  private int bitField0_;
+  public static final int TYPE_FIELD_NUMBER = 1;
   private volatile java.lang.Object type_;
   /**
-   * <code>optional string type = 8;</code>
+   * <code>optional string type = 1;</code>
    */
   public java.lang.String getType() {
     java.lang.Object ref = type_;
@@ -151,7 +175,7 @@ public  final class Group extends
     }
   }
   /**
-   * <code>optional string type = 8;</code>
+   * <code>optional string type = 1;</code>
    */
   public com.google.protobuf.ByteString
       getTypeBytes() {
@@ -167,10 +191,10 @@ public  final class Group extends
     }
   }
 
-  public static final int ID_FIELD_NUMBER = 1;
+  public static final int ID_FIELD_NUMBER = 2;
   private volatile java.lang.Object id_;
   /**
-   * <code>optional string id = 1;</code>
+   * <code>optional string id = 2;</code>
    */
   public java.lang.String getId() {
     java.lang.Object ref = id_;
@@ -185,7 +209,7 @@ public  final class Group extends
     }
   }
   /**
-   * <code>optional string id = 1;</code>
+   * <code>optional string id = 2;</code>
    */
   public com.google.protobuf.ByteString
       getIdBytes() {
@@ -201,78 +225,10 @@ public  final class Group extends
     }
   }
 
-  public static final int KEY_FIELD_NUMBER = 2;
-  private volatile java.lang.Object key_;
-  /**
-   * <code>optional string key = 2;</code>
-   */
-  public java.lang.String getKey() {
-    java.lang.Object ref = key_;
-    if (ref instanceof java.lang.String) {
-      return (java.lang.String) ref;
-    } else {
-      com.google.protobuf.ByteString bs = 
-          (com.google.protobuf.ByteString) ref;
-      java.lang.String s = bs.toStringUtf8();
-      key_ = s;
-      return s;
-    }
-  }
-  /**
-   * <code>optional string key = 2;</code>
-   */
-  public com.google.protobuf.ByteString
-      getKeyBytes() {
-    java.lang.Object ref = key_;
-    if (ref instanceof java.lang.String) {
-      com.google.protobuf.ByteString b = 
-          com.google.protobuf.ByteString.copyFromUtf8(
-              (java.lang.String) ref);
-      key_ = b;
-      return b;
-    } else {
-      return (com.google.protobuf.ByteString) ref;
-    }
-  }
-
-  public static final int NAME_FIELD_NUMBER = 3;
-  private volatile java.lang.Object name_;
-  /**
-   * <code>optional string name = 3;</code>
-   */
-  public java.lang.String getName() {
-    java.lang.Object ref = name_;
-    if (ref instanceof java.lang.String) {
-      return (java.lang.String) ref;
-    } else {
-      com.google.protobuf.ByteString bs = 
-          (com.google.protobuf.ByteString) ref;
-      java.lang.String s = bs.toStringUtf8();
-      name_ = s;
-      return s;
-    }
-  }
-  /**
-   * <code>optional string name = 3;</code>
-   */
-  public com.google.protobuf.ByteString
-      getNameBytes() {
-    java.lang.Object ref = name_;
-    if (ref instanceof java.lang.String) {
-      com.google.protobuf.ByteString b = 
-          com.google.protobuf.ByteString.copyFromUtf8(
-              (java.lang.String) ref);
-      name_ = b;
-      return b;
-    } else {
-      return (com.google.protobuf.ByteString) ref;
-    }
-  }
-
-  public static final int CREATED_FIELD_NUMBER = 6;
+  public static final int CREATED_FIELD_NUMBER = 3;
   private volatile java.lang.Object created_;
   /**
-   * <code>optional string created = 6;</code>
+   * <code>optional string created = 3;</code>
    */
   public java.lang.String getCreated() {
     java.lang.Object ref = created_;
@@ -287,7 +243,7 @@ public  final class Group extends
     }
   }
   /**
-   * <code>optional string created = 6;</code>
+   * <code>optional string created = 3;</code>
    */
   public com.google.protobuf.ByteString
       getCreatedBytes() {
@@ -303,10 +259,10 @@ public  final class Group extends
     }
   }
 
-  public static final int UPDATED_FIELD_NUMBER = 7;
+  public static final int UPDATED_FIELD_NUMBER = 4;
   private volatile java.lang.Object updated_;
   /**
-   * <code>optional string updated = 7;</code>
+   * <code>optional string updated = 4;</code>
    */
   public java.lang.String getUpdated() {
     java.lang.Object ref = updated_;
@@ -321,7 +277,7 @@ public  final class Group extends
     }
   }
   /**
-   * <code>optional string updated = 7;</code>
+   * <code>optional string updated = 4;</code>
    */
   public com.google.protobuf.ByteString
       getUpdatedBytes() {
@@ -337,43 +293,187 @@ public  final class Group extends
     }
   }
 
-  public static final int OWNERS_FIELD_NUMBER = 5;
+  public static final int PROPERTIES_FIELD_NUMBER = 5;
+  private static final class PropertiesDefaultEntryHolder {
+    static final com.google.protobuf.MapEntry<
+        java.lang.String, java.lang.String> defaultEntry =
+            com.google.protobuf.MapEntry
+            .<java.lang.String, java.lang.String>newDefaultInstance(
+                outland.feature.proto.FeatureMessage.internal_static_outland_Group_PropertiesEntry_descriptor, 
+                com.google.protobuf.WireFormat.FieldType.STRING,
+                "",
+                com.google.protobuf.WireFormat.FieldType.STRING,
+                "");
+  }
+  private com.google.protobuf.MapField<
+      java.lang.String, java.lang.String> properties_;
+  private com.google.protobuf.MapField<java.lang.String, java.lang.String>
+  internalGetProperties() {
+    if (properties_ == null) {
+      return com.google.protobuf.MapField.emptyMapField(
+          PropertiesDefaultEntryHolder.defaultEntry);
+    }
+    return properties_;
+  }
+
+  public int getPropertiesCount() {
+    return internalGetProperties().getMap().size();
+  }
+  /**
+   * <code>map&lt;string, string&gt; properties = 5;</code>
+   */
+
+  public boolean containsProperties(
+      java.lang.String key) {
+    if (key == null) { throw new java.lang.NullPointerException(); }
+    return internalGetProperties().getMap().containsKey(key);
+  }
+  /**
+   * Use {@link #getPropertiesMap()} instead.
+   */
+  @java.lang.Deprecated
+  public java.util.Map<java.lang.String, java.lang.String> getProperties() {
+    return getPropertiesMap();
+  }
+  /**
+   * <code>map&lt;string, string&gt; properties = 5;</code>
+   */
+
+  public java.util.Map<java.lang.String, java.lang.String> getPropertiesMap() {
+    return internalGetProperties().getMap();
+  }
+  /**
+   * <code>map&lt;string, string&gt; properties = 5;</code>
+   */
+
+  public java.lang.String getPropertiesOrDefault(
+      java.lang.String key,
+      java.lang.String defaultValue) {
+    if (key == null) { throw new java.lang.NullPointerException(); }
+    java.util.Map<java.lang.String, java.lang.String> map =
+        internalGetProperties().getMap();
+    return map.containsKey(key) ? map.get(key) : defaultValue;
+  }
+  /**
+   * <code>map&lt;string, string&gt; properties = 5;</code>
+   */
+
+  public java.lang.String getPropertiesOrThrow(
+      java.lang.String key) {
+    if (key == null) { throw new java.lang.NullPointerException(); }
+    java.util.Map<java.lang.String, java.lang.String> map =
+        internalGetProperties().getMap();
+    if (!map.containsKey(key)) {
+      throw new java.lang.IllegalArgumentException();
+    }
+    return map.get(key);
+  }
+
+  public static final int KEY_FIELD_NUMBER = 10;
+  private volatile java.lang.Object key_;
+  /**
+   * <code>optional string key = 10;</code>
+   */
+  public java.lang.String getKey() {
+    java.lang.Object ref = key_;
+    if (ref instanceof java.lang.String) {
+      return (java.lang.String) ref;
+    } else {
+      com.google.protobuf.ByteString bs = 
+          (com.google.protobuf.ByteString) ref;
+      java.lang.String s = bs.toStringUtf8();
+      key_ = s;
+      return s;
+    }
+  }
+  /**
+   * <code>optional string key = 10;</code>
+   */
+  public com.google.protobuf.ByteString
+      getKeyBytes() {
+    java.lang.Object ref = key_;
+    if (ref instanceof java.lang.String) {
+      com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString.copyFromUtf8(
+              (java.lang.String) ref);
+      key_ = b;
+      return b;
+    } else {
+      return (com.google.protobuf.ByteString) ref;
+    }
+  }
+
+  public static final int NAME_FIELD_NUMBER = 11;
+  private volatile java.lang.Object name_;
+  /**
+   * <code>optional string name = 11;</code>
+   */
+  public java.lang.String getName() {
+    java.lang.Object ref = name_;
+    if (ref instanceof java.lang.String) {
+      return (java.lang.String) ref;
+    } else {
+      com.google.protobuf.ByteString bs = 
+          (com.google.protobuf.ByteString) ref;
+      java.lang.String s = bs.toStringUtf8();
+      name_ = s;
+      return s;
+    }
+  }
+  /**
+   * <code>optional string name = 11;</code>
+   */
+  public com.google.protobuf.ByteString
+      getNameBytes() {
+    java.lang.Object ref = name_;
+    if (ref instanceof java.lang.String) {
+      com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString.copyFromUtf8(
+              (java.lang.String) ref);
+      name_ = b;
+      return b;
+    } else {
+      return (com.google.protobuf.ByteString) ref;
+    }
+  }
+
+  public static final int OWNERS_FIELD_NUMBER = 12;
   private outland.feature.proto.OwnerCollection owners_;
   /**
-   * <code>optional .outland.OwnerCollection owners = 5;</code>
+   * <code>optional .outland.OwnerCollection owners = 12;</code>
    */
   public boolean hasOwners() {
     return owners_ != null;
   }
   /**
-   * <code>optional .outland.OwnerCollection owners = 5;</code>
+   * <code>optional .outland.OwnerCollection owners = 12;</code>
    */
   public outland.feature.proto.OwnerCollection getOwners() {
     return owners_ == null ? outland.feature.proto.OwnerCollection.getDefaultInstance() : owners_;
   }
   /**
-   * <code>optional .outland.OwnerCollection owners = 5;</code>
+   * <code>optional .outland.OwnerCollection owners = 12;</code>
    */
   public outland.feature.proto.OwnerCollectionOrBuilder getOwnersOrBuilder() {
     return getOwners();
   }
 
-  public static final int GRANTED_FIELD_NUMBER = 9;
+  public static final int GRANTED_FIELD_NUMBER = 13;
   private outland.feature.proto.AccessCollection granted_;
   /**
-   * <code>optional .outland.AccessCollection granted = 9;</code>
+   * <code>optional .outland.AccessCollection granted = 13;</code>
    */
   public boolean hasGranted() {
     return granted_ != null;
   }
   /**
-   * <code>optional .outland.AccessCollection granted = 9;</code>
+   * <code>optional .outland.AccessCollection granted = 13;</code>
    */
   public outland.feature.proto.AccessCollection getGranted() {
     return granted_ == null ? outland.feature.proto.AccessCollection.getDefaultInstance() : granted_;
   }
   /**
-   * <code>optional .outland.AccessCollection granted = 9;</code>
+   * <code>optional .outland.AccessCollection granted = 13;</code>
    */
   public outland.feature.proto.AccessCollectionOrBuilder getGrantedOrBuilder() {
     return getGranted();
@@ -391,29 +491,38 @@ public  final class Group extends
 
   public void writeTo(com.google.protobuf.CodedOutputStream output)
                       throws java.io.IOException {
+    if (!getTypeBytes().isEmpty()) {
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 1, type_);
+    }
     if (!getIdBytes().isEmpty()) {
-      com.google.protobuf.GeneratedMessageV3.writeString(output, 1, id_);
-    }
-    if (!getKeyBytes().isEmpty()) {
-      com.google.protobuf.GeneratedMessageV3.writeString(output, 2, key_);
-    }
-    if (!getNameBytes().isEmpty()) {
-      com.google.protobuf.GeneratedMessageV3.writeString(output, 3, name_);
-    }
-    if (owners_ != null) {
-      output.writeMessage(5, getOwners());
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 2, id_);
     }
     if (!getCreatedBytes().isEmpty()) {
-      com.google.protobuf.GeneratedMessageV3.writeString(output, 6, created_);
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 3, created_);
     }
     if (!getUpdatedBytes().isEmpty()) {
-      com.google.protobuf.GeneratedMessageV3.writeString(output, 7, updated_);
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 4, updated_);
     }
-    if (!getTypeBytes().isEmpty()) {
-      com.google.protobuf.GeneratedMessageV3.writeString(output, 8, type_);
+    for (java.util.Map.Entry<java.lang.String, java.lang.String> entry
+         : internalGetProperties().getMap().entrySet()) {
+      com.google.protobuf.MapEntry<java.lang.String, java.lang.String>
+      properties = PropertiesDefaultEntryHolder.defaultEntry.newBuilderForType()
+          .setKey(entry.getKey())
+          .setValue(entry.getValue())
+          .build();
+      output.writeMessage(5, properties);
+    }
+    if (!getKeyBytes().isEmpty()) {
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 10, key_);
+    }
+    if (!getNameBytes().isEmpty()) {
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 11, name_);
+    }
+    if (owners_ != null) {
+      output.writeMessage(12, getOwners());
     }
     if (granted_ != null) {
-      output.writeMessage(9, getGranted());
+      output.writeMessage(13, getGranted());
     }
   }
 
@@ -422,31 +531,41 @@ public  final class Group extends
     if (size != -1) return size;
 
     size = 0;
+    if (!getTypeBytes().isEmpty()) {
+      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, type_);
+    }
     if (!getIdBytes().isEmpty()) {
-      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, id_);
+      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, id_);
+    }
+    if (!getCreatedBytes().isEmpty()) {
+      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, created_);
+    }
+    if (!getUpdatedBytes().isEmpty()) {
+      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(4, updated_);
+    }
+    for (java.util.Map.Entry<java.lang.String, java.lang.String> entry
+         : internalGetProperties().getMap().entrySet()) {
+      com.google.protobuf.MapEntry<java.lang.String, java.lang.String>
+      properties = PropertiesDefaultEntryHolder.defaultEntry.newBuilderForType()
+          .setKey(entry.getKey())
+          .setValue(entry.getValue())
+          .build();
+      size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(5, properties);
     }
     if (!getKeyBytes().isEmpty()) {
-      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, key_);
+      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(10, key_);
     }
     if (!getNameBytes().isEmpty()) {
-      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, name_);
+      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(11, name_);
     }
     if (owners_ != null) {
       size += com.google.protobuf.CodedOutputStream
-        .computeMessageSize(5, getOwners());
-    }
-    if (!getCreatedBytes().isEmpty()) {
-      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(6, created_);
-    }
-    if (!getUpdatedBytes().isEmpty()) {
-      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(7, updated_);
-    }
-    if (!getTypeBytes().isEmpty()) {
-      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(8, type_);
+        .computeMessageSize(12, getOwners());
     }
     if (granted_ != null) {
       size += com.google.protobuf.CodedOutputStream
-        .computeMessageSize(9, getGranted());
+        .computeMessageSize(13, getGranted());
     }
     memoizedSize = size;
     return size;
@@ -468,14 +587,16 @@ public  final class Group extends
         .equals(other.getType());
     result = result && getId()
         .equals(other.getId());
-    result = result && getKey()
-        .equals(other.getKey());
-    result = result && getName()
-        .equals(other.getName());
     result = result && getCreated()
         .equals(other.getCreated());
     result = result && getUpdated()
         .equals(other.getUpdated());
+    result = result && internalGetProperties().equals(
+        other.internalGetProperties());
+    result = result && getKey()
+        .equals(other.getKey());
+    result = result && getName()
+        .equals(other.getName());
     result = result && (hasOwners() == other.hasOwners());
     if (hasOwners()) {
       result = result && getOwners()
@@ -500,14 +621,18 @@ public  final class Group extends
     hash = (53 * hash) + getType().hashCode();
     hash = (37 * hash) + ID_FIELD_NUMBER;
     hash = (53 * hash) + getId().hashCode();
-    hash = (37 * hash) + KEY_FIELD_NUMBER;
-    hash = (53 * hash) + getKey().hashCode();
-    hash = (37 * hash) + NAME_FIELD_NUMBER;
-    hash = (53 * hash) + getName().hashCode();
     hash = (37 * hash) + CREATED_FIELD_NUMBER;
     hash = (53 * hash) + getCreated().hashCode();
     hash = (37 * hash) + UPDATED_FIELD_NUMBER;
     hash = (53 * hash) + getUpdated().hashCode();
+    if (!internalGetProperties().getMap().isEmpty()) {
+      hash = (37 * hash) + PROPERTIES_FIELD_NUMBER;
+      hash = (53 * hash) + internalGetProperties().hashCode();
+    }
+    hash = (37 * hash) + KEY_FIELD_NUMBER;
+    hash = (53 * hash) + getKey().hashCode();
+    hash = (37 * hash) + NAME_FIELD_NUMBER;
+    hash = (53 * hash) + getName().hashCode();
     if (hasOwners()) {
       hash = (37 * hash) + OWNERS_FIELD_NUMBER;
       hash = (53 * hash) + getOwners().hashCode();
@@ -610,6 +735,28 @@ public  final class Group extends
       return outland.feature.proto.FeatureMessage.internal_static_outland_Group_descriptor;
     }
 
+    @SuppressWarnings({"rawtypes"})
+    protected com.google.protobuf.MapField internalGetMapField(
+        int number) {
+      switch (number) {
+        case 5:
+          return internalGetProperties();
+        default:
+          throw new RuntimeException(
+              "Invalid map field number: " + number);
+      }
+    }
+    @SuppressWarnings({"rawtypes"})
+    protected com.google.protobuf.MapField internalGetMutableMapField(
+        int number) {
+      switch (number) {
+        case 5:
+          return internalGetMutableProperties();
+        default:
+          throw new RuntimeException(
+              "Invalid map field number: " + number);
+      }
+    }
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
       return outland.feature.proto.FeatureMessage.internal_static_outland_Group_fieldAccessorTable
@@ -638,13 +785,14 @@ public  final class Group extends
 
       id_ = "";
 
-      key_ = "";
-
-      name_ = "";
-
       created_ = "";
 
       updated_ = "";
+
+      internalGetMutableProperties().clear();
+      key_ = "";
+
+      name_ = "";
 
       if (ownersBuilder_ == null) {
         owners_ = null;
@@ -680,12 +828,16 @@ public  final class Group extends
 
     public outland.feature.proto.Group buildPartial() {
       outland.feature.proto.Group result = new outland.feature.proto.Group(this);
+      int from_bitField0_ = bitField0_;
+      int to_bitField0_ = 0;
       result.type_ = type_;
       result.id_ = id_;
-      result.key_ = key_;
-      result.name_ = name_;
       result.created_ = created_;
       result.updated_ = updated_;
+      result.properties_ = internalGetProperties();
+      result.properties_.makeImmutable();
+      result.key_ = key_;
+      result.name_ = name_;
       if (ownersBuilder_ == null) {
         result.owners_ = owners_;
       } else {
@@ -696,6 +848,7 @@ public  final class Group extends
       } else {
         result.granted_ = grantedBuilder_.build();
       }
+      result.bitField0_ = to_bitField0_;
       onBuilt();
       return result;
     }
@@ -745,20 +898,22 @@ public  final class Group extends
         id_ = other.id_;
         onChanged();
       }
-      if (!other.getKey().isEmpty()) {
-        key_ = other.key_;
-        onChanged();
-      }
-      if (!other.getName().isEmpty()) {
-        name_ = other.name_;
-        onChanged();
-      }
       if (!other.getCreated().isEmpty()) {
         created_ = other.created_;
         onChanged();
       }
       if (!other.getUpdated().isEmpty()) {
         updated_ = other.updated_;
+        onChanged();
+      }
+      internalGetMutableProperties().mergeFrom(
+          other.internalGetProperties());
+      if (!other.getKey().isEmpty()) {
+        key_ = other.key_;
+        onChanged();
+      }
+      if (!other.getName().isEmpty()) {
+        name_ = other.name_;
         onChanged();
       }
       if (other.hasOwners()) {
@@ -792,10 +947,11 @@ public  final class Group extends
       }
       return this;
     }
+    private int bitField0_;
 
     private java.lang.Object type_ = "";
     /**
-     * <code>optional string type = 8;</code>
+     * <code>optional string type = 1;</code>
      */
     public java.lang.String getType() {
       java.lang.Object ref = type_;
@@ -810,7 +966,7 @@ public  final class Group extends
       }
     }
     /**
-     * <code>optional string type = 8;</code>
+     * <code>optional string type = 1;</code>
      */
     public com.google.protobuf.ByteString
         getTypeBytes() {
@@ -826,7 +982,7 @@ public  final class Group extends
       }
     }
     /**
-     * <code>optional string type = 8;</code>
+     * <code>optional string type = 1;</code>
      */
     public Builder setType(
         java.lang.String value) {
@@ -839,7 +995,7 @@ public  final class Group extends
       return this;
     }
     /**
-     * <code>optional string type = 8;</code>
+     * <code>optional string type = 1;</code>
      */
     public Builder clearType() {
       
@@ -848,7 +1004,7 @@ public  final class Group extends
       return this;
     }
     /**
-     * <code>optional string type = 8;</code>
+     * <code>optional string type = 1;</code>
      */
     public Builder setTypeBytes(
         com.google.protobuf.ByteString value) {
@@ -864,7 +1020,7 @@ public  final class Group extends
 
     private java.lang.Object id_ = "";
     /**
-     * <code>optional string id = 1;</code>
+     * <code>optional string id = 2;</code>
      */
     public java.lang.String getId() {
       java.lang.Object ref = id_;
@@ -879,7 +1035,7 @@ public  final class Group extends
       }
     }
     /**
-     * <code>optional string id = 1;</code>
+     * <code>optional string id = 2;</code>
      */
     public com.google.protobuf.ByteString
         getIdBytes() {
@@ -895,7 +1051,7 @@ public  final class Group extends
       }
     }
     /**
-     * <code>optional string id = 1;</code>
+     * <code>optional string id = 2;</code>
      */
     public Builder setId(
         java.lang.String value) {
@@ -908,7 +1064,7 @@ public  final class Group extends
       return this;
     }
     /**
-     * <code>optional string id = 1;</code>
+     * <code>optional string id = 2;</code>
      */
     public Builder clearId() {
       
@@ -917,7 +1073,7 @@ public  final class Group extends
       return this;
     }
     /**
-     * <code>optional string id = 1;</code>
+     * <code>optional string id = 2;</code>
      */
     public Builder setIdBytes(
         com.google.protobuf.ByteString value) {
@@ -931,147 +1087,9 @@ public  final class Group extends
       return this;
     }
 
-    private java.lang.Object key_ = "";
-    /**
-     * <code>optional string key = 2;</code>
-     */
-    public java.lang.String getKey() {
-      java.lang.Object ref = key_;
-      if (!(ref instanceof java.lang.String)) {
-        com.google.protobuf.ByteString bs =
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        key_ = s;
-        return s;
-      } else {
-        return (java.lang.String) ref;
-      }
-    }
-    /**
-     * <code>optional string key = 2;</code>
-     */
-    public com.google.protobuf.ByteString
-        getKeyBytes() {
-      java.lang.Object ref = key_;
-      if (ref instanceof String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        key_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-    /**
-     * <code>optional string key = 2;</code>
-     */
-    public Builder setKey(
-        java.lang.String value) {
-      if (value == null) {
-    throw new NullPointerException();
-  }
-  
-      key_ = value;
-      onChanged();
-      return this;
-    }
-    /**
-     * <code>optional string key = 2;</code>
-     */
-    public Builder clearKey() {
-      
-      key_ = getDefaultInstance().getKey();
-      onChanged();
-      return this;
-    }
-    /**
-     * <code>optional string key = 2;</code>
-     */
-    public Builder setKeyBytes(
-        com.google.protobuf.ByteString value) {
-      if (value == null) {
-    throw new NullPointerException();
-  }
-  checkByteStringIsUtf8(value);
-      
-      key_ = value;
-      onChanged();
-      return this;
-    }
-
-    private java.lang.Object name_ = "";
-    /**
-     * <code>optional string name = 3;</code>
-     */
-    public java.lang.String getName() {
-      java.lang.Object ref = name_;
-      if (!(ref instanceof java.lang.String)) {
-        com.google.protobuf.ByteString bs =
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        name_ = s;
-        return s;
-      } else {
-        return (java.lang.String) ref;
-      }
-    }
-    /**
-     * <code>optional string name = 3;</code>
-     */
-    public com.google.protobuf.ByteString
-        getNameBytes() {
-      java.lang.Object ref = name_;
-      if (ref instanceof String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        name_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-    /**
-     * <code>optional string name = 3;</code>
-     */
-    public Builder setName(
-        java.lang.String value) {
-      if (value == null) {
-    throw new NullPointerException();
-  }
-  
-      name_ = value;
-      onChanged();
-      return this;
-    }
-    /**
-     * <code>optional string name = 3;</code>
-     */
-    public Builder clearName() {
-      
-      name_ = getDefaultInstance().getName();
-      onChanged();
-      return this;
-    }
-    /**
-     * <code>optional string name = 3;</code>
-     */
-    public Builder setNameBytes(
-        com.google.protobuf.ByteString value) {
-      if (value == null) {
-    throw new NullPointerException();
-  }
-  checkByteStringIsUtf8(value);
-      
-      name_ = value;
-      onChanged();
-      return this;
-    }
-
     private java.lang.Object created_ = "";
     /**
-     * <code>optional string created = 6;</code>
+     * <code>optional string created = 3;</code>
      */
     public java.lang.String getCreated() {
       java.lang.Object ref = created_;
@@ -1086,7 +1104,7 @@ public  final class Group extends
       }
     }
     /**
-     * <code>optional string created = 6;</code>
+     * <code>optional string created = 3;</code>
      */
     public com.google.protobuf.ByteString
         getCreatedBytes() {
@@ -1102,7 +1120,7 @@ public  final class Group extends
       }
     }
     /**
-     * <code>optional string created = 6;</code>
+     * <code>optional string created = 3;</code>
      */
     public Builder setCreated(
         java.lang.String value) {
@@ -1115,7 +1133,7 @@ public  final class Group extends
       return this;
     }
     /**
-     * <code>optional string created = 6;</code>
+     * <code>optional string created = 3;</code>
      */
     public Builder clearCreated() {
       
@@ -1124,7 +1142,7 @@ public  final class Group extends
       return this;
     }
     /**
-     * <code>optional string created = 6;</code>
+     * <code>optional string created = 3;</code>
      */
     public Builder setCreatedBytes(
         com.google.protobuf.ByteString value) {
@@ -1140,7 +1158,7 @@ public  final class Group extends
 
     private java.lang.Object updated_ = "";
     /**
-     * <code>optional string updated = 7;</code>
+     * <code>optional string updated = 4;</code>
      */
     public java.lang.String getUpdated() {
       java.lang.Object ref = updated_;
@@ -1155,7 +1173,7 @@ public  final class Group extends
       }
     }
     /**
-     * <code>optional string updated = 7;</code>
+     * <code>optional string updated = 4;</code>
      */
     public com.google.protobuf.ByteString
         getUpdatedBytes() {
@@ -1171,7 +1189,7 @@ public  final class Group extends
       }
     }
     /**
-     * <code>optional string updated = 7;</code>
+     * <code>optional string updated = 4;</code>
      */
     public Builder setUpdated(
         java.lang.String value) {
@@ -1184,7 +1202,7 @@ public  final class Group extends
       return this;
     }
     /**
-     * <code>optional string updated = 7;</code>
+     * <code>optional string updated = 4;</code>
      */
     public Builder clearUpdated() {
       
@@ -1193,7 +1211,7 @@ public  final class Group extends
       return this;
     }
     /**
-     * <code>optional string updated = 7;</code>
+     * <code>optional string updated = 4;</code>
      */
     public Builder setUpdatedBytes(
         com.google.protobuf.ByteString value) {
@@ -1207,17 +1225,274 @@ public  final class Group extends
       return this;
     }
 
+    private com.google.protobuf.MapField<
+        java.lang.String, java.lang.String> properties_;
+    private com.google.protobuf.MapField<java.lang.String, java.lang.String>
+    internalGetProperties() {
+      if (properties_ == null) {
+        return com.google.protobuf.MapField.emptyMapField(
+            PropertiesDefaultEntryHolder.defaultEntry);
+      }
+      return properties_;
+    }
+    private com.google.protobuf.MapField<java.lang.String, java.lang.String>
+    internalGetMutableProperties() {
+      onChanged();;
+      if (properties_ == null) {
+        properties_ = com.google.protobuf.MapField.newMapField(
+            PropertiesDefaultEntryHolder.defaultEntry);
+      }
+      if (!properties_.isMutable()) {
+        properties_ = properties_.copy();
+      }
+      return properties_;
+    }
+
+    public int getPropertiesCount() {
+      return internalGetProperties().getMap().size();
+    }
+    /**
+     * <code>map&lt;string, string&gt; properties = 5;</code>
+     */
+
+    public boolean containsProperties(
+        java.lang.String key) {
+      if (key == null) { throw new java.lang.NullPointerException(); }
+      return internalGetProperties().getMap().containsKey(key);
+    }
+    /**
+     * Use {@link #getPropertiesMap()} instead.
+     */
+    @java.lang.Deprecated
+    public java.util.Map<java.lang.String, java.lang.String> getProperties() {
+      return getPropertiesMap();
+    }
+    /**
+     * <code>map&lt;string, string&gt; properties = 5;</code>
+     */
+
+    public java.util.Map<java.lang.String, java.lang.String> getPropertiesMap() {
+      return internalGetProperties().getMap();
+    }
+    /**
+     * <code>map&lt;string, string&gt; properties = 5;</code>
+     */
+
+    public java.lang.String getPropertiesOrDefault(
+        java.lang.String key,
+        java.lang.String defaultValue) {
+      if (key == null) { throw new java.lang.NullPointerException(); }
+      java.util.Map<java.lang.String, java.lang.String> map =
+          internalGetProperties().getMap();
+      return map.containsKey(key) ? map.get(key) : defaultValue;
+    }
+    /**
+     * <code>map&lt;string, string&gt; properties = 5;</code>
+     */
+
+    public java.lang.String getPropertiesOrThrow(
+        java.lang.String key) {
+      if (key == null) { throw new java.lang.NullPointerException(); }
+      java.util.Map<java.lang.String, java.lang.String> map =
+          internalGetProperties().getMap();
+      if (!map.containsKey(key)) {
+        throw new java.lang.IllegalArgumentException();
+      }
+      return map.get(key);
+    }
+
+    public Builder clearProperties() {
+      getMutableProperties().clear();
+      return this;
+    }
+    /**
+     * <code>map&lt;string, string&gt; properties = 5;</code>
+     */
+
+    public Builder removeProperties(
+        java.lang.String key) {
+      if (key == null) { throw new java.lang.NullPointerException(); }
+      getMutableProperties().remove(key);
+      return this;
+    }
+    /**
+     * Use alternate mutation accessors instead.
+     */
+    @java.lang.Deprecated
+    public java.util.Map<java.lang.String, java.lang.String>
+    getMutableProperties() {
+      return internalGetMutableProperties().getMutableMap();
+    }
+    /**
+     * <code>map&lt;string, string&gt; properties = 5;</code>
+     */
+    public Builder putProperties(
+        java.lang.String key,
+        java.lang.String value) {
+      if (key == null) { throw new java.lang.NullPointerException(); }
+      if (value == null) { throw new java.lang.NullPointerException(); }
+      getMutableProperties().put(key, value);
+      return this;
+    }
+    /**
+     * <code>map&lt;string, string&gt; properties = 5;</code>
+     */
+
+    public Builder putAllProperties(
+        java.util.Map<java.lang.String, java.lang.String> values) {
+      getMutableProperties().putAll(values);
+      return this;
+    }
+
+    private java.lang.Object key_ = "";
+    /**
+     * <code>optional string key = 10;</code>
+     */
+    public java.lang.String getKey() {
+      java.lang.Object ref = key_;
+      if (!(ref instanceof java.lang.String)) {
+        com.google.protobuf.ByteString bs =
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        key_ = s;
+        return s;
+      } else {
+        return (java.lang.String) ref;
+      }
+    }
+    /**
+     * <code>optional string key = 10;</code>
+     */
+    public com.google.protobuf.ByteString
+        getKeyBytes() {
+      java.lang.Object ref = key_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        key_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+    /**
+     * <code>optional string key = 10;</code>
+     */
+    public Builder setKey(
+        java.lang.String value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  
+      key_ = value;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>optional string key = 10;</code>
+     */
+    public Builder clearKey() {
+      
+      key_ = getDefaultInstance().getKey();
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>optional string key = 10;</code>
+     */
+    public Builder setKeyBytes(
+        com.google.protobuf.ByteString value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+      
+      key_ = value;
+      onChanged();
+      return this;
+    }
+
+    private java.lang.Object name_ = "";
+    /**
+     * <code>optional string name = 11;</code>
+     */
+    public java.lang.String getName() {
+      java.lang.Object ref = name_;
+      if (!(ref instanceof java.lang.String)) {
+        com.google.protobuf.ByteString bs =
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        name_ = s;
+        return s;
+      } else {
+        return (java.lang.String) ref;
+      }
+    }
+    /**
+     * <code>optional string name = 11;</code>
+     */
+    public com.google.protobuf.ByteString
+        getNameBytes() {
+      java.lang.Object ref = name_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        name_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+    /**
+     * <code>optional string name = 11;</code>
+     */
+    public Builder setName(
+        java.lang.String value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  
+      name_ = value;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>optional string name = 11;</code>
+     */
+    public Builder clearName() {
+      
+      name_ = getDefaultInstance().getName();
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>optional string name = 11;</code>
+     */
+    public Builder setNameBytes(
+        com.google.protobuf.ByteString value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+      
+      name_ = value;
+      onChanged();
+      return this;
+    }
+
     private outland.feature.proto.OwnerCollection owners_ = null;
     private com.google.protobuf.SingleFieldBuilderV3<
         outland.feature.proto.OwnerCollection, outland.feature.proto.OwnerCollection.Builder, outland.feature.proto.OwnerCollectionOrBuilder> ownersBuilder_;
     /**
-     * <code>optional .outland.OwnerCollection owners = 5;</code>
+     * <code>optional .outland.OwnerCollection owners = 12;</code>
      */
     public boolean hasOwners() {
       return ownersBuilder_ != null || owners_ != null;
     }
     /**
-     * <code>optional .outland.OwnerCollection owners = 5;</code>
+     * <code>optional .outland.OwnerCollection owners = 12;</code>
      */
     public outland.feature.proto.OwnerCollection getOwners() {
       if (ownersBuilder_ == null) {
@@ -1227,7 +1502,7 @@ public  final class Group extends
       }
     }
     /**
-     * <code>optional .outland.OwnerCollection owners = 5;</code>
+     * <code>optional .outland.OwnerCollection owners = 12;</code>
      */
     public Builder setOwners(outland.feature.proto.OwnerCollection value) {
       if (ownersBuilder_ == null) {
@@ -1243,7 +1518,7 @@ public  final class Group extends
       return this;
     }
     /**
-     * <code>optional .outland.OwnerCollection owners = 5;</code>
+     * <code>optional .outland.OwnerCollection owners = 12;</code>
      */
     public Builder setOwners(
         outland.feature.proto.OwnerCollection.Builder builderForValue) {
@@ -1257,7 +1532,7 @@ public  final class Group extends
       return this;
     }
     /**
-     * <code>optional .outland.OwnerCollection owners = 5;</code>
+     * <code>optional .outland.OwnerCollection owners = 12;</code>
      */
     public Builder mergeOwners(outland.feature.proto.OwnerCollection value) {
       if (ownersBuilder_ == null) {
@@ -1275,7 +1550,7 @@ public  final class Group extends
       return this;
     }
     /**
-     * <code>optional .outland.OwnerCollection owners = 5;</code>
+     * <code>optional .outland.OwnerCollection owners = 12;</code>
      */
     public Builder clearOwners() {
       if (ownersBuilder_ == null) {
@@ -1289,7 +1564,7 @@ public  final class Group extends
       return this;
     }
     /**
-     * <code>optional .outland.OwnerCollection owners = 5;</code>
+     * <code>optional .outland.OwnerCollection owners = 12;</code>
      */
     public outland.feature.proto.OwnerCollection.Builder getOwnersBuilder() {
       
@@ -1297,7 +1572,7 @@ public  final class Group extends
       return getOwnersFieldBuilder().getBuilder();
     }
     /**
-     * <code>optional .outland.OwnerCollection owners = 5;</code>
+     * <code>optional .outland.OwnerCollection owners = 12;</code>
      */
     public outland.feature.proto.OwnerCollectionOrBuilder getOwnersOrBuilder() {
       if (ownersBuilder_ != null) {
@@ -1308,7 +1583,7 @@ public  final class Group extends
       }
     }
     /**
-     * <code>optional .outland.OwnerCollection owners = 5;</code>
+     * <code>optional .outland.OwnerCollection owners = 12;</code>
      */
     private com.google.protobuf.SingleFieldBuilderV3<
         outland.feature.proto.OwnerCollection, outland.feature.proto.OwnerCollection.Builder, outland.feature.proto.OwnerCollectionOrBuilder> 
@@ -1328,13 +1603,13 @@ public  final class Group extends
     private com.google.protobuf.SingleFieldBuilderV3<
         outland.feature.proto.AccessCollection, outland.feature.proto.AccessCollection.Builder, outland.feature.proto.AccessCollectionOrBuilder> grantedBuilder_;
     /**
-     * <code>optional .outland.AccessCollection granted = 9;</code>
+     * <code>optional .outland.AccessCollection granted = 13;</code>
      */
     public boolean hasGranted() {
       return grantedBuilder_ != null || granted_ != null;
     }
     /**
-     * <code>optional .outland.AccessCollection granted = 9;</code>
+     * <code>optional .outland.AccessCollection granted = 13;</code>
      */
     public outland.feature.proto.AccessCollection getGranted() {
       if (grantedBuilder_ == null) {
@@ -1344,7 +1619,7 @@ public  final class Group extends
       }
     }
     /**
-     * <code>optional .outland.AccessCollection granted = 9;</code>
+     * <code>optional .outland.AccessCollection granted = 13;</code>
      */
     public Builder setGranted(outland.feature.proto.AccessCollection value) {
       if (grantedBuilder_ == null) {
@@ -1360,7 +1635,7 @@ public  final class Group extends
       return this;
     }
     /**
-     * <code>optional .outland.AccessCollection granted = 9;</code>
+     * <code>optional .outland.AccessCollection granted = 13;</code>
      */
     public Builder setGranted(
         outland.feature.proto.AccessCollection.Builder builderForValue) {
@@ -1374,7 +1649,7 @@ public  final class Group extends
       return this;
     }
     /**
-     * <code>optional .outland.AccessCollection granted = 9;</code>
+     * <code>optional .outland.AccessCollection granted = 13;</code>
      */
     public Builder mergeGranted(outland.feature.proto.AccessCollection value) {
       if (grantedBuilder_ == null) {
@@ -1392,7 +1667,7 @@ public  final class Group extends
       return this;
     }
     /**
-     * <code>optional .outland.AccessCollection granted = 9;</code>
+     * <code>optional .outland.AccessCollection granted = 13;</code>
      */
     public Builder clearGranted() {
       if (grantedBuilder_ == null) {
@@ -1406,7 +1681,7 @@ public  final class Group extends
       return this;
     }
     /**
-     * <code>optional .outland.AccessCollection granted = 9;</code>
+     * <code>optional .outland.AccessCollection granted = 13;</code>
      */
     public outland.feature.proto.AccessCollection.Builder getGrantedBuilder() {
       
@@ -1414,7 +1689,7 @@ public  final class Group extends
       return getGrantedFieldBuilder().getBuilder();
     }
     /**
-     * <code>optional .outland.AccessCollection granted = 9;</code>
+     * <code>optional .outland.AccessCollection granted = 13;</code>
      */
     public outland.feature.proto.AccessCollectionOrBuilder getGrantedOrBuilder() {
       if (grantedBuilder_ != null) {
@@ -1425,7 +1700,7 @@ public  final class Group extends
       }
     }
     /**
-     * <code>optional .outland.AccessCollection granted = 9;</code>
+     * <code>optional .outland.AccessCollection granted = 13;</code>
      */
     private com.google.protobuf.SingleFieldBuilderV3<
         outland.feature.proto.AccessCollection, outland.feature.proto.AccessCollection.Builder, outland.feature.proto.AccessCollectionOrBuilder> 

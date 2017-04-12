@@ -37,7 +37,6 @@ class VersionSupport {
         .setType(Names.versionType())
         .setCounter(next.counter())
         .setTimestamp(next.logicalTime())
-        .setId(next.id())
         ;
   }
 

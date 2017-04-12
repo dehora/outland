@@ -18,25 +18,25 @@ public interface NamespaceFeatureCollectionOrBuilder extends
       getTypeBytes();
 
   /**
-   * <code>repeated .outland.NamespaceFeature items = 2;</code>
+   * <code>repeated .outland.NamespaceFeature items = 10;</code>
    */
   java.util.List<outland.feature.proto.NamespaceFeature> 
       getItemsList();
   /**
-   * <code>repeated .outland.NamespaceFeature items = 2;</code>
+   * <code>repeated .outland.NamespaceFeature items = 10;</code>
    */
   outland.feature.proto.NamespaceFeature getItems(int index);
   /**
-   * <code>repeated .outland.NamespaceFeature items = 2;</code>
+   * <code>repeated .outland.NamespaceFeature items = 10;</code>
    */
   int getItemsCount();
   /**
-   * <code>repeated .outland.NamespaceFeature items = 2;</code>
+   * <code>repeated .outland.NamespaceFeature items = 10;</code>
    */
   java.util.List<? extends outland.feature.proto.NamespaceFeatureOrBuilder> 
       getItemsOrBuilderList();
   /**
-   * <code>repeated .outland.NamespaceFeature items = 2;</code>
+   * <code>repeated .outland.NamespaceFeature items = 10;</code>
    */
   outland.feature.proto.NamespaceFeatureOrBuilder getItemsOrBuilder(
       int index);

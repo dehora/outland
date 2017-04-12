@@ -15,12 +15,12 @@ public  final class FeatureOption extends
     super(builder);
   }
   private FeatureOption() {
+    type_ = "";
     id_ = "";
     option_ = 0;
     name_ = "";
     value_ = "";
     weight_ = 0;
-    type_ = "";
   }
 
   @java.lang.Override
@@ -51,36 +51,36 @@ public  final class FeatureOption extends
           case 10: {
             java.lang.String s = input.readStringRequireUtf8();
 
+            type_ = s;
+            break;
+          }
+          case 18: {
+            java.lang.String s = input.readStringRequireUtf8();
+
             id_ = s;
             break;
           }
-          case 16: {
+          case 80: {
             int rawValue = input.readEnum();
 
             option_ = rawValue;
             break;
           }
-          case 26: {
+          case 90: {
             java.lang.String s = input.readStringRequireUtf8();
 
             name_ = s;
             break;
           }
-          case 34: {
+          case 98: {
             java.lang.String s = input.readStringRequireUtf8();
 
             value_ = s;
             break;
           }
-          case 40: {
+          case 104: {
 
             weight_ = input.readInt32();
-            break;
-          }
-          case 50: {
-            java.lang.String s = input.readStringRequireUtf8();
-
-            type_ = s;
             break;
           }
         }
@@ -106,137 +106,10 @@ public  final class FeatureOption extends
             outland.feature.proto.FeatureOption.class, outland.feature.proto.FeatureOption.Builder.class);
   }
 
-  public static final int ID_FIELD_NUMBER = 1;
-  private volatile java.lang.Object id_;
-  /**
-   * <code>optional string id = 1;</code>
-   */
-  public java.lang.String getId() {
-    java.lang.Object ref = id_;
-    if (ref instanceof java.lang.String) {
-      return (java.lang.String) ref;
-    } else {
-      com.google.protobuf.ByteString bs = 
-          (com.google.protobuf.ByteString) ref;
-      java.lang.String s = bs.toStringUtf8();
-      id_ = s;
-      return s;
-    }
-  }
-  /**
-   * <code>optional string id = 1;</code>
-   */
-  public com.google.protobuf.ByteString
-      getIdBytes() {
-    java.lang.Object ref = id_;
-    if (ref instanceof java.lang.String) {
-      com.google.protobuf.ByteString b = 
-          com.google.protobuf.ByteString.copyFromUtf8(
-              (java.lang.String) ref);
-      id_ = b;
-      return b;
-    } else {
-      return (com.google.protobuf.ByteString) ref;
-    }
-  }
-
-  public static final int OPTION_FIELD_NUMBER = 2;
-  private int option_;
-  /**
-   * <code>optional .outland.OptionType option = 2;</code>
-   */
-  public int getOptionValue() {
-    return option_;
-  }
-  /**
-   * <code>optional .outland.OptionType option = 2;</code>
-   */
-  public outland.feature.proto.OptionType getOption() {
-    outland.feature.proto.OptionType result = outland.feature.proto.OptionType.valueOf(option_);
-    return result == null ? outland.feature.proto.OptionType.UNRECOGNIZED : result;
-  }
-
-  public static final int NAME_FIELD_NUMBER = 3;
-  private volatile java.lang.Object name_;
-  /**
-   * <code>optional string name = 3;</code>
-   */
-  public java.lang.String getName() {
-    java.lang.Object ref = name_;
-    if (ref instanceof java.lang.String) {
-      return (java.lang.String) ref;
-    } else {
-      com.google.protobuf.ByteString bs = 
-          (com.google.protobuf.ByteString) ref;
-      java.lang.String s = bs.toStringUtf8();
-      name_ = s;
-      return s;
-    }
-  }
-  /**
-   * <code>optional string name = 3;</code>
-   */
-  public com.google.protobuf.ByteString
-      getNameBytes() {
-    java.lang.Object ref = name_;
-    if (ref instanceof java.lang.String) {
-      com.google.protobuf.ByteString b = 
-          com.google.protobuf.ByteString.copyFromUtf8(
-              (java.lang.String) ref);
-      name_ = b;
-      return b;
-    } else {
-      return (com.google.protobuf.ByteString) ref;
-    }
-  }
-
-  public static final int VALUE_FIELD_NUMBER = 4;
-  private volatile java.lang.Object value_;
-  /**
-   * <code>optional string value = 4;</code>
-   */
-  public java.lang.String getValue() {
-    java.lang.Object ref = value_;
-    if (ref instanceof java.lang.String) {
-      return (java.lang.String) ref;
-    } else {
-      com.google.protobuf.ByteString bs = 
-          (com.google.protobuf.ByteString) ref;
-      java.lang.String s = bs.toStringUtf8();
-      value_ = s;
-      return s;
-    }
-  }
-  /**
-   * <code>optional string value = 4;</code>
-   */
-  public com.google.protobuf.ByteString
-      getValueBytes() {
-    java.lang.Object ref = value_;
-    if (ref instanceof java.lang.String) {
-      com.google.protobuf.ByteString b = 
-          com.google.protobuf.ByteString.copyFromUtf8(
-              (java.lang.String) ref);
-      value_ = b;
-      return b;
-    } else {
-      return (com.google.protobuf.ByteString) ref;
-    }
-  }
-
-  public static final int WEIGHT_FIELD_NUMBER = 5;
-  private int weight_;
-  /**
-   * <code>optional int32 weight = 5;</code>
-   */
-  public int getWeight() {
-    return weight_;
-  }
-
-  public static final int TYPE_FIELD_NUMBER = 6;
+  public static final int TYPE_FIELD_NUMBER = 1;
   private volatile java.lang.Object type_;
   /**
-   * <code>optional string type = 6;</code>
+   * <code>optional string type = 1;</code>
    */
   public java.lang.String getType() {
     java.lang.Object ref = type_;
@@ -251,7 +124,7 @@ public  final class FeatureOption extends
     }
   }
   /**
-   * <code>optional string type = 6;</code>
+   * <code>optional string type = 1;</code>
    */
   public com.google.protobuf.ByteString
       getTypeBytes() {
@@ -267,6 +140,133 @@ public  final class FeatureOption extends
     }
   }
 
+  public static final int ID_FIELD_NUMBER = 2;
+  private volatile java.lang.Object id_;
+  /**
+   * <code>optional string id = 2;</code>
+   */
+  public java.lang.String getId() {
+    java.lang.Object ref = id_;
+    if (ref instanceof java.lang.String) {
+      return (java.lang.String) ref;
+    } else {
+      com.google.protobuf.ByteString bs = 
+          (com.google.protobuf.ByteString) ref;
+      java.lang.String s = bs.toStringUtf8();
+      id_ = s;
+      return s;
+    }
+  }
+  /**
+   * <code>optional string id = 2;</code>
+   */
+  public com.google.protobuf.ByteString
+      getIdBytes() {
+    java.lang.Object ref = id_;
+    if (ref instanceof java.lang.String) {
+      com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString.copyFromUtf8(
+              (java.lang.String) ref);
+      id_ = b;
+      return b;
+    } else {
+      return (com.google.protobuf.ByteString) ref;
+    }
+  }
+
+  public static final int OPTION_FIELD_NUMBER = 10;
+  private int option_;
+  /**
+   * <code>optional .outland.OptionType option = 10;</code>
+   */
+  public int getOptionValue() {
+    return option_;
+  }
+  /**
+   * <code>optional .outland.OptionType option = 10;</code>
+   */
+  public outland.feature.proto.OptionType getOption() {
+    outland.feature.proto.OptionType result = outland.feature.proto.OptionType.valueOf(option_);
+    return result == null ? outland.feature.proto.OptionType.UNRECOGNIZED : result;
+  }
+
+  public static final int NAME_FIELD_NUMBER = 11;
+  private volatile java.lang.Object name_;
+  /**
+   * <code>optional string name = 11;</code>
+   */
+  public java.lang.String getName() {
+    java.lang.Object ref = name_;
+    if (ref instanceof java.lang.String) {
+      return (java.lang.String) ref;
+    } else {
+      com.google.protobuf.ByteString bs = 
+          (com.google.protobuf.ByteString) ref;
+      java.lang.String s = bs.toStringUtf8();
+      name_ = s;
+      return s;
+    }
+  }
+  /**
+   * <code>optional string name = 11;</code>
+   */
+  public com.google.protobuf.ByteString
+      getNameBytes() {
+    java.lang.Object ref = name_;
+    if (ref instanceof java.lang.String) {
+      com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString.copyFromUtf8(
+              (java.lang.String) ref);
+      name_ = b;
+      return b;
+    } else {
+      return (com.google.protobuf.ByteString) ref;
+    }
+  }
+
+  public static final int VALUE_FIELD_NUMBER = 12;
+  private volatile java.lang.Object value_;
+  /**
+   * <code>optional string value = 12;</code>
+   */
+  public java.lang.String getValue() {
+    java.lang.Object ref = value_;
+    if (ref instanceof java.lang.String) {
+      return (java.lang.String) ref;
+    } else {
+      com.google.protobuf.ByteString bs = 
+          (com.google.protobuf.ByteString) ref;
+      java.lang.String s = bs.toStringUtf8();
+      value_ = s;
+      return s;
+    }
+  }
+  /**
+   * <code>optional string value = 12;</code>
+   */
+  public com.google.protobuf.ByteString
+      getValueBytes() {
+    java.lang.Object ref = value_;
+    if (ref instanceof java.lang.String) {
+      com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString.copyFromUtf8(
+              (java.lang.String) ref);
+      value_ = b;
+      return b;
+    } else {
+      return (com.google.protobuf.ByteString) ref;
+    }
+  }
+
+  public static final int WEIGHT_FIELD_NUMBER = 13;
+  private int weight_;
+  /**
+   * <code>optional int32 weight = 13;</code>
+   */
+  public int getWeight() {
+    return weight_;
+  }
+
   private byte memoizedIsInitialized = -1;
   public final boolean isInitialized() {
     byte isInitialized = memoizedIsInitialized;
@@ -279,23 +279,23 @@ public  final class FeatureOption extends
 
   public void writeTo(com.google.protobuf.CodedOutputStream output)
                       throws java.io.IOException {
+    if (!getTypeBytes().isEmpty()) {
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 1, type_);
+    }
     if (!getIdBytes().isEmpty()) {
-      com.google.protobuf.GeneratedMessageV3.writeString(output, 1, id_);
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 2, id_);
     }
     if (option_ != outland.feature.proto.OptionType.flag.getNumber()) {
-      output.writeEnum(2, option_);
+      output.writeEnum(10, option_);
     }
     if (!getNameBytes().isEmpty()) {
-      com.google.protobuf.GeneratedMessageV3.writeString(output, 3, name_);
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 11, name_);
     }
     if (!getValueBytes().isEmpty()) {
-      com.google.protobuf.GeneratedMessageV3.writeString(output, 4, value_);
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 12, value_);
     }
     if (weight_ != 0) {
-      output.writeInt32(5, weight_);
-    }
-    if (!getTypeBytes().isEmpty()) {
-      com.google.protobuf.GeneratedMessageV3.writeString(output, 6, type_);
+      output.writeInt32(13, weight_);
     }
   }
 
@@ -304,25 +304,25 @@ public  final class FeatureOption extends
     if (size != -1) return size;
 
     size = 0;
+    if (!getTypeBytes().isEmpty()) {
+      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, type_);
+    }
     if (!getIdBytes().isEmpty()) {
-      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, id_);
+      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, id_);
     }
     if (option_ != outland.feature.proto.OptionType.flag.getNumber()) {
       size += com.google.protobuf.CodedOutputStream
-        .computeEnumSize(2, option_);
+        .computeEnumSize(10, option_);
     }
     if (!getNameBytes().isEmpty()) {
-      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, name_);
+      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(11, name_);
     }
     if (!getValueBytes().isEmpty()) {
-      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(4, value_);
+      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(12, value_);
     }
     if (weight_ != 0) {
       size += com.google.protobuf.CodedOutputStream
-        .computeInt32Size(5, weight_);
-    }
-    if (!getTypeBytes().isEmpty()) {
-      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(6, type_);
+        .computeInt32Size(13, weight_);
     }
     memoizedSize = size;
     return size;
@@ -340,6 +340,8 @@ public  final class FeatureOption extends
     outland.feature.proto.FeatureOption other = (outland.feature.proto.FeatureOption) obj;
 
     boolean result = true;
+    result = result && getType()
+        .equals(other.getType());
     result = result && getId()
         .equals(other.getId());
     result = result && option_ == other.option_;
@@ -349,8 +351,6 @@ public  final class FeatureOption extends
         .equals(other.getValue());
     result = result && (getWeight()
         == other.getWeight());
-    result = result && getType()
-        .equals(other.getType());
     return result;
   }
 
@@ -361,6 +361,8 @@ public  final class FeatureOption extends
     }
     int hash = 41;
     hash = (19 * hash) + getDescriptorForType().hashCode();
+    hash = (37 * hash) + TYPE_FIELD_NUMBER;
+    hash = (53 * hash) + getType().hashCode();
     hash = (37 * hash) + ID_FIELD_NUMBER;
     hash = (53 * hash) + getId().hashCode();
     hash = (37 * hash) + OPTION_FIELD_NUMBER;
@@ -371,8 +373,6 @@ public  final class FeatureOption extends
     hash = (53 * hash) + getValue().hashCode();
     hash = (37 * hash) + WEIGHT_FIELD_NUMBER;
     hash = (53 * hash) + getWeight();
-    hash = (37 * hash) + TYPE_FIELD_NUMBER;
-    hash = (53 * hash) + getType().hashCode();
     hash = (29 * hash) + unknownFields.hashCode();
     memoizedHashCode = hash;
     return hash;
@@ -491,6 +491,8 @@ public  final class FeatureOption extends
     }
     public Builder clear() {
       super.clear();
+      type_ = "";
+
       id_ = "";
 
       option_ = 0;
@@ -500,8 +502,6 @@ public  final class FeatureOption extends
       value_ = "";
 
       weight_ = 0;
-
-      type_ = "";
 
       return this;
     }
@@ -525,12 +525,12 @@ public  final class FeatureOption extends
 
     public outland.feature.proto.FeatureOption buildPartial() {
       outland.feature.proto.FeatureOption result = new outland.feature.proto.FeatureOption(this);
+      result.type_ = type_;
       result.id_ = id_;
       result.option_ = option_;
       result.name_ = name_;
       result.value_ = value_;
       result.weight_ = weight_;
-      result.type_ = type_;
       onBuilt();
       return result;
     }
@@ -572,6 +572,10 @@ public  final class FeatureOption extends
 
     public Builder mergeFrom(outland.feature.proto.FeatureOption other) {
       if (other == outland.feature.proto.FeatureOption.getDefaultInstance()) return this;
+      if (!other.getType().isEmpty()) {
+        type_ = other.type_;
+        onChanged();
+      }
       if (!other.getId().isEmpty()) {
         id_ = other.id_;
         onChanged();
@@ -589,10 +593,6 @@ public  final class FeatureOption extends
       }
       if (other.getWeight() != 0) {
         setWeight(other.getWeight());
-      }
-      if (!other.getType().isEmpty()) {
-        type_ = other.type_;
-        onChanged();
       }
       onChanged();
       return this;
@@ -620,286 +620,9 @@ public  final class FeatureOption extends
       return this;
     }
 
-    private java.lang.Object id_ = "";
-    /**
-     * <code>optional string id = 1;</code>
-     */
-    public java.lang.String getId() {
-      java.lang.Object ref = id_;
-      if (!(ref instanceof java.lang.String)) {
-        com.google.protobuf.ByteString bs =
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        id_ = s;
-        return s;
-      } else {
-        return (java.lang.String) ref;
-      }
-    }
-    /**
-     * <code>optional string id = 1;</code>
-     */
-    public com.google.protobuf.ByteString
-        getIdBytes() {
-      java.lang.Object ref = id_;
-      if (ref instanceof String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        id_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-    /**
-     * <code>optional string id = 1;</code>
-     */
-    public Builder setId(
-        java.lang.String value) {
-      if (value == null) {
-    throw new NullPointerException();
-  }
-  
-      id_ = value;
-      onChanged();
-      return this;
-    }
-    /**
-     * <code>optional string id = 1;</code>
-     */
-    public Builder clearId() {
-      
-      id_ = getDefaultInstance().getId();
-      onChanged();
-      return this;
-    }
-    /**
-     * <code>optional string id = 1;</code>
-     */
-    public Builder setIdBytes(
-        com.google.protobuf.ByteString value) {
-      if (value == null) {
-    throw new NullPointerException();
-  }
-  checkByteStringIsUtf8(value);
-      
-      id_ = value;
-      onChanged();
-      return this;
-    }
-
-    private int option_ = 0;
-    /**
-     * <code>optional .outland.OptionType option = 2;</code>
-     */
-    public int getOptionValue() {
-      return option_;
-    }
-    /**
-     * <code>optional .outland.OptionType option = 2;</code>
-     */
-    public Builder setOptionValue(int value) {
-      option_ = value;
-      onChanged();
-      return this;
-    }
-    /**
-     * <code>optional .outland.OptionType option = 2;</code>
-     */
-    public outland.feature.proto.OptionType getOption() {
-      outland.feature.proto.OptionType result = outland.feature.proto.OptionType.valueOf(option_);
-      return result == null ? outland.feature.proto.OptionType.UNRECOGNIZED : result;
-    }
-    /**
-     * <code>optional .outland.OptionType option = 2;</code>
-     */
-    public Builder setOption(outland.feature.proto.OptionType value) {
-      if (value == null) {
-        throw new NullPointerException();
-      }
-      
-      option_ = value.getNumber();
-      onChanged();
-      return this;
-    }
-    /**
-     * <code>optional .outland.OptionType option = 2;</code>
-     */
-    public Builder clearOption() {
-      
-      option_ = 0;
-      onChanged();
-      return this;
-    }
-
-    private java.lang.Object name_ = "";
-    /**
-     * <code>optional string name = 3;</code>
-     */
-    public java.lang.String getName() {
-      java.lang.Object ref = name_;
-      if (!(ref instanceof java.lang.String)) {
-        com.google.protobuf.ByteString bs =
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        name_ = s;
-        return s;
-      } else {
-        return (java.lang.String) ref;
-      }
-    }
-    /**
-     * <code>optional string name = 3;</code>
-     */
-    public com.google.protobuf.ByteString
-        getNameBytes() {
-      java.lang.Object ref = name_;
-      if (ref instanceof String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        name_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-    /**
-     * <code>optional string name = 3;</code>
-     */
-    public Builder setName(
-        java.lang.String value) {
-      if (value == null) {
-    throw new NullPointerException();
-  }
-  
-      name_ = value;
-      onChanged();
-      return this;
-    }
-    /**
-     * <code>optional string name = 3;</code>
-     */
-    public Builder clearName() {
-      
-      name_ = getDefaultInstance().getName();
-      onChanged();
-      return this;
-    }
-    /**
-     * <code>optional string name = 3;</code>
-     */
-    public Builder setNameBytes(
-        com.google.protobuf.ByteString value) {
-      if (value == null) {
-    throw new NullPointerException();
-  }
-  checkByteStringIsUtf8(value);
-      
-      name_ = value;
-      onChanged();
-      return this;
-    }
-
-    private java.lang.Object value_ = "";
-    /**
-     * <code>optional string value = 4;</code>
-     */
-    public java.lang.String getValue() {
-      java.lang.Object ref = value_;
-      if (!(ref instanceof java.lang.String)) {
-        com.google.protobuf.ByteString bs =
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        value_ = s;
-        return s;
-      } else {
-        return (java.lang.String) ref;
-      }
-    }
-    /**
-     * <code>optional string value = 4;</code>
-     */
-    public com.google.protobuf.ByteString
-        getValueBytes() {
-      java.lang.Object ref = value_;
-      if (ref instanceof String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        value_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-    /**
-     * <code>optional string value = 4;</code>
-     */
-    public Builder setValue(
-        java.lang.String value) {
-      if (value == null) {
-    throw new NullPointerException();
-  }
-  
-      value_ = value;
-      onChanged();
-      return this;
-    }
-    /**
-     * <code>optional string value = 4;</code>
-     */
-    public Builder clearValue() {
-      
-      value_ = getDefaultInstance().getValue();
-      onChanged();
-      return this;
-    }
-    /**
-     * <code>optional string value = 4;</code>
-     */
-    public Builder setValueBytes(
-        com.google.protobuf.ByteString value) {
-      if (value == null) {
-    throw new NullPointerException();
-  }
-  checkByteStringIsUtf8(value);
-      
-      value_ = value;
-      onChanged();
-      return this;
-    }
-
-    private int weight_ ;
-    /**
-     * <code>optional int32 weight = 5;</code>
-     */
-    public int getWeight() {
-      return weight_;
-    }
-    /**
-     * <code>optional int32 weight = 5;</code>
-     */
-    public Builder setWeight(int value) {
-      
-      weight_ = value;
-      onChanged();
-      return this;
-    }
-    /**
-     * <code>optional int32 weight = 5;</code>
-     */
-    public Builder clearWeight() {
-      
-      weight_ = 0;
-      onChanged();
-      return this;
-    }
-
     private java.lang.Object type_ = "";
     /**
-     * <code>optional string type = 6;</code>
+     * <code>optional string type = 1;</code>
      */
     public java.lang.String getType() {
       java.lang.Object ref = type_;
@@ -914,7 +637,7 @@ public  final class FeatureOption extends
       }
     }
     /**
-     * <code>optional string type = 6;</code>
+     * <code>optional string type = 1;</code>
      */
     public com.google.protobuf.ByteString
         getTypeBytes() {
@@ -930,7 +653,7 @@ public  final class FeatureOption extends
       }
     }
     /**
-     * <code>optional string type = 6;</code>
+     * <code>optional string type = 1;</code>
      */
     public Builder setType(
         java.lang.String value) {
@@ -943,7 +666,7 @@ public  final class FeatureOption extends
       return this;
     }
     /**
-     * <code>optional string type = 6;</code>
+     * <code>optional string type = 1;</code>
      */
     public Builder clearType() {
       
@@ -952,7 +675,7 @@ public  final class FeatureOption extends
       return this;
     }
     /**
-     * <code>optional string type = 6;</code>
+     * <code>optional string type = 1;</code>
      */
     public Builder setTypeBytes(
         com.google.protobuf.ByteString value) {
@@ -962,6 +685,283 @@ public  final class FeatureOption extends
   checkByteStringIsUtf8(value);
       
       type_ = value;
+      onChanged();
+      return this;
+    }
+
+    private java.lang.Object id_ = "";
+    /**
+     * <code>optional string id = 2;</code>
+     */
+    public java.lang.String getId() {
+      java.lang.Object ref = id_;
+      if (!(ref instanceof java.lang.String)) {
+        com.google.protobuf.ByteString bs =
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        id_ = s;
+        return s;
+      } else {
+        return (java.lang.String) ref;
+      }
+    }
+    /**
+     * <code>optional string id = 2;</code>
+     */
+    public com.google.protobuf.ByteString
+        getIdBytes() {
+      java.lang.Object ref = id_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        id_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+    /**
+     * <code>optional string id = 2;</code>
+     */
+    public Builder setId(
+        java.lang.String value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  
+      id_ = value;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>optional string id = 2;</code>
+     */
+    public Builder clearId() {
+      
+      id_ = getDefaultInstance().getId();
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>optional string id = 2;</code>
+     */
+    public Builder setIdBytes(
+        com.google.protobuf.ByteString value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+      
+      id_ = value;
+      onChanged();
+      return this;
+    }
+
+    private int option_ = 0;
+    /**
+     * <code>optional .outland.OptionType option = 10;</code>
+     */
+    public int getOptionValue() {
+      return option_;
+    }
+    /**
+     * <code>optional .outland.OptionType option = 10;</code>
+     */
+    public Builder setOptionValue(int value) {
+      option_ = value;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>optional .outland.OptionType option = 10;</code>
+     */
+    public outland.feature.proto.OptionType getOption() {
+      outland.feature.proto.OptionType result = outland.feature.proto.OptionType.valueOf(option_);
+      return result == null ? outland.feature.proto.OptionType.UNRECOGNIZED : result;
+    }
+    /**
+     * <code>optional .outland.OptionType option = 10;</code>
+     */
+    public Builder setOption(outland.feature.proto.OptionType value) {
+      if (value == null) {
+        throw new NullPointerException();
+      }
+      
+      option_ = value.getNumber();
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>optional .outland.OptionType option = 10;</code>
+     */
+    public Builder clearOption() {
+      
+      option_ = 0;
+      onChanged();
+      return this;
+    }
+
+    private java.lang.Object name_ = "";
+    /**
+     * <code>optional string name = 11;</code>
+     */
+    public java.lang.String getName() {
+      java.lang.Object ref = name_;
+      if (!(ref instanceof java.lang.String)) {
+        com.google.protobuf.ByteString bs =
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        name_ = s;
+        return s;
+      } else {
+        return (java.lang.String) ref;
+      }
+    }
+    /**
+     * <code>optional string name = 11;</code>
+     */
+    public com.google.protobuf.ByteString
+        getNameBytes() {
+      java.lang.Object ref = name_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        name_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+    /**
+     * <code>optional string name = 11;</code>
+     */
+    public Builder setName(
+        java.lang.String value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  
+      name_ = value;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>optional string name = 11;</code>
+     */
+    public Builder clearName() {
+      
+      name_ = getDefaultInstance().getName();
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>optional string name = 11;</code>
+     */
+    public Builder setNameBytes(
+        com.google.protobuf.ByteString value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+      
+      name_ = value;
+      onChanged();
+      return this;
+    }
+
+    private java.lang.Object value_ = "";
+    /**
+     * <code>optional string value = 12;</code>
+     */
+    public java.lang.String getValue() {
+      java.lang.Object ref = value_;
+      if (!(ref instanceof java.lang.String)) {
+        com.google.protobuf.ByteString bs =
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        value_ = s;
+        return s;
+      } else {
+        return (java.lang.String) ref;
+      }
+    }
+    /**
+     * <code>optional string value = 12;</code>
+     */
+    public com.google.protobuf.ByteString
+        getValueBytes() {
+      java.lang.Object ref = value_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        value_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+    /**
+     * <code>optional string value = 12;</code>
+     */
+    public Builder setValue(
+        java.lang.String value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  
+      value_ = value;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>optional string value = 12;</code>
+     */
+    public Builder clearValue() {
+      
+      value_ = getDefaultInstance().getValue();
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>optional string value = 12;</code>
+     */
+    public Builder setValueBytes(
+        com.google.protobuf.ByteString value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+      
+      value_ = value;
+      onChanged();
+      return this;
+    }
+
+    private int weight_ ;
+    /**
+     * <code>optional int32 weight = 13;</code>
+     */
+    public int getWeight() {
+      return weight_;
+    }
+    /**
+     * <code>optional int32 weight = 13;</code>
+     */
+    public Builder setWeight(int value) {
+      
+      weight_ = value;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>optional int32 weight = 13;</code>
+     */
+    public Builder clearWeight() {
+      
+      weight_ = 0;
       onChanged();
       return this;
     }

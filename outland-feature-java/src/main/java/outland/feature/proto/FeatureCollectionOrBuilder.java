@@ -18,35 +18,35 @@ public interface FeatureCollectionOrBuilder extends
       getTypeBytes();
 
   /**
-   * <code>optional string group = 2;</code>
+   * <code>optional string group = 10;</code>
    */
   java.lang.String getGroup();
   /**
-   * <code>optional string group = 2;</code>
+   * <code>optional string group = 10;</code>
    */
   com.google.protobuf.ByteString
       getGroupBytes();
 
   /**
-   * <code>repeated .outland.Feature items = 3;</code>
+   * <code>repeated .outland.Feature items = 11;</code>
    */
   java.util.List<outland.feature.proto.Feature> 
       getItemsList();
   /**
-   * <code>repeated .outland.Feature items = 3;</code>
+   * <code>repeated .outland.Feature items = 11;</code>
    */
   outland.feature.proto.Feature getItems(int index);
   /**
-   * <code>repeated .outland.Feature items = 3;</code>
+   * <code>repeated .outland.Feature items = 11;</code>
    */
   int getItemsCount();
   /**
-   * <code>repeated .outland.Feature items = 3;</code>
+   * <code>repeated .outland.Feature items = 11;</code>
    */
   java.util.List<? extends outland.feature.proto.FeatureOrBuilder> 
       getItemsOrBuilderList();
   /**
-   * <code>repeated .outland.Feature items = 3;</code>
+   * <code>repeated .outland.Feature items = 11;</code>
    */
   outland.feature.proto.FeatureOrBuilder getItemsOrBuilder(
       int index);
