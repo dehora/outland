@@ -160,15 +160,15 @@ public interface FeatureOrBuilder extends
   outland.feature.proto.FeatureVersionOrBuilder getVersionOrBuilder();
 
   /**
-   * <code>optional .outland.NamespaceFeatureCollection namespaced = 14;</code>
+   * <code>optional .outland.NamespaceFeatureCollection namespaces = 14;</code>
    */
-  boolean hasNamespaced();
+  boolean hasNamespaces();
   /**
-   * <code>optional .outland.NamespaceFeatureCollection namespaced = 14;</code>
+   * <code>optional .outland.NamespaceFeatureCollection namespaces = 14;</code>
    */
-  outland.feature.proto.NamespaceFeatureCollection getNamespaced();
+  outland.feature.proto.NamespaceFeatureCollection getNamespaces();
   /**
-   * <code>optional .outland.NamespaceFeatureCollection namespaced = 14;</code>
+   * <code>optional .outland.NamespaceFeatureCollection namespaces = 14;</code>
    */
-  outland.feature.proto.NamespaceFeatureCollectionOrBuilder getNamespacedOrBuilder();
+  outland.feature.proto.NamespaceFeatureCollectionOrBuilder getNamespacesOrBuilder();
 }

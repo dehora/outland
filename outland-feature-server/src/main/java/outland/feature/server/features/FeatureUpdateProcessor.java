@@ -29,14 +29,14 @@ public class FeatureUpdateProcessor {
 
   public List<NamespaceFeature> buildMergedNamespaceFeatures(Feature existingFeature, Feature incomingFeature) {
 
-    if(incomingFeature.getNamespaced().getItemsCount() == 0) {
-      return Lists.newArrayList(existingFeature.getNamespaced().getItemsList());
+    if(incomingFeature.getNamespaces().getItemsCount() == 0) {
+      return Lists.newArrayList(existingFeature.getNamespaces().getItemsList());
     }
 
     FeatureValidator validator = new FeatureValidator();
 
-    final List<NamespaceFeature> existingList = existingFeature.getNamespaced().getItemsList();
-    final List<NamespaceFeature> incomingList = incomingFeature.getNamespaced().getItemsList();
+    final List<NamespaceFeature> existingList = existingFeature.getNamespaces().getItemsList();
+    final List<NamespaceFeature> incomingList = incomingFeature.getNamespaces().getItemsList();
 
     final Map<String, NamespaceFeature> existingMap = existingList.stream()
         .collect(Collectors.toMap(NamespaceFeature::getNamespace, Function.identity()));
@@ -69,11 +69,11 @@ public class FeatureUpdateProcessor {
 
   public List<NamespaceFeature> buildMergedNamespaceFeatures(Feature feature, NamespaceFeature incoming) {
 
-    if(! feature.hasNamespaced()) {
+    if(! feature.hasNamespaces()) {
       return Lists.newArrayList(prepareNewNamespaceFeature(incoming));
     }
 
-    final NamespaceFeatureCollection existingNamespaced = feature.getNamespaced();
+    final NamespaceFeatureCollection existingNamespaced = feature.getNamespaces();
     final List<NamespaceFeature> existingNamespacedItemsList = existingNamespaced.getItemsList();
 
     final ArrayList<NamespaceFeature> updatedNamespacedItemsList = Lists.newArrayList();

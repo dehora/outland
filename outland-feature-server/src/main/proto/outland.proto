@@ -96,7 +96,7 @@ message Feature {
     map<string, string> properties = 9;
     OptionCollection options = 10;
     FeatureVersion version = 12;
-    NamespaceFeatureCollection namespaced = 14;
+    NamespaceFeatureCollection namespaces = 14;
 }
 
 message FeatureCollection {

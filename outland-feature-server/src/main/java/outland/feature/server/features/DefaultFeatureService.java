@@ -77,6 +77,18 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
     logger.info("{} /feature[{}]", kvp("op", "registerFeature"),
         TextFormat.shortDebugString(registering));
 
+    Feature feature = prepareNewFeature(registering);
+
+    timed(saveFeatureTimer, () -> featureStorage.createFeature(feature));
+
+    logger.info("{} /feature=[{}]", kvp("op", "registerFeature", "result", "ok"),
+        TextFormat.shortDebugString(feature));
+
+    addToCache(feature);
+    return Optional.of(feature);
+  }
+
+  private Feature prepareNewFeature(Feature registering) {
     FeatureValidator featureValidator = new FeatureValidator();
 
     // catch bad input before merging
@@ -100,18 +112,10 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
     builder.clearOwner();
     applyOwnerRegister(registering, builder);
 
-    builder.clearNamespaced();
+    builder.clearNamespaces();
     applyFeatureNamespaceRegister(registering, builder);
 
-    Feature feature = builder.build();
-
-    timed(saveFeatureTimer, () -> featureStorage.createFeature(feature));
-
-    logger.info("{} /feature=[{}]", kvp("op", "registerFeature", "result", "ok"),
-        TextFormat.shortDebugString(feature));
-
-    addToCache(feature);
-    return Optional.of(feature);
+    return builder.build();
   }
 
   @Override
@@ -188,7 +192,7 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
     }
 
     // process namespaces if we received some
-    if(updates.hasNamespaced()) {
+    if(updates.hasNamespaces()) {
       applyFeatureNamespaceUpdate(found, updates, wipBuilder);
     }
 
@@ -355,8 +359,8 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
     builder.setType("namespace.feature.collection").addAllItems(namespaceFeatures);
 
     final Feature.Builder wipBuilder = feature.toBuilder()
-        .clearNamespaced()
-        .setNamespaced(builder);
+        .clearNamespaces()
+        .setNamespaces(builder);
 
 
     final FeatureVersion foundVersion = feature.getVersion();
@@ -392,7 +396,7 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
 
     final Feature feature = maybe.get();
 
-    final NamespaceFeatureCollection namespaced = feature.getNamespaced();
+    final NamespaceFeatureCollection namespaced = feature.getNamespaces();
 
     final ArrayList<NamespaceFeature> namespaceFeatures =
         Lists.newArrayList(namespaced.getItemsList());
@@ -417,8 +421,8 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
         .addAllItems(namespaceFeatures);
 
     final Feature.Builder wipBuilder = feature.toBuilder()
-        .clearNamespaced()
-        .setNamespaced(nfcBuilder);
+        .clearNamespaces()
+        .setNamespaces(nfcBuilder);
 
     final FeatureVersion foundVersion = feature.getVersion();
     applyVersion(feature, wipBuilder);
@@ -475,11 +479,11 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
   private void applyFeatureNamespaceUpdate(
       Feature existing, Feature incoming, Feature.Builder wipBuilder) {
 
-    if(! incoming.hasNamespaced()) {
+    if(! incoming.hasNamespaces()) {
       return;
     }
 
-    wipBuilder.clearNamespaced();
+    wipBuilder.clearNamespaces();
 
     FeatureUpdateProcessor processor = new FeatureUpdateProcessor(versionService);
     List<NamespaceFeature> merged = processor.buildMergedNamespaceFeatures(existing, incoming);
@@ -488,7 +492,7 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
         .setType("namespace.feature.collection")
         .addAllItems(merged);
 
-    wipBuilder.setNamespaced(nfcBuilder);
+    wipBuilder.setNamespaces(nfcBuilder);
   }
 
   private void applyNamespaceFeatureOptionsRegister(
@@ -528,13 +532,13 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
 
   private void applyFeatureNamespaceRegister(Feature registering, Feature.Builder builder) {
 
-    if(! registering.hasNamespaced()) {
+    if(! registering.hasNamespaces()) {
       return;
     }
 
     final FeatureUpdateProcessor processor = new FeatureUpdateProcessor(versionService);
 
-    final NamespaceFeatureCollection registeringNamespaced = registering.getNamespaced();
+    final NamespaceFeatureCollection registeringNamespaced = registering.getNamespaces();
     final List<NamespaceFeature> incomingFeaturesList = registeringNamespaced.getItemsList();
     final ArrayList<NamespaceFeature> registeringNamespaceFeatures = Lists.newArrayList();
 
@@ -565,7 +569,7 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
         .setType("namespace.feature.collection")
         .addAllItems(registeringNamespaceFeatures);
 
-    builder.setNamespaced(nfcBuilder);
+    builder.setNamespaces(nfcBuilder);
 
   }
 

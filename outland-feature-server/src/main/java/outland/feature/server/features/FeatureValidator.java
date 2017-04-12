@@ -28,7 +28,7 @@ class FeatureValidator {
       // only validate options if they're sent and we're not a flag type
       validateOptionsThrowing(feature.getOptions());
 
-      if (feature.hasNamespaced()) {
+      if (feature.hasNamespaces()) {
         validateNamespaceFeaturesThrowing(feature);
       }
     }
@@ -40,7 +40,7 @@ class FeatureValidator {
     validateKeysThrowing(feature);
     validateOptionsThrowing(feature.getOptions());
 
-    if (feature.hasNamespaced()) {
+    if (feature.hasNamespaces()) {
       validateNamespaceFeaturesThrowing(feature);
     }
   }
@@ -57,7 +57,7 @@ class FeatureValidator {
 
   private void validateNamespaceFeaturesThrowing(Feature feature) {
 
-    final List<NamespaceFeature> itemsList = feature.getNamespaced().getItemsList();
+    final List<NamespaceFeature> itemsList = feature.getNamespaces().getItemsList();
     for (NamespaceFeature namespaceFeature : itemsList) {
       validateFeatureDataNewCandidateThrowing(feature, namespaceFeature);
     }
