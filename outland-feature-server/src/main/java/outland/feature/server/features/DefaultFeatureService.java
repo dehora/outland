@@ -3,7 +3,6 @@ package outland.feature.server.features;
 import com.codahale.metrics.Meter;
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.Timer;
-import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
 import com.google.protobuf.TextFormat;
@@ -19,13 +18,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import outland.feature.proto.Feature;
 import outland.feature.proto.FeatureCollection;
-import outland.feature.proto.FeatureOption;
 import outland.feature.proto.FeatureVersion;
 import outland.feature.proto.NamespaceFeature;
 import outland.feature.proto.NamespaceFeatureCollection;
-import outland.feature.proto.OptionCollection;
-import outland.feature.proto.OptionType;
-import outland.feature.proto.Owner;
 
 import static outland.feature.server.StructLog.kvp;
 
@@ -45,6 +40,7 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
   private final FeatureCache featureCache;
   private final VersionService versionService;
   private final FeatureRegisterProcessor featureRegisterProcessor;
+  private final FeatureUpdateProcessor featureUpdateProcessor;
 
   private Timer saveFeatureTimer;
   private Timer updateFeatureTimer;
@@ -69,6 +65,7 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
     this.featureCache = featureCache;
     this.versionService = versionService;
     this.featureRegisterProcessor = new FeatureRegisterProcessor(versionService);
+    this.featureUpdateProcessor = new FeatureUpdateProcessor(versionService);
     configureMetrics(metrics);
   }
 
@@ -100,7 +97,6 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
     // catch bad input before merging
     featureValidator.validateFeatureUpdateThrowing(updates);
 
-    String now = TimeSupport.asString(OffsetDateTime.now());
     Optional<Feature> maybeFound =
         timed(loadFeatureByKeyTimer, () -> featureStorage.loadFeatureByKey(group, featureKey));
 
@@ -111,66 +107,13 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
 
     Feature found = maybeFound.get();
 
-    featureValidator.validateOptionIdsForUpdate(found.getOptions(), updates.getOptions());
-
     logger.info("{} /found_feature=[{}]",
         kvp("op", "updateFeature", "group", group, "feature_key", featureKey),
         TextFormat.shortDebugString(found));
 
-    Feature.Builder wipBuilder = found.toBuilder()
-        .mergeFrom(updates)
-        .setUpdated(now);
-
-    // can't change some values in update
-    wipBuilder.setType("feature");
-    wipBuilder.setCreated(found.getCreated());
-    wipBuilder.setId(found.getId());
-    wipBuilder.setGroup(found.getGroup());
-    wipBuilder.setKey(found.getKey());
+    Feature updated = featureUpdateProcessor.prepareUpdateFeature(found, updates);
 
     final FeatureVersion foundVersion = found.getVersion();
-    applyVersion(updates, wipBuilder);
-
-    // process options if we received some
-    if (updates.getOptions().getOption().equals(OptionType.bool)
-        && updates.getOptions().getItemsCount() != 0) {
-
-      // clear out options, we can rebuild them
-      wipBuilder.clearOptions();
-      final OptionCollection.Builder wipOptionsBuilder = OptionCollection.newBuilder();
-
-      List<FeatureOption> options = applyOptionsUpdate(updates, found);
-      wipOptionsBuilder.addAllItems(options);
-
-      // can't change some values in update
-      wipOptionsBuilder.setOption(found.getOptions().getOption());
-      wipOptionsBuilder.setType("options.collection");
-      wipOptionsBuilder.setMaxweight(DEFAULT_MAXWEIGHT);
-
-      wipBuilder.setOptions(wipOptionsBuilder);
-    }
-
-    if (updates.hasOwner()) {
-      Owner foundOwner = found.getOwner();
-      wipBuilder.clearOwner();
-      applyOwnerUpdate(updates, foundOwner, wipBuilder);
-    }
-
-    // a value other than none indicates the client sent something
-    if (!updates.getState().equals(Feature.State.none)) {
-      wipBuilder.setState(updates.getState());
-    }
-
-    // process namespaces if we received some
-    if(updates.hasNamespaces()) {
-      applyFeatureNamespaceUpdate(found, updates, wipBuilder);
-    }
-
-    Feature updated = wipBuilder.build();
-
-    // post check everything
-    featureValidator.validateFeatureRegistrationThrowing(updated);
-
     timed(updateFeatureTimer, () -> featureStorage.updateFeature(updated, foundVersion));
 
     logger.info("{} /updated_feature=[{}]",
@@ -414,80 +357,6 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
 
     addToCache(updated);
     return updated;
-  }
-
-  private List<FeatureOption> applyOptionsUpdate(Feature updated, Feature found) {
-
-    final ArrayList<FeatureOption> results = Lists.newArrayList();
-
-    // nothing in the update, return what we have
-    if (updated.getOptions().getItemsCount() == 0) {
-      results.addAll(found.getOptions().getItemsList());
-      return results;
-    }
-
-    final List<FeatureOption> updatedOptionsList = updated.getOptions().getItemsList();
-    final List<FeatureOption> foundOptionsList = found.getOptions().getItemsList();
-
-    for (FeatureOption updateOption : updatedOptionsList) {
-      final String updateId = updateOption.getId();
-
-      for (FeatureOption foundOption : foundOptionsList) {
-        final FeatureOption.Builder builder = foundOption.toBuilder();
-        if (foundOption.getId().equals(updateId)) {
-          // weight is the only field we change
-          builder.setWeight(updateOption.getWeight());
-          results.add(builder.build());
-          break;
-        }
-      }
-    }
-
-    return results;
-  }
-
-  private void applyFeatureNamespaceUpdate(
-      Feature existing, Feature incoming, Feature.Builder wipBuilder) {
-
-    if(! incoming.hasNamespaces()) {
-      return;
-    }
-
-    wipBuilder.clearNamespaces();
-
-    FeatureUpdateProcessor processor = new FeatureUpdateProcessor(versionService);
-    List<NamespaceFeature> merged = processor.buildMergedNamespaceFeatures(existing, incoming);
-
-    final NamespaceFeatureCollection.Builder nfcBuilder = NamespaceFeatureCollection.newBuilder()
-        .setType("namespace.feature.collection")
-        .addAllItems(merged);
-
-    wipBuilder.setNamespaces(nfcBuilder);
-  }
-
-  private void applyOwnerUpdate(Feature updates, Owner foundOwner, Feature.Builder builder) {
-    final Owner updateOwner = updates.getOwner();
-    new FeatureValidator().validateOwner(updateOwner);
-
-    if ((!Strings.isNullOrEmpty(updateOwner.getEmail())
-        && !updateOwner.getEmail().equals(foundOwner.getEmail()))
-        &&
-        (!Strings.isNullOrEmpty(updateOwner.getUsername())
-            && !updateOwner.getUsername().equals(foundOwner.getEmail()))) {
-      // treat as new owner
-      final Owner.Builder replacementOwnerBuilder = updateOwner.toBuilder();
-      replacementOwnerBuilder.setType("featureowner");
-      replacementOwnerBuilder.setId("own_" + Ulid.random());
-      builder.setOwner(replacementOwnerBuilder.buildPartial());
-    } else {
-
-      final Owner.Builder wipOwnerBuilder = foundOwner.toBuilder().mergeFrom(updateOwner);
-      // some fields can't be changed
-      wipOwnerBuilder.setType("featureowner");
-      wipOwnerBuilder.setId(foundOwner.getId());
-
-      builder.setOwner(wipOwnerBuilder.buildPartial());
-    }
   }
 
   private void applyVersion(Feature registering, Feature.Builder builder) {
