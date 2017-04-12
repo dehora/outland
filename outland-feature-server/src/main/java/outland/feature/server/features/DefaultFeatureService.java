@@ -18,7 +18,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import outland.feature.proto.Feature;
 import outland.feature.proto.FeatureCollection;
-import outland.feature.proto.FeatureVersion;
 import outland.feature.proto.NamespaceFeature;
 import outland.feature.proto.NamespaceFeatureCollection;
 
@@ -90,16 +89,15 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
 
     featureValidator.validateFeatureUpdateThrowing(updates);
 
-    final Optional<Feature> maybeFound =
+    final Optional<Feature> maybe =
         timed(loadFeatureByKeyTimer, () -> featureStorage.loadFeatureByKey(group, featureKey));
 
-    if (!maybeFound.isPresent()) {
-      return maybeFound;
+    if (!maybe.isPresent()) {
+      return maybe;
     }
 
-    final Feature existing = maybeFound.get();
-    final Feature prepared = featureUpdateProcessor.prepareUpdateFeature(existing, updates);
-    featureValidator.validateFeatureUpdateThrowing(prepared);
+    final Feature existing = maybe.get();
+    final Feature prepared = featureUpdateProcessor.prepareUpdateFeatureThrowing(existing, updates);
     timed(updateFeatureTimer, () -> featureStorage.updateFeature(prepared, existing.getVersion()));
     addToCache(prepared);
     return Optional.of(prepared);
@@ -109,7 +107,7 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
 
     logger.info("{}", kvp("op", "loadFeatureByKey", "group", group, "feature_key", featureKey));
 
-    Optional<Feature> cached = timed(loadFeatureCacheTimer,
+    final Optional<Feature> cached = timed(loadFeatureCacheTimer,
         () -> featureCache.findInCache(featureCache.buildCacheKeyByFeatureKey(group, featureKey)));
 
     if (cached.isPresent()) {
@@ -194,33 +192,12 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
     logger.info("{} {}", kvp("op", "addNamespaceFeature"),
         TextFormat.shortDebugString(namespaceFeature));
 
-    final FeatureValidator featureValidator = new FeatureValidator();
     featureValidator.validateFeatureDataNewCandidateThrowing(feature, namespaceFeature);
 
-    final FeatureUpdateProcessor processor = new FeatureUpdateProcessor(versionService);
     final List<NamespaceFeature> namespaceFeatures =
-        processor.buildMergedNamespaceFeatures(feature, namespaceFeature);
+        featureUpdateProcessor.buildMergedNamespaceFeatures(feature, namespaceFeature);
 
-    final NamespaceFeatureCollection.Builder builder = NamespaceFeatureCollection.newBuilder();
-    builder.setType("namespace.feature.collection").addAllItems(namespaceFeatures);
-
-    final Feature.Builder wipBuilder = feature.toBuilder()
-        .clearNamespaces()
-        .setNamespaces(builder);
-
-    final FeatureVersion foundVersion = feature.getVersion();
-
-    final String now = TimeSupport.asString(OffsetDateTime.now());
-    wipBuilder.setUpdated(now);
-
-    versionSupport.applyVersion(feature, wipBuilder);
-
-    final Feature updated = wipBuilder.build();
-
-    featureValidator.validateFeatureRegistrationThrowing(updated);
-    timed(updateFeatureTimer, () -> featureStorage.updateFeature(updated, foundVersion));
-    addToCache(updated);
-    return updated;
+    return update(feature, namespaceFeatures);
   }
 
   @Override public Feature removeNamespaceFeature(String group, String featureKey,
@@ -232,9 +209,8 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
     }
 
     final Feature feature = maybe.get();
-    final NamespaceFeatureCollection namespaced = feature.getNamespaces();
-    final List<NamespaceFeature> namespaceFeatures = Lists.newArrayList(namespaced.getItemsList());
-
+    final NamespaceFeatureCollection namespaces = feature.getNamespaces();
+    final List<NamespaceFeature> namespaceFeatures = Lists.newArrayList(namespaces.getItemsList());
     NamespaceFeature namespaceFeature = null;
     final Iterator<NamespaceFeature> iterator = namespaceFeatures.iterator();
     while (iterator.hasNext()) {
@@ -250,23 +226,12 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
       return null;
     }
 
-    final NamespaceFeatureCollection.Builder nfcBuilder = NamespaceFeatureCollection.newBuilder()
-        .setType("namespace.feature.collection")
-        .addAllItems(namespaceFeatures);
+    return update(feature, namespaceFeatures);
+  }
 
-    final Feature.Builder wipBuilder = feature.toBuilder()
-        .clearNamespaces()
-        .setNamespaces(nfcBuilder);
-
-    final FeatureVersion foundVersion = feature.getVersion();
-    versionSupport.applyVersion(feature, wipBuilder);
-    wipBuilder.setUpdated(TimeSupport.asString(OffsetDateTime.now()));
-
-    final Feature updated = wipBuilder.build();
-    final FeatureValidator featureValidator = new FeatureValidator();
-    featureValidator.validateFeatureRegistrationThrowing(updated);
-
-    timed(updateFeatureTimer, () -> featureStorage.updateFeature(updated, foundVersion));
+  private Feature update(Feature feature, List<NamespaceFeature> namespaceFeatures) {
+    final Feature updated = featureUpdateProcessor.prepareUpdateNamespaceFeatureThrowing(feature, namespaceFeatures);
+    timed(updateFeatureTimer, () -> featureStorage.updateFeature(updated, feature.getVersion()));
     addToCache(updated);
     return updated;
   }

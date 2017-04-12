@@ -18,10 +18,15 @@ class FeatureValidator {
 
   void validateFeatureUpdateThrowing(Feature feature) throws ServiceException {
 
+    if (feature.hasOwner()) {
+      validateOwner(feature.getOwner());
+    }
+
+    validateKeysThrowing(feature);
+
     if (OptionType.flag != feature.getOptions().getOption()) {
       validateOptionsHaveIdsThrowing(feature);
     }
-    validateKeysThrowing(feature);
 
     if (OptionType.flag != feature.getOptions().getOption()
         && feature.getOptions().getItemsCount() != 0) {

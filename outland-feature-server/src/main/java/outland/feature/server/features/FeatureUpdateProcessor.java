@@ -25,12 +25,31 @@ import static outland.feature.server.features.DefaultFeatureService.DEFAULT_MAXW
 public class FeatureUpdateProcessor {
 
   private final VersionService versionService;
+  private final VersionSupport versionSupport;
+  private final FeatureValidator featureValidator;
 
   public FeatureUpdateProcessor(VersionService versionService) {
     this.versionService = versionService;
+    this.versionSupport = new VersionSupport(versionService);
+    this.featureValidator = new FeatureValidator();
   }
 
-  Feature prepareUpdateFeature(Feature existing, Feature incoming) {
+  Feature prepareUpdateNamespaceFeatureThrowing(Feature feature, List<NamespaceFeature> namespaceFeatures) {
+    final NamespaceFeatureCollection.Builder nfcBuilder = NamespaceFeatureCollection.newBuilder()
+        .setType("namespace.feature.collection")
+        .addAllItems(namespaceFeatures);
+    final Feature.Builder featureBuilder = feature.toBuilder()
+        .clearNamespaces()
+        .setNamespaces(nfcBuilder);
+    final FeatureVersion nextVersion = versionSupport.generateVersion(feature);
+    featureBuilder.setVersion(nextVersion);
+    featureBuilder.setUpdated(timeNow());
+    final Feature updated = featureBuilder.build();
+    featureValidator.validateFeatureRegistrationThrowing(updated);
+    return updated;
+  }
+
+  Feature prepareUpdateFeatureThrowing(Feature existing, Feature incoming) {
 
     FeatureValidator featureValidator = new FeatureValidator();
 
@@ -89,7 +108,7 @@ public class FeatureUpdateProcessor {
     Feature updated = wipBuilder.build();
 
     // post check everything
-    featureValidator.validateFeatureRegistrationThrowing(updated);
+    featureValidator.validateFeatureUpdateThrowing(updated);
     return updated;
   }
 
@@ -427,5 +446,9 @@ public class FeatureUpdateProcessor {
 
   private boolean isMatching(NamespaceFeature existing, NamespaceFeature incoming) {
     return existing.getNamespace().equals(incoming.getNamespace());
+  }
+
+  private String timeNow() {
+    return TimeSupport.asString(OffsetDateTime.now());
   }
 }
