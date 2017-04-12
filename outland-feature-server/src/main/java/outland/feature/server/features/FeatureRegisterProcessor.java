@@ -13,16 +13,18 @@ import outland.feature.proto.OptionCollection;
 import outland.feature.proto.OptionType;
 import outland.feature.proto.Owner;
 
-public class FeatureRegisterProcessor {
+class FeatureRegisterProcessor {
 
   private static final int DEFAULT_MAXWEIGHT = FeatureService.DEFAULT_MAXWEIGHT;
 
   private final VersionService versionService;
   private final VersionSupport versionSupport;
+  private final OptionsProcessor optionsProcessor;
 
-  public FeatureRegisterProcessor(VersionService versionService) {
+  FeatureRegisterProcessor(VersionService versionService) {
     this.versionService = versionService;
-    versionSupport = new VersionSupport(versionService);
+    this.versionSupport = new VersionSupport(versionService);
+    this.optionsProcessor = new OptionsProcessor();
   }
 
   Feature prepareNewFeature(Feature registering) {
@@ -42,7 +44,7 @@ public class FeatureRegisterProcessor {
     builder.setUpdated(builder.getCreated());
     builder.setState(Feature.State.off); // always disabled on registerFeature
 
-    versionSupport.applyVersion(registering, builder);
+    builder.setVersion(versionSupport.generateVersion(registering));
     builder.clearOptions();
     applyOptionsRegister(registering, builder);
 
@@ -72,7 +74,7 @@ public class FeatureRegisterProcessor {
       if (feature.getOptions().getItemsCount() != 0) {
 
         final List<FeatureOption> options = feature.getOptions().getItemsList();
-        applyBooleanOptions(collectionBuilder, options);
+        optionsProcessor.applyBooleanOptions(collectionBuilder, options);
         builder.setOptions(collectionBuilder);
       } else {
 
@@ -105,17 +107,6 @@ public class FeatureRegisterProcessor {
     builder.setOwner(ownerBuilder.buildPartial());
   }
 
-  private void applyBooleanOptions(OptionCollection.Builder collectionBuilder,
-      List<FeatureOption> options) {
-    for (FeatureOption option : options) {
-      final FeatureOption.Builder optionBuilder = FeatureOption.newBuilder().mergeFrom(option);
-      optionBuilder.setType("option");
-      optionBuilder.setId("opt_" + Ulid.random());
-      optionBuilder.setOption(OptionType.bool);
-      collectionBuilder.addItems(optionBuilder);
-    }
-  }
-
   private void applyNamespaceFeatureOptionsRegister(
       NamespaceFeature incoming, FeatureData.Builder featureDataBuilder) {
 
@@ -134,7 +125,7 @@ public class FeatureRegisterProcessor {
       if (incoming.getFeature().getOptions().getItemsCount() != 0) {
 
         final List<FeatureOption> options = incoming.getFeature().getOptions().getItemsList();
-        applyBooleanOptions(optionCollectionBuilder, options);
+        optionsProcessor.applyBooleanOptions(optionCollectionBuilder, options);
         featureDataBuilder.setOptions(optionCollectionBuilder);
       }
     }

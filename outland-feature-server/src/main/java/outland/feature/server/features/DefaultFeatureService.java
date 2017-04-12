@@ -37,10 +37,8 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
 
   private final FeatureStorage featureStorage;
   private final FeatureCache featureCache;
-  private final VersionService versionService;
   private final FeatureRegisterProcessor featureRegisterProcessor;
   private final FeatureUpdateProcessor featureUpdateProcessor;
-  private final VersionSupport versionSupport;
   private final FeatureValidator featureValidator;
   private Timer saveFeatureTimer;
   private Timer updateFeatureTimer;
@@ -63,10 +61,8 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
   ) {
     this.featureStorage = featureStorage;
     this.featureCache = featureCache;
-    this.versionService = versionService;
     this.featureRegisterProcessor = new FeatureRegisterProcessor(versionService);
     this.featureUpdateProcessor = new FeatureUpdateProcessor(versionService);
-    this.versionSupport = new VersionSupport(versionService);
     configureMetrics(metrics);
     featureValidator = new FeatureValidator();
   }
