@@ -151,13 +151,13 @@ public  final class Feature extends
           }
           case 114: {
             outland.feature.proto.NamespaceFeatureCollection.Builder subBuilder = null;
-            if (namespaced_ != null) {
-              subBuilder = namespaced_.toBuilder();
+            if (namespaces_ != null) {
+              subBuilder = namespaces_.toBuilder();
             }
-            namespaced_ = input.readMessage(outland.feature.proto.NamespaceFeatureCollection.parser(), extensionRegistry);
+            namespaces_ = input.readMessage(outland.feature.proto.NamespaceFeatureCollection.parser(), extensionRegistry);
             if (subBuilder != null) {
-              subBuilder.mergeFrom(namespaced_);
-              namespaced_ = subBuilder.buildPartial();
+              subBuilder.mergeFrom(namespaces_);
+              namespaces_ = subBuilder.buildPartial();
             }
 
             break;
@@ -697,25 +697,25 @@ public  final class Feature extends
     return getVersion();
   }
 
-  public static final int NAMESPACED_FIELD_NUMBER = 14;
-  private outland.feature.proto.NamespaceFeatureCollection namespaced_;
+  public static final int NAMESPACES_FIELD_NUMBER = 14;
+  private outland.feature.proto.NamespaceFeatureCollection namespaces_;
   /**
-   * <code>optional .outland.NamespaceFeatureCollection namespaced = 14;</code>
+   * <code>optional .outland.NamespaceFeatureCollection namespaces = 14;</code>
    */
-  public boolean hasNamespaced() {
-    return namespaced_ != null;
+  public boolean hasNamespaces() {
+    return namespaces_ != null;
   }
   /**
-   * <code>optional .outland.NamespaceFeatureCollection namespaced = 14;</code>
+   * <code>optional .outland.NamespaceFeatureCollection namespaces = 14;</code>
    */
-  public outland.feature.proto.NamespaceFeatureCollection getNamespaced() {
-    return namespaced_ == null ? outland.feature.proto.NamespaceFeatureCollection.getDefaultInstance() : namespaced_;
+  public outland.feature.proto.NamespaceFeatureCollection getNamespaces() {
+    return namespaces_ == null ? outland.feature.proto.NamespaceFeatureCollection.getDefaultInstance() : namespaces_;
   }
   /**
-   * <code>optional .outland.NamespaceFeatureCollection namespaced = 14;</code>
+   * <code>optional .outland.NamespaceFeatureCollection namespaces = 14;</code>
    */
-  public outland.feature.proto.NamespaceFeatureCollectionOrBuilder getNamespacedOrBuilder() {
-    return getNamespaced();
+  public outland.feature.proto.NamespaceFeatureCollectionOrBuilder getNamespacesOrBuilder() {
+    return getNamespaces();
   }
 
   private byte memoizedIsInitialized = -1;
@@ -772,8 +772,8 @@ public  final class Feature extends
     if (!getTypeBytes().isEmpty()) {
       com.google.protobuf.GeneratedMessageV3.writeString(output, 13, type_);
     }
-    if (namespaced_ != null) {
-      output.writeMessage(14, getNamespaced());
+    if (namespaces_ != null) {
+      output.writeMessage(14, getNamespaces());
     }
   }
 
@@ -829,9 +829,9 @@ public  final class Feature extends
     if (!getTypeBytes().isEmpty()) {
       size += com.google.protobuf.GeneratedMessageV3.computeStringSize(13, type_);
     }
-    if (namespaced_ != null) {
+    if (namespaces_ != null) {
       size += com.google.protobuf.CodedOutputStream
-        .computeMessageSize(14, getNamespaced());
+        .computeMessageSize(14, getNamespaces());
     }
     memoizedSize = size;
     return size;
@@ -881,10 +881,10 @@ public  final class Feature extends
       result = result && getVersion()
           .equals(other.getVersion());
     }
-    result = result && (hasNamespaced() == other.hasNamespaced());
-    if (hasNamespaced()) {
-      result = result && getNamespaced()
-          .equals(other.getNamespaced());
+    result = result && (hasNamespaces() == other.hasNamespaces());
+    if (hasNamespaces()) {
+      result = result && getNamespaces()
+          .equals(other.getNamespaces());
     }
     return result;
   }
@@ -928,9 +928,9 @@ public  final class Feature extends
       hash = (37 * hash) + VERSION_FIELD_NUMBER;
       hash = (53 * hash) + getVersion().hashCode();
     }
-    if (hasNamespaced()) {
-      hash = (37 * hash) + NAMESPACED_FIELD_NUMBER;
-      hash = (53 * hash) + getNamespaced().hashCode();
+    if (hasNamespaces()) {
+      hash = (37 * hash) + NAMESPACES_FIELD_NUMBER;
+      hash = (53 * hash) + getNamespaces().hashCode();
     }
     hash = (29 * hash) + unknownFields.hashCode();
     memoizedHashCode = hash;
@@ -1107,11 +1107,11 @@ public  final class Feature extends
         version_ = null;
         versionBuilder_ = null;
       }
-      if (namespacedBuilder_ == null) {
-        namespaced_ = null;
+      if (namespacesBuilder_ == null) {
+        namespaces_ = null;
       } else {
-        namespaced_ = null;
-        namespacedBuilder_ = null;
+        namespaces_ = null;
+        namespacesBuilder_ = null;
       }
       return this;
     }
@@ -1162,10 +1162,10 @@ public  final class Feature extends
       } else {
         result.version_ = versionBuilder_.build();
       }
-      if (namespacedBuilder_ == null) {
-        result.namespaced_ = namespaced_;
+      if (namespacesBuilder_ == null) {
+        result.namespaces_ = namespaces_;
       } else {
-        result.namespaced_ = namespacedBuilder_.build();
+        result.namespaces_ = namespacesBuilder_.build();
       }
       result.bitField0_ = to_bitField0_;
       onBuilt();
@@ -1251,8 +1251,8 @@ public  final class Feature extends
       if (other.hasVersion()) {
         mergeVersion(other.getVersion());
       }
-      if (other.hasNamespaced()) {
-        mergeNamespaced(other.getNamespaced());
+      if (other.hasNamespaces()) {
+        mergeNamespaces(other.getNamespaces());
       }
       onChanged();
       return this;
@@ -2278,121 +2278,121 @@ public  final class Feature extends
       return versionBuilder_;
     }
 
-    private outland.feature.proto.NamespaceFeatureCollection namespaced_ = null;
+    private outland.feature.proto.NamespaceFeatureCollection namespaces_ = null;
     private com.google.protobuf.SingleFieldBuilderV3<
-        outland.feature.proto.NamespaceFeatureCollection, outland.feature.proto.NamespaceFeatureCollection.Builder, outland.feature.proto.NamespaceFeatureCollectionOrBuilder> namespacedBuilder_;
+        outland.feature.proto.NamespaceFeatureCollection, outland.feature.proto.NamespaceFeatureCollection.Builder, outland.feature.proto.NamespaceFeatureCollectionOrBuilder> namespacesBuilder_;
     /**
-     * <code>optional .outland.NamespaceFeatureCollection namespaced = 14;</code>
+     * <code>optional .outland.NamespaceFeatureCollection namespaces = 14;</code>
      */
-    public boolean hasNamespaced() {
-      return namespacedBuilder_ != null || namespaced_ != null;
+    public boolean hasNamespaces() {
+      return namespacesBuilder_ != null || namespaces_ != null;
     }
     /**
-     * <code>optional .outland.NamespaceFeatureCollection namespaced = 14;</code>
+     * <code>optional .outland.NamespaceFeatureCollection namespaces = 14;</code>
      */
-    public outland.feature.proto.NamespaceFeatureCollection getNamespaced() {
-      if (namespacedBuilder_ == null) {
-        return namespaced_ == null ? outland.feature.proto.NamespaceFeatureCollection.getDefaultInstance() : namespaced_;
+    public outland.feature.proto.NamespaceFeatureCollection getNamespaces() {
+      if (namespacesBuilder_ == null) {
+        return namespaces_ == null ? outland.feature.proto.NamespaceFeatureCollection.getDefaultInstance() : namespaces_;
       } else {
-        return namespacedBuilder_.getMessage();
+        return namespacesBuilder_.getMessage();
       }
     }
     /**
-     * <code>optional .outland.NamespaceFeatureCollection namespaced = 14;</code>
+     * <code>optional .outland.NamespaceFeatureCollection namespaces = 14;</code>
      */
-    public Builder setNamespaced(outland.feature.proto.NamespaceFeatureCollection value) {
-      if (namespacedBuilder_ == null) {
+    public Builder setNamespaces(outland.feature.proto.NamespaceFeatureCollection value) {
+      if (namespacesBuilder_ == null) {
         if (value == null) {
           throw new NullPointerException();
         }
-        namespaced_ = value;
+        namespaces_ = value;
         onChanged();
       } else {
-        namespacedBuilder_.setMessage(value);
+        namespacesBuilder_.setMessage(value);
       }
 
       return this;
     }
     /**
-     * <code>optional .outland.NamespaceFeatureCollection namespaced = 14;</code>
+     * <code>optional .outland.NamespaceFeatureCollection namespaces = 14;</code>
      */
-    public Builder setNamespaced(
+    public Builder setNamespaces(
         outland.feature.proto.NamespaceFeatureCollection.Builder builderForValue) {
-      if (namespacedBuilder_ == null) {
-        namespaced_ = builderForValue.build();
+      if (namespacesBuilder_ == null) {
+        namespaces_ = builderForValue.build();
         onChanged();
       } else {
-        namespacedBuilder_.setMessage(builderForValue.build());
+        namespacesBuilder_.setMessage(builderForValue.build());
       }
 
       return this;
     }
     /**
-     * <code>optional .outland.NamespaceFeatureCollection namespaced = 14;</code>
+     * <code>optional .outland.NamespaceFeatureCollection namespaces = 14;</code>
      */
-    public Builder mergeNamespaced(outland.feature.proto.NamespaceFeatureCollection value) {
-      if (namespacedBuilder_ == null) {
-        if (namespaced_ != null) {
-          namespaced_ =
-            outland.feature.proto.NamespaceFeatureCollection.newBuilder(namespaced_).mergeFrom(value).buildPartial();
+    public Builder mergeNamespaces(outland.feature.proto.NamespaceFeatureCollection value) {
+      if (namespacesBuilder_ == null) {
+        if (namespaces_ != null) {
+          namespaces_ =
+            outland.feature.proto.NamespaceFeatureCollection.newBuilder(namespaces_).mergeFrom(value).buildPartial();
         } else {
-          namespaced_ = value;
+          namespaces_ = value;
         }
         onChanged();
       } else {
-        namespacedBuilder_.mergeFrom(value);
+        namespacesBuilder_.mergeFrom(value);
       }
 
       return this;
     }
     /**
-     * <code>optional .outland.NamespaceFeatureCollection namespaced = 14;</code>
+     * <code>optional .outland.NamespaceFeatureCollection namespaces = 14;</code>
      */
-    public Builder clearNamespaced() {
-      if (namespacedBuilder_ == null) {
-        namespaced_ = null;
+    public Builder clearNamespaces() {
+      if (namespacesBuilder_ == null) {
+        namespaces_ = null;
         onChanged();
       } else {
-        namespaced_ = null;
-        namespacedBuilder_ = null;
+        namespaces_ = null;
+        namespacesBuilder_ = null;
       }
 
       return this;
     }
     /**
-     * <code>optional .outland.NamespaceFeatureCollection namespaced = 14;</code>
+     * <code>optional .outland.NamespaceFeatureCollection namespaces = 14;</code>
      */
-    public outland.feature.proto.NamespaceFeatureCollection.Builder getNamespacedBuilder() {
+    public outland.feature.proto.NamespaceFeatureCollection.Builder getNamespacesBuilder() {
       
       onChanged();
-      return getNamespacedFieldBuilder().getBuilder();
+      return getNamespacesFieldBuilder().getBuilder();
     }
     /**
-     * <code>optional .outland.NamespaceFeatureCollection namespaced = 14;</code>
+     * <code>optional .outland.NamespaceFeatureCollection namespaces = 14;</code>
      */
-    public outland.feature.proto.NamespaceFeatureCollectionOrBuilder getNamespacedOrBuilder() {
-      if (namespacedBuilder_ != null) {
-        return namespacedBuilder_.getMessageOrBuilder();
+    public outland.feature.proto.NamespaceFeatureCollectionOrBuilder getNamespacesOrBuilder() {
+      if (namespacesBuilder_ != null) {
+        return namespacesBuilder_.getMessageOrBuilder();
       } else {
-        return namespaced_ == null ?
-            outland.feature.proto.NamespaceFeatureCollection.getDefaultInstance() : namespaced_;
+        return namespaces_ == null ?
+            outland.feature.proto.NamespaceFeatureCollection.getDefaultInstance() : namespaces_;
       }
     }
     /**
-     * <code>optional .outland.NamespaceFeatureCollection namespaced = 14;</code>
+     * <code>optional .outland.NamespaceFeatureCollection namespaces = 14;</code>
      */
     private com.google.protobuf.SingleFieldBuilderV3<
         outland.feature.proto.NamespaceFeatureCollection, outland.feature.proto.NamespaceFeatureCollection.Builder, outland.feature.proto.NamespaceFeatureCollectionOrBuilder> 
-        getNamespacedFieldBuilder() {
-      if (namespacedBuilder_ == null) {
-        namespacedBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+        getNamespacesFieldBuilder() {
+      if (namespacesBuilder_ == null) {
+        namespacesBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
             outland.feature.proto.NamespaceFeatureCollection, outland.feature.proto.NamespaceFeatureCollection.Builder, outland.feature.proto.NamespaceFeatureCollectionOrBuilder>(
-                getNamespaced(),
+                getNamespaces(),
                 getParentForChildren(),
                 isClean());
-        namespaced_ = null;
+        namespaces_ = null;
       }
-      return namespacedBuilder_;
+      return namespacesBuilder_;
     }
     public final Builder setUnknownFields(
         final com.google.protobuf.UnknownFieldSet unknownFields) {

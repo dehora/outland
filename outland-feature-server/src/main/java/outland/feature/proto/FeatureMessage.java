@@ -128,7 +128,7 @@ public final class FeatureMessage {
       "4\n\nproperties\030\t \003(\0132 .outland.Feature.Pr" +
       "opertiesEntry\022*\n\007options\030\n \001(\0132\031.outland" +
       ".OptionCollection\022(\n\007version\030\014 \001(\0132\027.out",
-      "land.FeatureVersion\0227\n\nnamespaced\030\016 \001(\0132" +
+      "land.FeatureVersion\0227\n\nnamespaces\030\016 \001(\0132" +
       "#.outland.NamespaceFeatureCollection\0321\n\017" +
       "PropertiesEntry\022\013\n\003key\030\001 \001(\t\022\r\n\005value\030\002 " +
       "\001(\t:\0028\001\"\"\n\005State\022\010\n\004none\020\000\022\007\n\003off\020\001\022\006\n\002o" +
@@ -214,7 +214,7 @@ public final class FeatureMessage {
     internal_static_outland_Feature_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_outland_Feature_descriptor,
-        new java.lang.String[] { "Type", "Id", "Key", "Group", "State", "Description", "Created", "Updated", "Owner", "Properties", "Options", "Version", "Namespaced", });
+        new java.lang.String[] { "Type", "Id", "Key", "Group", "State", "Description", "Created", "Updated", "Owner", "Properties", "Options", "Version", "Namespaces", });
     internal_static_outland_Feature_PropertiesEntry_descriptor =
       internal_static_outland_Feature_descriptor.getNestedTypes().get(0);
     internal_static_outland_Feature_PropertiesEntry_fieldAccessorTable = new
