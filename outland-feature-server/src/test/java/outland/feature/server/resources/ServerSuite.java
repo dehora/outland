@@ -17,7 +17,7 @@ import org.junit.runners.Suite;
 import outland.feature.server.ServerConfiguration;
 import outland.feature.server.ServerMain;
 import outland.feature.server.ServerModule;
-import outland.feature.server.namespaces.TestAppModule;
+import outland.feature.server.groups.TestAppModule;
 import outland.feature.server.auth.AuthModule;
 import outland.feature.server.aws.DynamoDbModule;
 import outland.feature.server.features.TestFeatureServiceModule;

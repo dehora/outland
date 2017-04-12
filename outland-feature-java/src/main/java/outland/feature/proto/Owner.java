@@ -19,8 +19,6 @@ public  final class Owner extends
     name_ = "";
     username_ = "";
     email_ = "";
-    created_ = "";
-    updated_ = "";
     type_ = "";
   }
 
@@ -71,18 +69,6 @@ public  final class Owner extends
             java.lang.String s = input.readStringRequireUtf8();
 
             email_ = s;
-            break;
-          }
-          case 42: {
-            java.lang.String s = input.readStringRequireUtf8();
-
-            created_ = s;
-            break;
-          }
-          case 50: {
-            java.lang.String s = input.readStringRequireUtf8();
-
-            updated_ = s;
             break;
           }
           case 58: {
@@ -250,74 +236,6 @@ public  final class Owner extends
     }
   }
 
-  public static final int CREATED_FIELD_NUMBER = 5;
-  private volatile java.lang.Object created_;
-  /**
-   * <code>optional string created = 5;</code>
-   */
-  public java.lang.String getCreated() {
-    java.lang.Object ref = created_;
-    if (ref instanceof java.lang.String) {
-      return (java.lang.String) ref;
-    } else {
-      com.google.protobuf.ByteString bs = 
-          (com.google.protobuf.ByteString) ref;
-      java.lang.String s = bs.toStringUtf8();
-      created_ = s;
-      return s;
-    }
-  }
-  /**
-   * <code>optional string created = 5;</code>
-   */
-  public com.google.protobuf.ByteString
-      getCreatedBytes() {
-    java.lang.Object ref = created_;
-    if (ref instanceof java.lang.String) {
-      com.google.protobuf.ByteString b = 
-          com.google.protobuf.ByteString.copyFromUtf8(
-              (java.lang.String) ref);
-      created_ = b;
-      return b;
-    } else {
-      return (com.google.protobuf.ByteString) ref;
-    }
-  }
-
-  public static final int UPDATED_FIELD_NUMBER = 6;
-  private volatile java.lang.Object updated_;
-  /**
-   * <code>optional string updated = 6;</code>
-   */
-  public java.lang.String getUpdated() {
-    java.lang.Object ref = updated_;
-    if (ref instanceof java.lang.String) {
-      return (java.lang.String) ref;
-    } else {
-      com.google.protobuf.ByteString bs = 
-          (com.google.protobuf.ByteString) ref;
-      java.lang.String s = bs.toStringUtf8();
-      updated_ = s;
-      return s;
-    }
-  }
-  /**
-   * <code>optional string updated = 6;</code>
-   */
-  public com.google.protobuf.ByteString
-      getUpdatedBytes() {
-    java.lang.Object ref = updated_;
-    if (ref instanceof java.lang.String) {
-      com.google.protobuf.ByteString b = 
-          com.google.protobuf.ByteString.copyFromUtf8(
-              (java.lang.String) ref);
-      updated_ = b;
-      return b;
-    } else {
-      return (com.google.protobuf.ByteString) ref;
-    }
-  }
-
   public static final int TYPE_FIELD_NUMBER = 7;
   private volatile java.lang.Object type_;
   /**
@@ -376,12 +294,6 @@ public  final class Owner extends
     if (!getEmailBytes().isEmpty()) {
       com.google.protobuf.GeneratedMessageV3.writeString(output, 4, email_);
     }
-    if (!getCreatedBytes().isEmpty()) {
-      com.google.protobuf.GeneratedMessageV3.writeString(output, 5, created_);
-    }
-    if (!getUpdatedBytes().isEmpty()) {
-      com.google.protobuf.GeneratedMessageV3.writeString(output, 6, updated_);
-    }
     if (!getTypeBytes().isEmpty()) {
       com.google.protobuf.GeneratedMessageV3.writeString(output, 7, type_);
     }
@@ -403,12 +315,6 @@ public  final class Owner extends
     }
     if (!getEmailBytes().isEmpty()) {
       size += com.google.protobuf.GeneratedMessageV3.computeStringSize(4, email_);
-    }
-    if (!getCreatedBytes().isEmpty()) {
-      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(5, created_);
-    }
-    if (!getUpdatedBytes().isEmpty()) {
-      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(6, updated_);
     }
     if (!getTypeBytes().isEmpty()) {
       size += com.google.protobuf.GeneratedMessageV3.computeStringSize(7, type_);
@@ -437,10 +343,6 @@ public  final class Owner extends
         .equals(other.getUsername());
     result = result && getEmail()
         .equals(other.getEmail());
-    result = result && getCreated()
-        .equals(other.getCreated());
-    result = result && getUpdated()
-        .equals(other.getUpdated());
     result = result && getType()
         .equals(other.getType());
     return result;
@@ -461,10 +363,6 @@ public  final class Owner extends
     hash = (53 * hash) + getUsername().hashCode();
     hash = (37 * hash) + EMAIL_FIELD_NUMBER;
     hash = (53 * hash) + getEmail().hashCode();
-    hash = (37 * hash) + CREATED_FIELD_NUMBER;
-    hash = (53 * hash) + getCreated().hashCode();
-    hash = (37 * hash) + UPDATED_FIELD_NUMBER;
-    hash = (53 * hash) + getUpdated().hashCode();
     hash = (37 * hash) + TYPE_FIELD_NUMBER;
     hash = (53 * hash) + getType().hashCode();
     hash = (29 * hash) + unknownFields.hashCode();
@@ -593,10 +491,6 @@ public  final class Owner extends
 
       email_ = "";
 
-      created_ = "";
-
-      updated_ = "";
-
       type_ = "";
 
       return this;
@@ -625,8 +519,6 @@ public  final class Owner extends
       result.name_ = name_;
       result.username_ = username_;
       result.email_ = email_;
-      result.created_ = created_;
-      result.updated_ = updated_;
       result.type_ = type_;
       onBuilt();
       return result;
@@ -683,14 +575,6 @@ public  final class Owner extends
       }
       if (!other.getEmail().isEmpty()) {
         email_ = other.email_;
-        onChanged();
-      }
-      if (!other.getCreated().isEmpty()) {
-        created_ = other.created_;
-        onChanged();
-      }
-      if (!other.getUpdated().isEmpty()) {
-        updated_ = other.updated_;
         onChanged();
       }
       if (!other.getType().isEmpty()) {
@@ -995,144 +879,6 @@ public  final class Owner extends
   checkByteStringIsUtf8(value);
       
       email_ = value;
-      onChanged();
-      return this;
-    }
-
-    private java.lang.Object created_ = "";
-    /**
-     * <code>optional string created = 5;</code>
-     */
-    public java.lang.String getCreated() {
-      java.lang.Object ref = created_;
-      if (!(ref instanceof java.lang.String)) {
-        com.google.protobuf.ByteString bs =
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        created_ = s;
-        return s;
-      } else {
-        return (java.lang.String) ref;
-      }
-    }
-    /**
-     * <code>optional string created = 5;</code>
-     */
-    public com.google.protobuf.ByteString
-        getCreatedBytes() {
-      java.lang.Object ref = created_;
-      if (ref instanceof String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        created_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-    /**
-     * <code>optional string created = 5;</code>
-     */
-    public Builder setCreated(
-        java.lang.String value) {
-      if (value == null) {
-    throw new NullPointerException();
-  }
-  
-      created_ = value;
-      onChanged();
-      return this;
-    }
-    /**
-     * <code>optional string created = 5;</code>
-     */
-    public Builder clearCreated() {
-      
-      created_ = getDefaultInstance().getCreated();
-      onChanged();
-      return this;
-    }
-    /**
-     * <code>optional string created = 5;</code>
-     */
-    public Builder setCreatedBytes(
-        com.google.protobuf.ByteString value) {
-      if (value == null) {
-    throw new NullPointerException();
-  }
-  checkByteStringIsUtf8(value);
-      
-      created_ = value;
-      onChanged();
-      return this;
-    }
-
-    private java.lang.Object updated_ = "";
-    /**
-     * <code>optional string updated = 6;</code>
-     */
-    public java.lang.String getUpdated() {
-      java.lang.Object ref = updated_;
-      if (!(ref instanceof java.lang.String)) {
-        com.google.protobuf.ByteString bs =
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        updated_ = s;
-        return s;
-      } else {
-        return (java.lang.String) ref;
-      }
-    }
-    /**
-     * <code>optional string updated = 6;</code>
-     */
-    public com.google.protobuf.ByteString
-        getUpdatedBytes() {
-      java.lang.Object ref = updated_;
-      if (ref instanceof String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        updated_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-    /**
-     * <code>optional string updated = 6;</code>
-     */
-    public Builder setUpdated(
-        java.lang.String value) {
-      if (value == null) {
-    throw new NullPointerException();
-  }
-  
-      updated_ = value;
-      onChanged();
-      return this;
-    }
-    /**
-     * <code>optional string updated = 6;</code>
-     */
-    public Builder clearUpdated() {
-      
-      updated_ = getDefaultInstance().getUpdated();
-      onChanged();
-      return this;
-    }
-    /**
-     * <code>optional string updated = 6;</code>
-     */
-    public Builder setUpdatedBytes(
-        com.google.protobuf.ByteString value) {
-      if (value == null) {
-    throw new NullPointerException();
-  }
-  checkByteStringIsUtf8(value);
-      
-      updated_ = value;
       onChanged();
       return this;
     }

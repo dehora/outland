@@ -6,7 +6,7 @@ import outland.feature.proto.Feature;
 
 public class TestFeatureCache implements FeatureCache {
 
-  @Override public String buildCacheKeyByFeatureKey(String nsKey, String featureKey) {
+  @Override public String buildCacheKeyByFeatureKey(String group, String featureKey) {
     return "";
   }
 
@@ -14,7 +14,7 @@ public class TestFeatureCache implements FeatureCache {
     return null;
   }
 
-  @Override public Optional<Map<String, String>> getCacheSet(String nsKey) {
+  @Override public Optional<Map<String, String>> getCacheSet(String group) {
     return Optional.empty();
   }
 
@@ -22,7 +22,7 @@ public class TestFeatureCache implements FeatureCache {
     return Optional.empty();
   }
 
-  @Override public Void flushCache(String nsKey, String featureKey, String id) {
+  @Override public Void flushCache(String group, String featureKey, String id) {
     return null;
   }
 

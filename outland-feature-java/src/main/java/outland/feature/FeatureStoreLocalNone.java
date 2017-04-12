@@ -13,7 +13,7 @@ class FeatureStoreLocalNone implements FeatureStoreLocal {
     return FeatureCollection.newBuilder().build();
   }
 
-  @Override public FeatureCollection findAll(String namespace) throws FeatureException {
+  @Override public FeatureCollection findAll(String group) throws FeatureException {
     return FeatureCollection.newBuilder().build();
   }
 

@@ -48,26 +48,6 @@ public interface OwnerOrBuilder extends
       getEmailBytes();
 
   /**
-   * <code>optional string created = 5;</code>
-   */
-  java.lang.String getCreated();
-  /**
-   * <code>optional string created = 5;</code>
-   */
-  com.google.protobuf.ByteString
-      getCreatedBytes();
-
-  /**
-   * <code>optional string updated = 6;</code>
-   */
-  java.lang.String getUpdated();
-  /**
-   * <code>optional string updated = 6;</code>
-   */
-  com.google.protobuf.ByteString
-      getUpdatedBytes();
-
-  /**
    * <code>optional string type = 7;</code>
    */
   java.lang.String getType();

@@ -50,10 +50,10 @@ class FeatureStoreReal implements FeatureStore {
   }
 
   @Override public Void put(Feature feature) {
-    final String storageKey = FeatureStoreKeys.storageKey(feature.getNamespace(), feature.getKey());
+    final String storageKey = FeatureStoreKeys.storageKey(feature.getGroup(), feature.getKey());
 
-    logger.info("op=put, storage=cache, namespace={}, feature_key={} storage_key={}",
-        feature.getNamespace(), feature.getKey(), storageKey);
+    logger.info("op=put, storage=cache, group={}, feature_key={} storage_key={}",
+        feature.getGroup(), feature.getKey(), storageKey);
 
     featureCache.put(storageKey, feature);
 
@@ -63,13 +63,13 @@ class FeatureStoreReal implements FeatureStore {
     return null;
   }
 
-  @Override public Optional<Feature> find(String namespace, String featureKey) {
+  @Override public Optional<Feature> find(String group, String featureKey) {
     try {
 
-      final String storageKey = FeatureStoreKeys.storageKey(namespace, featureKey);
+      final String storageKey = FeatureStoreKeys.storageKey(group, featureKey);
 
-      logger.debug("op=find, namespace={}, feature_key={}, storage_key={}",
-          namespace, featureKey, storageKey);
+      logger.debug("op=find, group={}, feature_key={}, storage_key={}",
+          group, featureKey, storageKey);
 
       return Optional.ofNullable(featureCache.get(storageKey));
     } catch (ExecutionException | UncheckedExecutionException e) {
@@ -78,18 +78,18 @@ class FeatureStoreReal implements FeatureStore {
     }
   }
 
-  @Override public FeatureCollection findAll(String namespace) {
-    logger.info("op=findAll, namespace={}", namespace);
+  @Override public FeatureCollection findAll(String group) {
+    logger.info("op=findAll, group={}", group);
 
-    return client.resources().features().listFeatures(namespace);
+    return client.resources().features().listFeatures(group);
   }
 
-  @Override public Void remove(String namespace, String featureKey) {
+  @Override public Void remove(String group, String featureKey) {
 
-    final String storageKey = FeatureStoreKeys.storageKey(namespace, featureKey);
+    final String storageKey = FeatureStoreKeys.storageKey(group, featureKey);
 
-    logger.info("op=remove, namespace={}, feature_key={} storage_key={}",
-        namespace, featureKey, storageKey);
+    logger.info("op=remove, group={}, feature_key={} storage_key={}",
+        group, featureKey, storageKey);
 
     featureCache.invalidate(storageKey);
     return null;
@@ -109,8 +109,8 @@ class FeatureStoreReal implements FeatureStore {
         final ConcurrentMap<String, Feature> map = featureCache.asMap();
         final Set<Map.Entry<String, Feature>> entries = map.entrySet();
         for (Map.Entry<String, Feature> entry : entries) {
-          logger.info("op=close, action=flush_feature_to_local_store, namespace={}, feature_key={}",
-              entry.getValue().getNamespace(), entry.getValue().getKey());
+          logger.info("op=close, action=flush_feature_to_local_store, group={}, feature_key={}",
+              entry.getValue().getGroup(), entry.getValue().getKey());
           backingFeatureStore.put(entry.getValue());
         }
       } catch (Exception e) {
@@ -133,11 +133,11 @@ class FeatureStoreReal implements FeatureStore {
 
   private void loadFeaturesIntoCache() {
 
-    // only call the api when we are working with a default (pre-supplied) namespace
-    if (client.defaultNamespace() != null) {
+    // only call the api when we are working with a default (pre-supplied) group
+    if (client.defaultGroup() != null) {
       loadFromApiAttempted.getAndSet(true);
       logger.info("op=populateCache, action=attempt_load, source=api");
-      if (loadedFromApi(client.defaultNamespace())) {
+      if (loadedFromApi(client.defaultGroup())) {
         loadFromApiSuccessful.getAndSet(true);
         logger.info("op=populateCache, action=attempt_load, source=api result=ok");
       }
@@ -157,22 +157,22 @@ class FeatureStoreReal implements FeatureStore {
     }
   }
 
-  private boolean loadedFromApi(String namespace) {
+  private boolean loadedFromApi(String group) {
 
     try {
-      FeatureCollection all = findAll(namespace);
+      FeatureCollection all = findAll(group);
       // todo: do we need a distinction between empty and failed or trust the exception?
       if (all != null) {
-        logger.info("op=populateCache, action=load, source=api, feature_count={}, namespace={}",
+        logger.info("op=populateCache, action=load, source=api, feature_count={}, group={}",
             all.getItemsCount(),
-            namespace);
+            group);
         all.getItemsList().forEach(this::put);
         return true;
       }
     } catch (FeatureException e) {
       logger.error(
-          String.format("op=populateCache, action=load, source=api, namespace=%s err=%s",
-              namespace, e.problem().toMessage()));
+          String.format("op=populateCache, action=load, source=api, group=%s err=%s",
+              group, e.problem().toMessage()));
     }
 
     return false;
@@ -182,13 +182,13 @@ class FeatureStoreReal implements FeatureStore {
     try {
 
       FeatureCollection all = null;
-      if(client.defaultNamespace() == null) {
-        logger.info("op=loadedFromLocal, action=attempt_load_multi_namespace, source=local");
+      if(client.defaultGroup() == null) {
+        logger.info("op=loadedFromLocal, action=attempt_load_multi_group, source=local");
         all = backingFeatureStore.loadAll();
       } else {
-        logger.info("op=loadedFromLocal, action=attempt_load_single_namespace, source=local namespace={}",
-            client.defaultNamespace());
-        all = backingFeatureStore.findAll(client.defaultNamespace());
+        logger.info("op=loadedFromLocal, action=attempt_load_single_group, source=local group={}",
+            client.defaultGroup());
+        all = backingFeatureStore.findAll(client.defaultGroup());
       }
 
       if (all != null) {
@@ -198,7 +198,7 @@ class FeatureStoreReal implements FeatureStore {
 
         // access cache directly to avoid writing back out to store
         itemsList.forEach(
-            f -> featureCache.put(FeatureStoreKeys.storageKey(f.getNamespace(), f.getKey()), f));
+            f -> featureCache.put(FeatureStoreKeys.storageKey(f.getGroup(), f.getKey()), f));
         return true;
       } else {
         logger.warn("op=populateCache, action=load, source=local, result=null");

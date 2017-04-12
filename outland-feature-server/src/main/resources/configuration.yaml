@@ -43,8 +43,8 @@ aws:
 
 featureTable:
   outlandFeaturesTable: dev_outland_features
-  outlandAppsTable: dev_outland_namespaces
-  outlandAppGraphTable: dev_outland_namespaces_graph
+  outlandGroupsTable: dev_outland_groups
+  outlandAppGraphTable: dev_outland_graph
 
 auth:
   # basic exists mostly for dev, test and local docker. Prefer oauth for production.
@@ -62,8 +62,8 @@ auth:
     connectTimeout: 3000
     readTimeout: 3000
 
-  # if these services are authenticated, allow them to access any app/feature
-  multipleNamespaceAccessList: ${OUTLAND_FEATURE_ANY_NAMESPACE_GRANT:-outland.feature.ui,acme.thread.safe}
+  # if these services are authenticated, allow them to access any group/feature
+  multipleGroupAccessList: ${OUTLAND_FEATURE_ANY_GROUP_ACCESS:-outland.feature.ui,acme.thread.safe}
 
 
 redisFeatureCacheHystrix:
@@ -84,14 +84,14 @@ dynamodbFeatureReadHystrix:
    threadpool:
      coreSize: 16
 
-dynamodbNamespaceGraphWriteHystrix:
-  hystrixCommandGroupKey: dynamodbNamespaceGraphWriteHystrix
+dynamodbGraphWriteHystrix:
+  hystrixCommandGroupKey: dynamodbGraphWriteHystrix
   executionTimeoutInMilliseconds: 3000
   threadpool:
     coreSize: 8
 
-dynamodbNamespaceWriteHystrix:
-  hystrixCommandGroupKey: dynamodbNamespaceWriteHystrix
+dynamodbGroupWriteHystrix:
+  hystrixCommandGroupKey: dynamodbGroupWriteHystrix
   executionTimeoutInMilliseconds: 3000
   threadpool:
     coreSize: 8

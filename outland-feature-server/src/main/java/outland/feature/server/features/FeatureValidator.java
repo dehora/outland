@@ -1,10 +1,14 @@
 package outland.feature.server.features;
 
 import com.google.common.base.Strings;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import outland.feature.proto.Feature;
+import outland.feature.proto.FeatureData;
 import outland.feature.proto.FeatureOption;
+import outland.feature.proto.NamespaceFeature;
+import outland.feature.proto.NamespaceFeatureCollection;
 import outland.feature.proto.OptionCollection;
 import outland.feature.proto.OptionType;
 import outland.feature.proto.Owner;
@@ -23,7 +27,12 @@ class FeatureValidator {
     if (OptionType.flag != feature.getOptions().getOption()
         && feature.getOptions().getItemsCount() != 0) {
       // only validate options if they're sent and we're not a flag type
-      validateOptionsThrowing(feature);
+      validateOptionsThrowing(feature.getOptions());
+
+      if(feature.hasNamespaced()) {
+        validateNamespaceFeaturesThrowing(feature);
+      }
+
     }
   }
 
@@ -31,26 +40,43 @@ class FeatureValidator {
 
     validateOwnerThrowing(feature);
     validateKeysThrowing(feature);
-    validateOptionsThrowing(feature);
+    validateOptionsThrowing(feature.getOptions());
   }
 
-  private void validateOptionsThrowing(Feature feature) {
-    if (OptionType.bool == feature.getOptions().getOption()) {
-      validateBooleanOptionsThrowing(feature);
+  void validateOptionsThrowing(OptionCollection options) {
+    if (OptionType.bool == options.getOption()) {
+      validateBooleanOptionsThrowing(options);
     }
 
-    if(OptionType.flag != feature.getOptions().getOption()) {
-      validateWeightsThrowing(feature);
+    if(OptionType.flag != options.getOption()) {
+      validateWeightsThrowing(options);
     }
   }
 
-  void validateBooleanOptionsThrowing(Feature feature) {
-    if(feature.getOptions().getItemsCount() != 2) {
+  private void validateNamespaceFeaturesThrowing(Feature feature) {
+
+    final List<NamespaceFeature> itemsList = feature.getNamespaced().getItemsList();
+    for (NamespaceFeature namespaceFeature : itemsList) {
+
+      if (!feature.getKey().equals(namespaceFeature.getFeature().getKey())) {
+        throw new ServiceException(Problem.clientProblem("wrong_key_for_namespace_feature",
+            "A namespace must have the same key as its feature name", 422));
+      }
+
+      if(namespaceFeature.getFeature().hasOptions()) {
+        validateOptionsThrowing(namespaceFeature.getFeature().getOptions());
+      }
+    }
+  }
+
+  void validateBooleanOptionsThrowing(OptionCollection options) {
+
+    if(options.getItemsCount() != 2) {
       throw new ServiceException(Problem.clientProblem("wrong_options_for_bool_feature",
           "A bool option must have two options", 422));
     }
 
-    feature.getOptions().getItemsList().forEach(option -> {
+    options.getItemsList().forEach(option -> {
       final String name = option.getName();
       if(!"true".equals(name) && !"false".equals(name)) {
         throw new ServiceException(Problem.clientProblem("wrong_name_for_bool_feature",
@@ -84,6 +110,22 @@ class FeatureValidator {
     }
   }
 
+  void validateFeatureDataMergeCandidates(FeatureData existing, FeatureData incoming) {
+
+    this.validateFeatureDataKeysMatch(existing, incoming);
+    this.validateOptionsThrowing(incoming.getOptions());
+    this.validateOptionIdsForUpdate(existing.getOptions(), incoming.getOptions());
+  }
+
+  void validateFeatureDataKeysMatch(FeatureData existing, FeatureData update) {
+
+    if(!existing.getKey().equals(update.getKey())) {
+      throw new ServiceException(
+          Problem.clientProblem("feature_keys_mismatch", "feature data keys must be the same",
+              422));
+    }
+  }
+
   void validateOptionIdsForUpdate(OptionCollection existing, OptionCollection update) {
 
     if (update.getItemsCount() == 0) {
@@ -107,8 +149,8 @@ class FeatureValidator {
     validateFeatureKeyThrowing(feature.getKey(), Problem.clientProblem("no_key_for_feature",
         "A feature must have a key", 422));
 
-    validateFeatureKeyThrowing(feature.getNamespace(), Problem.clientProblem("no_nskey_for_feature",
-        "A feature must have a namespace key", 422));
+    validateFeatureKeyThrowing(feature.getGroup(), Problem.clientProblem("no_group_for_feature",
+        "A feature must have a group key", 422));
   }
 
   private void validateFeatureKeyThrowing(String key, Problem no_key_for_feature) {
@@ -127,10 +169,10 @@ class FeatureValidator {
     validateOwner(owner);
   }
 
-  private void validateWeightsThrowing(Feature feature) {
+  private void validateWeightsThrowing(OptionCollection options) {
 
     int sum = 0;
-    for (FeatureOption option : feature.getOptions().getItemsList()) {
+    for (FeatureOption option : options.getItemsList()) {
       if (option.getWeight() > 10_000 || option.getWeight() < 0) {
         throw new ServiceException(Problem.clientProblem("weights_out_of_bounds",
             "option weights must be between 0 and 10000", 422));
@@ -150,5 +192,13 @@ class FeatureValidator {
       validateFeatureKeyThrowing(option.getId(), Problem.clientProblem("missing_id_for_option",
           "A feature update must have ids for its options", 422));
     });
+  }
+
+  public void validateNamespaceFeatureCollection(NamespaceFeatureCollection updateNamespaced) {
+
+  }
+
+  public void validateFeatureDataNewCandidate(Feature existingFeature, NamespaceFeature incoming) {
+
   }
 }

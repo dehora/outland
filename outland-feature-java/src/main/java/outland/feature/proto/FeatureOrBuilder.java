@@ -8,6 +8,16 @@ public interface FeatureOrBuilder extends
     com.google.protobuf.MessageOrBuilder {
 
   /**
+   * <code>optional string type = 13;</code>
+   */
+  java.lang.String getType();
+  /**
+   * <code>optional string type = 13;</code>
+   */
+  com.google.protobuf.ByteString
+      getTypeBytes();
+
+  /**
    * <code>optional string id = 1;</code>
    */
   java.lang.String getId();
@@ -28,14 +38,14 @@ public interface FeatureOrBuilder extends
       getKeyBytes();
 
   /**
-   * <code>optional string namespace = 3;</code>
+   * <code>optional string group = 3;</code>
    */
-  java.lang.String getNamespace();
+  java.lang.String getGroup();
   /**
-   * <code>optional string namespace = 3;</code>
+   * <code>optional string group = 3;</code>
    */
   com.google.protobuf.ByteString
-      getNamespaceBytes();
+      getGroupBytes();
 
   /**
    * <code>optional .outland.Feature.State state = 4;</code>
@@ -150,12 +160,15 @@ public interface FeatureOrBuilder extends
   outland.feature.proto.FeatureVersionOrBuilder getVersionOrBuilder();
 
   /**
-   * <code>optional string type = 13;</code>
+   * <code>optional .outland.NamespaceFeatureCollection namespaced = 14;</code>
    */
-  java.lang.String getType();
+  boolean hasNamespaced();
   /**
-   * <code>optional string type = 13;</code>
+   * <code>optional .outland.NamespaceFeatureCollection namespaced = 14;</code>
    */
-  com.google.protobuf.ByteString
-      getTypeBytes();
+  outland.feature.proto.NamespaceFeatureCollection getNamespaced();
+  /**
+   * <code>optional .outland.NamespaceFeatureCollection namespaced = 14;</code>
+   */
+  outland.feature.proto.NamespaceFeatureCollectionOrBuilder getNamespacedOrBuilder();
 }
