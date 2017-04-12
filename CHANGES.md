@@ -2,6 +2,8 @@
 
 ### 0.0.10
 
+- Removes ids from version structures.
+
 - Allows a feature to have one or more namespaced variants.
 
 - Renames namespace to group.
