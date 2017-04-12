@@ -22,16 +22,18 @@ import outland.feature.proto.Owner;
 
 import static outland.feature.server.features.DefaultFeatureService.DEFAULT_MAXWEIGHT;
 
-public class FeatureUpdateProcessor {
+class FeatureUpdateProcessor {
 
   private final VersionService versionService;
   private final VersionSupport versionSupport;
   private final FeatureValidator featureValidator;
+  private final OptionsProcessor optionsProcessor;
 
-  public FeatureUpdateProcessor(VersionService versionService) {
+  FeatureUpdateProcessor(VersionService versionService) {
     this.versionService = versionService;
     this.versionSupport = new VersionSupport(versionService);
     this.featureValidator = new FeatureValidator();
+    this.optionsProcessor = new OptionsProcessor();
   }
 
   Feature prepareUpdateNamespaceFeatureThrowing(Feature feature, List<NamespaceFeature> namespaceFeatures) {
@@ -41,8 +43,7 @@ public class FeatureUpdateProcessor {
     final Feature.Builder featureBuilder = feature.toBuilder()
         .clearNamespaces()
         .setNamespaces(nfcBuilder);
-    final FeatureVersion nextVersion = versionSupport.generateVersion(feature);
-    featureBuilder.setVersion(nextVersion);
+    featureBuilder.setVersion(versionSupport.generateVersion(feature));
     featureBuilder.setUpdated(timeNow());
     final Feature updated = featureBuilder.build();
     featureValidator.validateFeatureRegistrationThrowing(updated);
@@ -68,7 +69,7 @@ public class FeatureUpdateProcessor {
     wipBuilder.setGroup(existing.getGroup());
     wipBuilder.setKey(existing.getKey());
 
-    applyVersion(incoming, wipBuilder);
+    wipBuilder.setVersion(versionSupport.generateVersion(incoming));
 
     // process options if we received some
     if (incoming.getOptions().getOption().equals(OptionType.bool)
@@ -78,7 +79,7 @@ public class FeatureUpdateProcessor {
       wipBuilder.clearOptions();
       final OptionCollection.Builder wipOptionsBuilder = OptionCollection.newBuilder();
 
-      List<FeatureOption> options = applyOptionsUpdate(incoming, existing);
+      List<FeatureOption> options = buildFeaturesOptionsUpdate(existing, incoming);
       wipOptionsBuilder.addAllItems(options);
 
       // can't change some values in update
@@ -112,58 +113,69 @@ public class FeatureUpdateProcessor {
     return updated;
   }
 
-  private List<FeatureOption> applyOptionsUpdate(Feature updated, Feature found) {
+  List<NamespaceFeature> buildMergedNamespaceFeatures(Feature feature, NamespaceFeature incoming) {
+
+    if(! feature.hasNamespaces()) {
+      return Lists.newArrayList(prepareNewNamespaceFeature(incoming));
+    }
+
+    final NamespaceFeatureCollection existingNamespaced = feature.getNamespaces();
+    final List<NamespaceFeature> existingNamespacedItemsList = existingNamespaced.getItemsList();
+
+    final ArrayList<NamespaceFeature> updatedNamespacedItemsList = Lists.newArrayList();
+
+    boolean found = false;
+    for (NamespaceFeature existing : existingNamespacedItemsList) {
+      if(isMatching(existing, incoming)) {
+        updatedNamespacedItemsList.add(mergeNamespaceFeature(existing, incoming));
+        found = true;
+      } else {
+        updatedNamespacedItemsList.add(existing);
+      }
+    }
+
+    if(! found) {
+      updatedNamespacedItemsList.add(prepareNewNamespaceFeature(incoming));
+    }
+
+    return updatedNamespacedItemsList;
+  }
+
+  private List<FeatureOption> buildNamespaceFeatureOptionsUpdate(
+      FeatureData existing, FeatureData incoming) {
+    return buildOptionsUpdate(existing.getOptions(), incoming.getOptions());
+  }
+
+  private List<FeatureOption> buildFeaturesOptionsUpdate(Feature existing, Feature incoming) {
+    return buildOptionsUpdate(existing.getOptions(), incoming.getOptions());
+  }
+
+  private List<FeatureOption> buildOptionsUpdate(
+      OptionCollection existingOptions, OptionCollection incomingOptions) {
 
     final ArrayList<FeatureOption> results = Lists.newArrayList();
 
-    // nothing in the update, return what we have
-    if (updated.getOptions().getItemsCount() == 0) {
-      results.addAll(found.getOptions().getItemsList());
+    if (incomingOptions.getItemsCount() == 0) {
+      results.addAll(existingOptions.getItemsList());
       return results;
     }
 
-    final List<FeatureOption> updatedOptionsList = updated.getOptions().getItemsList();
-    final List<FeatureOption> foundOptionsList = found.getOptions().getItemsList();
+    final List<FeatureOption> updatedOptionsList = incomingOptions.getItemsList();
+    final List<FeatureOption> foundOptionsList = existingOptions.getItemsList();
 
     for (FeatureOption updateOption : updatedOptionsList) {
       final String updateId = updateOption.getId();
-
       for (FeatureOption foundOption : foundOptionsList) {
         final FeatureOption.Builder builder = foundOption.toBuilder();
         if (foundOption.getId().equals(updateId)) {
-          // weight is the only field we change
           builder.setWeight(updateOption.getWeight());
           results.add(builder.build());
           break;
         }
       }
     }
-
     return results;
   }
-
-  private void applyVersion(Feature registering, Feature.Builder builder) {
-
-    VersionService.HybridLogicalTimestamp next;
-    if (registering.hasVersion()) {
-      next = versionService.nextVersionUpdate(new VersionService.HybridLogicalTimestamp(
-          registering.getVersion().getTimestamp(),
-          registering.getVersion().getCounter()));
-    } else {
-      next = versionService.nextVersion();
-    }
-
-    builder.setVersion(buildVersion(next));
-  }
-
-  private FeatureVersion.Builder buildVersion(VersionService.HybridLogicalTimestamp next) {
-    return FeatureVersion.newBuilder()
-        .setType("hlcver")
-        .setCounter(next.counter())
-        .setTimestamp(next.logicalTime())
-        .setId(next.id());
-  }
-
 
   private void applyOwnerUpdate(Feature updates, Owner foundOwner, Feature.Builder builder) {
     final Owner updateOwner = updates.getOwner();
@@ -209,7 +221,8 @@ public class FeatureUpdateProcessor {
     wipBuilder.setNamespaces(nfcBuilder);
   }
 
-  public List<NamespaceFeature> buildMergedNamespaceFeatures(Feature existingFeature, Feature incomingFeature) {
+  private List<NamespaceFeature> buildMergedNamespaceFeatures(Feature existingFeature,
+      Feature incomingFeature) {
 
     if(incomingFeature.getNamespaces().getItemsCount() == 0) {
       return Lists.newArrayList(existingFeature.getNamespaces().getItemsList());
@@ -249,35 +262,7 @@ public class FeatureUpdateProcessor {
     return ImmutableList.copyOf(updateMap.values());
   }
 
-  public List<NamespaceFeature> buildMergedNamespaceFeatures(Feature feature, NamespaceFeature incoming) {
-
-    if(! feature.hasNamespaces()) {
-      return Lists.newArrayList(prepareNewNamespaceFeature(incoming));
-    }
-
-    final NamespaceFeatureCollection existingNamespaced = feature.getNamespaces();
-    final List<NamespaceFeature> existingNamespacedItemsList = existingNamespaced.getItemsList();
-
-    final ArrayList<NamespaceFeature> updatedNamespacedItemsList = Lists.newArrayList();
-
-    boolean found = false;
-    for (NamespaceFeature existing : existingNamespacedItemsList) {
-      if(isMatching(existing, incoming)) {
-        updatedNamespacedItemsList.add(mergeNamespaceFeature(existing, incoming));
-        found = true;
-      } else {
-        updatedNamespacedItemsList.add(existing);
-      }
-    }
-
-    if(! found) {
-      updatedNamespacedItemsList.add(prepareNewNamespaceFeature(incoming));
-    }
-
-    return updatedNamespacedItemsList;
-  }
-
-  NamespaceFeature prepareNewNamespaceFeature(NamespaceFeature incoming) {
+  private NamespaceFeature prepareNewNamespaceFeature(NamespaceFeature incoming) {
 
     final FeatureData incomingFeatureData = incoming.getFeature();
 
@@ -308,7 +293,7 @@ public class FeatureUpdateProcessor {
       if (incomingFeatureData.getOptions().getItemsCount() != 0) {
 
         final List<FeatureOption> options = incomingFeatureData.getOptions().getItemsList();
-        applyBooleanOptions(optionCollectionBuilder, options);
+        optionsProcessor.applyBooleanOptions(optionCollectionBuilder, options);
         featureDataBuilder.setOptions(optionCollectionBuilder);
       }
     }
@@ -318,17 +303,6 @@ public class FeatureUpdateProcessor {
         .setFeature(featureDataBuilder)
         .build();
 
-  }
-
-  private void applyBooleanOptions(
-      OptionCollection.Builder collectionBuilder, List<FeatureOption> options) {
-    for (FeatureOption option : options) {
-      final FeatureOption.Builder optionBuilder = FeatureOption.newBuilder().mergeFrom(option);
-      optionBuilder.setType("option");
-      optionBuilder.setId("opt_" + Ulid.random());
-      optionBuilder.setOption(OptionType.bool);
-      collectionBuilder.addItems(optionBuilder);
-    }
   }
 
   private NamespaceFeature mergeNamespaceFeature(
@@ -348,7 +322,7 @@ public class FeatureUpdateProcessor {
       featureDataBuilder.clearOptions();
       final OptionCollection.Builder wipOptionsBuilder = OptionCollection.newBuilder();
 
-      List<FeatureOption> merged = applyNamespaceFeatureOptionsUpdate(existingFeatureData,
+      List<FeatureOption> merged = buildNamespaceFeatureOptionsUpdate(existingFeatureData,
           incomingFeatureData);
 
       wipOptionsBuilder.addAllItems(merged);
@@ -365,38 +339,6 @@ public class FeatureUpdateProcessor {
     namespaceFeaturebuilder.setType(existing.getType());
     namespaceFeaturebuilder.setFeature(featureDataBuilder);
     return namespaceFeaturebuilder.build();
-  }
-
-
-    private List<FeatureOption> applyNamespaceFeatureOptionsUpdate(
-        FeatureData existing, FeatureData updated) {
-
-    final ArrayList<FeatureOption> results = Lists.newArrayList();
-
-    // nothing in the update, return what we have
-    if (updated.getOptions().getItemsCount() == 0) {
-      results.addAll(existing.getOptions().getItemsList());
-      return results;
-    }
-
-    final List<FeatureOption> updatedOptionsList = updated.getOptions().getItemsList();
-    final List<FeatureOption> foundOptionsList = existing.getOptions().getItemsList();
-
-    for (FeatureOption updateOption : updatedOptionsList) {
-      final String updateId = updateOption.getId();
-
-      for (FeatureOption foundOption : foundOptionsList) {
-        final FeatureOption.Builder builder = foundOption.toBuilder();
-        if (foundOption.getId().equals(updateId)) {
-          // weight is the only field we change
-          builder.setWeight(updateOption.getWeight());
-          results.add(builder.build());
-          break;
-        }
-      }
-    }
-
-    return results;
   }
 
   private FeatureData.Builder mergeFeatureData(FeatureData existing, FeatureData incoming) {
@@ -433,11 +375,11 @@ public class FeatureUpdateProcessor {
         ;
   }
 
-  VersionService.HybridLogicalTimestamp buildNextHybridLogicalTimestamp() {
+  private VersionService.HybridLogicalTimestamp buildNextHybridLogicalTimestamp() {
     return versionService.nextVersion();
   }
 
-  VersionService.HybridLogicalTimestamp buildNextHybridLogicalTimestamp(
+  private VersionService.HybridLogicalTimestamp buildNextHybridLogicalTimestamp(
       FeatureVersion version) {
     return versionService.nextVersionUpdate(new VersionService.HybridLogicalTimestamp(
         version.getTimestamp(),

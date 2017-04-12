@@ -3,24 +3,20 @@ package outland.feature.server.features;
 import outland.feature.proto.Feature;
 import outland.feature.proto.FeatureVersion;
 
-public class VersionSupport {
+class VersionSupport {
 
   private final VersionService versionService;
 
-  public VersionSupport(VersionService versionService) {
+  VersionSupport(VersionService versionService) {
     this.versionService = versionService;
   }
 
-  void applyVersion(Feature registering, Feature.Builder builder) {
-    builder.setVersion(generateVersion(registering));
-  }
-
-  FeatureVersion generateVersion(Feature registering) {
+  FeatureVersion generateVersion(Feature feature) {
     VersionService.HybridLogicalTimestamp next;
-    if (registering.hasVersion()) {
+    if (feature.hasVersion()) {
       next = versionService.nextVersionUpdate(new VersionService.HybridLogicalTimestamp(
-          registering.getVersion().getTimestamp(),
-          registering.getVersion().getCounter()));
+          feature.getVersion().getTimestamp(),
+          feature.getVersion().getCounter()));
     } else {
       next = versionService.nextVersion();
     }
