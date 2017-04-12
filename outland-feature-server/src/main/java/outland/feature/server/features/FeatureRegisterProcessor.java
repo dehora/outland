@@ -12,6 +12,7 @@ import outland.feature.proto.NamespaceFeatureCollection;
 import outland.feature.proto.OptionCollection;
 import outland.feature.proto.OptionType;
 import outland.feature.proto.Owner;
+import outland.feature.server.Names;
 
 class FeatureRegisterProcessor {
 
@@ -34,7 +35,7 @@ class FeatureRegisterProcessor {
     featureValidator.validateFeatureRegistrationThrowing(registering);
 
     OffsetDateTime now = OffsetDateTime.now();
-    String id = "feat_" + Ulid.random(now.toInstant().toEpochMilli());
+    String id = Names.feature(now);
     String created = TimeSupport.asString(now);
 
     Feature.Builder builder = registering.toBuilder();
@@ -80,7 +81,7 @@ class FeatureRegisterProcessor {
 
         collectionBuilder.addItems(FeatureOption.newBuilder()
             .setType("option")
-            .setId("opt_" + Ulid.random())
+            .setId(Names.option())
             .setName("false")
             .setValue("false")
             .setOption(OptionType.bool)
@@ -88,7 +89,7 @@ class FeatureRegisterProcessor {
 
         collectionBuilder.addItems(FeatureOption.newBuilder()
             .setType("option")
-            .setId("opt_" + Ulid.random())
+            .setId(Names.option())
             .setName("true")
             .setValue("true")
             .setOption(OptionType.bool)
@@ -103,7 +104,7 @@ class FeatureRegisterProcessor {
     final Owner owner = registering.getOwner();
     final Owner.Builder ownerBuilder = owner.toBuilder();
     ownerBuilder.setType("featureowner");
-    ownerBuilder.setId("own_" + Ulid.random());
+    ownerBuilder.setId(Names.owner());
     builder.setOwner(ownerBuilder.buildPartial());
   }
 
@@ -148,7 +149,7 @@ class FeatureRegisterProcessor {
 
       final FeatureData.Builder featureDataBuilder = FeatureData.newBuilder()
           .mergeFrom(incoming.getFeature())
-          .setId("nsfeature_" + Ulid.random())
+          .setId(Names.namespaceFeature())
           .setVersion(processor.buildNextFeatureVersion())
           .setKey(incoming.getFeature().getKey())
           // always off on create

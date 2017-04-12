@@ -9,7 +9,7 @@ import outland.feature.proto.MemberAccess;
 import outland.feature.proto.Owner;
 import outland.feature.proto.OwnerCollection;
 import outland.feature.proto.ServiceAccess;
-import outland.feature.server.features.Ulid;
+import outland.feature.server.Names;
 
 class GroupUpdateProcessor {
 
@@ -118,14 +118,14 @@ class GroupUpdateProcessor {
   }
 
   private String mintMemberId() {
-    return "mbr_" + Ulid.random();
+    return Names.member();
   }
 
   private String mintOwnerId() {
-    return "usr_" + Ulid.random();
+    return Names.owner();
   }
 
   private String mintServiceId() {
-    return "svc_" + Ulid.random();
+    return Names.service();
   }
 }
