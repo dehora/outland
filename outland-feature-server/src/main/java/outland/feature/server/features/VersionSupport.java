@@ -12,7 +12,10 @@ public class VersionSupport {
   }
 
   void applyVersion(Feature registering, Feature.Builder builder) {
+    builder.setVersion(generateVersion(registering));
+  }
 
+  FeatureVersion generateVersion(Feature registering) {
     VersionService.HybridLogicalTimestamp next;
     if (registering.hasVersion()) {
       next = versionService.nextVersionUpdate(new VersionService.HybridLogicalTimestamp(
@@ -22,7 +25,7 @@ public class VersionSupport {
       next = versionService.nextVersion();
     }
 
-    builder.setVersion(buildVersion(next));
+    return buildVersion(next).buildPartial();
   }
 
   private FeatureVersion.Builder buildVersion(VersionService.HybridLogicalTimestamp next) {
