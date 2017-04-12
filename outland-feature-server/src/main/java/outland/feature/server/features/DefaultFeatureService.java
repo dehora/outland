@@ -42,7 +42,7 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
   private final FeatureRegisterProcessor featureRegisterProcessor;
   private final FeatureUpdateProcessor featureUpdateProcessor;
   private final VersionSupport versionSupport;
-
+  private final FeatureValidator featureValidator;
   private Timer saveFeatureTimer;
   private Timer updateFeatureTimer;
   private Timer addToCacheTimer;
@@ -69,25 +69,17 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
     this.featureUpdateProcessor = new FeatureUpdateProcessor(versionService);
     this.versionSupport = new VersionSupport(versionService);
     configureMetrics(metrics);
+    featureValidator = new FeatureValidator();
   }
 
   @Override public Optional<Feature> registerFeature(Feature registering) {
 
     logger.info("{} /feature[{}]", kvp("op", "registerFeature"), toString(registering));
 
-    Feature feature = featureRegisterProcessor.prepareNewFeature(registering);
-
+    final Feature feature = featureRegisterProcessor.prepareNewFeature(registering);
     timed(saveFeatureTimer, () -> featureStorage.createFeature(feature));
-
-    logger.info("{} /feature=[{}]",
-        kvp("op", "registerFeature", "result", "ok"), toString(feature));
-
     addToCache(feature);
     return Optional.of(feature);
-  }
-
-  private String toString(Feature feature) {
-    return TextFormat.shortDebugString(feature);
   }
 
   @Override
@@ -96,34 +88,21 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
     logger.info("{} /update_feature=[{}]",
         kvp("op", "updateFeature", "group", group, "feature_key", featureKey), toString(updates));
 
-    FeatureValidator featureValidator = new FeatureValidator();
-
-    // catch bad input before merging
     featureValidator.validateFeatureUpdateThrowing(updates);
 
-    Optional<Feature> maybeFound =
+    final Optional<Feature> maybeFound =
         timed(loadFeatureByKeyTimer, () -> featureStorage.loadFeatureByKey(group, featureKey));
 
     if (!maybeFound.isPresent()) {
-      logger.info("updateFeature not_found {} {}", group, updates);
       return maybeFound;
     }
 
-    Feature found = maybeFound.get();
-
-    logger.info("{} /found_feature=[{}]",
-        kvp("op", "updateFeature", "group", group, "feature_key", featureKey), toString(found));
-
-    Feature updated = featureUpdateProcessor.prepareUpdateFeature(found, updates);
-
-    final FeatureVersion foundVersion = found.getVersion();
-    timed(updateFeatureTimer, () -> featureStorage.updateFeature(updated, foundVersion));
-
-    logger.info("{} /updated_feature=[{}]",
-        kvp("op", "updateFeature", "group", group, "feature_key", featureKey), toString(updated));
-
-    addToCache(updated);
-    return Optional.of(updated);
+    final Feature existing = maybeFound.get();
+    final Feature prepared = featureUpdateProcessor.prepareUpdateFeature(existing, updates);
+    featureValidator.validateFeatureUpdateThrowing(prepared);
+    timed(updateFeatureTimer, () -> featureStorage.updateFeature(prepared, existing.getVersion()));
+    addToCache(prepared);
+    return Optional.of(prepared);
   }
 
   @Override public Optional<Feature> loadFeatureByKey(String group, String featureKey) {
@@ -135,130 +114,90 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
 
     if (cached.isPresent()) {
       loadFeatureCacheHitMeter.mark();
-      logger.info("{} /feature=[{}]",
-          kvp("op", "loadFeatureByKey", "group", group, "feature_key", featureKey,
-          "result", "cache_hit"), toString(cached.get()));
       return cached;
     }
 
     loadFeatureCacheMissMeter.mark();
 
-    Optional<Feature> feature =
+    final Optional<Feature> maybe =
         timed(loadFeatureByKeyTimer, () -> featureStorage.loadFeatureByKey(group, featureKey));
 
-    if (feature.isPresent()) {
+    if (maybe.isPresent()) {
       /*
-      drive a full load; this is to avoid the case where a single item is pulled from storage
+      drive a full read; this is to avoid the case where a single item is pulled from storage
       added to an empty set, but there are other items in storage such that the single cached
       result will be served, leaving behind the other features.
       */
-      logger.info("{}", kvp("op", "loadFeatureByKey", "group", group,
-          "feature_key", featureKey, "msg", "force_cache_reload"));
-
-      addAllToCache(group, timed(loadFeaturesTimer, () -> featureStorage.loadFeatures(group)));
-
-      logger.info("{} /feature=[{}]", kvp("op", "loadFeatureByKey",
-          "group", group, "feature_key", featureKey, "result", "cache_miss",
-          "msg", "add_to_cache"), toString(feature.get()));
+      addAllToCache(timed(loadFeaturesTimer, () -> featureStorage.loadFeatures(group)));
     }
 
-    logger.info("{}", kvp("op", "loadFeatureByKey",
-        "group", group, "result", feature.isPresent() ? "ok" : "not_found"));
-
-    // todo: signal 404 if empty
-    return feature;
+    return maybe;
   }
 
   @Override public FeatureCollection loadFeatures(String group) {
 
     logger.info("{}", kvp("op", "loadFeatures", "group", group));
 
-    FeatureCollection.Builder builder = FeatureCollection.newBuilder();
+    final FeatureCollection.Builder builder = FeatureCollection.newBuilder();
     builder.setType("feature.list");
     builder.setGroup(group);
 
-    Optional<Map<String, String>> cacheSet = timed(loadFeaturesCacheTimer,
+    final Optional<Map<String, String>> cacheSet = timed(loadFeaturesCacheTimer,
         () -> featureCache.getCacheSet(group));
 
     if (cacheSet.isPresent()) {
       loadFeaturesCacheHitMeter.mark();
       final ArrayList<Feature> features = Lists.newArrayList();
-      Set<Map.Entry<String, String>> entries = cacheSet.get().entrySet();
+      final Set<Map.Entry<String, String>> entries = cacheSet.get().entrySet();
       for (Map.Entry<String, String> entry : entries) {
         features.add(FeatureSupport.toFeature(entry.getValue()));
       }
 
       features.sort(byUpdatedOrdering);
       builder.addAllItems(features);
-      FeatureCollection featureCollection = builder.build();
-
-      logger.info("{} /features=[{}]", kvp("op", "loadFeatures",
-          "group", group,
-          "result", "cache_hit"),
-          toString(featureCollection));
-
-      return featureCollection;
+      return builder.build();
     }
 
     loadFeaturesCacheMissMeter.mark();
 
-    List<Feature> features = timed(loadFeaturesTimer, () -> featureStorage.loadFeatures(group));
+    final List<Feature> features =
+        timed(loadFeaturesTimer, () -> featureStorage.loadFeatures(group));
     features.sort(byUpdatedOrdering);
+    addAllToCache(features);
     builder.addAllItems(features);
-    FeatureCollection featureCollection = builder.build();
-
-    addAllToCache(group, features);
-
-    logger.info("{} /features=[{}]", kvp("op", "loadFeatures",
-        "group", group,
-        "result", "ok"),
-        toString(featureCollection));
-
-    return featureCollection;
-  }
-
-  private String toString(FeatureCollection featureCollection) {
-    return TextFormat.shortDebugString(featureCollection);
+    return builder.build();
   }
 
   @Override public FeatureCollection loadFeaturesChangedSince(String group, OffsetDateTime since) {
 
     logger.info("{}", kvp("op", "loadFeaturesSince", "group", group, "since", since));
 
-    FeatureCollection collection = loadFeatures(group);
-
-    List<Feature> sinceList = Lists.newArrayList();
-
-    List<Feature> list = collection.getItemsList();
+    final List<Feature> sinceList = Lists.newArrayList();
+    final List<Feature> list = loadFeatures(group).getItemsList();
     for (Feature feature : list) {
-      OffsetDateTime time = TimeSupport.asOffsetDateTime(feature.getUpdated());
+      final OffsetDateTime time = TimeSupport.asOffsetDateTime(feature.getUpdated());
       if (time.isAfter(since)) {
         sinceList.add(feature);
       }
     }
 
     sinceList.sort(byUpdatedOrdering);
-
-    FeatureCollection.Builder builder = FeatureCollection.newBuilder();
-    final FeatureCollection featureCollection = builder
+    return FeatureCollection.newBuilder()
         .addAllItems(sinceList)
         .setGroup(group)
         .setType("feature.list")
         .build();
-
-    logger.info("{} /features=[{}]", kvp("op", "loadFeaturesSince",
-            "group", group, "since", since, "result", "ok"), toString(featureCollection));
-
-    return featureCollection;
   }
 
   @Override public Feature add(Feature feature, NamespaceFeature namespaceFeature) {
 
-    FeatureValidator featureValidator = new FeatureValidator();
+    logger.info("{} {}", kvp("op", "addNamespaceFeature"),
+        TextFormat.shortDebugString(namespaceFeature));
 
+    final FeatureValidator featureValidator = new FeatureValidator();
     featureValidator.validateFeatureDataNewCandidateThrowing(feature, namespaceFeature);
 
-    FeatureUpdateProcessor processor = new FeatureUpdateProcessor(versionService);
+    final FeatureUpdateProcessor processor = new FeatureUpdateProcessor(versionService);
     final List<NamespaceFeature> namespaceFeatures =
         processor.buildMergedNamespaceFeatures(feature, namespaceFeature);
 
@@ -269,22 +208,17 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
         .clearNamespaces()
         .setNamespaces(builder);
 
-
     final FeatureVersion foundVersion = feature.getVersion();
 
-    String now = TimeSupport.asString(OffsetDateTime.now());
+    final String now = TimeSupport.asString(OffsetDateTime.now());
     wipBuilder.setUpdated(now);
 
     versionSupport.applyVersion(feature, wipBuilder);
 
-    Feature updated = wipBuilder.build();
+    final Feature updated = wipBuilder.build();
 
     featureValidator.validateFeatureRegistrationThrowing(updated);
     timed(updateFeatureTimer, () -> featureStorage.updateFeature(updated, foundVersion));
-    logger.info("{} /updated_feature_namespace=[{}]", kvp("op", "updateFeatureNamespace",
-        "group", feature.getGroup(), "feature_key", feature.getKey(),
-        "namespace", namespaceFeature.getNamespace()), toString(updated));
-
     addToCache(updated);
     return updated;
   }
@@ -293,29 +227,26 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
       String namespace) {
     final Optional<Feature> maybe = loadFeatureByKey(group, featureKey);
 
-    if(! maybe.isPresent()) {
-      return  null;
+    if (!maybe.isPresent()) {
+      return null;
     }
 
     final Feature feature = maybe.get();
-
     final NamespaceFeatureCollection namespaced = feature.getNamespaces();
-
-    final ArrayList<NamespaceFeature> namespaceFeatures =
-        Lists.newArrayList(namespaced.getItemsList());
+    final List<NamespaceFeature> namespaceFeatures = Lists.newArrayList(namespaced.getItemsList());
 
     NamespaceFeature namespaceFeature = null;
     final Iterator<NamespaceFeature> iterator = namespaceFeatures.iterator();
     while (iterator.hasNext()) {
       NamespaceFeature next = iterator.next();
-      if(next.getNamespace().equals(namespace)) {
+      if (next.getNamespace().equals(namespace)) {
         namespaceFeature = next;
         iterator.remove();
         break;
       }
     }
 
-    if(namespaceFeature == null) {
+    if (namespaceFeature == null) {
       return null;
     }
 
@@ -332,29 +263,16 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
     wipBuilder.setUpdated(TimeSupport.asString(OffsetDateTime.now()));
 
     final Feature updated = wipBuilder.build();
-
-    FeatureValidator featureValidator = new FeatureValidator();
+    final FeatureValidator featureValidator = new FeatureValidator();
     featureValidator.validateFeatureRegistrationThrowing(updated);
 
     timed(updateFeatureTimer, () -> featureStorage.updateFeature(updated, foundVersion));
-
-    logger.info("{} /updated_feature_namespace=[{}]",
-        kvp("op", "removeNamespaceFeature",
-            "group", feature.getGroup(),
-            "feature_key", feature.getKey(),
-            "namespace", namespaceFeature.getNamespace()
-        ), toString(updated));
-
     addToCache(updated);
     return updated;
   }
 
-  private void addAllToCache(String group, List<Feature> features) {
+  private void addAllToCache(List<Feature> features) {
     for (Feature feature : features) {
-
-      logger.info("{} /feature=[{}]", kvp("op", "loadFeatures",
-          "group", group, "result", "cache_miss", "msg", "add_to_cache"), toString(feature));
-
       addToCache(feature);
     }
   }
@@ -386,5 +304,9 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
         "loadFeatureCacheHitMeter"));
     loadFeatureCacheMissMeter = metrics.meter(MetricRegistry.name(DefaultFeatureService.class,
         "loadFeatureCacheMissMeter"));
+  }
+
+  private String toString(Feature feature) {
+    return TextFormat.shortDebugString(feature);
   }
 }
