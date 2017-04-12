@@ -19,7 +19,7 @@ import outland.feature.server.groups.NamesapaceAuthService;
 import outland.feature.server.groups.NamesapaceAuthServiceViaPlanBServer;
 import outland.feature.server.groups.TestAppModule;
 import outland.feature.server.features.VersionService;
-import outland.feature.server.features.Versions;
+import outland.feature.server.features.DefaultVersionService;
 
 import static junit.framework.TestCase.fail;
 import static org.junit.Assert.assertFalse;
@@ -53,7 +53,7 @@ public class AuthTest {
         new TestAppModule(),
         new AbstractModule(){
           @Override protected void configure() {
-            bind(VersionService.class).to(Versions.class).asEagerSingleton();
+            bind(VersionService.class).to(DefaultVersionService.class).asEagerSingleton();
             bind(NamesapaceAuthService.class).to(NamesapaceAuthServiceViaPlanBServer.class).asEagerSingleton();
             List<String> multipleGroupAccessList = Lists.newArrayList();
             multipleGroupAccessList.addAll(
