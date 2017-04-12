@@ -23,7 +23,7 @@ import outland.feature.proto.ServiceAccess;
 import outland.feature.server.Problem;
 import outland.feature.server.ServiceException;
 import outland.feature.server.features.MetricsTimer;
-import outland.feature.server.features.Ulid;
+import outland.feature.server.Names;
 import outland.feature.server.features.VersionService;
 
 import static outland.feature.server.StructLog.kvp;
@@ -292,7 +292,7 @@ public class DefaultGroupService implements GroupService, MetricsTimer {
     OffsetDateTime now = OffsetDateTime.now();
     String created = GroupService.asString(now);
     final Group.Builder builder = newNamespaceBuilder(group);
-    builder.setId("group_" + Ulid.random(now.toInstant().toEpochMilli()));
+    builder.setId(Names.group(now));
     builder.setCreated(created);
     builder.setUpdated(created);
 

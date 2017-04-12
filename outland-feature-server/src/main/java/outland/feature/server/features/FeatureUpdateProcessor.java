@@ -19,6 +19,7 @@ import outland.feature.proto.NamespaceFeatureCollection;
 import outland.feature.proto.OptionCollection;
 import outland.feature.proto.OptionType;
 import outland.feature.proto.Owner;
+import outland.feature.server.Names;
 
 import static outland.feature.server.features.DefaultFeatureService.DEFAULT_MAXWEIGHT;
 
@@ -189,7 +190,7 @@ class FeatureUpdateProcessor {
       // treat as new owner
       final Owner.Builder replacementOwnerBuilder = updateOwner.toBuilder();
       replacementOwnerBuilder.setType("featureowner");
-      replacementOwnerBuilder.setId("own_" + Ulid.random());
+      replacementOwnerBuilder.setId(Names.owner());
       builder.setOwner(replacementOwnerBuilder.buildPartial());
     } else {
 
@@ -267,7 +268,7 @@ class FeatureUpdateProcessor {
     final FeatureData incomingFeatureData = incoming.getFeature();
 
     final FeatureData.Builder featureDataBuilder = incomingFeatureData.toBuilder()
-        .setId("nsfeature_"+Ulid.random())
+        .setId(Names.namespaceFeature())
         .setVersion(buildNextFeatureVersion())
         .setKey(incomingFeatureData.getKey())
         // always off on create

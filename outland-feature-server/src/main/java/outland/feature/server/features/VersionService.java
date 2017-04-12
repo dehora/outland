@@ -30,7 +30,8 @@ public interface VersionService {
     }
 
     String id() {
-      return "ver_" + Ulid.generate(asTimestampMillis(),
+      return "ver_" + Ulid.generate(
+          asTimestampMillis(),
           ("localTime=" + logicalTime + ",counter=" + counter).getBytes());
     }
 
