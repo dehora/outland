@@ -2,6 +2,7 @@ package outland.feature.server.features;
 
 import outland.feature.proto.Feature;
 import outland.feature.proto.FeatureVersion;
+import outland.feature.server.Names;
 
 class VersionSupport {
 
@@ -11,24 +12,42 @@ class VersionSupport {
     this.versionService = versionService;
   }
 
-  FeatureVersion generateVersion(Feature feature) {
-    VersionService.HybridLogicalTimestamp next;
+  FeatureVersion nextFeatureVersion(Feature feature) {
     if (feature.hasVersion()) {
-      next = versionService.nextVersionUpdate(new VersionService.HybridLogicalTimestamp(
-          feature.getVersion().getTimestamp(),
-          feature.getVersion().getCounter()));
+      return nextFeatureVersion(feature.getVersion());
     } else {
-      next = versionService.nextVersion();
+      return nextFeatureVersion();
     }
-
-    return buildVersion(next).buildPartial();
   }
 
-  private FeatureVersion.Builder buildVersion(VersionService.HybridLogicalTimestamp next) {
+  FeatureVersion nextFeatureVersion() {
+    return nextFeatureVersion(nextTimestamp());
+  }
+
+  FeatureVersion nextFeatureVersion(FeatureVersion version) {
+    return nextFeatureVersion(nextTimestamp(version));
+  }
+
+  private FeatureVersion nextFeatureVersion(VersionService.HybridLogicalTimestamp nextVersion) {
+    return buildVersionBuilder(nextVersion).buildPartial();
+  }
+
+  private FeatureVersion.Builder buildVersionBuilder(VersionService.HybridLogicalTimestamp next) {
     return FeatureVersion.newBuilder()
-        .setType("hlcver")
+        .setType(Names.versionType())
         .setCounter(next.counter())
         .setTimestamp(next.logicalTime())
-        .setId(next.id());
+        .setId(next.id())
+        ;
+  }
+
+  private VersionService.HybridLogicalTimestamp nextTimestamp(FeatureVersion version) {
+    return versionService.nextVersionUpdate(new VersionService.HybridLogicalTimestamp(
+        version.getTimestamp(),
+        version.getCounter()));
+  }
+
+  private VersionService.HybridLogicalTimestamp nextTimestamp() {
+    return versionService.nextVersion();
   }
 }

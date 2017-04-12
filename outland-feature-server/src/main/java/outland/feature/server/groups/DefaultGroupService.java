@@ -234,7 +234,7 @@ public class DefaultGroupService implements GroupService, MetricsTimer {
     final Group.Builder builder = group.toBuilder();
     builder.getOwners().getItemsList().clear();
     OwnerCollection.Builder oc = OwnerCollection.newBuilder()
-        .setType("owner.collection")
+        .setType(Names.ownerCollectionType())
         .addAllItems(wrapped);
     builder.setOwners(oc);
 
@@ -299,7 +299,7 @@ public class DefaultGroupService implements GroupService, MetricsTimer {
     List<Owner> ownersReady = Lists.newArrayList();
     group.getOwners().getItemsList().forEach(owner -> ownersReady.add(prepareOwner(owner)));
     OwnerCollection.Builder oc = OwnerCollection.newBuilder()
-        .setType("owner.collection")
+        .setType(Names.ownerCollectionType())
         .addAllItems(ownersReady);
     builder.setOwners(oc);
 
@@ -328,7 +328,7 @@ public class DefaultGroupService implements GroupService, MetricsTimer {
   }
 
   private AccessCollection.Builder newGrantCollectionBuilder() {
-    return AccessCollection.newBuilder().setType("access.collection");
+    return AccessCollection.newBuilder().setType(Names.accessCollectionType());
   }
 
   private Group.Builder newNamespaceBuilder(Group group) {

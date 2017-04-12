@@ -20,6 +20,7 @@ import outland.feature.proto.Group;
 import outland.feature.proto.Owner;
 import outland.feature.proto.OwnerCollection;
 import outland.feature.proto.ServiceAccess;
+import outland.feature.server.Names;
 import outland.feature.server.Problem;
 import outland.feature.server.ServerConfiguration;
 import outland.feature.server.TestSupport;
@@ -74,7 +75,7 @@ public class GroupResourceTest {
     services.add(ServiceAccess.newBuilder().setKey(serviceKey).buildPartial());
     accessBuilder.addAllServices(services);
     OwnerCollection.Builder oc = OwnerCollection.newBuilder()
-        .setType("owner.collection")
+        .setType(Names.ownerCollectionType())
         .addItems(Owner.newBuilder().setName("Jayne").setUsername("jayne"));
     final Group group = Group.newBuilder()
         .setKey(appKey)

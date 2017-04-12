@@ -12,7 +12,7 @@ class OptionsProcessor {
       OptionCollection.Builder collectionBuilder, List<FeatureOption> options) {
     for (FeatureOption option : options) {
       final FeatureOption.Builder optionBuilder = FeatureOption.newBuilder().mergeFrom(option);
-      optionBuilder.setType("option");
+      optionBuilder.setType(Names.optionType());
       optionBuilder.setId(Names.option());
       optionBuilder.setOption(OptionType.bool);
       collectionBuilder.addItems(optionBuilder);
