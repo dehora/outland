@@ -35,10 +35,9 @@ import static outland.feature.server.StructLog.kvp;
 
 public class DefaultFeatureStorage implements FeatureStorage {
 
-  private static final Logger logger = LoggerFactory.getLogger(DefaultFeatureStorage.class);
   public static final String HASH_KEY = "group_key";
   public static final String RANGE_KEY = "feature_key";
-
+  private static final Logger logger = LoggerFactory.getLogger(DefaultFeatureStorage.class);
   static Map<String, Feature> features = Maps.newHashMap();
 
   private final DynamoDB dynamoDB;
@@ -77,7 +76,8 @@ public class DefaultFeatureStorage implements FeatureStorage {
       try {
         return dynamoDB.getTable(featureTableName).putItem(putItemSpec);
       } catch (ConditionalCheckFailedException e) {
-        logger.error("err=conflict_feature_already_exists feature_key={} {}", feature.getKey(), e.getMessage());
+        logger.error("err=conflict_feature_already_exists feature_key={} {}", feature.getKey(),
+            e.getMessage());
         throwConflictAlreadyExists(feature);
         return null;
       }
@@ -117,7 +117,8 @@ public class DefaultFeatureStorage implements FeatureStorage {
       try {
         return dynamoDB.getTable(featureTableName).putItem(putItemSpec);
       } catch (ConditionalCheckFailedException e) {
-        logger.error("err=conflict_feature_version_mismatch ns_key={} {}", feature.getKey(), e.getMessage());
+        logger.error("err=conflict_feature_version_mismatch ns_key={} {}", feature.getKey(),
+            e.getMessage());
         throwConflictVersionMismatch(feature);
         return null;
       }
@@ -158,6 +159,34 @@ public class DefaultFeatureStorage implements FeatureStorage {
       return Optional.empty();
     }
     return Optional.of(FeatureSupport.toFeature(item.getString("json")));
+  }
+
+  @Override public List<Feature> loadFeatures(String group) {
+    logger.info("{}", kvp("op", "loadFeatures", "group", group));
+    List<Feature> features = Lists.newArrayList();
+
+    Table table = dynamoDB.getTable(featureTableName);
+
+    QuerySpec querySpec = new QuerySpec()
+        .withKeyConditionExpression(HASH_KEY + " = :k_" + HASH_KEY)
+        .withValueMap(new ValueMap().withString(":k_" + HASH_KEY, group))
+        .withConsistentRead(true);
+
+    DynamoDbCommand<ItemCollection<QueryOutcome>> cmd = new DynamoDbCommand<>("loadFeatures",
+        () -> queryTable(table, querySpec),
+        () -> {
+          throw new RuntimeException("loadFeatureById");
+        },
+        hystrixReadConfiguration,
+        metrics);
+
+    ItemCollection<QueryOutcome> items = cmd.execute();
+
+    for (Page<Item, QueryOutcome> page : items.pages()) {
+      page.forEach(item -> features.add(FeatureSupport.toFeature(item.getString("json"))));
+    }
+
+    return features;
   }
 
   private Item preparePutItem(Feature feature) {
@@ -202,34 +231,6 @@ public class DefaultFeatureStorage implements FeatureStorage {
 
   private Item getItem(String group, String key, Table table) {
     return table.getItem(HASH_KEY, group, RANGE_KEY, key);
-  }
-
-  @Override public List<Feature> loadFeatures(String group) {
-    logger.info("{}", kvp("op", "loadFeatures", "group", group));
-    List<Feature> features = Lists.newArrayList();
-
-    Table table = dynamoDB.getTable(featureTableName);
-
-    QuerySpec querySpec = new QuerySpec()
-        .withKeyConditionExpression(HASH_KEY+" = :k_"+HASH_KEY)
-        .withValueMap(new ValueMap().withString(":k_"+HASH_KEY, group))
-        .withConsistentRead(true);
-
-    DynamoDbCommand<ItemCollection<QueryOutcome>> cmd = new DynamoDbCommand<>("loadFeatures",
-        () -> queryTable(table, querySpec),
-        () -> {
-          throw new RuntimeException("loadFeatureById");
-        },
-        hystrixReadConfiguration,
-        metrics);
-
-    ItemCollection<QueryOutcome> items = cmd.execute();
-
-    for (Page<Item, QueryOutcome> page : items.pages()) {
-      page.forEach(item -> features.add(FeatureSupport.toFeature(item.getString("json"))));
-    }
-
-    return features;
   }
 
   private ItemCollection<QueryOutcome> queryTable(Table table, QuerySpec querySpec) {

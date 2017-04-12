@@ -56,7 +56,6 @@ class FeatureRegisterProcessor {
     applyFeatureNamespaceRegister(registering, builder);
 
     return builder.build();
-
   }
 
   private void applyOptionsRegister(Feature feature, Feature.Builder builder) {
@@ -132,10 +131,9 @@ class FeatureRegisterProcessor {
     }
   }
 
-
   private void applyFeatureNamespaceRegister(Feature registering, Feature.Builder builder) {
 
-    if(! registering.hasNamespaces()) {
+    if (!registering.hasNamespaces()) {
       return;
     }
 
@@ -153,7 +151,7 @@ class FeatureRegisterProcessor {
           .setVersion(processor.buildNextFeatureVersion())
           .setKey(incoming.getFeature().getKey())
           // always off on create
-          .setState(FeatureData.State.off) ;
+          .setState(FeatureData.State.off);
 
       featureDataBuilder.clearOptions();
       applyNamespaceFeatureOptionsRegister(incoming, featureDataBuilder);
@@ -173,7 +171,5 @@ class FeatureRegisterProcessor {
         .addAllItems(registeringNamespaceFeatures);
 
     builder.setNamespaces(nfcBuilder);
-
   }
-
 }

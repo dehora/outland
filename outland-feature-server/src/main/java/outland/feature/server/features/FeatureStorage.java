@@ -23,7 +23,6 @@ public interface FeatureStorage {
         409));
   }
 
-
   Void createFeature(Feature feature);
 
   Void updateFeature(Feature feature, FeatureVersion previousVersion);

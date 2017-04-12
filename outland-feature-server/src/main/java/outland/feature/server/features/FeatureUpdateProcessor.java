@@ -37,7 +37,8 @@ class FeatureUpdateProcessor {
     this.optionsProcessor = new OptionsProcessor();
   }
 
-  Feature prepareUpdateNamespaceFeatureThrowing(Feature feature, List<NamespaceFeature> namespaceFeatures) {
+  Feature prepareUpdateNamespaceFeatureThrowing(Feature feature,
+      List<NamespaceFeature> namespaceFeatures) {
     final NamespaceFeatureCollection.Builder nfcBuilder = NamespaceFeatureCollection.newBuilder()
         .setType("namespace.feature.collection")
         .addAllItems(namespaceFeatures);
@@ -103,7 +104,7 @@ class FeatureUpdateProcessor {
     }
 
     // process namespaces if we received some
-    if(incoming.hasNamespaces()) {
+    if (incoming.hasNamespaces()) {
       applyFeatureNamespaceUpdate(existing, incoming, wipBuilder);
     }
 
@@ -116,7 +117,7 @@ class FeatureUpdateProcessor {
 
   List<NamespaceFeature> buildMergedNamespaceFeatures(Feature feature, NamespaceFeature incoming) {
 
-    if(! feature.hasNamespaces()) {
+    if (!feature.hasNamespaces()) {
       return Lists.newArrayList(prepareNewNamespaceFeature(incoming));
     }
 
@@ -127,7 +128,7 @@ class FeatureUpdateProcessor {
 
     boolean found = false;
     for (NamespaceFeature existing : existingNamespacedItemsList) {
-      if(isMatching(existing, incoming)) {
+      if (isMatching(existing, incoming)) {
         updatedNamespacedItemsList.add(mergeNamespaceFeature(existing, incoming));
         found = true;
       } else {
@@ -135,7 +136,7 @@ class FeatureUpdateProcessor {
       }
     }
 
-    if(! found) {
+    if (!found) {
       updatedNamespacedItemsList.add(prepareNewNamespaceFeature(incoming));
     }
 
@@ -206,7 +207,7 @@ class FeatureUpdateProcessor {
   private void applyFeatureNamespaceUpdate(
       Feature existing, Feature incoming, Feature.Builder wipBuilder) {
 
-    if(! incoming.hasNamespaces()) {
+    if (!incoming.hasNamespaces()) {
       return;
     }
 
@@ -225,7 +226,7 @@ class FeatureUpdateProcessor {
   private List<NamespaceFeature> buildMergedNamespaceFeatures(Feature existingFeature,
       Feature incomingFeature) {
 
-    if(incomingFeature.getNamespaces().getItemsCount() == 0) {
+    if (incomingFeature.getNamespaces().getItemsCount() == 0) {
       return Lists.newArrayList(existingFeature.getNamespaces().getItemsList());
     }
 
@@ -239,8 +240,8 @@ class FeatureUpdateProcessor {
 
     final Map<String, NamespaceFeature> updateMap = Maps.newHashMap();
 
-    for (NamespaceFeature incoming: incomingList) {
-      if(existingMap.containsKey(incoming.getNamespace())) {
+    for (NamespaceFeature incoming : incomingList) {
+      if (existingMap.containsKey(incoming.getNamespace())) {
         // merge
         final NamespaceFeature existing = existingMap.get(incoming.getNamespace());
         final FeatureData existingFeatureData = existing.getFeature();
@@ -254,7 +255,7 @@ class FeatureUpdateProcessor {
     }
 
     for (NamespaceFeature existing : existingList) {
-      if(updateMap.containsKey(existing.getNamespace())) {
+      if (updateMap.containsKey(existing.getNamespace())) {
         continue;
       }
       updateMap.put(existing.getNamespace(), existing);
@@ -272,9 +273,7 @@ class FeatureUpdateProcessor {
         .setVersion(buildNextFeatureVersion())
         .setKey(incomingFeatureData.getKey())
         // always off on create
-        .setState(FeatureData.State.off)
-        ;
-
+        .setState(FeatureData.State.off);
 
     if (incomingFeatureData.getOptions().getOption().equals(OptionType.flag)) {
       return incoming.toBuilder()
@@ -303,7 +302,6 @@ class FeatureUpdateProcessor {
         .setType("namespace.feature")
         .setFeature(featureDataBuilder)
         .build();
-
   }
 
   private NamespaceFeature mergeNamespaceFeature(
@@ -344,16 +342,17 @@ class FeatureUpdateProcessor {
 
   private FeatureData.Builder mergeFeatureData(FeatureData existing, FeatureData incoming) {
     return existing.toBuilder()
-          .mergeFrom(incoming)
-          .setId(existing.getId())
-          .setVersion(nextFeatureVersion(existing.getVersion()));
+        .mergeFrom(incoming)
+        .setId(existing.getId())
+        .setVersion(nextFeatureVersion(existing.getVersion()));
   }
 
   private FeatureVersion nextFeatureVersion(FeatureVersion version) {
     return buildNextFeatureVersion(buildNextHybridLogicalTimestamp(version));
   }
 
-  private FeatureVersion buildNextFeatureVersion(VersionService.HybridLogicalTimestamp nextVersion) {
+  private FeatureVersion buildNextFeatureVersion(
+      VersionService.HybridLogicalTimestamp nextVersion) {
     return FeatureVersion.newBuilder()
         .setType("hlcver")
         .setCounter(nextVersion.counter())

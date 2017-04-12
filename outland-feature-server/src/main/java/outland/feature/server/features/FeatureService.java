@@ -1,7 +1,6 @@
 package outland.feature.server.features;
 
 import java.time.OffsetDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 import outland.feature.proto.Feature;
 import outland.feature.proto.FeatureCollection;
@@ -10,7 +9,7 @@ import outland.feature.proto.NamespaceFeature;
 public interface FeatureService {
 
   int DEFAULT_MAXWEIGHT = 10_000;
-  
+
   Optional<Feature> registerFeature(Feature feature);
 
   Optional<Feature> updateFeature(String group, String featureKey, Feature feature);
