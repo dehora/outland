@@ -10,7 +10,7 @@ public interface FeatureService {
 
   int DEFAULT_MAXWEIGHT = 10_000;
 
-  Optional<Feature> registerFeature(Feature feature);
+  Feature registerFeature(Feature feature);
 
   Optional<Feature> updateFeature(String group, String featureKey, Feature feature);
 
