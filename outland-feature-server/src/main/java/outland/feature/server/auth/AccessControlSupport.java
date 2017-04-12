@@ -37,15 +37,17 @@ public class AccessControlSupport {
       return;
     }
 
-    if (! GroupService.MEMBER.equals(authPrincipal.type()) && ! GroupService.SERVICE.equals(authPrincipal.type())) {
-      throw new AuthenticationException("Unknown type "+ authPrincipal.type());
+    if (!GroupService.MEMBER.equals(authPrincipal.type()) && !GroupService.SERVICE.equals(
+        authPrincipal.type())) {
+      throw new AuthenticationException("Unknown type " + authPrincipal.type());
     }
 
-    if (GroupService.MEMBER.equals(authPrincipal.type()) && ! memberHasGrant(authPrincipal, group)) {
+    if (GroupService.MEMBER.equals(authPrincipal.type()) && !memberHasGrant(authPrincipal, group)) {
       throw new AuthenticationException("Member not authenticated");
     }
 
-    if(GroupService.SERVICE.equals(authPrincipal.type()) && ! serviceHasGrant(authPrincipal, group)) {
+    if (GroupService.SERVICE.equals(authPrincipal.type()) && !serviceHasGrant(authPrincipal,
+        group)) {
       throw new AuthenticationException("Service not authenticated");
     }
   }
@@ -59,15 +61,17 @@ public class AccessControlSupport {
       return;
     }
 
-    if (! GroupService.MEMBER.equals(authPrincipal.type()) && ! GroupService.SERVICE.equals(authPrincipal.type())) {
-      throw new AuthenticationException("Unknown access type "+ authPrincipal.type());
+    if (!GroupService.MEMBER.equals(authPrincipal.type()) && !GroupService.SERVICE.equals(
+        authPrincipal.type())) {
+      throw new AuthenticationException("Unknown access type " + authPrincipal.type());
     }
 
     if (GroupService.MEMBER.equals(authPrincipal.type()) && !memberHasGrant(authPrincipal, group)) {
       throw new AuthenticationException("Member not authenticated");
     }
 
-    if (GroupService.SERVICE.equals(authPrincipal.type()) && !serviceHasGrant(authPrincipal, group)) {
+    if (GroupService.SERVICE.equals(authPrincipal.type()) && !serviceHasGrant(authPrincipal,
+        group)) {
       throw new AuthenticationException("Service not authenticated");
     }
   }

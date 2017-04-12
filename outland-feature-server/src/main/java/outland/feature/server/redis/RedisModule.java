@@ -1,7 +1,6 @@
 package outland.feature.server.redis;
 
 import com.google.inject.AbstractModule;
-import com.google.inject.Inject;
 import com.google.inject.multibindings.MapBinder;
 import java.util.Map;
 import org.slf4j.Logger;

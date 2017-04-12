@@ -14,10 +14,10 @@ import java.util.Optional;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Problem {
 
-  private static final URI DEFAULT_TYPE = URI.create("about:blank");
   public static final URI AUTH_TYPE = URI.create("about:auth");
   public static final URI CLIENT_TYPE = URI.create("about:client");
   public static final URI SERVER_TYPE = URI.create("about:server");
+  private static final URI DEFAULT_TYPE = URI.create("about:blank");
   private static final URI ARG_TYPE = URI.create("about:argument");
 
   @JsonProperty("type")

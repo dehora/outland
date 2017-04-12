@@ -17,8 +17,8 @@ import java.util.List;
 import javax.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import outland.feature.server.groups.GroupStorage;
 import outland.feature.server.features.TableConfiguration;
+import outland.feature.server.groups.GroupStorage;
 
 public class DynamoCreateGraphTableTask extends Task {
 

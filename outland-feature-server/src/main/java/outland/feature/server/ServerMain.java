@@ -33,13 +33,13 @@ import org.glassfish.jersey.server.filter.RolesAllowedDynamicFeature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import outland.feature.server.app.GuiceApplication;
-import outland.feature.server.groups.NamesapaceAuthService;
-import outland.feature.server.groups.GroupModule;
-import outland.feature.server.auth.AuthPrincipal;
 import outland.feature.server.auth.AuthConfiguration;
 import outland.feature.server.auth.AuthModule;
+import outland.feature.server.auth.AuthPrincipal;
 import outland.feature.server.aws.DynamoDbModule;
 import outland.feature.server.features.FeatureModule;
+import outland.feature.server.groups.GroupModule;
+import outland.feature.server.groups.NamesapaceAuthService;
 import outland.feature.server.hystrix.HystrixModule;
 import outland.feature.server.protobuf.Protobuf3Bundle;
 import outland.feature.server.redis.RedisModule;
@@ -65,7 +65,8 @@ public class ServerMain extends GuiceApplication<ServerConfiguration> {
     final boolean strict = false;
     bootstrap.setConfigurationSourceProvider(
         new SubstitutingSourceProvider(
-            bootstrap.getConfigurationSourceProvider(), new EnvironmentVariableSubstitutor(strict)));
+            bootstrap.getConfigurationSourceProvider(),
+            new EnvironmentVariableSubstitutor(strict)));
     bootstrap.addBundle(new Java8Bundle());
     bootstrap.addBundle(new Protobuf3Bundle());
     super.initialize(bootstrap);
@@ -95,7 +96,6 @@ public class ServerMain extends GuiceApplication<ServerConfiguration> {
   private void enableContentEncodingGzip(Environment environment) {
     EncodingFilter.enableFor(environment.jersey().getResourceConfig(), GZipEncoder.class);
   }
-
 
   private void configureAuth(AuthConfiguration configuration, Environment environment,
       Injector injector) {
@@ -137,14 +137,16 @@ public class ServerMain extends GuiceApplication<ServerConfiguration> {
       logger.info("op=auth_configuration,mechanism=basic");
 
       final Authenticator<BasicCredentials, AuthPrincipal> basicAppAuthenticator =
-          injector.getInstance(Key.get(new TypeLiteral<Authenticator<BasicCredentials, AuthPrincipal>>() {
-          }, Names.named("basicAppAuthenticator")));
+          injector.getInstance(
+              Key.get(new TypeLiteral<Authenticator<BasicCredentials, AuthPrincipal>>() {
+              }, Names.named("basicAppAuthenticator")));
 
-      final CachingAuthenticator<BasicCredentials, AuthPrincipal> cached = new CachingAuthenticator<>(
-          environment.metrics(),
-          basicAppAuthenticator,
-          CacheBuilder.newBuilder().maximumSize(1024)
-              .expireAfterWrite(configuration.basicCacheCredentialSeconds, TimeUnit.SECONDS));
+      final CachingAuthenticator<BasicCredentials, AuthPrincipal> cached =
+          new CachingAuthenticator<>(
+              environment.metrics(),
+              basicAppAuthenticator,
+              CacheBuilder.newBuilder().maximumSize(1024)
+                  .expireAfterWrite(configuration.basicCacheCredentialSeconds, TimeUnit.SECONDS));
 
       final AuthFilter basicAuthFilter = new BasicCredentialAuthFilter.Builder<AuthPrincipal>()
           .setPrefix("Basic")
@@ -156,7 +158,7 @@ public class ServerMain extends GuiceApplication<ServerConfiguration> {
       filters.add(basicAuthFilter);
     }
 
-    if(filters.size() == 0) {
+    if (filters.size() == 0) {
       logger.warn("op=auth_configuration,mechanism=no_auth_configured");
     }
 

@@ -29,9 +29,9 @@ import outland.feature.proto.Owner;
 import outland.feature.proto.ServiceAccess;
 import outland.feature.server.Problem;
 import outland.feature.server.ServerConfiguration;
-import outland.feature.server.groups.GroupService;
 import outland.feature.server.auth.AccessControlSupport;
 import outland.feature.server.auth.AuthPrincipal;
+import outland.feature.server.groups.GroupService;
 
 @Resource
 @Path("/groups")
@@ -217,7 +217,7 @@ public class GroupResource {
   ) throws AuthenticationException {
     final long start = System.currentTimeMillis();
 
-    if(Strings.isNullOrEmpty(ownerKey)) {
+    if (Strings.isNullOrEmpty(ownerKey)) {
       return headers.enrich(Response.status(404).entity(
           Problem.clientProblem("param_not_found", "", 404)), start).build();
     }
@@ -258,7 +258,7 @@ public class GroupResource {
 
       boolean found = false;
 
-      if(GroupService.ACCESS_RELATION.equals(relation)) {
+      if (GroupService.ACCESS_RELATION.equals(relation)) {
         if (!Strings.isNullOrEmpty(username)) {
           found = groupService.hasMemberAccess(group, username);
         } else if (!Strings.isNullOrEmpty(email)) {
@@ -268,7 +268,7 @@ public class GroupResource {
         }
       }
 
-      if(GroupService.OWNER_RELATION.equals(relation)) {
+      if (GroupService.OWNER_RELATION.equals(relation)) {
         if (!Strings.isNullOrEmpty(username)) {
           found = groupService.hasOwner(group, username);
         } else if (!Strings.isNullOrEmpty(email)) {
@@ -285,7 +285,6 @@ public class GroupResource {
 
     return headers.enrich(Response.status(404).entity(
         Problem.clientProblem(TITLE_NOT_FOUND, "", 404)), start).build();
-
   }
 
   private Response postUpdate(
@@ -299,7 +298,7 @@ public class GroupResource {
 
     if (maybe.isPresent()) {
       final Group group = maybe.get();
-     accessControlSupport.throwUnlessGrantedFor(authPrincipal, group);
+      accessControlSupport.throwUnlessGrantedFor(authPrincipal, group);
       final Group updated = updater.apply(group);
       return headers.enrich(Response.ok(updated), start).build();
     }

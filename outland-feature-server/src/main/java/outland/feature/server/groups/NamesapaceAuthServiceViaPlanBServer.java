@@ -26,12 +26,8 @@ import static outland.feature.server.StructLog.kvp;
 
 public class NamesapaceAuthServiceViaPlanBServer implements NamesapaceAuthService {
 
-  private static final Logger logger = LoggerFactory.getLogger(NamesapaceAuthServiceViaPlanBServer.class);
-
-  private static Gson gson() {
-    return GsonHolder.INSTANCE;
-  }
-
+  private static final Logger logger =
+      LoggerFactory.getLogger(NamesapaceAuthServiceViaPlanBServer.class);
   private static final Map<String, String> PLANB_REALMS = Maps.newHashMap();
   private static final String PLANB_FIELD_SCOPE = "scope";
   private static final String PLAN_FIELD_IDENTITY = "uid";
@@ -44,13 +40,16 @@ public class NamesapaceAuthServiceViaPlanBServer implements NamesapaceAuthServic
 
   private final OkHttpClient client;
   private final URI tokenLookupUri;
-
   @Inject
   public NamesapaceAuthServiceViaPlanBServer(
       @Named("OAuthServiceClient") OkHttpClient client,
       @Named("OAuthServiceTokenLookupUri") URI tokenLookupUri) {
     this.client = client;
     this.tokenLookupUri = tokenLookupUri;
+  }
+
+  private static Gson gson() {
+    return GsonHolder.INSTANCE;
   }
 
   @Override public Optional<AuthPrincipal> authenticate(String credentials, String tokenType) {

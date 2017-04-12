@@ -81,7 +81,7 @@ public class FeatureResource {
     final long start = System.currentTimeMillis();
 
     final Optional<Group> maybe = groupService.loadByKey(feature.getGroup());
-    if(! maybe.isPresent()) {
+    if (!maybe.isPresent()) {
       return headers.enrich(Response.status(404).entity(
           Problem.clientProblem("group_not_found", "", 404)), start).build();
     }
@@ -160,7 +160,7 @@ public class FeatureResource {
 
     final Optional<Feature> feature = featureService.loadFeatureByKey(group, featureKey);
 
-    if(feature.isPresent()) {
+    if (feature.isPresent()) {
       return headers.enrich(Response.ok(feature.get()), start).build();
     }
 
@@ -221,7 +221,7 @@ public class FeatureResource {
   ) throws AuthenticationException {
 
     return postUpdate(authPrincipal, group, featureKey,
-            feature -> featureService.add(feature, namespaceFeature));
+        feature -> featureService.add(feature, namespaceFeature));
   }
 
   @DELETE
@@ -245,7 +245,8 @@ public class FeatureResource {
   }
 
   private Response postUpdate(
-      AuthPrincipal authPrincipal, String group, String featureKey, Function<Feature, Feature> updater)
+      AuthPrincipal authPrincipal, String group, String featureKey,
+      Function<Feature, Feature> updater)
       throws AuthenticationException {
 
     final long start = System.currentTimeMillis();
@@ -262,9 +263,9 @@ public class FeatureResource {
   private void throwUnlessFeatureKeyMatch(Feature feature, String featureKey) {
     if (!feature.getKey().equals(featureKey)) {
       throw new ServiceException(Problem.clientProblem(
-              "Resource and entity feature keys do not match.",
-              kvp("url_feature_key", featureKey, "data_feature_key", feature.getKey()),
-              422));
+          "Resource and entity feature keys do not match.",
+          kvp("url_feature_key", featureKey, "data_feature_key", feature.getKey()),
+          422));
     }
   }
 

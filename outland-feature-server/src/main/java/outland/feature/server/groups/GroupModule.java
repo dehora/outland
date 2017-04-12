@@ -14,6 +14,7 @@ public class GroupModule extends AbstractModule {
   @Override protected void configure() {
     bind(GroupService.class).to(DefaultGroupService.class).asEagerSingleton();
     bind(GroupStorage.class).to(DefaultGroupStorage.class).asEagerSingleton();
-    bind(NamesapaceAuthService.class).to(NamesapaceAuthServiceViaPlanBServer.class).asEagerSingleton();
+    bind(NamesapaceAuthService.class).to(NamesapaceAuthServiceViaPlanBServer.class)
+        .asEagerSingleton();
   }
 }
