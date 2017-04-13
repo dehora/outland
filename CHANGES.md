@@ -2,121 +2,105 @@
 
 ### 0.0.10
 
+#### Server
+
+- Fixes location headers for groups and features.
+- Adds properties to groups.
 - Removes ids from version structures.
-
+- Tidies up proto files, types and identifiers.
 - Allows a feature to have one or more namespaced variants.
-
 - Renames namespace to group.
-
 - Returns 422 if the feature/group request content is invalid.
+
 
 ### 0.0.9
 
+#### Client
+
 - Replaces "app" concept with namespace in client
-
 - Clients can work with multiple namespaces without declaring a configuration.
-
 - Adds an automatic client shutdown hook.
-
 - Adds JavaDoc for client.
 
 
 ### 0.0.8
 
+#### Server
+
 - Renames App to Namespace.
-
 - Renames grants to access.
-
 - Moves app owners into a collection.
-
 - Fixes updates of features.
-
 - Rejects re-creation of Features with a 422.
-
 - Rejects re-creation of Apps with a 422.
-
 - Extends the readme quickstart with HTTP API examples
+
 
 ### 0.0.7
 
+#### Server
+
  - Fixes updates sent with no option changes.
+
 
 ### 0.0.6
 
 #### Server
 
 - Wraps feature options in a collection object.
-
 - Validates option ids match on update
+
 
 ### 0.0.5
 
 #### Server
 
- - Defines an initial Open API file for the server.
- 
- - Adds a discovery resource for serving the Open API file.
- 
- - Updates readme: background, quickstart, docker, describes features, apps and grants.
- 
- - Males OAuth remote server check the only option.
- 
- - Cleans up basic auth option, remove scope check and redundant options.
- 
- - Replaces global API keys with per service/member keys.
+- Defines an initial Open API file for the server.
+- Adds a discovery resource for serving the Open API file.
+- Updates readme: background, quickstart, docker, describes features, apps and grants.
+- Males OAuth remote server check the only option.
+- Cleans up basic auth option, remove scope check and redundant options.
+- Replaces global API keys with per service/member keys.
+- Simplifies AWS client configuration.
 
- - Simplifies AWS client configuration.
- 
 #### Client 
  
- - Reduces declared client deps to SLF4J, RocksDB, and Metrics.
+- Reduces declared client deps to SLF4J, RocksDB, and Metrics.
 
 #### Client
 
- - Declared client dependencies are, SLF4J, RocksDB, and Metrics.
+- Declared client dependencies are, SLF4J, RocksDB, and Metrics.
+
 
 ### 0.0.4
 
 **Server**
 
 - Changes App to have service and member grants to access features, replacing owners.
-
 - Renames appId to appkey across client and server to reflect what the field actually is.
-
 - Removes FeatureOwner in proto/api model replacing it with Owner.
-
 - Renames optionType to option in from proto/api model.
-
 - Adds type fields to the proto/api model.
-
 - Allows any authenticated principal to create an App via the API.
-
 - Adds an App validator checking minimum fields needed to create.
-
 - Adds a feature validator checking minimum fields and options for create/update.
-
 - Moves docker support to outland-feature-docker sub-project.
-
 - Publishes image to docker hub under dehora/outland-feature-server
-
 - Allows jvm opts to be passed to docker through the env.
-
 - Embeds configuration directly in image, removes previously needed docker mount.
-
 - Makes dropwizard conf items available to docker through the env.
-
 - Adds an example docker-compose file for dehora/outland-feature-server.
 
 **Client**:
 
 - Updates API to match server.
 
+
 ### 0.0.3
 
 **Server**
 
 - Checks the app exists before allowing a feature creation.
-
 - Adds an implementation of HyParView using gRPC.
 
 
