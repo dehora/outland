@@ -196,113 +196,6 @@ public  final class Feature extends
             outland.feature.proto.Feature.class, outland.feature.proto.Feature.Builder.class);
   }
 
-  /**
-   * Protobuf enum {@code outland.Feature.State}
-   */
-  public enum State
-      implements com.google.protobuf.ProtocolMessageEnum {
-    /**
-     * <code>none = 0;</code>
-     */
-    none(0),
-    /**
-     * <code>off = 1;</code>
-     */
-    off(1),
-    /**
-     * <code>on = 2;</code>
-     */
-    on(2),
-    UNRECOGNIZED(-1),
-    ;
-
-    /**
-     * <code>none = 0;</code>
-     */
-    public static final int none_VALUE = 0;
-    /**
-     * <code>off = 1;</code>
-     */
-    public static final int off_VALUE = 1;
-    /**
-     * <code>on = 2;</code>
-     */
-    public static final int on_VALUE = 2;
-
-
-    public final int getNumber() {
-      if (this == UNRECOGNIZED) {
-        throw new java.lang.IllegalArgumentException(
-            "Can't get the number of an unknown enum value.");
-      }
-      return value;
-    }
-
-    /**
-     * @deprecated Use {@link #forNumber(int)} instead.
-     */
-    @java.lang.Deprecated
-    public static State valueOf(int value) {
-      return forNumber(value);
-    }
-
-    public static State forNumber(int value) {
-      switch (value) {
-        case 0: return none;
-        case 1: return off;
-        case 2: return on;
-        default: return null;
-      }
-    }
-
-    public static com.google.protobuf.Internal.EnumLiteMap<State>
-        internalGetValueMap() {
-      return internalValueMap;
-    }
-    private static final com.google.protobuf.Internal.EnumLiteMap<
-        State> internalValueMap =
-          new com.google.protobuf.Internal.EnumLiteMap<State>() {
-            public State findValueByNumber(int number) {
-              return State.forNumber(number);
-            }
-          };
-
-    public final com.google.protobuf.Descriptors.EnumValueDescriptor
-        getValueDescriptor() {
-      return getDescriptor().getValues().get(ordinal());
-    }
-    public final com.google.protobuf.Descriptors.EnumDescriptor
-        getDescriptorForType() {
-      return getDescriptor();
-    }
-    public static final com.google.protobuf.Descriptors.EnumDescriptor
-        getDescriptor() {
-      return outland.feature.proto.Feature.getDescriptor().getEnumTypes().get(0);
-    }
-
-    private static final State[] VALUES = values();
-
-    public static State valueOf(
-        com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
-      if (desc.getType() != getDescriptor()) {
-        throw new java.lang.IllegalArgumentException(
-          "EnumValueDescriptor is not for this type.");
-      }
-      if (desc.getIndex() == -1) {
-        return UNRECOGNIZED;
-      }
-      return VALUES[desc.getIndex()];
-    }
-
-    private final int value;
-
-    private State(int value) {
-      this.value = value;
-    }
-
-    // @@protoc_insertion_point(enum_scope:outland.Feature.State)
-  }
-
   private int bitField0_;
   public static final int TYPE_FIELD_NUMBER = 1;
   private volatile java.lang.Object type_;
@@ -587,17 +480,17 @@ public  final class Feature extends
   public static final int STATE_FIELD_NUMBER = 12;
   private int state_;
   /**
-   * <code>optional .outland.Feature.State state = 12;</code>
+   * <code>optional .outland.State state = 12;</code>
    */
   public int getStateValue() {
     return state_;
   }
   /**
-   * <code>optional .outland.Feature.State state = 12;</code>
+   * <code>optional .outland.State state = 12;</code>
    */
-  public outland.feature.proto.Feature.State getState() {
-    outland.feature.proto.Feature.State result = outland.feature.proto.Feature.State.valueOf(state_);
-    return result == null ? outland.feature.proto.Feature.State.UNRECOGNIZED : result;
+  public outland.feature.proto.State getState() {
+    outland.feature.proto.State result = outland.feature.proto.State.valueOf(state_);
+    return result == null ? outland.feature.proto.State.UNRECOGNIZED : result;
   }
 
   public static final int DESCRIPTION_FIELD_NUMBER = 13;
@@ -757,7 +650,7 @@ public  final class Feature extends
     if (!getGroupBytes().isEmpty()) {
       com.google.protobuf.GeneratedMessageV3.writeString(output, 11, group_);
     }
-    if (state_ != outland.feature.proto.Feature.State.none.getNumber()) {
+    if (state_ != outland.feature.proto.State.none.getNumber()) {
       output.writeEnum(12, state_);
     }
     if (!getDescriptionBytes().isEmpty()) {
@@ -810,7 +703,7 @@ public  final class Feature extends
     if (!getGroupBytes().isEmpty()) {
       size += com.google.protobuf.GeneratedMessageV3.computeStringSize(11, group_);
     }
-    if (state_ != outland.feature.proto.Feature.State.none.getNumber()) {
+    if (state_ != outland.feature.proto.State.none.getNumber()) {
       size += com.google.protobuf.CodedOutputStream
         .computeEnumSize(12, state_);
     }
@@ -1816,13 +1709,13 @@ public  final class Feature extends
 
     private int state_ = 0;
     /**
-     * <code>optional .outland.Feature.State state = 12;</code>
+     * <code>optional .outland.State state = 12;</code>
      */
     public int getStateValue() {
       return state_;
     }
     /**
-     * <code>optional .outland.Feature.State state = 12;</code>
+     * <code>optional .outland.State state = 12;</code>
      */
     public Builder setStateValue(int value) {
       state_ = value;
@@ -1830,16 +1723,16 @@ public  final class Feature extends
       return this;
     }
     /**
-     * <code>optional .outland.Feature.State state = 12;</code>
+     * <code>optional .outland.State state = 12;</code>
      */
-    public outland.feature.proto.Feature.State getState() {
-      outland.feature.proto.Feature.State result = outland.feature.proto.Feature.State.valueOf(state_);
-      return result == null ? outland.feature.proto.Feature.State.UNRECOGNIZED : result;
+    public outland.feature.proto.State getState() {
+      outland.feature.proto.State result = outland.feature.proto.State.valueOf(state_);
+      return result == null ? outland.feature.proto.State.UNRECOGNIZED : result;
     }
     /**
-     * <code>optional .outland.Feature.State state = 12;</code>
+     * <code>optional .outland.State state = 12;</code>
      */
-    public Builder setState(outland.feature.proto.Feature.State value) {
+    public Builder setState(outland.feature.proto.State value) {
       if (value == null) {
         throw new NullPointerException();
       }
@@ -1849,7 +1742,7 @@ public  final class Feature extends
       return this;
     }
     /**
-     * <code>optional .outland.Feature.State state = 12;</code>
+     * <code>optional .outland.State state = 12;</code>
      */
     public Builder clearState() {
       

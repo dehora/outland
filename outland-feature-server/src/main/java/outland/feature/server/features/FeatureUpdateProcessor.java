@@ -18,6 +18,7 @@ import outland.feature.proto.NamespaceFeatureCollection;
 import outland.feature.proto.OptionCollection;
 import outland.feature.proto.OptionType;
 import outland.feature.proto.Owner;
+import outland.feature.proto.State;
 import outland.feature.server.Names;
 
 import static outland.feature.server.features.DefaultFeatureService.DEFAULT_MAXWEIGHT;
@@ -98,7 +99,7 @@ class FeatureUpdateProcessor {
     }
 
     // a value other than none indicates the client sent something
-    if (!incoming.getState().equals(Feature.State.none)) {
+    if (!incoming.getState().equals(State.none)) {
       wipBuilder.setState(incoming.getState());
     }
 
@@ -273,7 +274,7 @@ class FeatureUpdateProcessor {
         .setVersion(versionSupport.nextFeatureVersion())
         .setKey(incomingFeatureData.getKey())
         // always off on create
-        .setState(FeatureData.State.off);
+        .setState(State.off);
 
     if (incomingFeatureData.getOptions().getOption().equals(OptionType.flag)) {
       return incoming.toBuilder()

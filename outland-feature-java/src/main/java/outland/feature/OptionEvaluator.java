@@ -4,6 +4,7 @@ import java.util.List;
 import outland.feature.proto.Feature;
 import outland.feature.proto.FeatureOption;
 import outland.feature.proto.OptionType;
+import outland.feature.proto.State;
 
 class OptionEvaluator {
 
@@ -15,7 +16,7 @@ class OptionEvaluator {
       return false; // todo: throw this?
     }
 
-    if(! feature.getState().equals(Feature.State.on)) {
+    if(! feature.getState().equals(State.on)) {
       return false; // todo: replace with a fallback when we add fallbacks for options
     }
 
@@ -29,7 +30,7 @@ class OptionEvaluator {
     final int weight2 = option2.getWeight();
 
     if (weight1 == 0 && weight2 == 0) { // zero/missing waits treated as a plain toggle
-      return feature.getState().equals(Feature.State.on);
+      return feature.getState().equals(State.on);
     }
 
     // normalise to 0.0..1.0

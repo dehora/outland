@@ -6,6 +6,7 @@ import outland.feature.proto.Feature;
 import outland.feature.proto.FeatureOption;
 import outland.feature.proto.OptionCollection;
 import outland.feature.proto.OptionType;
+import outland.feature.proto.State;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -18,11 +19,11 @@ public class OptionEvaluatorTest {
     OptionEvaluator oe = new OptionEvaluator();
 
     assertFalse(oe.evaluateBooleanOptions(Feature.newBuilder()
-        .setState(Feature.State.off)
+        .setState(State.off)
         .build()));
 
     assertFalse(oe.evaluateBooleanOptions(Feature.newBuilder()
-        .setState(Feature.State.none)
+        .setState(State.none)
         .build()));
   }
 
@@ -36,7 +37,7 @@ public class OptionEvaluatorTest {
 
     final Feature feature1 = Feature.newBuilder()
         .setOptions(collection)
-        .setState(Feature.State.on)
+        .setState(State.on)
         .build();
 
     assertFalse(oe.evaluateBooleanOptions(feature1));
@@ -79,7 +80,7 @@ public class OptionEvaluatorTest {
 
     final Feature feature1 = Feature.newBuilder()
         .setOptions(collection)
-        .setState(Feature.State.on)
+        .setState(State.on)
         .build();
 
     OptionEvaluator oe = new OptionEvaluator();
@@ -102,7 +103,7 @@ public class OptionEvaluatorTest {
         .buildPartial();
 
     final Feature feature1 = Feature.newBuilder()
-        .setOptions(collection).setState(Feature.State.on)
+        .setOptions(collection).setState(State.on)
         .build();
 
     OptionEvaluator oe = new OptionEvaluator();
@@ -148,7 +149,7 @@ public class OptionEvaluatorTest {
         .buildPartial();
 
     final Feature feature1 = Feature.newBuilder()
-        .setOptions(collection).setState(Feature.State.on)
+        .setOptions(collection).setState(State.on)
         .build();
 
     OptionEvaluator oe = new OptionEvaluator();
@@ -172,7 +173,7 @@ public class OptionEvaluatorTest {
         .buildPartial();
 
     final Feature feature1 = Feature.newBuilder()
-        .setOptions(collection).setState(Feature.State.on)
+        .setOptions(collection).setState(State.on)
         .build();
 
     OptionEvaluator oe = new OptionEvaluator();
@@ -232,7 +233,7 @@ public class OptionEvaluatorTest {
 
     final Feature feature1 = Feature.newBuilder()
         .setOptions(collection)
-        .setState(Feature.State.on  )
+        .setState(State.on  )
         .build();
 
     OptionEvaluator oe = new OptionEvaluator();

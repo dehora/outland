@@ -102,13 +102,13 @@ public interface FeatureOrBuilder extends
       getGroupBytes();
 
   /**
-   * <code>optional .outland.Feature.State state = 12;</code>
+   * <code>optional .outland.State state = 12;</code>
    */
   int getStateValue();
   /**
-   * <code>optional .outland.Feature.State state = 12;</code>
+   * <code>optional .outland.State state = 12;</code>
    */
-  outland.feature.proto.Feature.State getState();
+  outland.feature.proto.State getState();
 
   /**
    * <code>optional string description = 13;</code>

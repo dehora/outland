@@ -12,6 +12,7 @@ import outland.feature.proto.NamespaceFeatureCollection;
 import outland.feature.proto.OptionCollection;
 import outland.feature.proto.OptionType;
 import outland.feature.proto.Owner;
+import outland.feature.proto.State;
 import outland.feature.server.Names;
 
 class FeatureRegisterProcessor {
@@ -43,7 +44,7 @@ class FeatureRegisterProcessor {
     builder.setId(id);
     builder.setCreated(created);
     builder.setUpdated(builder.getCreated());
-    builder.setState(Feature.State.off); // always disabled on registerFeature
+    builder.setState(State.off); // always disabled on registerFeature
 
     builder.setVersion(versionSupport.nextFeatureVersion(registering));
     builder.clearOptions();
@@ -152,7 +153,7 @@ class FeatureRegisterProcessor {
           .setVersion(versionSupport.nextFeatureVersion())
           .setKey(incoming.getFeature().getKey())
           // always off on create
-          .setState(FeatureData.State.off);
+          .setState(State.off);
 
       featureDataBuilder.clearOptions();
       applyNamespaceFeatureOptionsRegister(incoming, featureDataBuilder);

@@ -24,6 +24,7 @@ import outland.feature.proto.MemberAccess;
 import outland.feature.proto.Owner;
 import outland.feature.proto.OwnerCollection;
 import outland.feature.proto.ServiceAccess;
+import outland.feature.proto.State;
 import outland.feature.server.Names;
 import outland.feature.server.Problem;
 import outland.feature.server.ServerConfiguration;
@@ -466,7 +467,7 @@ public class FeatureResourceTest {
     String id = builderRegister.getId();
     String created = builderRegister.getCreated();
     String updated = builderRegister.getUpdated();
-    Feature.State state = builderRegister.getState();
+    State state = builderRegister.getState();
 
     // same id
     assertNotNull(id);
@@ -475,11 +476,11 @@ public class FeatureResourceTest {
     // created
     assertNotNull(created);
     // disabled by default
-    assertEquals(Feature.State.off, state);
+    assertEquals(State.off, state);
 
     // turn on our feature and send an update
 
-    Feature update = builderRegister.build().toBuilder().setState(Feature.State.on).build();
+    Feature update = builderRegister.build().toBuilder().setState(State.on).build();
     String featureUpdateJson = Protobuf3Support.toJsonString(update);
     Response responseUpdate = client.target(url + "/" + seedGroupOneKey + "/" + featureKey)
         .request()
@@ -503,7 +504,7 @@ public class FeatureResourceTest {
     // same created
     assertEquals(created, builderUpdated.getCreated());
     // updated to enabled
-    assertEquals(Feature.State.on, builderUpdated.getState());
+    assertEquals(State.on, builderUpdated.getState());
 
     // now read it back from the server and double check
 
@@ -529,7 +530,7 @@ public class FeatureResourceTest {
     // same created
     assertEquals(created, featResponseGet.getCreated());
     // still enabled
-    assertEquals(Feature.State.on, featResponseGet.getState());
+    assertEquals(State.on, featResponseGet.getState());
   }
 
   @Test
