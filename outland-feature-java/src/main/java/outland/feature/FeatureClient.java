@@ -8,7 +8,6 @@ import okhttp3.OkHttpClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import outland.feature.proto.Feature;
-import outland.feature.proto.OptionType;
 import outland.feature.proto.State;
 
 /**
@@ -28,6 +27,7 @@ public class FeatureClient {
   private final ContentSupport contentSupport;
   private final URI baseURI;
   private final String defaultGroup;
+  private final String defaultNamespace;
   private final boolean localStoreEnabled;
   private final MetricRegistry metricRegistry;
   private final Evaluator evaluator;
@@ -36,6 +36,7 @@ public class FeatureClient {
     this.serverConfiguration = builder.serverConfiguration;
     this.baseURI = serverConfiguration.baseURI();
     this.defaultGroup = serverConfiguration.defaultGroup();
+    this.defaultNamespace = serverConfiguration.defaultNamespace();
     this.localStoreEnabled = serverConfiguration.localStoreEnabled();
     this.authorizationProvider = builder.authorizationProvider;
     this.resourceProvider = builder.resourceProvider;
@@ -290,7 +291,7 @@ public class FeatureClient {
       return false;
     }
 
-    return evaluate(maybe);
+    return evaluate(maybe.get());
   }
 
   private boolean enabledThrowingInner(String group, String featureKey) {
@@ -300,11 +301,16 @@ public class FeatureClient {
       return throwNotFound(group, featureKey);
     }
 
-    return evaluate(maybe);
+    return evaluate(maybe.get());
   }
 
-  private boolean evaluate(Optional<Feature> maybe) {
-    return evaluator.evaluate(maybe.get());
+  private boolean evaluate(Feature feature) {
+
+    if(this.defaultNamespace.equals(ServerConfiguration.DEFAULT_NAMESPACE)) {
+      return evaluator.evaluate(feature);
+    }
+
+    return evaluator.evaluate(feature, defaultNamespace);
   }
 
   private boolean throwNotFound(String group, String featureKey) {

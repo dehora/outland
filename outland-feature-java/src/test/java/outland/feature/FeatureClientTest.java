@@ -1,13 +1,20 @@
 package outland.feature;
 
 import org.junit.Test;
+import outland.feature.proto.Feature;
+import outland.feature.proto.FeatureData;
+import outland.feature.proto.FeatureOption;
+import outland.feature.proto.NamespaceFeature;
+import outland.feature.proto.NamespaceFeatureCollection;
+import outland.feature.proto.OptionCollection;
+import outland.feature.proto.OptionType;
+import outland.feature.proto.State;
 
 import static junit.framework.TestCase.assertTrue;
 import static junit.framework.TestCase.fail;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 
 public class FeatureClientTest {
 
@@ -16,8 +23,7 @@ public class FeatureClientTest {
     ServerConfiguration serverConfiguration =
         new ServerConfiguration()
             .baseURI("http://localhost")
-            .defaultGroup("the_app")
-            ;
+            .defaultGroup("the_app");
 
     assertTrue(serverConfiguration.defaultGroup() != null);
 
@@ -59,7 +65,7 @@ public class FeatureClientTest {
 
   @Test
   public void testNopeBuilder() {
-    
+
     try {
       FeatureClient.newBuilder()
           .featureStore(new FeatureStoreNone())
