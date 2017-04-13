@@ -269,6 +269,7 @@ class FeatureUpdateProcessor {
 
     final FeatureData.Builder featureDataBuilder = incomingFeatureData.toBuilder()
         .setId(Names.namespaceFeature())
+        .setType(Names.namespaceFeatureType())
         .setVersion(versionSupport.nextFeatureVersion())
         .setKey(incomingFeatureData.getKey())
         // always off on create
@@ -312,6 +313,8 @@ class FeatureUpdateProcessor {
     final FeatureData.Builder featureDataBuilder =
         mergeFeatureData(existingFeatureData, incomingFeatureData);
 
+    featureDataBuilder.setType(Names.namespaceFeatureType());
+
     // process options if we received some
     if (incomingFeatureData.getOptions().getOption().equals(OptionType.bool)
         && incomingFeatureData.getOptions().getItemsCount() != 0) {
@@ -343,6 +346,7 @@ class FeatureUpdateProcessor {
     return existing.toBuilder()
         .mergeFrom(incoming)
         .setId(existing.getId())
+        .setType(Names.namespaceFeatureType())
         .setVersion(versionSupport.nextFeatureVersion(existing.getVersion()));
   }
 
