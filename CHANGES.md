@@ -4,13 +4,18 @@
 
 #### Server
 
+- Allows a feature to have one or more namespaced variants.
 - Fixes location headers for groups and features.
 - Adds properties to groups.
 - Removes ids from version structures.
 - Tidies up proto files, types and identifiers.
-- Allows a feature to have one or more namespaced variants.
 - Renames namespace to group.
 - Returns 422 if the feature/group request content is invalid.
+
+#### Clients
+
+- Allows a client to be configured to use a namespace.
+- Evaluates feature namespaces falling back to default values.
 
 
 ### 0.0.9
