@@ -27,11 +27,13 @@
     - [Evaluate a Feature](#evaluate-a-feature)
     - [Client Feature API](#client-feature-api)
 - [Outland Feature Flag Model](#outland-feature-flag-model)
-  - [Summary: Features and Groups](#summary-features-and-groups)
+  - [Summary: Features, Groups and Namespaces](#summary-features-groups-and-namespaces)
   - [Features](#features)
   - [Feature Flags and Feature Options](#feature-flags-and-feature-options)
-  - [Group](#group)
+  - [Groups](#groups)
   - [Group Access](#group-access)
+  - [Namespaces](#namespaces)
+    - [Pattern: using namespaces for environments](#pattern-using-namespaces-for-environments)
 - [Installation](#installation)
   - [Server](#server-1)
     - [Docker](#docker)
@@ -108,7 +110,6 @@ The admin UI and cluster mode are next in line. See also:
 - [Trello Roadmap](http://bit.ly/2nje8ou) is where the project direction is written down.
 - [Open Issues](http://bit.ly/2nLZNUT) section has a  list of bugs and things to get done. 
 - [Help Wanted](http://bit.ly/2ngXkxP) has a list of things that would be nice to have.
-
 
 # Quickstart
 
@@ -347,7 +348,7 @@ You can manage features via the client via `FeatureResource`:
 
 # Outland Feature Flag Model
 
-## Summary: Features and Groups
+## Summary: Features, Groups and Namespaces
 
 A _Feature_ is identified by a _key_, and can be in an _on_ or _off_ state. Every feature has an owner
 and a version.  As well as a state, Features may also have a set of _options_. These are evaluated 
@@ -357,6 +358,10 @@ if it being returned.
 A _Group_ is a collection of features and also identified by a key. Every Group at 
 least one owner. A Feature always belongs to one Group. Groups also hold a list of services 
 and team members that are allowed access its features. 
+
+A feature can have optionally have one or more _Namespaces_ that carry a custom variation of
+the feature's state. For example a feature can be disabled by default but enabled for a 
+namespace called `staging`.
 
 ## Features
 
@@ -418,7 +423,7 @@ biases the evaluation. One time in ten the "red" option will be returned, two ti
 it'll be "green", and seven times out of ten it'll be "blue". This gives us a path beyond on/off 
 toggles to things like A/B testing and multi-armed bandits.
 
-## Group
+## Groups
 
 A Group is a collection of features and every feature belongs to just one Group. Every 
 feature in a Group must have a unique key within the Group. 
@@ -453,6 +458,63 @@ otherwise it won't be authorised.
 
 Owners and grants are distinct - owners are not automatically given grants and are not looked 
 up during authentication. 
+
+## Namespaces
+
+Each feature can have one or more namespaces that contain variations of the feature state. The 
+API returns the namespace variations as part of the feature's response data.
+
+The client can be configured to use a particular namespace via its `ServerConfiguration`, 
+for example: 
+
+```java
+  ServerConfiguration conf = new ServerConfiguration()
+      .baseURI("http://localhost:8180")
+      .namespace("staging");
+
+  FeatureClient client = ...;
+```
+
+If a feature it's evaluating doesn't have that namespace the client will fall back to using 
+the feature's default state.
+
+You can define feature namespaces when creating a feature, but they are easy to add to a feature after its been created by sending one to the features `namespaces` resource. Here's an example:
+
+```bash
+curl -v http://localhost:8180/features/testgroup-1/testfeature-2/namespaces \
+-H "Content-type: application/json" \
+-u testconsole/service:letmein -d'
+{
+  "namespace": "staging",
+  "feature": {
+    "key": "testfeature-2",
+    "state": "off",
+    "options": {
+      "option": "bool",
+      "items": [
+        {
+          "name": "false",
+          "value": "false",
+          "weight": 9900
+        },
+        {
+          "name": "true",
+          "value": "true",
+          "weight": 100
+        }
+      ]
+    }
+  }
+}
+'
+```
+
+### Pattern: using namespaces for environments
+
+A common use of namespaces is to define per-environment settings. For example a "production" 
+namespace can have a bool option with a 99% false weight and a 1% true weight, whereas the 
+default could be 90% false and 10% true. Using namespaces like this means you don't have to 
+define a Group per environment you're working with.
 
 
 # Installation

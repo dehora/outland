@@ -158,7 +158,7 @@ public class ServerConfiguration {
    * Optionally configure a namespace used to qualify feature checks.
    *<p>
    * Features can be configured with one or more namespaces that carry a custom variation of the
-   * the feature state. For example a bool feature might have default weights of
+   * feature state. For example a bool feature might have default weights of
    * <code>true: 5000<code/> and <code>false: 5000<code/> but for the "staging" namespace different
    * weights  of <code>true: 9000<code/> and <code>false: 1000<code/>. As with the example,
    * a common use of namespaces is set feature states for environments.
