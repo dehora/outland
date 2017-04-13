@@ -17,5 +17,5 @@ echo "Server ready, creating tables..."
 
 echo "Server tables done, creating seed group..."
 
-create_seed_group
+./create_seed_group
 
