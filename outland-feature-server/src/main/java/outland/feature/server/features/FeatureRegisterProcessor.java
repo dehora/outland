@@ -147,6 +147,7 @@ class FeatureRegisterProcessor {
 
       final FeatureData.Builder featureDataBuilder = FeatureData.newBuilder()
           .mergeFrom(incoming.getFeature())
+          .setType(Names.namespaceFeatureType())
           .setId(Names.namespaceFeature())
           .setVersion(versionSupport.nextFeatureVersion())
           .setKey(incoming.getFeature().getKey())
