@@ -12,10 +12,10 @@ public class ServerConfigurationTest {
   @Test
   public void testConfigurationNamespace() throws Exception {
     ServerConfiguration configuration = new ServerConfiguration();
-    assertEquals(ServerConfiguration.DEFAULT_NAMESPACE, configuration.defaultNamespace());
+    assertEquals(ServerConfiguration.DEFAULT_NAMESPACE, configuration.namespace());
 
-    configuration.defaultNamespace("production");
-    assertEquals("production", configuration.defaultNamespace());
+    configuration.namespace("production");
+    assertEquals("production", configuration.namespace());
   }
 
   @Test
