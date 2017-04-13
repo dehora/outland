@@ -2,7 +2,6 @@ package outland.feature;
 
 import com.codahale.metrics.MetricRegistry;
 import java.net.URI;
-import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import okhttp3.OkHttpClient;
 import org.slf4j.Logger;
@@ -27,7 +26,7 @@ public class FeatureClient {
   private final ContentSupport contentSupport;
   private final URI baseURI;
   private final String defaultGroup;
-  private final String defaultNamespace;
+  private final String namespace;
   private final boolean localStoreEnabled;
   private final MetricRegistry metricRegistry;
   private final Evaluator evaluator;
@@ -36,7 +35,7 @@ public class FeatureClient {
     this.serverConfiguration = builder.serverConfiguration;
     this.baseURI = serverConfiguration.baseURI();
     this.defaultGroup = serverConfiguration.defaultGroup();
-    this.defaultNamespace = serverConfiguration.defaultNamespace();
+    this.namespace = serverConfiguration.namespace();
     this.localStoreEnabled = serverConfiguration.localStoreEnabled();
     this.authorizationProvider = builder.authorizationProvider;
     this.resourceProvider = builder.resourceProvider;
@@ -308,11 +307,11 @@ public class FeatureClient {
       return false;
     }
 
-    if(this.defaultNamespace.equals(ServerConfiguration.DEFAULT_NAMESPACE)) {
+    if(this.namespace.equals(ServerConfiguration.DEFAULT_NAMESPACE)) {
       return evaluator.evaluate(feature);
     }
 
-    return evaluator.evaluate(feature, defaultNamespace);
+    return evaluator.evaluate(feature, namespace);
   }
 
   private boolean throwNotFound(String group, String featureKey) {

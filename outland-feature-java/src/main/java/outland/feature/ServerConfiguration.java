@@ -150,7 +150,7 @@ public class ServerConfiguration {
     return this;
   }
 
-  public String defaultNamespace() {
+  public String namespace() {
     return namespace;
   }
 
@@ -172,7 +172,7 @@ public class ServerConfiguration {
    * @param namespace the feature namespace
    * @return this
    */
-  public ServerConfiguration defaultNamespace(String namespace) {
+  public ServerConfiguration namespace(String namespace) {
     this.namespace = namespace;
     return this;
   }

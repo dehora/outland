@@ -127,7 +127,7 @@ public class FeatureClientNamespaceTest {
     final ServerConfiguration serverConfiguration = new ServerConfiguration()
         .baseURI("http://localhost")
         .defaultGroup(group)
-        .defaultNamespace(namespace);
+        .namespace(namespace);
 
     return FeatureClient.newBuilder()
         .serverConfiguration(serverConfiguration)
