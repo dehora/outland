@@ -10,8 +10,8 @@ class FeatureStoreNone implements FeatureStore {
     return null;
   }
 
-  @Override public Optional<Feature> find(String group, String key) {
-    return Optional.empty();
+  @Override public Feature find(String group, String key) {
+    return null;
   }
 
   @Override public FeatureCollection findAll(String group) {

@@ -63,7 +63,7 @@ class FeatureStoreReal implements FeatureStore {
     return null;
   }
 
-  @Override public Optional<Feature> find(String group, String featureKey) {
+  @Override public Feature find(String group, String featureKey) {
     try {
 
       final String storageKey = FeatureStoreKeys.storageKey(group, featureKey);
@@ -71,10 +71,10 @@ class FeatureStoreReal implements FeatureStore {
       logger.debug("op=find, group={}, feature_key={}, storage_key={}",
           group, featureKey, storageKey);
 
-      return Optional.ofNullable(featureCache.get(storageKey));
+      return featureCache.get(storageKey);
     } catch (ExecutionException | UncheckedExecutionException e) {
       logger.warn(String.format("error finding %s %s", featureKey, e.getMessage()));
-      return Optional.empty();
+      return null;
     }
   }
 

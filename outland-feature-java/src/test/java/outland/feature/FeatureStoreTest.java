@@ -15,8 +15,8 @@ public class FeatureStoreTest implements FeatureStore {
     return null;
   }
 
-  @Override public Optional<Feature> find(String group, String key) throws FeatureException {
-    return Optional.of(db.get(FeatureStoreKeys.storageKey(group, key)));
+  @Override public Feature find(String group, String key) throws FeatureException {
+    return db.get(FeatureStoreKeys.storageKey(group, key));
   }
 
   @Override public FeatureCollection findAll(String group) throws FeatureException {

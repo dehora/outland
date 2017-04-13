@@ -282,29 +282,31 @@ public class FeatureClient {
     }
   }
 
-  // todo: consider remove the optional boxing
-
   private boolean enabledInner(String group, String featureKey) {
-    final Optional<Feature> maybe = featureStore.find(group, featureKey);
+    final Feature maybe = featureStore.find(group, featureKey);
 
-    if (!maybe.isPresent()) {
+    if (maybe == null) {
       return false;
     }
 
-    return evaluate(maybe.get());
+    return evaluate(maybe);
   }
 
   private boolean enabledThrowingInner(String group, String featureKey) {
-    final Optional<Feature> maybe = featureStore.find(group, featureKey);
+    final Feature maybe = featureStore.find(group, featureKey);
 
-    if (!maybe.isPresent()) {
+    if (maybe == null) {
       return throwNotFound(group, featureKey);
     }
 
-    return evaluate(maybe.get());
+    return evaluate(maybe);
   }
 
   private boolean evaluate(Feature feature) {
+
+    if(feature == null) {
+      return false;
+    }
 
     if(this.defaultNamespace.equals(ServerConfiguration.DEFAULT_NAMESPACE)) {
       return evaluator.evaluate(feature);
