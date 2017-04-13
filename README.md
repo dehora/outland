@@ -144,7 +144,7 @@ This will:
  - Start an Outland container on port 8180.
  - Create the dynamodb tables used by the server.
  - Seed the server with a group called `testgroup`.
- - Add two feature flags to the group, `test-flag-1` and `test-option-1`. 
+ - Add three feature flags to the group, `test-flag-1`, `test-option-1` and `test-flag-namespace-1`. 
  
  
 You can see the group's list of features via the API:
@@ -275,6 +275,25 @@ curl -v -XPOST  http://localhost:8180/features/testgroup-1/testfeature-1 \
   ,"group": "testgroup-1"
   ,"state": "on"
 }  
+'
+```
+
+### Add a Feature Namespace
+
+Features can have multiple namespaces allowing you define a variation of the feature for a 
+particular context, such as an environment. Let's add a "production" namespace to the first 
+feature `testfeature-1`: 
+
+```bash
+curl -v -XPOST  http://localhost:8180/features/testgroup-1/testfeature-1/namespaces \
+-H "Content-type: application/json" \
+-u testconsole/service:letmein -d'
+{
+  "namespace": "production",
+  "feature": {
+    "key": "testfeature-1"
+  }
+}
 '
 ```
 

@@ -1,0 +1,120 @@
+#!/usr/bin/env bash
+
+# these are also set in the .env file given to the server on startup
+service="testconsole/service"
+api_key="letmein"
+
+ikey_app="idemkey_test"
+
+curl -i http://localhost:8180/groups \
+-u ${service}:${api_key} \
+-H "Content-type: application/json" \
+-H "Idempotency-Key: ${ikey_app}" \
+-d'
+{
+	"key": "testgroup",
+	"name": "My Group",
+	"owners": {
+	  "items":[{
+		  "name": "Acme",
+		  "username": "acme",
+		  "email": "acme@example.org"
+	  }
+	  ]
+	},
+	"granted": {
+		"services": [{
+			"key": "testservice",
+			"name": "Test Service"
+		}],
+		"members": [{
+			"username": "testuser",
+			"name": "Test User"
+		}]
+	}
+}
+'
+
+echo "Group created, adding some feature flags"
+
+ikey_f1="idemkey_testgroup_f1"
+
+curl -i http://localhost:8180/features \
+-u ${service}:${api_key} \
+-H "Content-type: application/json" \
+-H "Idempotency-Key: ${ikey_f1}" \
+-d '
+{
+	"key": "test-flag-1",
+	"description": "A feature flag",
+	"group": "testgroup",
+	"owner": {
+		"username": "acme",
+		"email": "acme@example.org"
+	}
+}
+'
+
+ikey_f2="idemkey_testgroup_f21"
+
+curl -i http://localhost:8180/features \
+-u ${service}:${api_key} \
+-H "Content-type: application/json" \
+-H "Idempotency-Key: ${ikey_f2}" \
+-d'
+{
+	"key": "test-option-1",
+	"description": "A weighted feature",
+	"group": "testgroup",
+	"options": {
+	  "option": "bool",
+	  "items": [{
+		"name": "false",
+		"value": "false",
+		"weight": 9000
+    }, {
+      "name": "true",
+      "value": "true",
+      "weight": 1000
+    }]
+	},
+	"owner": {
+		"username": "acme",
+		"email": "acme@example.org"
+	}
+}
+'
+
+ikey_f3="idemkey_testgroup_f22"
+
+curl -i http://localhost:8180/features \
+-u ${service}:${api_key} \
+-H "Content-type: application/json" \
+-H "Idempotency-Key: ${ikey_f3}" \
+-d '
+{
+	"key": "test-flag-namespace-1",
+	"description": "A feature flag with two namespaces",
+	"group": "testgroup",
+	"owner": {
+		"username": "acme",
+		"email": "acme@example.org"
+	},
+	"namespaces": {
+	   "items": [
+	      {
+	        "namespace": "staging",
+	        "feature": {
+	          "key": "test-flag-namespace-1"
+	        }
+	      }
+	      ,{
+	        "namespace": "production",
+	        "feature": {
+	          "key": "test-flag-namespace-1"
+	        }
+	      }
+	   ]
+	}
+}
+'
