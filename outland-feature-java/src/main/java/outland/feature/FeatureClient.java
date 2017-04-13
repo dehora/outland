@@ -30,6 +30,7 @@ public class FeatureClient {
   private final String defaultGroup;
   private final boolean localStoreEnabled;
   private final MetricRegistry metricRegistry;
+  private final Evaluator evaluator;
 
   public FeatureClient(Builder builder) {
     this.serverConfiguration = builder.serverConfiguration;
@@ -60,6 +61,7 @@ public class FeatureClient {
     }
 
     this.featureStore = builder.featureStore;
+    evaluator = new Evaluator();
   }
 
   /**
@@ -279,6 +281,8 @@ public class FeatureClient {
     }
   }
 
+  // todo: consider remove the optional boxing
+
   private boolean enabledInner(String group, String featureKey) {
     final Optional<Feature> maybe = featureStore.find(group, featureKey);
 
@@ -286,41 +290,29 @@ public class FeatureClient {
       return false;
     }
 
-    final Feature feature = maybe.get();
-
-    if (feature.getOptions().getOption().equals(OptionType.flag)) {
-      return feature.getState().equals(State.on);
-    }
-
-    if (feature.getOptions().getOption().equals(OptionType.bool)) {
-      return new OptionEvaluator().evaluateBooleanOptions(feature);
-    }
-
-    return false;
+    return evaluate(maybe);
   }
 
   private boolean enabledThrowingInner(String group, String featureKey) {
     final Optional<Feature> maybe = featureStore.find(group, featureKey);
 
     if (!maybe.isPresent()) {
-      throw new FeatureException(
-          Problem.noSuchFeature("feature_not_found",
-              String.format(
-                  "feature %s for defaultGroup %s was not found and raising an error was requested",
-                  featureKey, group)));
+      return throwNotFound(group, featureKey);
     }
 
-    final Feature feature = maybe.get();
+    return evaluate(maybe);
+  }
 
-    if (feature.getOptions().getOption().equals(OptionType.flag)) {
-      return feature.getState().equals(State.on);
-    }
+  private boolean evaluate(Optional<Feature> maybe) {
+    return evaluator.evaluate(maybe.get());
+  }
 
-    if (feature.getOptions().getOption().equals(OptionType.bool)) {
-      return new OptionEvaluator().evaluateBooleanOptions(feature);
-    }
-
-    return false;
+  private boolean throwNotFound(String group, String featureKey) {
+    throw new FeatureException(
+        Problem.noSuchFeature("feature_not_found",
+            String.format(
+                "feature %s for defaultGroup %s was not found and raising an error was requested",
+                featureKey, group)));
   }
 
   /**
