@@ -58,16 +58,17 @@ message OptionCollection {
     repeated FeatureOption items = 12;
 }
 
+enum State {
+    none = 0;
+    off = 1;
+    on = 2;
+}
+
 message FeatureData {
     string type = 1;
     string id = 2;
 
     string key = 10;
-    enum State {
-        none = 0;
-        off = 1;
-        on = 2;
-    }
     State state = 11;
     OptionCollection options = 12;
     FeatureVersion version = 13;
@@ -95,11 +96,6 @@ message Feature {
 
     string key = 10;
     string group = 11;
-    enum State {
-        none = 0;
-        off = 1;
-        on = 2;
-    }
     State state = 12;
     string description = 13;
     Owner owner = 14;

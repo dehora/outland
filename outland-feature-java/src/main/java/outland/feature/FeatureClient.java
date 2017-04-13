@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import outland.feature.proto.Feature;
 import outland.feature.proto.OptionType;
+import outland.feature.proto.State;
 
 /**
  * A client which can be used to check feature state and access the feature management APIs.
@@ -82,7 +83,7 @@ public class FeatureClient {
    * </p>
    * <p>
    * The feature is considered enabled if the underlying {@link Feature} has a state equal
-   * to  {@link Feature.State#on}. The call will return false for the following scenarios:
+   * to  {@link State#on}. The call will return false for the following scenarios:
    * <ol>
    * <li>If the underlying {@link Feature} has a state equal to {@link Feature.State#off}.</li>
    * <li>The {@link Feature} is enabled, but is a boolean option type and the boolean option
@@ -288,7 +289,7 @@ public class FeatureClient {
     final Feature feature = maybe.get();
 
     if (feature.getOptions().getOption().equals(OptionType.flag)) {
-      return feature.getState().equals(Feature.State.on);
+      return feature.getState().equals(State.on);
     }
 
     if (feature.getOptions().getOption().equals(OptionType.bool)) {
@@ -312,7 +313,7 @@ public class FeatureClient {
     final Feature feature = maybe.get();
 
     if (feature.getOptions().getOption().equals(OptionType.flag)) {
-      return feature.getState().equals(Feature.State.on);
+      return feature.getState().equals(State.on);
     }
 
     if (feature.getOptions().getOption().equals(OptionType.bool)) {

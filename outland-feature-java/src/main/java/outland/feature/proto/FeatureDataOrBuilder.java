@@ -38,13 +38,13 @@ public interface FeatureDataOrBuilder extends
       getKeyBytes();
 
   /**
-   * <code>optional .outland.FeatureData.State state = 11;</code>
+   * <code>optional .outland.State state = 11;</code>
    */
   int getStateValue();
   /**
-   * <code>optional .outland.FeatureData.State state = 11;</code>
+   * <code>optional .outland.State state = 11;</code>
    */
-  outland.feature.proto.FeatureData.State getState();
+  outland.feature.proto.State getState();
 
   /**
    * <code>optional .outland.OptionCollection options = 12;</code>

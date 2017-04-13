@@ -3,6 +3,7 @@ package outland.feature.server.features;
 import com.google.protobuf.util.JsonFormat;
 import org.junit.Test;
 import outland.feature.proto.Feature;
+import outland.feature.proto.State;
 
 import static org.junit.Assert.*;
 
@@ -16,7 +17,7 @@ public class FeatureSupportTest {
         .setKey("key1")
         .setGroup("app1")
         .setDescription("desc1")
-        .setState(Feature.State.off)
+        .setState(State.off)
         .build();
 
     final String json = JsonFormat.printer().print(feature);
