@@ -14,6 +14,9 @@ public class ServerConfiguration {
   static final int INITIAL_CAPACITY = 50;
   static final int REFRESH_AFTER_WRITE_S = 8;
 
+  @VisibleForTesting
+  static final String DEFAULT_NAMESPACE = "*";
+
   private URI baseURI;
   private String defaultGroup;
   private long connectTimeout = 5_000L;
@@ -24,6 +27,7 @@ public class ServerConfiguration {
   private long maxCacheSize = MAX_CACHE_SIZE;
   private int initialCacheSize = INITIAL_CAPACITY;
   private long refreshCacheAfterWrite = REFRESH_AFTER_WRITE_S;
+  private String namespace = DEFAULT_NAMESPACE;
 
   /**
    * The base API url the client is using.
@@ -143,6 +147,33 @@ public class ServerConfiguration {
     // todo: reject junk once we define the legal group regex on the api
 
     this.defaultGroup = defaultGroup;
+    return this;
+  }
+
+  public String defaultNamespace() {
+    return namespace;
+  }
+
+  /**
+   * Optionally configure a namespace used to qualify feature checks.
+   *<p>
+   * Features can be configured with one or more namespaces that carry a custom variation of the
+   * the feature state. For example a bool feature might have default weights of
+   * <code>true: 5000<code/> and <code>false: 5000<code/> but for the "staging" namespace different
+   * weights  of <code>true: 9000<code/> and <code>false: 1000<code/>. As with the example,
+   * a common use of namespaces is set feature states for environments.
+   *</p>
+   *<p>
+   *  Namespaces are optional, but features always have their default states as a fallback. If a
+   *  client is configured with a namespace and the feature being checked doesn't have that
+   *  namespace set, the client will use the default state of the feature.
+   *</p>
+   *
+   * @param namespace the feature namespace
+   * @return this
+   */
+  public ServerConfiguration defaultNamespace(String namespace) {
+    this.namespace = namespace;
     return this;
   }
 

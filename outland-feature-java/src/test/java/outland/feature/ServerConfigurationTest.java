@@ -10,6 +10,15 @@ import static org.junit.Assert.fail;
 public class ServerConfigurationTest {
 
   @Test
+  public void testConfigurationNamespace() throws Exception {
+    ServerConfiguration configuration = new ServerConfiguration();
+    assertEquals(ServerConfiguration.DEFAULT_NAMESPACE, configuration.defaultNamespace());
+
+    configuration.defaultNamespace("production");
+    assertEquals("production", configuration.defaultNamespace());
+  }
+
+  @Test
   public void testConfiguration() throws Exception {
     ServerConfiguration configuration = new ServerConfiguration()
         .baseURI(new URI("http://localhost"))
