@@ -152,7 +152,7 @@ public class FeatureResource {
     accessControlSupport.throwUnlessGrantedFor(principal, group);
     final Optional<Feature> feature = featureService.loadFeatureByKey(group, featureKey);
     final Response.ResponseBuilder rb = feature.map(Response::ok).orElseGet(this::featureNotFound);
-    return headers.enrich(Response.ok(rb), start).build();
+    return headers.enrich(rb, start).build();
   }
 
   @GET
@@ -239,6 +239,7 @@ public class FeatureResource {
 
   private URI locationUrl(Feature feature) {
     return UriBuilder.fromUri(baseURI)
+        .path("features")
         .path(feature.getGroup())
         .path(feature.getKey())
         .build();

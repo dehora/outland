@@ -74,10 +74,7 @@ public class GroupResource {
 
     // no further acl check; if you are an authenticated AuthPrincipal, you can create
 
-    URI loc = UriBuilder.fromUri(baseURI)
-        .path(group.getKey())
-        .build();
-
+    final URI loc = locationHeader(group);
     final Optional<String> optional = idempotencyChecker.extractKey(httpHeaders);
     final boolean seen = optional.isPresent() && idempotencyChecker.seen(optional.get());
     if (seen) {
@@ -86,7 +83,7 @@ public class GroupResource {
               .header(IdempotencyChecker.RES_HEADER, "key=" + optional.get()), start).build();
     }
 
-    Group registered = groupService.register(group)
+    final Group registered = groupService.register(group)
         .orElseThrow(() -> new RuntimeException("todo"));
 
     return headers.enrich(Response.created(loc).entity(registered), start).build();
@@ -227,8 +224,7 @@ public class GroupResource {
     if (maybe.isPresent()) {
       final Group group = maybe.get();
       accessControlSupport.throwUnlessGrantedFor(authPrincipal, group);
-
-      Group updated = groupService.removeOwner(group, ownerKey);
+      final Group updated = groupService.removeOwner(group, ownerKey);
       return headers.enrich(Response.ok(updated), start).build();
     }
 
@@ -305,5 +301,12 @@ public class GroupResource {
 
     return headers.enrich(Response.status(404).entity(
         Problem.clientProblem(TITLE_NOT_FOUND, "", 404)), start).build();
+  }
+
+  private URI locationHeader(Group group) {
+    return UriBuilder.fromUri(baseURI)
+        .path("groups")
+        .path(group.getKey())
+        .build();
   }
 }
