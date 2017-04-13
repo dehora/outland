@@ -8,7 +8,7 @@ interface FeatureStore {
 
   Void put(Feature feature) throws FeatureException;
 
-  Optional<Feature> find(String group, String key) throws FeatureException;
+  Feature find(String group, String key) throws FeatureException;
 
   FeatureCollection findAll(String group) throws FeatureException;
 

@@ -55,7 +55,7 @@ class FeatureStoreMetered implements FeatureStore, MeterTimer {
     return metric(putTimer, putMeter, () -> featureStore.put(feature));
   }
 
-  @Override public Optional<Feature> find(String group, String key) {
+  @Override public Feature find(String group, String key) {
     return metric(findTimer, findMeter, () -> featureStore.find(group, key));
   }
 
