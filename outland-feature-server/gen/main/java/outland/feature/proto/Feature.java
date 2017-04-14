@@ -81,9 +81,10 @@ public  final class Feature extends
               mutable_bitField0_ |= 0x00000010;
             }
             com.google.protobuf.MapEntry<java.lang.String, java.lang.String>
-            properties = input.readMessage(
+            properties__ = input.readMessage(
                 PropertiesDefaultEntryHolder.defaultEntry.getParserForType(), extensionRegistry);
-            properties_.getMutableMap().put(properties.getKey(), properties.getValue());
+            properties_.getMutableMap().put(
+                properties__.getKey(), properties__.getValue());
             break;
           }
           case 82: {
@@ -200,7 +201,7 @@ public  final class Feature extends
   public static final int TYPE_FIELD_NUMBER = 1;
   private volatile java.lang.Object type_;
   /**
-   * <code>optional string type = 1;</code>
+   * <code>string type = 1;</code>
    */
   public java.lang.String getType() {
     java.lang.Object ref = type_;
@@ -215,7 +216,7 @@ public  final class Feature extends
     }
   }
   /**
-   * <code>optional string type = 1;</code>
+   * <code>string type = 1;</code>
    */
   public com.google.protobuf.ByteString
       getTypeBytes() {
@@ -234,7 +235,7 @@ public  final class Feature extends
   public static final int ID_FIELD_NUMBER = 2;
   private volatile java.lang.Object id_;
   /**
-   * <code>optional string id = 2;</code>
+   * <code>string id = 2;</code>
    */
   public java.lang.String getId() {
     java.lang.Object ref = id_;
@@ -249,7 +250,7 @@ public  final class Feature extends
     }
   }
   /**
-   * <code>optional string id = 2;</code>
+   * <code>string id = 2;</code>
    */
   public com.google.protobuf.ByteString
       getIdBytes() {
@@ -268,7 +269,7 @@ public  final class Feature extends
   public static final int CREATED_FIELD_NUMBER = 3;
   private volatile java.lang.Object created_;
   /**
-   * <code>optional string created = 3;</code>
+   * <code>string created = 3;</code>
    */
   public java.lang.String getCreated() {
     java.lang.Object ref = created_;
@@ -283,7 +284,7 @@ public  final class Feature extends
     }
   }
   /**
-   * <code>optional string created = 3;</code>
+   * <code>string created = 3;</code>
    */
   public com.google.protobuf.ByteString
       getCreatedBytes() {
@@ -302,7 +303,7 @@ public  final class Feature extends
   public static final int UPDATED_FIELD_NUMBER = 4;
   private volatile java.lang.Object updated_;
   /**
-   * <code>optional string updated = 4;</code>
+   * <code>string updated = 4;</code>
    */
   public java.lang.String getUpdated() {
     java.lang.Object ref = updated_;
@@ -317,7 +318,7 @@ public  final class Feature extends
     }
   }
   /**
-   * <code>optional string updated = 4;</code>
+   * <code>string updated = 4;</code>
    */
   public com.google.protobuf.ByteString
       getUpdatedBytes() {
@@ -412,7 +413,7 @@ public  final class Feature extends
   public static final int KEY_FIELD_NUMBER = 10;
   private volatile java.lang.Object key_;
   /**
-   * <code>optional string key = 10;</code>
+   * <code>string key = 10;</code>
    */
   public java.lang.String getKey() {
     java.lang.Object ref = key_;
@@ -427,7 +428,7 @@ public  final class Feature extends
     }
   }
   /**
-   * <code>optional string key = 10;</code>
+   * <code>string key = 10;</code>
    */
   public com.google.protobuf.ByteString
       getKeyBytes() {
@@ -446,7 +447,7 @@ public  final class Feature extends
   public static final int GROUP_FIELD_NUMBER = 11;
   private volatile java.lang.Object group_;
   /**
-   * <code>optional string group = 11;</code>
+   * <code>string group = 11;</code>
    */
   public java.lang.String getGroup() {
     java.lang.Object ref = group_;
@@ -461,7 +462,7 @@ public  final class Feature extends
     }
   }
   /**
-   * <code>optional string group = 11;</code>
+   * <code>string group = 11;</code>
    */
   public com.google.protobuf.ByteString
       getGroupBytes() {
@@ -480,13 +481,13 @@ public  final class Feature extends
   public static final int STATE_FIELD_NUMBER = 12;
   private int state_;
   /**
-   * <code>optional .outland.State state = 12;</code>
+   * <code>.outland.State state = 12;</code>
    */
   public int getStateValue() {
     return state_;
   }
   /**
-   * <code>optional .outland.State state = 12;</code>
+   * <code>.outland.State state = 12;</code>
    */
   public outland.feature.proto.State getState() {
     outland.feature.proto.State result = outland.feature.proto.State.valueOf(state_);
@@ -496,7 +497,7 @@ public  final class Feature extends
   public static final int DESCRIPTION_FIELD_NUMBER = 13;
   private volatile java.lang.Object description_;
   /**
-   * <code>optional string description = 13;</code>
+   * <code>string description = 13;</code>
    */
   public java.lang.String getDescription() {
     java.lang.Object ref = description_;
@@ -511,7 +512,7 @@ public  final class Feature extends
     }
   }
   /**
-   * <code>optional string description = 13;</code>
+   * <code>string description = 13;</code>
    */
   public com.google.protobuf.ByteString
       getDescriptionBytes() {
@@ -530,19 +531,19 @@ public  final class Feature extends
   public static final int OWNER_FIELD_NUMBER = 14;
   private outland.feature.proto.Owner owner_;
   /**
-   * <code>optional .outland.Owner owner = 14;</code>
+   * <code>.outland.Owner owner = 14;</code>
    */
   public boolean hasOwner() {
     return owner_ != null;
   }
   /**
-   * <code>optional .outland.Owner owner = 14;</code>
+   * <code>.outland.Owner owner = 14;</code>
    */
   public outland.feature.proto.Owner getOwner() {
     return owner_ == null ? outland.feature.proto.Owner.getDefaultInstance() : owner_;
   }
   /**
-   * <code>optional .outland.Owner owner = 14;</code>
+   * <code>.outland.Owner owner = 14;</code>
    */
   public outland.feature.proto.OwnerOrBuilder getOwnerOrBuilder() {
     return getOwner();
@@ -551,19 +552,19 @@ public  final class Feature extends
   public static final int OPTIONS_FIELD_NUMBER = 15;
   private outland.feature.proto.OptionCollection options_;
   /**
-   * <code>optional .outland.OptionCollection options = 15;</code>
+   * <code>.outland.OptionCollection options = 15;</code>
    */
   public boolean hasOptions() {
     return options_ != null;
   }
   /**
-   * <code>optional .outland.OptionCollection options = 15;</code>
+   * <code>.outland.OptionCollection options = 15;</code>
    */
   public outland.feature.proto.OptionCollection getOptions() {
     return options_ == null ? outland.feature.proto.OptionCollection.getDefaultInstance() : options_;
   }
   /**
-   * <code>optional .outland.OptionCollection options = 15;</code>
+   * <code>.outland.OptionCollection options = 15;</code>
    */
   public outland.feature.proto.OptionCollectionOrBuilder getOptionsOrBuilder() {
     return getOptions();
@@ -572,19 +573,19 @@ public  final class Feature extends
   public static final int VERSION_FIELD_NUMBER = 16;
   private outland.feature.proto.FeatureVersion version_;
   /**
-   * <code>optional .outland.FeatureVersion version = 16;</code>
+   * <code>.outland.FeatureVersion version = 16;</code>
    */
   public boolean hasVersion() {
     return version_ != null;
   }
   /**
-   * <code>optional .outland.FeatureVersion version = 16;</code>
+   * <code>.outland.FeatureVersion version = 16;</code>
    */
   public outland.feature.proto.FeatureVersion getVersion() {
     return version_ == null ? outland.feature.proto.FeatureVersion.getDefaultInstance() : version_;
   }
   /**
-   * <code>optional .outland.FeatureVersion version = 16;</code>
+   * <code>.outland.FeatureVersion version = 16;</code>
    */
   public outland.feature.proto.FeatureVersionOrBuilder getVersionOrBuilder() {
     return getVersion();
@@ -593,19 +594,19 @@ public  final class Feature extends
   public static final int NAMESPACES_FIELD_NUMBER = 17;
   private outland.feature.proto.NamespaceFeatureCollection namespaces_;
   /**
-   * <code>optional .outland.NamespaceFeatureCollection namespaces = 17;</code>
+   * <code>.outland.NamespaceFeatureCollection namespaces = 17;</code>
    */
   public boolean hasNamespaces() {
     return namespaces_ != null;
   }
   /**
-   * <code>optional .outland.NamespaceFeatureCollection namespaces = 17;</code>
+   * <code>.outland.NamespaceFeatureCollection namespaces = 17;</code>
    */
   public outland.feature.proto.NamespaceFeatureCollection getNamespaces() {
     return namespaces_ == null ? outland.feature.proto.NamespaceFeatureCollection.getDefaultInstance() : namespaces_;
   }
   /**
-   * <code>optional .outland.NamespaceFeatureCollection namespaces = 17;</code>
+   * <code>.outland.NamespaceFeatureCollection namespaces = 17;</code>
    */
   public outland.feature.proto.NamespaceFeatureCollectionOrBuilder getNamespacesOrBuilder() {
     return getNamespaces();
@@ -635,15 +636,12 @@ public  final class Feature extends
     if (!getUpdatedBytes().isEmpty()) {
       com.google.protobuf.GeneratedMessageV3.writeString(output, 4, updated_);
     }
-    for (java.util.Map.Entry<java.lang.String, java.lang.String> entry
-         : internalGetProperties().getMap().entrySet()) {
-      com.google.protobuf.MapEntry<java.lang.String, java.lang.String>
-      properties = PropertiesDefaultEntryHolder.defaultEntry.newBuilderForType()
-          .setKey(entry.getKey())
-          .setValue(entry.getValue())
-          .build();
-      output.writeMessage(5, properties);
-    }
+    com.google.protobuf.GeneratedMessageV3
+      .serializeStringMapTo(
+        output,
+        internalGetProperties(),
+        PropertiesDefaultEntryHolder.defaultEntry,
+        5);
     if (!getKeyBytes().isEmpty()) {
       com.google.protobuf.GeneratedMessageV3.writeString(output, 10, key_);
     }
@@ -690,12 +688,12 @@ public  final class Feature extends
     for (java.util.Map.Entry<java.lang.String, java.lang.String> entry
          : internalGetProperties().getMap().entrySet()) {
       com.google.protobuf.MapEntry<java.lang.String, java.lang.String>
-      properties = PropertiesDefaultEntryHolder.defaultEntry.newBuilderForType()
+      properties__ = PropertiesDefaultEntryHolder.defaultEntry.newBuilderForType()
           .setKey(entry.getKey())
           .setValue(entry.getValue())
           .build();
       size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(5, properties);
+          .computeMessageSize(5, properties__);
     }
     if (!getKeyBytes().isEmpty()) {
       size += com.google.protobuf.GeneratedMessageV3.computeStringSize(10, key_);
@@ -788,7 +786,7 @@ public  final class Feature extends
       return memoizedHashCode;
     }
     int hash = 41;
-    hash = (19 * hash) + getDescriptorForType().hashCode();
+    hash = (19 * hash) + getDescriptor().hashCode();
     hash = (37 * hash) + TYPE_FIELD_NUMBER;
     hash = (53 * hash) + getType().hashCode();
     hash = (37 * hash) + ID_FIELD_NUMBER;
@@ -1176,7 +1174,7 @@ public  final class Feature extends
 
     private java.lang.Object type_ = "";
     /**
-     * <code>optional string type = 1;</code>
+     * <code>string type = 1;</code>
      */
     public java.lang.String getType() {
       java.lang.Object ref = type_;
@@ -1191,7 +1189,7 @@ public  final class Feature extends
       }
     }
     /**
-     * <code>optional string type = 1;</code>
+     * <code>string type = 1;</code>
      */
     public com.google.protobuf.ByteString
         getTypeBytes() {
@@ -1207,7 +1205,7 @@ public  final class Feature extends
       }
     }
     /**
-     * <code>optional string type = 1;</code>
+     * <code>string type = 1;</code>
      */
     public Builder setType(
         java.lang.String value) {
@@ -1220,7 +1218,7 @@ public  final class Feature extends
       return this;
     }
     /**
-     * <code>optional string type = 1;</code>
+     * <code>string type = 1;</code>
      */
     public Builder clearType() {
       
@@ -1229,7 +1227,7 @@ public  final class Feature extends
       return this;
     }
     /**
-     * <code>optional string type = 1;</code>
+     * <code>string type = 1;</code>
      */
     public Builder setTypeBytes(
         com.google.protobuf.ByteString value) {
@@ -1245,7 +1243,7 @@ public  final class Feature extends
 
     private java.lang.Object id_ = "";
     /**
-     * <code>optional string id = 2;</code>
+     * <code>string id = 2;</code>
      */
     public java.lang.String getId() {
       java.lang.Object ref = id_;
@@ -1260,7 +1258,7 @@ public  final class Feature extends
       }
     }
     /**
-     * <code>optional string id = 2;</code>
+     * <code>string id = 2;</code>
      */
     public com.google.protobuf.ByteString
         getIdBytes() {
@@ -1276,7 +1274,7 @@ public  final class Feature extends
       }
     }
     /**
-     * <code>optional string id = 2;</code>
+     * <code>string id = 2;</code>
      */
     public Builder setId(
         java.lang.String value) {
@@ -1289,7 +1287,7 @@ public  final class Feature extends
       return this;
     }
     /**
-     * <code>optional string id = 2;</code>
+     * <code>string id = 2;</code>
      */
     public Builder clearId() {
       
@@ -1298,7 +1296,7 @@ public  final class Feature extends
       return this;
     }
     /**
-     * <code>optional string id = 2;</code>
+     * <code>string id = 2;</code>
      */
     public Builder setIdBytes(
         com.google.protobuf.ByteString value) {
@@ -1314,7 +1312,7 @@ public  final class Feature extends
 
     private java.lang.Object created_ = "";
     /**
-     * <code>optional string created = 3;</code>
+     * <code>string created = 3;</code>
      */
     public java.lang.String getCreated() {
       java.lang.Object ref = created_;
@@ -1329,7 +1327,7 @@ public  final class Feature extends
       }
     }
     /**
-     * <code>optional string created = 3;</code>
+     * <code>string created = 3;</code>
      */
     public com.google.protobuf.ByteString
         getCreatedBytes() {
@@ -1345,7 +1343,7 @@ public  final class Feature extends
       }
     }
     /**
-     * <code>optional string created = 3;</code>
+     * <code>string created = 3;</code>
      */
     public Builder setCreated(
         java.lang.String value) {
@@ -1358,7 +1356,7 @@ public  final class Feature extends
       return this;
     }
     /**
-     * <code>optional string created = 3;</code>
+     * <code>string created = 3;</code>
      */
     public Builder clearCreated() {
       
@@ -1367,7 +1365,7 @@ public  final class Feature extends
       return this;
     }
     /**
-     * <code>optional string created = 3;</code>
+     * <code>string created = 3;</code>
      */
     public Builder setCreatedBytes(
         com.google.protobuf.ByteString value) {
@@ -1383,7 +1381,7 @@ public  final class Feature extends
 
     private java.lang.Object updated_ = "";
     /**
-     * <code>optional string updated = 4;</code>
+     * <code>string updated = 4;</code>
      */
     public java.lang.String getUpdated() {
       java.lang.Object ref = updated_;
@@ -1398,7 +1396,7 @@ public  final class Feature extends
       }
     }
     /**
-     * <code>optional string updated = 4;</code>
+     * <code>string updated = 4;</code>
      */
     public com.google.protobuf.ByteString
         getUpdatedBytes() {
@@ -1414,7 +1412,7 @@ public  final class Feature extends
       }
     }
     /**
-     * <code>optional string updated = 4;</code>
+     * <code>string updated = 4;</code>
      */
     public Builder setUpdated(
         java.lang.String value) {
@@ -1427,7 +1425,7 @@ public  final class Feature extends
       return this;
     }
     /**
-     * <code>optional string updated = 4;</code>
+     * <code>string updated = 4;</code>
      */
     public Builder clearUpdated() {
       
@@ -1436,7 +1434,7 @@ public  final class Feature extends
       return this;
     }
     /**
-     * <code>optional string updated = 4;</code>
+     * <code>string updated = 4;</code>
      */
     public Builder setUpdatedBytes(
         com.google.protobuf.ByteString value) {
@@ -1527,7 +1525,8 @@ public  final class Feature extends
     }
 
     public Builder clearProperties() {
-      getMutableProperties().clear();
+      internalGetMutableProperties().getMutableMap()
+          .clear();
       return this;
     }
     /**
@@ -1537,7 +1536,8 @@ public  final class Feature extends
     public Builder removeProperties(
         java.lang.String key) {
       if (key == null) { throw new java.lang.NullPointerException(); }
-      getMutableProperties().remove(key);
+      internalGetMutableProperties().getMutableMap()
+          .remove(key);
       return this;
     }
     /**
@@ -1556,7 +1556,8 @@ public  final class Feature extends
         java.lang.String value) {
       if (key == null) { throw new java.lang.NullPointerException(); }
       if (value == null) { throw new java.lang.NullPointerException(); }
-      getMutableProperties().put(key, value);
+      internalGetMutableProperties().getMutableMap()
+          .put(key, value);
       return this;
     }
     /**
@@ -1565,13 +1566,14 @@ public  final class Feature extends
 
     public Builder putAllProperties(
         java.util.Map<java.lang.String, java.lang.String> values) {
-      getMutableProperties().putAll(values);
+      internalGetMutableProperties().getMutableMap()
+          .putAll(values);
       return this;
     }
 
     private java.lang.Object key_ = "";
     /**
-     * <code>optional string key = 10;</code>
+     * <code>string key = 10;</code>
      */
     public java.lang.String getKey() {
       java.lang.Object ref = key_;
@@ -1586,7 +1588,7 @@ public  final class Feature extends
       }
     }
     /**
-     * <code>optional string key = 10;</code>
+     * <code>string key = 10;</code>
      */
     public com.google.protobuf.ByteString
         getKeyBytes() {
@@ -1602,7 +1604,7 @@ public  final class Feature extends
       }
     }
     /**
-     * <code>optional string key = 10;</code>
+     * <code>string key = 10;</code>
      */
     public Builder setKey(
         java.lang.String value) {
@@ -1615,7 +1617,7 @@ public  final class Feature extends
       return this;
     }
     /**
-     * <code>optional string key = 10;</code>
+     * <code>string key = 10;</code>
      */
     public Builder clearKey() {
       
@@ -1624,7 +1626,7 @@ public  final class Feature extends
       return this;
     }
     /**
-     * <code>optional string key = 10;</code>
+     * <code>string key = 10;</code>
      */
     public Builder setKeyBytes(
         com.google.protobuf.ByteString value) {
@@ -1640,7 +1642,7 @@ public  final class Feature extends
 
     private java.lang.Object group_ = "";
     /**
-     * <code>optional string group = 11;</code>
+     * <code>string group = 11;</code>
      */
     public java.lang.String getGroup() {
       java.lang.Object ref = group_;
@@ -1655,7 +1657,7 @@ public  final class Feature extends
       }
     }
     /**
-     * <code>optional string group = 11;</code>
+     * <code>string group = 11;</code>
      */
     public com.google.protobuf.ByteString
         getGroupBytes() {
@@ -1671,7 +1673,7 @@ public  final class Feature extends
       }
     }
     /**
-     * <code>optional string group = 11;</code>
+     * <code>string group = 11;</code>
      */
     public Builder setGroup(
         java.lang.String value) {
@@ -1684,7 +1686,7 @@ public  final class Feature extends
       return this;
     }
     /**
-     * <code>optional string group = 11;</code>
+     * <code>string group = 11;</code>
      */
     public Builder clearGroup() {
       
@@ -1693,7 +1695,7 @@ public  final class Feature extends
       return this;
     }
     /**
-     * <code>optional string group = 11;</code>
+     * <code>string group = 11;</code>
      */
     public Builder setGroupBytes(
         com.google.protobuf.ByteString value) {
@@ -1709,13 +1711,13 @@ public  final class Feature extends
 
     private int state_ = 0;
     /**
-     * <code>optional .outland.State state = 12;</code>
+     * <code>.outland.State state = 12;</code>
      */
     public int getStateValue() {
       return state_;
     }
     /**
-     * <code>optional .outland.State state = 12;</code>
+     * <code>.outland.State state = 12;</code>
      */
     public Builder setStateValue(int value) {
       state_ = value;
@@ -1723,14 +1725,14 @@ public  final class Feature extends
       return this;
     }
     /**
-     * <code>optional .outland.State state = 12;</code>
+     * <code>.outland.State state = 12;</code>
      */
     public outland.feature.proto.State getState() {
       outland.feature.proto.State result = outland.feature.proto.State.valueOf(state_);
       return result == null ? outland.feature.proto.State.UNRECOGNIZED : result;
     }
     /**
-     * <code>optional .outland.State state = 12;</code>
+     * <code>.outland.State state = 12;</code>
      */
     public Builder setState(outland.feature.proto.State value) {
       if (value == null) {
@@ -1742,7 +1744,7 @@ public  final class Feature extends
       return this;
     }
     /**
-     * <code>optional .outland.State state = 12;</code>
+     * <code>.outland.State state = 12;</code>
      */
     public Builder clearState() {
       
@@ -1753,7 +1755,7 @@ public  final class Feature extends
 
     private java.lang.Object description_ = "";
     /**
-     * <code>optional string description = 13;</code>
+     * <code>string description = 13;</code>
      */
     public java.lang.String getDescription() {
       java.lang.Object ref = description_;
@@ -1768,7 +1770,7 @@ public  final class Feature extends
       }
     }
     /**
-     * <code>optional string description = 13;</code>
+     * <code>string description = 13;</code>
      */
     public com.google.protobuf.ByteString
         getDescriptionBytes() {
@@ -1784,7 +1786,7 @@ public  final class Feature extends
       }
     }
     /**
-     * <code>optional string description = 13;</code>
+     * <code>string description = 13;</code>
      */
     public Builder setDescription(
         java.lang.String value) {
@@ -1797,7 +1799,7 @@ public  final class Feature extends
       return this;
     }
     /**
-     * <code>optional string description = 13;</code>
+     * <code>string description = 13;</code>
      */
     public Builder clearDescription() {
       
@@ -1806,7 +1808,7 @@ public  final class Feature extends
       return this;
     }
     /**
-     * <code>optional string description = 13;</code>
+     * <code>string description = 13;</code>
      */
     public Builder setDescriptionBytes(
         com.google.protobuf.ByteString value) {
@@ -1824,13 +1826,13 @@ public  final class Feature extends
     private com.google.protobuf.SingleFieldBuilderV3<
         outland.feature.proto.Owner, outland.feature.proto.Owner.Builder, outland.feature.proto.OwnerOrBuilder> ownerBuilder_;
     /**
-     * <code>optional .outland.Owner owner = 14;</code>
+     * <code>.outland.Owner owner = 14;</code>
      */
     public boolean hasOwner() {
       return ownerBuilder_ != null || owner_ != null;
     }
     /**
-     * <code>optional .outland.Owner owner = 14;</code>
+     * <code>.outland.Owner owner = 14;</code>
      */
     public outland.feature.proto.Owner getOwner() {
       if (ownerBuilder_ == null) {
@@ -1840,7 +1842,7 @@ public  final class Feature extends
       }
     }
     /**
-     * <code>optional .outland.Owner owner = 14;</code>
+     * <code>.outland.Owner owner = 14;</code>
      */
     public Builder setOwner(outland.feature.proto.Owner value) {
       if (ownerBuilder_ == null) {
@@ -1856,7 +1858,7 @@ public  final class Feature extends
       return this;
     }
     /**
-     * <code>optional .outland.Owner owner = 14;</code>
+     * <code>.outland.Owner owner = 14;</code>
      */
     public Builder setOwner(
         outland.feature.proto.Owner.Builder builderForValue) {
@@ -1870,7 +1872,7 @@ public  final class Feature extends
       return this;
     }
     /**
-     * <code>optional .outland.Owner owner = 14;</code>
+     * <code>.outland.Owner owner = 14;</code>
      */
     public Builder mergeOwner(outland.feature.proto.Owner value) {
       if (ownerBuilder_ == null) {
@@ -1888,7 +1890,7 @@ public  final class Feature extends
       return this;
     }
     /**
-     * <code>optional .outland.Owner owner = 14;</code>
+     * <code>.outland.Owner owner = 14;</code>
      */
     public Builder clearOwner() {
       if (ownerBuilder_ == null) {
@@ -1902,7 +1904,7 @@ public  final class Feature extends
       return this;
     }
     /**
-     * <code>optional .outland.Owner owner = 14;</code>
+     * <code>.outland.Owner owner = 14;</code>
      */
     public outland.feature.proto.Owner.Builder getOwnerBuilder() {
       
@@ -1910,7 +1912,7 @@ public  final class Feature extends
       return getOwnerFieldBuilder().getBuilder();
     }
     /**
-     * <code>optional .outland.Owner owner = 14;</code>
+     * <code>.outland.Owner owner = 14;</code>
      */
     public outland.feature.proto.OwnerOrBuilder getOwnerOrBuilder() {
       if (ownerBuilder_ != null) {
@@ -1921,7 +1923,7 @@ public  final class Feature extends
       }
     }
     /**
-     * <code>optional .outland.Owner owner = 14;</code>
+     * <code>.outland.Owner owner = 14;</code>
      */
     private com.google.protobuf.SingleFieldBuilderV3<
         outland.feature.proto.Owner, outland.feature.proto.Owner.Builder, outland.feature.proto.OwnerOrBuilder> 
@@ -1941,13 +1943,13 @@ public  final class Feature extends
     private com.google.protobuf.SingleFieldBuilderV3<
         outland.feature.proto.OptionCollection, outland.feature.proto.OptionCollection.Builder, outland.feature.proto.OptionCollectionOrBuilder> optionsBuilder_;
     /**
-     * <code>optional .outland.OptionCollection options = 15;</code>
+     * <code>.outland.OptionCollection options = 15;</code>
      */
     public boolean hasOptions() {
       return optionsBuilder_ != null || options_ != null;
     }
     /**
-     * <code>optional .outland.OptionCollection options = 15;</code>
+     * <code>.outland.OptionCollection options = 15;</code>
      */
     public outland.feature.proto.OptionCollection getOptions() {
       if (optionsBuilder_ == null) {
@@ -1957,7 +1959,7 @@ public  final class Feature extends
       }
     }
     /**
-     * <code>optional .outland.OptionCollection options = 15;</code>
+     * <code>.outland.OptionCollection options = 15;</code>
      */
     public Builder setOptions(outland.feature.proto.OptionCollection value) {
       if (optionsBuilder_ == null) {
@@ -1973,7 +1975,7 @@ public  final class Feature extends
       return this;
     }
     /**
-     * <code>optional .outland.OptionCollection options = 15;</code>
+     * <code>.outland.OptionCollection options = 15;</code>
      */
     public Builder setOptions(
         outland.feature.proto.OptionCollection.Builder builderForValue) {
@@ -1987,7 +1989,7 @@ public  final class Feature extends
       return this;
     }
     /**
-     * <code>optional .outland.OptionCollection options = 15;</code>
+     * <code>.outland.OptionCollection options = 15;</code>
      */
     public Builder mergeOptions(outland.feature.proto.OptionCollection value) {
       if (optionsBuilder_ == null) {
@@ -2005,7 +2007,7 @@ public  final class Feature extends
       return this;
     }
     /**
-     * <code>optional .outland.OptionCollection options = 15;</code>
+     * <code>.outland.OptionCollection options = 15;</code>
      */
     public Builder clearOptions() {
       if (optionsBuilder_ == null) {
@@ -2019,7 +2021,7 @@ public  final class Feature extends
       return this;
     }
     /**
-     * <code>optional .outland.OptionCollection options = 15;</code>
+     * <code>.outland.OptionCollection options = 15;</code>
      */
     public outland.feature.proto.OptionCollection.Builder getOptionsBuilder() {
       
@@ -2027,7 +2029,7 @@ public  final class Feature extends
       return getOptionsFieldBuilder().getBuilder();
     }
     /**
-     * <code>optional .outland.OptionCollection options = 15;</code>
+     * <code>.outland.OptionCollection options = 15;</code>
      */
     public outland.feature.proto.OptionCollectionOrBuilder getOptionsOrBuilder() {
       if (optionsBuilder_ != null) {
@@ -2038,7 +2040,7 @@ public  final class Feature extends
       }
     }
     /**
-     * <code>optional .outland.OptionCollection options = 15;</code>
+     * <code>.outland.OptionCollection options = 15;</code>
      */
     private com.google.protobuf.SingleFieldBuilderV3<
         outland.feature.proto.OptionCollection, outland.feature.proto.OptionCollection.Builder, outland.feature.proto.OptionCollectionOrBuilder> 
@@ -2058,13 +2060,13 @@ public  final class Feature extends
     private com.google.protobuf.SingleFieldBuilderV3<
         outland.feature.proto.FeatureVersion, outland.feature.proto.FeatureVersion.Builder, outland.feature.proto.FeatureVersionOrBuilder> versionBuilder_;
     /**
-     * <code>optional .outland.FeatureVersion version = 16;</code>
+     * <code>.outland.FeatureVersion version = 16;</code>
      */
     public boolean hasVersion() {
       return versionBuilder_ != null || version_ != null;
     }
     /**
-     * <code>optional .outland.FeatureVersion version = 16;</code>
+     * <code>.outland.FeatureVersion version = 16;</code>
      */
     public outland.feature.proto.FeatureVersion getVersion() {
       if (versionBuilder_ == null) {
@@ -2074,7 +2076,7 @@ public  final class Feature extends
       }
     }
     /**
-     * <code>optional .outland.FeatureVersion version = 16;</code>
+     * <code>.outland.FeatureVersion version = 16;</code>
      */
     public Builder setVersion(outland.feature.proto.FeatureVersion value) {
       if (versionBuilder_ == null) {
@@ -2090,7 +2092,7 @@ public  final class Feature extends
       return this;
     }
     /**
-     * <code>optional .outland.FeatureVersion version = 16;</code>
+     * <code>.outland.FeatureVersion version = 16;</code>
      */
     public Builder setVersion(
         outland.feature.proto.FeatureVersion.Builder builderForValue) {
@@ -2104,7 +2106,7 @@ public  final class Feature extends
       return this;
     }
     /**
-     * <code>optional .outland.FeatureVersion version = 16;</code>
+     * <code>.outland.FeatureVersion version = 16;</code>
      */
     public Builder mergeVersion(outland.feature.proto.FeatureVersion value) {
       if (versionBuilder_ == null) {
@@ -2122,7 +2124,7 @@ public  final class Feature extends
       return this;
     }
     /**
-     * <code>optional .outland.FeatureVersion version = 16;</code>
+     * <code>.outland.FeatureVersion version = 16;</code>
      */
     public Builder clearVersion() {
       if (versionBuilder_ == null) {
@@ -2136,7 +2138,7 @@ public  final class Feature extends
       return this;
     }
     /**
-     * <code>optional .outland.FeatureVersion version = 16;</code>
+     * <code>.outland.FeatureVersion version = 16;</code>
      */
     public outland.feature.proto.FeatureVersion.Builder getVersionBuilder() {
       
@@ -2144,7 +2146,7 @@ public  final class Feature extends
       return getVersionFieldBuilder().getBuilder();
     }
     /**
-     * <code>optional .outland.FeatureVersion version = 16;</code>
+     * <code>.outland.FeatureVersion version = 16;</code>
      */
     public outland.feature.proto.FeatureVersionOrBuilder getVersionOrBuilder() {
       if (versionBuilder_ != null) {
@@ -2155,7 +2157,7 @@ public  final class Feature extends
       }
     }
     /**
-     * <code>optional .outland.FeatureVersion version = 16;</code>
+     * <code>.outland.FeatureVersion version = 16;</code>
      */
     private com.google.protobuf.SingleFieldBuilderV3<
         outland.feature.proto.FeatureVersion, outland.feature.proto.FeatureVersion.Builder, outland.feature.proto.FeatureVersionOrBuilder> 
@@ -2175,13 +2177,13 @@ public  final class Feature extends
     private com.google.protobuf.SingleFieldBuilderV3<
         outland.feature.proto.NamespaceFeatureCollection, outland.feature.proto.NamespaceFeatureCollection.Builder, outland.feature.proto.NamespaceFeatureCollectionOrBuilder> namespacesBuilder_;
     /**
-     * <code>optional .outland.NamespaceFeatureCollection namespaces = 17;</code>
+     * <code>.outland.NamespaceFeatureCollection namespaces = 17;</code>
      */
     public boolean hasNamespaces() {
       return namespacesBuilder_ != null || namespaces_ != null;
     }
     /**
-     * <code>optional .outland.NamespaceFeatureCollection namespaces = 17;</code>
+     * <code>.outland.NamespaceFeatureCollection namespaces = 17;</code>
      */
     public outland.feature.proto.NamespaceFeatureCollection getNamespaces() {
       if (namespacesBuilder_ == null) {
@@ -2191,7 +2193,7 @@ public  final class Feature extends
       }
     }
     /**
-     * <code>optional .outland.NamespaceFeatureCollection namespaces = 17;</code>
+     * <code>.outland.NamespaceFeatureCollection namespaces = 17;</code>
      */
     public Builder setNamespaces(outland.feature.proto.NamespaceFeatureCollection value) {
       if (namespacesBuilder_ == null) {
@@ -2207,7 +2209,7 @@ public  final class Feature extends
       return this;
     }
     /**
-     * <code>optional .outland.NamespaceFeatureCollection namespaces = 17;</code>
+     * <code>.outland.NamespaceFeatureCollection namespaces = 17;</code>
      */
     public Builder setNamespaces(
         outland.feature.proto.NamespaceFeatureCollection.Builder builderForValue) {
@@ -2221,7 +2223,7 @@ public  final class Feature extends
       return this;
     }
     /**
-     * <code>optional .outland.NamespaceFeatureCollection namespaces = 17;</code>
+     * <code>.outland.NamespaceFeatureCollection namespaces = 17;</code>
      */
     public Builder mergeNamespaces(outland.feature.proto.NamespaceFeatureCollection value) {
       if (namespacesBuilder_ == null) {
@@ -2239,7 +2241,7 @@ public  final class Feature extends
       return this;
     }
     /**
-     * <code>optional .outland.NamespaceFeatureCollection namespaces = 17;</code>
+     * <code>.outland.NamespaceFeatureCollection namespaces = 17;</code>
      */
     public Builder clearNamespaces() {
       if (namespacesBuilder_ == null) {
@@ -2253,7 +2255,7 @@ public  final class Feature extends
       return this;
     }
     /**
-     * <code>optional .outland.NamespaceFeatureCollection namespaces = 17;</code>
+     * <code>.outland.NamespaceFeatureCollection namespaces = 17;</code>
      */
     public outland.feature.proto.NamespaceFeatureCollection.Builder getNamespacesBuilder() {
       
@@ -2261,7 +2263,7 @@ public  final class Feature extends
       return getNamespacesFieldBuilder().getBuilder();
     }
     /**
-     * <code>optional .outland.NamespaceFeatureCollection namespaces = 17;</code>
+     * <code>.outland.NamespaceFeatureCollection namespaces = 17;</code>
      */
     public outland.feature.proto.NamespaceFeatureCollectionOrBuilder getNamespacesOrBuilder() {
       if (namespacesBuilder_ != null) {
@@ -2272,7 +2274,7 @@ public  final class Feature extends
       }
     }
     /**
-     * <code>optional .outland.NamespaceFeatureCollection namespaces = 17;</code>
+     * <code>.outland.NamespaceFeatureCollection namespaces = 17;</code>
      */
     private com.google.protobuf.SingleFieldBuilderV3<
         outland.feature.proto.NamespaceFeatureCollection, outland.feature.proto.NamespaceFeatureCollection.Builder, outland.feature.proto.NamespaceFeatureCollectionOrBuilder> 

@@ -17,7 +17,7 @@ import org.junit.runners.Suite;
 import outland.feature.server.ServerConfiguration;
 import outland.feature.server.ServerMain;
 import outland.feature.server.ServerModule;
-import outland.feature.server.groups.TestAppModule;
+import outland.feature.server.groups.TestGroupModule;
 import outland.feature.server.auth.AuthModule;
 import outland.feature.server.aws.DynamoDbModule;
 import outland.feature.server.features.TestFeatureServiceModule;
@@ -49,7 +49,7 @@ public class ServerSuite {
                       new DynamoDbModule(configuration.aws),
                       new AuthModule(configuration.auth),
                       new TestFeatureServiceModule(),
-                      new TestAppModule()
+                      new TestGroupModule()
                   );
                 }
               };

@@ -96,7 +96,7 @@ public  final class ServiceAccess extends
   public static final int TYPE_FIELD_NUMBER = 1;
   private volatile java.lang.Object type_;
   /**
-   * <code>optional string type = 1;</code>
+   * <code>string type = 1;</code>
    */
   public java.lang.String getType() {
     java.lang.Object ref = type_;
@@ -111,7 +111,7 @@ public  final class ServiceAccess extends
     }
   }
   /**
-   * <code>optional string type = 1;</code>
+   * <code>string type = 1;</code>
    */
   public com.google.protobuf.ByteString
       getTypeBytes() {
@@ -130,7 +130,7 @@ public  final class ServiceAccess extends
   public static final int ID_FIELD_NUMBER = 2;
   private volatile java.lang.Object id_;
   /**
-   * <code>optional string id = 2;</code>
+   * <code>string id = 2;</code>
    */
   public java.lang.String getId() {
     java.lang.Object ref = id_;
@@ -145,7 +145,7 @@ public  final class ServiceAccess extends
     }
   }
   /**
-   * <code>optional string id = 2;</code>
+   * <code>string id = 2;</code>
    */
   public com.google.protobuf.ByteString
       getIdBytes() {
@@ -164,7 +164,7 @@ public  final class ServiceAccess extends
   public static final int NAME_FIELD_NUMBER = 10;
   private volatile java.lang.Object name_;
   /**
-   * <code>optional string name = 10;</code>
+   * <code>string name = 10;</code>
    */
   public java.lang.String getName() {
     java.lang.Object ref = name_;
@@ -179,7 +179,7 @@ public  final class ServiceAccess extends
     }
   }
   /**
-   * <code>optional string name = 10;</code>
+   * <code>string name = 10;</code>
    */
   public com.google.protobuf.ByteString
       getNameBytes() {
@@ -198,7 +198,7 @@ public  final class ServiceAccess extends
   public static final int KEY_FIELD_NUMBER = 11;
   private volatile java.lang.Object key_;
   /**
-   * <code>optional string key = 11;</code>
+   * <code>string key = 11;</code>
    */
   public java.lang.String getKey() {
     java.lang.Object ref = key_;
@@ -213,7 +213,7 @@ public  final class ServiceAccess extends
     }
   }
   /**
-   * <code>optional string key = 11;</code>
+   * <code>string key = 11;</code>
    */
   public com.google.protobuf.ByteString
       getKeyBytes() {
@@ -305,7 +305,7 @@ public  final class ServiceAccess extends
       return memoizedHashCode;
     }
     int hash = 41;
-    hash = (19 * hash) + getDescriptorForType().hashCode();
+    hash = (19 * hash) + getDescriptor().hashCode();
     hash = (37 * hash) + TYPE_FIELD_NUMBER;
     hash = (53 * hash) + getType().hashCode();
     hash = (37 * hash) + ID_FIELD_NUMBER;
@@ -551,7 +551,7 @@ public  final class ServiceAccess extends
 
     private java.lang.Object type_ = "";
     /**
-     * <code>optional string type = 1;</code>
+     * <code>string type = 1;</code>
      */
     public java.lang.String getType() {
       java.lang.Object ref = type_;
@@ -566,7 +566,7 @@ public  final class ServiceAccess extends
       }
     }
     /**
-     * <code>optional string type = 1;</code>
+     * <code>string type = 1;</code>
      */
     public com.google.protobuf.ByteString
         getTypeBytes() {
@@ -582,7 +582,7 @@ public  final class ServiceAccess extends
       }
     }
     /**
-     * <code>optional string type = 1;</code>
+     * <code>string type = 1;</code>
      */
     public Builder setType(
         java.lang.String value) {
@@ -595,7 +595,7 @@ public  final class ServiceAccess extends
       return this;
     }
     /**
-     * <code>optional string type = 1;</code>
+     * <code>string type = 1;</code>
      */
     public Builder clearType() {
       
@@ -604,7 +604,7 @@ public  final class ServiceAccess extends
       return this;
     }
     /**
-     * <code>optional string type = 1;</code>
+     * <code>string type = 1;</code>
      */
     public Builder setTypeBytes(
         com.google.protobuf.ByteString value) {
@@ -620,7 +620,7 @@ public  final class ServiceAccess extends
 
     private java.lang.Object id_ = "";
     /**
-     * <code>optional string id = 2;</code>
+     * <code>string id = 2;</code>
      */
     public java.lang.String getId() {
       java.lang.Object ref = id_;
@@ -635,7 +635,7 @@ public  final class ServiceAccess extends
       }
     }
     /**
-     * <code>optional string id = 2;</code>
+     * <code>string id = 2;</code>
      */
     public com.google.protobuf.ByteString
         getIdBytes() {
@@ -651,7 +651,7 @@ public  final class ServiceAccess extends
       }
     }
     /**
-     * <code>optional string id = 2;</code>
+     * <code>string id = 2;</code>
      */
     public Builder setId(
         java.lang.String value) {
@@ -664,7 +664,7 @@ public  final class ServiceAccess extends
       return this;
     }
     /**
-     * <code>optional string id = 2;</code>
+     * <code>string id = 2;</code>
      */
     public Builder clearId() {
       
@@ -673,7 +673,7 @@ public  final class ServiceAccess extends
       return this;
     }
     /**
-     * <code>optional string id = 2;</code>
+     * <code>string id = 2;</code>
      */
     public Builder setIdBytes(
         com.google.protobuf.ByteString value) {
@@ -689,7 +689,7 @@ public  final class ServiceAccess extends
 
     private java.lang.Object name_ = "";
     /**
-     * <code>optional string name = 10;</code>
+     * <code>string name = 10;</code>
      */
     public java.lang.String getName() {
       java.lang.Object ref = name_;
@@ -704,7 +704,7 @@ public  final class ServiceAccess extends
       }
     }
     /**
-     * <code>optional string name = 10;</code>
+     * <code>string name = 10;</code>
      */
     public com.google.protobuf.ByteString
         getNameBytes() {
@@ -720,7 +720,7 @@ public  final class ServiceAccess extends
       }
     }
     /**
-     * <code>optional string name = 10;</code>
+     * <code>string name = 10;</code>
      */
     public Builder setName(
         java.lang.String value) {
@@ -733,7 +733,7 @@ public  final class ServiceAccess extends
       return this;
     }
     /**
-     * <code>optional string name = 10;</code>
+     * <code>string name = 10;</code>
      */
     public Builder clearName() {
       
@@ -742,7 +742,7 @@ public  final class ServiceAccess extends
       return this;
     }
     /**
-     * <code>optional string name = 10;</code>
+     * <code>string name = 10;</code>
      */
     public Builder setNameBytes(
         com.google.protobuf.ByteString value) {
@@ -758,7 +758,7 @@ public  final class ServiceAccess extends
 
     private java.lang.Object key_ = "";
     /**
-     * <code>optional string key = 11;</code>
+     * <code>string key = 11;</code>
      */
     public java.lang.String getKey() {
       java.lang.Object ref = key_;
@@ -773,7 +773,7 @@ public  final class ServiceAccess extends
       }
     }
     /**
-     * <code>optional string key = 11;</code>
+     * <code>string key = 11;</code>
      */
     public com.google.protobuf.ByteString
         getKeyBytes() {
@@ -789,7 +789,7 @@ public  final class ServiceAccess extends
       }
     }
     /**
-     * <code>optional string key = 11;</code>
+     * <code>string key = 11;</code>
      */
     public Builder setKey(
         java.lang.String value) {
@@ -802,7 +802,7 @@ public  final class ServiceAccess extends
       return this;
     }
     /**
-     * <code>optional string key = 11;</code>
+     * <code>string key = 11;</code>
      */
     public Builder clearKey() {
       
@@ -811,7 +811,7 @@ public  final class ServiceAccess extends
       return this;
     }
     /**
-     * <code>optional string key = 11;</code>
+     * <code>string key = 11;</code>
      */
     public Builder setKeyBytes(
         com.google.protobuf.ByteString value) {

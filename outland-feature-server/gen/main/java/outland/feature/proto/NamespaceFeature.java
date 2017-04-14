@@ -95,7 +95,7 @@ public  final class NamespaceFeature extends
   public static final int TYPE_FIELD_NUMBER = 1;
   private volatile java.lang.Object type_;
   /**
-   * <code>optional string type = 1;</code>
+   * <code>string type = 1;</code>
    */
   public java.lang.String getType() {
     java.lang.Object ref = type_;
@@ -110,7 +110,7 @@ public  final class NamespaceFeature extends
     }
   }
   /**
-   * <code>optional string type = 1;</code>
+   * <code>string type = 1;</code>
    */
   public com.google.protobuf.ByteString
       getTypeBytes() {
@@ -129,7 +129,7 @@ public  final class NamespaceFeature extends
   public static final int NAMESPACE_FIELD_NUMBER = 10;
   private volatile java.lang.Object namespace_;
   /**
-   * <code>optional string namespace = 10;</code>
+   * <code>string namespace = 10;</code>
    */
   public java.lang.String getNamespace() {
     java.lang.Object ref = namespace_;
@@ -144,7 +144,7 @@ public  final class NamespaceFeature extends
     }
   }
   /**
-   * <code>optional string namespace = 10;</code>
+   * <code>string namespace = 10;</code>
    */
   public com.google.protobuf.ByteString
       getNamespaceBytes() {
@@ -163,19 +163,19 @@ public  final class NamespaceFeature extends
   public static final int FEATURE_FIELD_NUMBER = 11;
   private outland.feature.proto.FeatureData feature_;
   /**
-   * <code>optional .outland.FeatureData feature = 11;</code>
+   * <code>.outland.FeatureData feature = 11;</code>
    */
   public boolean hasFeature() {
     return feature_ != null;
   }
   /**
-   * <code>optional .outland.FeatureData feature = 11;</code>
+   * <code>.outland.FeatureData feature = 11;</code>
    */
   public outland.feature.proto.FeatureData getFeature() {
     return feature_ == null ? outland.feature.proto.FeatureData.getDefaultInstance() : feature_;
   }
   /**
-   * <code>optional .outland.FeatureData feature = 11;</code>
+   * <code>.outland.FeatureData feature = 11;</code>
    */
   public outland.feature.proto.FeatureDataOrBuilder getFeatureOrBuilder() {
     return getFeature();
@@ -253,7 +253,7 @@ public  final class NamespaceFeature extends
       return memoizedHashCode;
     }
     int hash = 41;
-    hash = (19 * hash) + getDescriptorForType().hashCode();
+    hash = (19 * hash) + getDescriptor().hashCode();
     hash = (37 * hash) + TYPE_FIELD_NUMBER;
     hash = (53 * hash) + getType().hashCode();
     hash = (37 * hash) + NAMESPACE_FIELD_NUMBER;
@@ -499,7 +499,7 @@ public  final class NamespaceFeature extends
 
     private java.lang.Object type_ = "";
     /**
-     * <code>optional string type = 1;</code>
+     * <code>string type = 1;</code>
      */
     public java.lang.String getType() {
       java.lang.Object ref = type_;
@@ -514,7 +514,7 @@ public  final class NamespaceFeature extends
       }
     }
     /**
-     * <code>optional string type = 1;</code>
+     * <code>string type = 1;</code>
      */
     public com.google.protobuf.ByteString
         getTypeBytes() {
@@ -530,7 +530,7 @@ public  final class NamespaceFeature extends
       }
     }
     /**
-     * <code>optional string type = 1;</code>
+     * <code>string type = 1;</code>
      */
     public Builder setType(
         java.lang.String value) {
@@ -543,7 +543,7 @@ public  final class NamespaceFeature extends
       return this;
     }
     /**
-     * <code>optional string type = 1;</code>
+     * <code>string type = 1;</code>
      */
     public Builder clearType() {
       
@@ -552,7 +552,7 @@ public  final class NamespaceFeature extends
       return this;
     }
     /**
-     * <code>optional string type = 1;</code>
+     * <code>string type = 1;</code>
      */
     public Builder setTypeBytes(
         com.google.protobuf.ByteString value) {
@@ -568,7 +568,7 @@ public  final class NamespaceFeature extends
 
     private java.lang.Object namespace_ = "";
     /**
-     * <code>optional string namespace = 10;</code>
+     * <code>string namespace = 10;</code>
      */
     public java.lang.String getNamespace() {
       java.lang.Object ref = namespace_;
@@ -583,7 +583,7 @@ public  final class NamespaceFeature extends
       }
     }
     /**
-     * <code>optional string namespace = 10;</code>
+     * <code>string namespace = 10;</code>
      */
     public com.google.protobuf.ByteString
         getNamespaceBytes() {
@@ -599,7 +599,7 @@ public  final class NamespaceFeature extends
       }
     }
     /**
-     * <code>optional string namespace = 10;</code>
+     * <code>string namespace = 10;</code>
      */
     public Builder setNamespace(
         java.lang.String value) {
@@ -612,7 +612,7 @@ public  final class NamespaceFeature extends
       return this;
     }
     /**
-     * <code>optional string namespace = 10;</code>
+     * <code>string namespace = 10;</code>
      */
     public Builder clearNamespace() {
       
@@ -621,7 +621,7 @@ public  final class NamespaceFeature extends
       return this;
     }
     /**
-     * <code>optional string namespace = 10;</code>
+     * <code>string namespace = 10;</code>
      */
     public Builder setNamespaceBytes(
         com.google.protobuf.ByteString value) {
@@ -639,13 +639,13 @@ public  final class NamespaceFeature extends
     private com.google.protobuf.SingleFieldBuilderV3<
         outland.feature.proto.FeatureData, outland.feature.proto.FeatureData.Builder, outland.feature.proto.FeatureDataOrBuilder> featureBuilder_;
     /**
-     * <code>optional .outland.FeatureData feature = 11;</code>
+     * <code>.outland.FeatureData feature = 11;</code>
      */
     public boolean hasFeature() {
       return featureBuilder_ != null || feature_ != null;
     }
     /**
-     * <code>optional .outland.FeatureData feature = 11;</code>
+     * <code>.outland.FeatureData feature = 11;</code>
      */
     public outland.feature.proto.FeatureData getFeature() {
       if (featureBuilder_ == null) {
@@ -655,7 +655,7 @@ public  final class NamespaceFeature extends
       }
     }
     /**
-     * <code>optional .outland.FeatureData feature = 11;</code>
+     * <code>.outland.FeatureData feature = 11;</code>
      */
     public Builder setFeature(outland.feature.proto.FeatureData value) {
       if (featureBuilder_ == null) {
@@ -671,7 +671,7 @@ public  final class NamespaceFeature extends
       return this;
     }
     /**
-     * <code>optional .outland.FeatureData feature = 11;</code>
+     * <code>.outland.FeatureData feature = 11;</code>
      */
     public Builder setFeature(
         outland.feature.proto.FeatureData.Builder builderForValue) {
@@ -685,7 +685,7 @@ public  final class NamespaceFeature extends
       return this;
     }
     /**
-     * <code>optional .outland.FeatureData feature = 11;</code>
+     * <code>.outland.FeatureData feature = 11;</code>
      */
     public Builder mergeFeature(outland.feature.proto.FeatureData value) {
       if (featureBuilder_ == null) {
@@ -703,7 +703,7 @@ public  final class NamespaceFeature extends
       return this;
     }
     /**
-     * <code>optional .outland.FeatureData feature = 11;</code>
+     * <code>.outland.FeatureData feature = 11;</code>
      */
     public Builder clearFeature() {
       if (featureBuilder_ == null) {
@@ -717,7 +717,7 @@ public  final class NamespaceFeature extends
       return this;
     }
     /**
-     * <code>optional .outland.FeatureData feature = 11;</code>
+     * <code>.outland.FeatureData feature = 11;</code>
      */
     public outland.feature.proto.FeatureData.Builder getFeatureBuilder() {
       
@@ -725,7 +725,7 @@ public  final class NamespaceFeature extends
       return getFeatureFieldBuilder().getBuilder();
     }
     /**
-     * <code>optional .outland.FeatureData feature = 11;</code>
+     * <code>.outland.FeatureData feature = 11;</code>
      */
     public outland.feature.proto.FeatureDataOrBuilder getFeatureOrBuilder() {
       if (featureBuilder_ != null) {
@@ -736,7 +736,7 @@ public  final class NamespaceFeature extends
       }
     }
     /**
-     * <code>optional .outland.FeatureData feature = 11;</code>
+     * <code>.outland.FeatureData feature = 11;</code>
      */
     private com.google.protobuf.SingleFieldBuilderV3<
         outland.feature.proto.FeatureData, outland.feature.proto.FeatureData.Builder, outland.feature.proto.FeatureDataOrBuilder> 
