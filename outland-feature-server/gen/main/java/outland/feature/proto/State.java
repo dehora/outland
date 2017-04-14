@@ -84,8 +84,7 @@ public enum State
   }
   public static final com.google.protobuf.Descriptors.EnumDescriptor
       getDescriptor() {
-    return outland.feature.proto.FeatureMessage.getDescriptor()
-        .getEnumTypes().get(1);
+    return outland.feature.proto.FeatureMessage.getDescriptor().getEnumTypes().get(1);
   }
 
   private static final State[] VALUES = values();

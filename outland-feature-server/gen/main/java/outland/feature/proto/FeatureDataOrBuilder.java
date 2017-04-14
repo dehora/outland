@@ -8,67 +8,67 @@ public interface FeatureDataOrBuilder extends
     com.google.protobuf.MessageOrBuilder {
 
   /**
-   * <code>optional string type = 1;</code>
+   * <code>string type = 1;</code>
    */
   java.lang.String getType();
   /**
-   * <code>optional string type = 1;</code>
+   * <code>string type = 1;</code>
    */
   com.google.protobuf.ByteString
       getTypeBytes();
 
   /**
-   * <code>optional string id = 2;</code>
+   * <code>string id = 2;</code>
    */
   java.lang.String getId();
   /**
-   * <code>optional string id = 2;</code>
+   * <code>string id = 2;</code>
    */
   com.google.protobuf.ByteString
       getIdBytes();
 
   /**
-   * <code>optional string key = 10;</code>
+   * <code>string key = 10;</code>
    */
   java.lang.String getKey();
   /**
-   * <code>optional string key = 10;</code>
+   * <code>string key = 10;</code>
    */
   com.google.protobuf.ByteString
       getKeyBytes();
 
   /**
-   * <code>optional .outland.State state = 11;</code>
+   * <code>.outland.State state = 11;</code>
    */
   int getStateValue();
   /**
-   * <code>optional .outland.State state = 11;</code>
+   * <code>.outland.State state = 11;</code>
    */
   outland.feature.proto.State getState();
 
   /**
-   * <code>optional .outland.OptionCollection options = 12;</code>
+   * <code>.outland.OptionCollection options = 12;</code>
    */
   boolean hasOptions();
   /**
-   * <code>optional .outland.OptionCollection options = 12;</code>
+   * <code>.outland.OptionCollection options = 12;</code>
    */
   outland.feature.proto.OptionCollection getOptions();
   /**
-   * <code>optional .outland.OptionCollection options = 12;</code>
+   * <code>.outland.OptionCollection options = 12;</code>
    */
   outland.feature.proto.OptionCollectionOrBuilder getOptionsOrBuilder();
 
   /**
-   * <code>optional .outland.FeatureVersion version = 13;</code>
+   * <code>.outland.FeatureVersion version = 13;</code>
    */
   boolean hasVersion();
   /**
-   * <code>optional .outland.FeatureVersion version = 13;</code>
+   * <code>.outland.FeatureVersion version = 13;</code>
    */
   outland.feature.proto.FeatureVersion getVersion();
   /**
-   * <code>optional .outland.FeatureVersion version = 13;</code>
+   * <code>.outland.FeatureVersion version = 13;</code>
    */
   outland.feature.proto.FeatureVersionOrBuilder getVersionOrBuilder();
 }

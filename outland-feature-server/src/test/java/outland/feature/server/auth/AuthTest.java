@@ -17,7 +17,7 @@ import java.util.Optional;
 import org.junit.Test;
 import outland.feature.server.groups.NamesapaceAuthService;
 import outland.feature.server.groups.NamesapaceAuthServiceViaPlanBServer;
-import outland.feature.server.groups.TestAppModule;
+import outland.feature.server.groups.TestGroupModule;
 import outland.feature.server.features.VersionService;
 import outland.feature.server.features.DefaultVersionService;
 
@@ -50,7 +50,7 @@ public class AuthTest {
 
     final Injector injector = Guice.createInjector(
         new AuthModule(authConfiguration),
-        new TestAppModule(),
+        new TestGroupModule(),
         new AbstractModule(){
           @Override protected void configure() {
             bind(VersionService.class).to(DefaultVersionService.class).asEagerSingleton();

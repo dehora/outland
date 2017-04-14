@@ -89,7 +89,7 @@ public  final class OwnerCollection extends
   public static final int TYPE_FIELD_NUMBER = 1;
   private volatile java.lang.Object type_;
   /**
-   * <code>optional string type = 1;</code>
+   * <code>string type = 1;</code>
    */
   public java.lang.String getType() {
     java.lang.Object ref = type_;
@@ -104,7 +104,7 @@ public  final class OwnerCollection extends
     }
   }
   /**
-   * <code>optional string type = 1;</code>
+   * <code>string type = 1;</code>
    */
   public com.google.protobuf.ByteString
       getTypeBytes() {
@@ -216,7 +216,7 @@ public  final class OwnerCollection extends
       return memoizedHashCode;
     }
     int hash = 41;
-    hash = (19 * hash) + getDescriptorForType().hashCode();
+    hash = (19 * hash) + getDescriptor().hashCode();
     hash = (37 * hash) + TYPE_FIELD_NUMBER;
     hash = (53 * hash) + getType().hashCode();
     if (getItemsCount() > 0) {
@@ -485,7 +485,7 @@ public  final class OwnerCollection extends
 
     private java.lang.Object type_ = "";
     /**
-     * <code>optional string type = 1;</code>
+     * <code>string type = 1;</code>
      */
     public java.lang.String getType() {
       java.lang.Object ref = type_;
@@ -500,7 +500,7 @@ public  final class OwnerCollection extends
       }
     }
     /**
-     * <code>optional string type = 1;</code>
+     * <code>string type = 1;</code>
      */
     public com.google.protobuf.ByteString
         getTypeBytes() {
@@ -516,7 +516,7 @@ public  final class OwnerCollection extends
       }
     }
     /**
-     * <code>optional string type = 1;</code>
+     * <code>string type = 1;</code>
      */
     public Builder setType(
         java.lang.String value) {
@@ -529,7 +529,7 @@ public  final class OwnerCollection extends
       return this;
     }
     /**
-     * <code>optional string type = 1;</code>
+     * <code>string type = 1;</code>
      */
     public Builder clearType() {
       
@@ -538,7 +538,7 @@ public  final class OwnerCollection extends
       return this;
     }
     /**
-     * <code>optional string type = 1;</code>
+     * <code>string type = 1;</code>
      */
     public Builder setTypeBytes(
         com.google.protobuf.ByteString value) {

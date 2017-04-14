@@ -91,8 +91,7 @@ public enum OptionType
   }
   public static final com.google.protobuf.Descriptors.EnumDescriptor
       getDescriptor() {
-    return outland.feature.proto.FeatureMessage.getDescriptor()
-        .getEnumTypes().get(0);
+    return outland.feature.proto.FeatureMessage.getDescriptor().getEnumTypes().get(0);
   }
 
   private static final OptionType[] VALUES = values();

@@ -109,7 +109,7 @@ public  final class FeatureOption extends
   public static final int TYPE_FIELD_NUMBER = 1;
   private volatile java.lang.Object type_;
   /**
-   * <code>optional string type = 1;</code>
+   * <code>string type = 1;</code>
    */
   public java.lang.String getType() {
     java.lang.Object ref = type_;
@@ -124,7 +124,7 @@ public  final class FeatureOption extends
     }
   }
   /**
-   * <code>optional string type = 1;</code>
+   * <code>string type = 1;</code>
    */
   public com.google.protobuf.ByteString
       getTypeBytes() {
@@ -143,7 +143,7 @@ public  final class FeatureOption extends
   public static final int ID_FIELD_NUMBER = 2;
   private volatile java.lang.Object id_;
   /**
-   * <code>optional string id = 2;</code>
+   * <code>string id = 2;</code>
    */
   public java.lang.String getId() {
     java.lang.Object ref = id_;
@@ -158,7 +158,7 @@ public  final class FeatureOption extends
     }
   }
   /**
-   * <code>optional string id = 2;</code>
+   * <code>string id = 2;</code>
    */
   public com.google.protobuf.ByteString
       getIdBytes() {
@@ -177,13 +177,13 @@ public  final class FeatureOption extends
   public static final int OPTION_FIELD_NUMBER = 10;
   private int option_;
   /**
-   * <code>optional .outland.OptionType option = 10;</code>
+   * <code>.outland.OptionType option = 10;</code>
    */
   public int getOptionValue() {
     return option_;
   }
   /**
-   * <code>optional .outland.OptionType option = 10;</code>
+   * <code>.outland.OptionType option = 10;</code>
    */
   public outland.feature.proto.OptionType getOption() {
     outland.feature.proto.OptionType result = outland.feature.proto.OptionType.valueOf(option_);
@@ -193,7 +193,7 @@ public  final class FeatureOption extends
   public static final int NAME_FIELD_NUMBER = 11;
   private volatile java.lang.Object name_;
   /**
-   * <code>optional string name = 11;</code>
+   * <code>string name = 11;</code>
    */
   public java.lang.String getName() {
     java.lang.Object ref = name_;
@@ -208,7 +208,7 @@ public  final class FeatureOption extends
     }
   }
   /**
-   * <code>optional string name = 11;</code>
+   * <code>string name = 11;</code>
    */
   public com.google.protobuf.ByteString
       getNameBytes() {
@@ -227,7 +227,7 @@ public  final class FeatureOption extends
   public static final int VALUE_FIELD_NUMBER = 12;
   private volatile java.lang.Object value_;
   /**
-   * <code>optional string value = 12;</code>
+   * <code>string value = 12;</code>
    */
   public java.lang.String getValue() {
     java.lang.Object ref = value_;
@@ -242,7 +242,7 @@ public  final class FeatureOption extends
     }
   }
   /**
-   * <code>optional string value = 12;</code>
+   * <code>string value = 12;</code>
    */
   public com.google.protobuf.ByteString
       getValueBytes() {
@@ -261,7 +261,7 @@ public  final class FeatureOption extends
   public static final int WEIGHT_FIELD_NUMBER = 13;
   private int weight_;
   /**
-   * <code>optional int32 weight = 13;</code>
+   * <code>int32 weight = 13;</code>
    */
   public int getWeight() {
     return weight_;
@@ -360,7 +360,7 @@ public  final class FeatureOption extends
       return memoizedHashCode;
     }
     int hash = 41;
-    hash = (19 * hash) + getDescriptorForType().hashCode();
+    hash = (19 * hash) + getDescriptor().hashCode();
     hash = (37 * hash) + TYPE_FIELD_NUMBER;
     hash = (53 * hash) + getType().hashCode();
     hash = (37 * hash) + ID_FIELD_NUMBER;
@@ -622,7 +622,7 @@ public  final class FeatureOption extends
 
     private java.lang.Object type_ = "";
     /**
-     * <code>optional string type = 1;</code>
+     * <code>string type = 1;</code>
      */
     public java.lang.String getType() {
       java.lang.Object ref = type_;
@@ -637,7 +637,7 @@ public  final class FeatureOption extends
       }
     }
     /**
-     * <code>optional string type = 1;</code>
+     * <code>string type = 1;</code>
      */
     public com.google.protobuf.ByteString
         getTypeBytes() {
@@ -653,7 +653,7 @@ public  final class FeatureOption extends
       }
     }
     /**
-     * <code>optional string type = 1;</code>
+     * <code>string type = 1;</code>
      */
     public Builder setType(
         java.lang.String value) {
@@ -666,7 +666,7 @@ public  final class FeatureOption extends
       return this;
     }
     /**
-     * <code>optional string type = 1;</code>
+     * <code>string type = 1;</code>
      */
     public Builder clearType() {
       
@@ -675,7 +675,7 @@ public  final class FeatureOption extends
       return this;
     }
     /**
-     * <code>optional string type = 1;</code>
+     * <code>string type = 1;</code>
      */
     public Builder setTypeBytes(
         com.google.protobuf.ByteString value) {
@@ -691,7 +691,7 @@ public  final class FeatureOption extends
 
     private java.lang.Object id_ = "";
     /**
-     * <code>optional string id = 2;</code>
+     * <code>string id = 2;</code>
      */
     public java.lang.String getId() {
       java.lang.Object ref = id_;
@@ -706,7 +706,7 @@ public  final class FeatureOption extends
       }
     }
     /**
-     * <code>optional string id = 2;</code>
+     * <code>string id = 2;</code>
      */
     public com.google.protobuf.ByteString
         getIdBytes() {
@@ -722,7 +722,7 @@ public  final class FeatureOption extends
       }
     }
     /**
-     * <code>optional string id = 2;</code>
+     * <code>string id = 2;</code>
      */
     public Builder setId(
         java.lang.String value) {
@@ -735,7 +735,7 @@ public  final class FeatureOption extends
       return this;
     }
     /**
-     * <code>optional string id = 2;</code>
+     * <code>string id = 2;</code>
      */
     public Builder clearId() {
       
@@ -744,7 +744,7 @@ public  final class FeatureOption extends
       return this;
     }
     /**
-     * <code>optional string id = 2;</code>
+     * <code>string id = 2;</code>
      */
     public Builder setIdBytes(
         com.google.protobuf.ByteString value) {
@@ -760,13 +760,13 @@ public  final class FeatureOption extends
 
     private int option_ = 0;
     /**
-     * <code>optional .outland.OptionType option = 10;</code>
+     * <code>.outland.OptionType option = 10;</code>
      */
     public int getOptionValue() {
       return option_;
     }
     /**
-     * <code>optional .outland.OptionType option = 10;</code>
+     * <code>.outland.OptionType option = 10;</code>
      */
     public Builder setOptionValue(int value) {
       option_ = value;
@@ -774,14 +774,14 @@ public  final class FeatureOption extends
       return this;
     }
     /**
-     * <code>optional .outland.OptionType option = 10;</code>
+     * <code>.outland.OptionType option = 10;</code>
      */
     public outland.feature.proto.OptionType getOption() {
       outland.feature.proto.OptionType result = outland.feature.proto.OptionType.valueOf(option_);
       return result == null ? outland.feature.proto.OptionType.UNRECOGNIZED : result;
     }
     /**
-     * <code>optional .outland.OptionType option = 10;</code>
+     * <code>.outland.OptionType option = 10;</code>
      */
     public Builder setOption(outland.feature.proto.OptionType value) {
       if (value == null) {
@@ -793,7 +793,7 @@ public  final class FeatureOption extends
       return this;
     }
     /**
-     * <code>optional .outland.OptionType option = 10;</code>
+     * <code>.outland.OptionType option = 10;</code>
      */
     public Builder clearOption() {
       
@@ -804,7 +804,7 @@ public  final class FeatureOption extends
 
     private java.lang.Object name_ = "";
     /**
-     * <code>optional string name = 11;</code>
+     * <code>string name = 11;</code>
      */
     public java.lang.String getName() {
       java.lang.Object ref = name_;
@@ -819,7 +819,7 @@ public  final class FeatureOption extends
       }
     }
     /**
-     * <code>optional string name = 11;</code>
+     * <code>string name = 11;</code>
      */
     public com.google.protobuf.ByteString
         getNameBytes() {
@@ -835,7 +835,7 @@ public  final class FeatureOption extends
       }
     }
     /**
-     * <code>optional string name = 11;</code>
+     * <code>string name = 11;</code>
      */
     public Builder setName(
         java.lang.String value) {
@@ -848,7 +848,7 @@ public  final class FeatureOption extends
       return this;
     }
     /**
-     * <code>optional string name = 11;</code>
+     * <code>string name = 11;</code>
      */
     public Builder clearName() {
       
@@ -857,7 +857,7 @@ public  final class FeatureOption extends
       return this;
     }
     /**
-     * <code>optional string name = 11;</code>
+     * <code>string name = 11;</code>
      */
     public Builder setNameBytes(
         com.google.protobuf.ByteString value) {
@@ -873,7 +873,7 @@ public  final class FeatureOption extends
 
     private java.lang.Object value_ = "";
     /**
-     * <code>optional string value = 12;</code>
+     * <code>string value = 12;</code>
      */
     public java.lang.String getValue() {
       java.lang.Object ref = value_;
@@ -888,7 +888,7 @@ public  final class FeatureOption extends
       }
     }
     /**
-     * <code>optional string value = 12;</code>
+     * <code>string value = 12;</code>
      */
     public com.google.protobuf.ByteString
         getValueBytes() {
@@ -904,7 +904,7 @@ public  final class FeatureOption extends
       }
     }
     /**
-     * <code>optional string value = 12;</code>
+     * <code>string value = 12;</code>
      */
     public Builder setValue(
         java.lang.String value) {
@@ -917,7 +917,7 @@ public  final class FeatureOption extends
       return this;
     }
     /**
-     * <code>optional string value = 12;</code>
+     * <code>string value = 12;</code>
      */
     public Builder clearValue() {
       
@@ -926,7 +926,7 @@ public  final class FeatureOption extends
       return this;
     }
     /**
-     * <code>optional string value = 12;</code>
+     * <code>string value = 12;</code>
      */
     public Builder setValueBytes(
         com.google.protobuf.ByteString value) {
@@ -942,13 +942,13 @@ public  final class FeatureOption extends
 
     private int weight_ ;
     /**
-     * <code>optional int32 weight = 13;</code>
+     * <code>int32 weight = 13;</code>
      */
     public int getWeight() {
       return weight_;
     }
     /**
-     * <code>optional int32 weight = 13;</code>
+     * <code>int32 weight = 13;</code>
      */
     public Builder setWeight(int value) {
       
@@ -957,7 +957,7 @@ public  final class FeatureOption extends
       return this;
     }
     /**
-     * <code>optional int32 weight = 13;</code>
+     * <code>int32 weight = 13;</code>
      */
     public Builder clearWeight() {
       

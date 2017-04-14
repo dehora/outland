@@ -8,51 +8,51 @@ public interface OwnerOrBuilder extends
     com.google.protobuf.MessageOrBuilder {
 
   /**
-   * <code>optional string type = 1;</code>
+   * <code>string type = 1;</code>
    */
   java.lang.String getType();
   /**
-   * <code>optional string type = 1;</code>
+   * <code>string type = 1;</code>
    */
   com.google.protobuf.ByteString
       getTypeBytes();
 
   /**
-   * <code>optional string id = 2;</code>
+   * <code>string id = 2;</code>
    */
   java.lang.String getId();
   /**
-   * <code>optional string id = 2;</code>
+   * <code>string id = 2;</code>
    */
   com.google.protobuf.ByteString
       getIdBytes();
 
   /**
-   * <code>optional string username = 10;</code>
+   * <code>string username = 10;</code>
    */
   java.lang.String getUsername();
   /**
-   * <code>optional string username = 10;</code>
+   * <code>string username = 10;</code>
    */
   com.google.protobuf.ByteString
       getUsernameBytes();
 
   /**
-   * <code>optional string email = 11;</code>
+   * <code>string email = 11;</code>
    */
   java.lang.String getEmail();
   /**
-   * <code>optional string email = 11;</code>
+   * <code>string email = 11;</code>
    */
   com.google.protobuf.ByteString
       getEmailBytes();
 
   /**
-   * <code>optional string name = 12;</code>
+   * <code>string name = 12;</code>
    */
   java.lang.String getName();
   /**
-   * <code>optional string name = 12;</code>
+   * <code>string name = 12;</code>
    */
   com.google.protobuf.ByteString
       getNameBytes();

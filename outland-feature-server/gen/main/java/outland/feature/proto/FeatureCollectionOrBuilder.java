@@ -8,21 +8,21 @@ public interface FeatureCollectionOrBuilder extends
     com.google.protobuf.MessageOrBuilder {
 
   /**
-   * <code>optional string type = 1;</code>
+   * <code>string type = 1;</code>
    */
   java.lang.String getType();
   /**
-   * <code>optional string type = 1;</code>
+   * <code>string type = 1;</code>
    */
   com.google.protobuf.ByteString
       getTypeBytes();
 
   /**
-   * <code>optional string group = 10;</code>
+   * <code>string group = 10;</code>
    */
   java.lang.String getGroup();
   /**
-   * <code>optional string group = 10;</code>
+   * <code>string group = 10;</code>
    */
   com.google.protobuf.ByteString
       getGroupBytes();
