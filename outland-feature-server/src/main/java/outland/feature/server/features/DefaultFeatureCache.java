@@ -11,6 +11,8 @@ import org.slf4j.LoggerFactory;
 import outland.feature.proto.Feature;
 import outland.feature.server.hystrix.HystrixConfiguration;
 import outland.feature.server.protobuf.Protobuf3Support;
+import outland.feature.server.redis.RedisCache;
+import outland.feature.server.redis.RedisCacheCommand;
 
 import static outland.feature.server.StructLog.kvp;
 

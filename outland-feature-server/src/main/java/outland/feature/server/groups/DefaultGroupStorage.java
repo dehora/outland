@@ -200,7 +200,7 @@ public class DefaultGroupStorage implements GroupStorage {
     final ItemCollection<QueryOutcome> items = cmd.execute();
     final IteratorSupport<Item, QueryOutcome> iterator = items.iterator();
     if (iterator.hasNext()) {
-      return Optional.of(GroupSupport.toApp(iterator.next().getString("json")));
+      return Optional.of(GroupSupport.toGroup(iterator.next().getString("json")));
     }
 
     return Optional.empty();

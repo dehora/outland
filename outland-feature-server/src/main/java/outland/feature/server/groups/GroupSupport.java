@@ -6,7 +6,7 @@ import outland.feature.proto.Group;
 
 public class GroupSupport {
 
-  public static Group toApp(String json) {
+  public static Group toGroup(String json) {
 
     try {
       Group.Builder builder = Group.newBuilder();

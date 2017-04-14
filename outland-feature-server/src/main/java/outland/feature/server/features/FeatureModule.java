@@ -2,6 +2,7 @@ package outland.feature.server.features;
 
 import com.google.inject.AbstractModule;
 import javax.inject.Inject;
+import outland.feature.server.redis.RedisCache;
 
 public class FeatureModule extends AbstractModule {
 
