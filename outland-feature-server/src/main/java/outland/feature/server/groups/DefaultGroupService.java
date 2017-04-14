@@ -1,5 +1,6 @@
 package outland.feature.server.groups;
 
+import com.codahale.metrics.Meter;
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.Timer;
 import com.google.common.base.Strings;
@@ -34,6 +35,7 @@ public class DefaultGroupService implements GroupService, MetricsTimer {
   public static final String REL_MARK = "rel.";
   public static final String INV_MARK = "inv.";
   private static final Logger logger = LoggerFactory.getLogger(DefaultGroupService.class);
+  private final GroupCache groupCache;
   private final GroupStorage groupStorage;
   private final VersionService versionService;
   private final GroupUpdateProcessor groupUpdateProcessor;
@@ -43,14 +45,20 @@ public class DefaultGroupService implements GroupService, MetricsTimer {
   private Timer saveOwnerTimer;
   private Timer saveMemberTimer;
   private Timer readNamespaceTimer;
+  private Timer readCacheTimer;
   private Timer removeRelationTimer;
+  private Meter loadCacheHitMeter;
+  private Meter loadCacheMissMeter;
+  private Timer addToCacheTimer;
 
   @Inject
   public DefaultGroupService(
+      GroupCache groupCache,
       GroupStorage groupStorage,
       VersionService versionService,
       MetricRegistry metrics
   ) {
+    this.groupCache = groupCache;
     this.groupStorage = groupStorage;
     this.versionService = versionService;
     this.groupUpdateProcessor = new GroupUpdateProcessor();
@@ -60,49 +68,61 @@ public class DefaultGroupService implements GroupService, MetricsTimer {
   @Override public Optional<Group> register(Group group) {
     logger.info("{} /group[{}]", kvp("op", "register"), TextFormat.shortDebugString(group));
     new GroupValidator().validateRegistrationThrowing(group);
-    return processRegistration(group);
+    final Optional<Group> registration = processRegistration(group);
+
+    registration.ifPresent(this::addToCache);
+    return registration;
   }
 
   @Override public Group update(Group group) {
     logger.info("{} /group[{}]", kvp("op", "update"), TextFormat.shortDebugString(group));
 
-    return processUpdate(group, builder -> {
+    final Group update = processUpdate(group, builder -> {
     });
+
+    addToCache(update);
+    return update;
   }
 
   @Override public Group add(Group group, ServiceAccess service) {
     logger.info("{} /group[{}]/svc[{}]", kvp("op", "add.service"),
         TextFormat.shortDebugString(group), TextFormat.shortDebugString(service));
 
-    return processUpdate(group,
+    final Group update = processUpdate(group,
         builder -> {
           AccessCollection.Builder accessBuilder = newGrantCollectionBuilder();
           accessBuilder.addAllServices(groupUpdateProcessor.mergeServices(group, service));
           accessBuilder.addAllMembers(group.getGranted().getMembersList());
           builder.setGranted(accessBuilder.buildPartial());
         });
+    addToCache(update);
+    return update;
   }
 
   @Override public Group add(Group group, MemberAccess member) {
     logger.info("{} /group[{}]/mbr[{}]", kvp("op", "add.member"),
         TextFormat.shortDebugString(group), TextFormat.shortDebugString(member));
 
-    return processUpdate(group,
+    final Group update = processUpdate(group,
         builder -> {
           AccessCollection.Builder accessBuilder = newGrantCollectionBuilder();
           accessBuilder.addAllMembers(groupUpdateProcessor.mergeMembers(group, member));
           accessBuilder.addAllServices(group.getGranted().getServicesList());
           builder.setGranted(accessBuilder.buildPartial());
         });
+    addToCache(update);
+    return update;
   }
 
   @Override public Group add(Group group, final Owner incoming) {
     logger.info("{} /group[{}]/own[{}]", kvp("op", "add.owner"),
         TextFormat.shortDebugString(group), TextFormat.shortDebugString(incoming));
 
-    return processUpdate(group,
+    final Group update = processUpdate(group,
         builder -> builder.setOwners(OwnerCollection.newBuilder()
             .addAllItems(groupUpdateProcessor.mergeOwners(group, incoming))));
+    addToCache(update);
+    return update;
   }
 
   @Override public Group removeServiceAccess(Group group, String serviceKey) {
@@ -144,6 +164,7 @@ public class DefaultGroupService implements GroupService, MetricsTimer {
     final Group updated = builder.build();
     updateNamespaceInner(updated);
     removeServiceFromGraph(updated, service);
+    addToCache(updated);
     return updated;
   }
 
@@ -191,6 +212,7 @@ public class DefaultGroupService implements GroupService, MetricsTimer {
     final Group updated = builder.build();
     updateNamespaceInner(updated);
     removeMemberFromGraph(updated, MemberAccess);
+    addToCache(updated);
     return updated;
   }
 
@@ -231,7 +253,7 @@ public class DefaultGroupService implements GroupService, MetricsTimer {
     }
 
     final Group.Builder builder = group.toBuilder();
-    builder.getOwners().getItemsList().clear();
+    builder.clearOwners();
     OwnerCollection.Builder oc = OwnerCollection.newBuilder()
         .setType(Names.ownerCollectionType())
         .addAllItems(wrapped);
@@ -244,6 +266,7 @@ public class DefaultGroupService implements GroupService, MetricsTimer {
     final Group updated = builder.build();
     updateNamespaceInner(updated);
     removeOwnerFromGraph(updated, owner);
+    addToCache(updated);
     return updated;
   }
 
@@ -260,7 +283,22 @@ public class DefaultGroupService implements GroupService, MetricsTimer {
   }
 
   @Override public Optional<Group> loadByKey(String group) {
-    return timed(readNamespaceTimer, () -> groupStorage.loadByKey(group));
+
+    final Optional<Group> cached = timed(readCacheTimer,
+        () -> groupCache.findInCache(groupCache.buildCacheKey(group)));
+
+    if(cached.isPresent()) {
+      loadCacheHitMeter.mark();
+      return cached;
+    }
+
+    loadCacheMissMeter.mark();
+
+    return timed(readNamespaceTimer, () -> {
+      final Optional<Group> maybe = groupStorage.loadByKey(group);
+      maybe.ifPresent(this::addToCache);
+      return maybe;
+    });
   }
 
   private Owner prepareOwner(Owner owner) {
@@ -555,6 +593,10 @@ public class DefaultGroupService implements GroupService, MetricsTimer {
         () -> groupStorage.removeRelation(group, inverseRelationHashKey, inverseRelationRangeKey));
   }
 
+  private void addToCache(Group group) {
+    timed(addToCacheTimer, () -> groupCache.addToCache(group));
+  }
+
   private void configureMetrics(MetricRegistry metrics) {
     saveNamespaceTimer = metrics.timer(MetricRegistry.name(DefaultGroupService.class,
         "saveNamespaceTimer"));
@@ -568,5 +610,13 @@ public class DefaultGroupService implements GroupService, MetricsTimer {
         "readNamespaceTimer"));
     removeRelationTimer = metrics.timer(MetricRegistry.name(DefaultGroupService.class,
         "removeRelationTimer"));
+    readCacheTimer = metrics.timer(MetricRegistry.name(DefaultGroupService.class,
+        "readCacheTimer"));
+    addToCacheTimer = metrics.timer(MetricRegistry.name(DefaultGroupService.class,
+        "addToCacheTimer"));
+    loadCacheMissMeter = metrics.meter(MetricRegistry.name(DefaultGroupService.class,
+        "loadCacheMissMeter"));
+    loadCacheHitMeter = metrics.meter(MetricRegistry.name(DefaultGroupService.class,
+        "loadCacheHitMeter"));
   }
 }

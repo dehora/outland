@@ -1,4 +1,4 @@
-package outland.feature.server.features;
+package outland.feature.server.redis;
 
 import com.codahale.metrics.Meter;
 import com.codahale.metrics.MetricRegistry;
@@ -9,12 +9,13 @@ import java.util.List;
 import java.util.function.Supplier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import outland.feature.server.features.MetricsTimer;
 import outland.feature.server.hystrix.HystrixConfiguration;
 
 import static outland.feature.server.StructLog.kvp;
 
-class RedisCacheCommand<T> extends HystrixCommand implements MetricsTimer {
-  private static final Logger logger = LoggerFactory.getLogger(DefaultFeatureService.class);
+public class RedisCacheCommand<T> extends HystrixCommand implements MetricsTimer {
+  private static final Logger logger = LoggerFactory.getLogger(RedisCacheCommand.class);
 
   private final String commandName;
   private final Supplier<T> cacheAction;
@@ -23,7 +24,7 @@ class RedisCacheCommand<T> extends HystrixCommand implements MetricsTimer {
   private final Meter meter;
   private final Meter failMeter;
 
-  RedisCacheCommand(
+  public RedisCacheCommand(
       String commandName,
       Supplier<T> cacheAction,
       Supplier<T> fallbackAction,

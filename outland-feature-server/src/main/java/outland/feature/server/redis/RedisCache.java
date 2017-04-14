@@ -1,11 +1,10 @@
-package outland.feature.server.features;
+package outland.feature.server.redis;
 
 import java.util.Map;
 import java.util.Optional;
 import javax.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import outland.feature.server.redis.RedisProvider;
 import redis.clients.jedis.Jedis;
 
 import static outland.feature.server.StructLog.kvp;
@@ -21,7 +20,7 @@ public class RedisCache {
     this.redisProvider = providerMap.get("outland_feature_cache_redis");
   }
 
-  Void del(String key) {
+  public Void del(String key) {
     Jedis jedis = null;
     try {
       jedis = redisProvider.get();
@@ -35,7 +34,7 @@ public class RedisCache {
     return null;
   }
 
-  Optional<Map<String, String>> hgetAll(String cacheKey) {
+  public Optional<Map<String, String>> hgetAll(String cacheKey) {
     Jedis jedis = null;
     try {
       jedis = redisProvider.get();
@@ -51,7 +50,7 @@ public class RedisCache {
     }
   }
 
-  Optional<String> get(String key) {
+  public Optional<String> get(String key) {
     Jedis jedis = null;
     try {
       jedis = redisProvider.get();
@@ -65,7 +64,7 @@ public class RedisCache {
     }
   }
 
-  Optional<String> set(String key, String data) {
+  public Optional<String> set(String key, String data) {
     Jedis jedis = null;
     try {
       jedis = redisProvider.get();
@@ -81,7 +80,7 @@ public class RedisCache {
     }
   }
 
-  Void hset(String cacheKey, String fieldKey, String value) {
+  public Void hset(String cacheKey, String fieldKey, String value) {
     Jedis jedis = null;
     try {
       jedis = redisProvider.get();
