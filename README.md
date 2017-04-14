@@ -164,15 +164,12 @@ Dummy credentials are setup as a convenience in the folder's `.env` file, this i
 
 ### Create a Group and some Features via the API
 
-A _group_ is used to group features together and store information about which services are 
-granted accessed the group's features. Grants can be given to _services_ or _members_ (such as an 
-individual or team account). Every group also has one or more _owners_.
+A _group_ contains one or more features and describe which services or teams are 
+granted access to those features. Every group also has one or more _owners_.
 
-The example below creates an group called testgroup-1 with two grants and an owner. The grants are 
-given to  a service called testservice-1 and one to a user called testuser-1. The owner is 
-also testuser-1 - owners are just owners, and are not granted access to an group's features by 
-default. 
-
+The example below creates a group called testgroup-1 that can be accessed by a service called 
+`testservice-1` and a member called `testuser-1` and whose owner is 
+also `testuser-1`:
 ```bash
 curl -v -XPOST http://localhost:8180/groups   \
 -H "Content-type: application/json" \
@@ -201,6 +198,10 @@ curl -v -XPOST http://localhost:8180/groups   \
 }
 '
 ```
+
+Owners have permissions to edit the group, but owners are not granted access to the group's 
+features by default - only services and members are allowed to access features. 
+
 
 Let's add a _feature_ to the group by posting the feature JSON to the server associating it with 
 the group's `key`. This one is a simple on/off flag:
