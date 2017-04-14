@@ -26,7 +26,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 import outland.feature.proto.Feature;
-import outland.feature.proto.FeatureCollection;
 import outland.feature.proto.Group;
 import outland.feature.proto.NamespaceFeature;
 import outland.feature.server.Problem;
@@ -81,21 +80,16 @@ public class FeatureResource {
 
     final Optional<Group> maybe = groupService.loadByKey(feature.getGroup());
     if (!maybe.isPresent()) {
-      return headers.enrich(Response.status(404).entity(
-          Problem.clientProblem("group_not_found", "", 404)), start).build();
+      return notFound(start);
     }
 
     accessControlSupport.throwUnlessGrantedFor(principal, maybe.get());
 
     final URI loc = locationUrl(feature);
 
-    final Optional<String> maybeHeader = idempotencyChecker.extractKey(httpHeaders);
-    final boolean seen = maybeHeader.isPresent() && idempotencyChecker.seen(maybeHeader.get());
-    if (maybeHeader.isPresent() && seen) {
-      return headers.enrich(
-          Response.created(loc).header(IdempotencyChecker.RES_HEADER, "key=" + maybeHeader.get())
-              .entity(featureService.loadFeatureByKey(feature.getGroup(), feature.getKey()))
-          , start).build();
+    final Optional<String> maybeSeen = idempotencyChecker.extractKey(httpHeaders);
+    if (maybeSeen.isPresent() && idempotencyChecker.seen(maybeSeen.get())) {
+      return respondAlreadyCreated(feature, start, loc, maybeSeen);
     }
 
     return headers.enrich(
@@ -118,23 +112,15 @@ public class FeatureResource {
 
     final long start = System.currentTimeMillis();
 
-    accessControlSupport.throwUnlessGrantedFor(principal, group);
-    groupValidator.throwUnlessGroupKeyMatch(feature, group);
-    groupValidator.throwUnlessFeatureKeyMatch(feature, featureKey);
+    grantedGuard(principal, group);
+    groupValidGuard(group, featureKey, feature);
 
-    final Optional<String> optional = idempotencyChecker.extractKey(httpHeaders);
-
-    if (optional.isPresent() && idempotencyChecker.seen(optional.get())) {
-      return headers.enrich(
-          Response.ok(featureService.loadFeatureByKey(feature.getGroup(), feature.getKey()))
-              .header(IdempotencyChecker.RES_HEADER, "key=" + optional.get()),
-          start).build();
+    final Optional<String> maybeSeen = idempotencyChecker.extractKey(httpHeaders);
+    if (maybeSeen.isPresent() && idempotencyChecker.seen(maybeSeen.get())) {
+      return alreadyUpdated(feature, start, maybeSeen);
     }
 
-    final Feature updated = featureService.updateFeature(group, featureKey, feature)
-        .orElseThrow(() -> new RuntimeException(""));
-
-    return headers.enrich(Response.ok(updated), start).build();
+    return headers.enrich(Response.ok(update(group, feature)), start).build();
   }
 
   @GET
@@ -149,10 +135,11 @@ public class FeatureResource {
   ) throws AuthenticationException {
 
     final long start = System.currentTimeMillis();
-    accessControlSupport.throwUnlessGrantedFor(principal, group);
-    final Optional<Feature> feature = featureService.loadFeatureByKey(group, featureKey);
-    final Response.ResponseBuilder rb = feature.map(Response::ok).orElseGet(this::featureNotFound);
-    return headers.enrich(rb, start).build();
+    grantedGuard(principal, group);
+    return headers.enrich(
+        featureService.loadFeatureByKey(group, featureKey)
+            .map(Response::ok)
+            .orElseGet(this::featureNotFound), start).build();
   }
 
   @GET
@@ -167,9 +154,8 @@ public class FeatureResource {
   ) throws AuthenticationException {
 
     final long start = System.currentTimeMillis();
-    accessControlSupport.throwUnlessGrantedFor(principal, group);
-    final FeatureCollection features = featureService.loadFeatures(group);
-    return this.headers.enrich(Response.ok(features), start).build();
+    grantedGuard(principal, group);
+    return this.headers.enrich(Response.ok(featureService.loadFeatures(group)), start).build();
   }
 
   @GET
@@ -185,9 +171,9 @@ public class FeatureResource {
   ) throws AuthenticationException {
 
     final long start = System.currentTimeMillis();
-    accessControlSupport.throwUnlessGrantedFor(principal, group);
-    final FeatureCollection fc = featureService.loadFeaturesChangedSince(group, toOffset(since));
-    return this.headers.enrich(Response.ok(fc), start).build();
+    grantedGuard(principal, group);
+    return this.headers.enrich(
+        Response.ok(featureService.loadChangedSince(group, toOffset(since))), start).build();
   }
 
   @POST
@@ -227,7 +213,7 @@ public class FeatureResource {
       throws AuthenticationException {
 
     final long start = System.currentTimeMillis();
-    accessControlSupport.throwUnlessGrantedFor(authPrincipal, group);
+    grantedGuard(authPrincipal, group);
 
     final Response.ResponseBuilder rb =
         featureService.loadFeatureByKey(group, featureKey)
@@ -235,6 +221,38 @@ public class FeatureResource {
             .orElseGet(this::featureNotFound);
 
     return headers.enrich(rb, start).build();
+  }
+
+  private OffsetDateTime toOffset(@QueryParam("since") long since) {
+    return OffsetDateTime.ofInstant(Instant.ofEpochSecond(since), ZoneId.of("UTC").normalized());
+  }
+
+  private Response.ResponseBuilder featureNotFound() {
+    return Response.status(404).entity(Problem.clientProblem("feature_not_found", "", 404));
+  }
+
+  private Optional<Feature> loadFeature(Feature feature) {
+    return featureService.loadFeatureByKey(feature.getGroup(), feature.getKey());
+  }
+
+  private Response respondAlreadyCreated(
+      Feature feature, long start, URI loc, Optional<String> maybeSeen) {
+    return headers.enrich(
+        Response.created(loc)
+            .header(IdempotencyChecker.RES_HEADER, "key=" + maybeSeen.get())
+            .entity(loadFeature(feature)), start).build();
+  }
+
+  private Response alreadyUpdated(Feature feature, long start, Optional<String> maybeSeen) {
+    return headers.enrich(
+        Response.ok(loadFeature(feature))
+            .header(IdempotencyChecker.RES_HEADER, "key=" + maybeSeen.get()),
+        start).build();
+  }
+
+  private Response notFound(long start) {
+    return headers.enrich(Response.status(404).entity(
+        Problem.clientProblem("group_not_found", "", 404)), start).build();
   }
 
   private URI locationUrl(Feature feature) {
@@ -245,11 +263,18 @@ public class FeatureResource {
         .build();
   }
 
-  private OffsetDateTime toOffset(@QueryParam("since") long since) {
-    return OffsetDateTime.ofInstant(Instant.ofEpochSecond(since), ZoneId.of("UTC").normalized());
+  private Feature update(@PathParam("group") String group, Feature feature) {
+    return featureService.updateFeature(group, feature.getKey(), feature)
+        .orElseThrow(() -> new RuntimeException(""));
   }
 
-  private Response.ResponseBuilder featureNotFound() {
-    return Response.status(404).entity(Problem.clientProblem("feature_not_found", "", 404));
+  private void grantedGuard(@Auth AuthPrincipal principal, @PathParam("group") String group)
+      throws AuthenticationException {
+    accessControlSupport.throwUnlessGrantedFor(principal, group);
+  }
+
+  private void groupValidGuard(String group, String featureKey, Feature feature) {
+    groupValidator.throwUnlessGroupKeyMatch(feature, group);
+    groupValidator.throwUnlessFeatureKeyMatch(feature, featureKey);
   }
 }

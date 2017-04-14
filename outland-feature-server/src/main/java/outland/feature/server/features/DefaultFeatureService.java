@@ -163,7 +163,7 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
     return builder.build();
   }
 
-  @Override public FeatureCollection loadFeaturesChangedSince(String group, OffsetDateTime since) {
+  @Override public FeatureCollection loadChangedSince(String group, OffsetDateTime since) {
 
     logger.info("{}", kvp("op", "loadFeaturesSince", "group", group, "since", since));
 
