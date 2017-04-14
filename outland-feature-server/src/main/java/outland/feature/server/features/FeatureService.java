@@ -18,7 +18,7 @@ public interface FeatureService {
 
   FeatureCollection loadFeatures(String group);
 
-  FeatureCollection loadFeaturesChangedSince(String group, OffsetDateTime since);
+  FeatureCollection loadChangedSince(String group, OffsetDateTime since);
 
   Feature add(Feature feature, NamespaceFeature namespaceFeature);
 
