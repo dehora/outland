@@ -100,7 +100,7 @@ public class GroupResource {
   ) throws AuthenticationException {
 
     final long start = System.currentTimeMillis();
-    final Optional<Group> maybe = groupService.loadByKey(group);
+    final Optional<Group> maybe = findGroup(group);
 
     if (maybe.isPresent()) {
       accessControlSupport.throwUnlessGrantedFor(authPrincipal, maybe.get());
@@ -162,7 +162,7 @@ public class GroupResource {
   ) throws AuthenticationException {
     final long start = System.currentTimeMillis();
 
-    final Optional<Group> maybe = groupService.loadByKey(groupKey);
+    final Optional<Group> maybe = findGroup(groupKey);
 
     if (maybe.isPresent()) {
       final Group group = maybe.get();
@@ -188,7 +188,7 @@ public class GroupResource {
   ) throws AuthenticationException {
     final long start = System.currentTimeMillis();
 
-    final Optional<Group> maybe = groupService.loadByKey(groupKey);
+    final Optional<Group> maybe = findGroup(groupKey);
 
     if (maybe.isPresent()) {
       final Group group = maybe.get();
@@ -219,7 +219,7 @@ public class GroupResource {
           Problem.clientProblem("param_not_found", "", 404)), start).build();
     }
 
-    final Optional<Group> maybe = groupService.loadByKey(groupKey);
+    final Optional<Group> maybe = findGroup(groupKey);
 
     if (maybe.isPresent()) {
       final Group group = maybe.get();
@@ -248,7 +248,7 @@ public class GroupResource {
 
     final long start = System.currentTimeMillis();
 
-    final Optional<Group> maybe = groupService.loadByKey(group);
+    final Optional<Group> maybe = findGroup(group);
     if (maybe.isPresent()) {
       accessControlSupport.throwUnlessGrantedFor(authPrincipal, maybe.get());
 
@@ -290,7 +290,7 @@ public class GroupResource {
   ) throws AuthenticationException {
 
     final long start = System.currentTimeMillis();
-    final Optional<Group> maybe = groupService.loadByKey(groupKey);
+    final Optional<Group> maybe = findGroup(groupKey);
 
     if (maybe.isPresent()) {
       final Group group = maybe.get();
@@ -308,5 +308,9 @@ public class GroupResource {
         .path("groups")
         .path(group.getKey())
         .build();
+  }
+
+  private Optional<Group> findGroup(@PathParam("group") String group) {
+    return groupService.loadByKey(group);
   }
 }
