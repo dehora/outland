@@ -290,9 +290,17 @@ class FeatureUpdateProcessor {
     optionCollectionBuilder.setType(Names.optionCollectionType());
     optionCollectionBuilder.setOption(incomingFeatureData.getOptions().getOption());
 
-    if (incomingFeatureData.getOptions().getOption().equals(OptionType.bool)) {
+    if (isBoolOption(incomingFeatureData)) {
       if (incomingFeatureData.getOptions().getItemsCount() != 0) {
 
+        final List<FeatureOption> options = incomingFeatureData.getOptions().getItemsList();
+        optionsProcessor.applyBooleanOptions(optionCollectionBuilder, options);
+        featureDataBuilder.setOptions(optionCollectionBuilder);
+      }
+    }
+
+    if(isStringOption(incomingFeatureData)) {
+      if (incomingFeatureData.getOptions().getItemsCount() != 0) {
         final List<FeatureOption> options = incomingFeatureData.getOptions().getItemsList();
         optionsProcessor.applyBooleanOptions(optionCollectionBuilder, options);
         featureDataBuilder.setOptions(optionCollectionBuilder);
@@ -317,7 +325,7 @@ class FeatureUpdateProcessor {
     featureDataBuilder.setType(Names.namespaceFeatureType());
 
     // process options if we received some
-    if (incomingFeatureData.getOptions().getOption().equals(OptionType.bool)
+    if (isBoolOption(incomingFeatureData)
         && incomingFeatureData.getOptions().getItemsCount() != 0) {
 
       // clear out options, we can rebuild them
@@ -337,10 +345,35 @@ class FeatureUpdateProcessor {
       featureDataBuilder.setOptions(wipOptionsBuilder);
     }
 
+    if(isStringOption(incomingFeatureData)
+        && incomingFeatureData.getOptions().getItemsCount() != 0) {
+      featureDataBuilder.clearOptions();
+      final OptionCollection.Builder wipOptionsBuilder = OptionCollection.newBuilder();
+
+      List<FeatureOption> merged = buildNamespaceFeatureOptionsUpdate(existingFeatureData,
+          incomingFeatureData);
+
+      wipOptionsBuilder.addAllItems(merged);
+
+      wipOptionsBuilder.setOption(existingFeatureData.getOptions().getOption());
+      wipOptionsBuilder.setType(Names.optionCollectionType());
+      wipOptionsBuilder.setMaxweight(DEFAULT_MAXWEIGHT);
+
+      featureDataBuilder.setOptions(wipOptionsBuilder);
+    }
+
     final NamespaceFeature.Builder namespaceFeaturebuilder = existing.toBuilder();
     namespaceFeaturebuilder.setType(existing.getType());
     namespaceFeaturebuilder.setFeature(featureDataBuilder);
     return namespaceFeaturebuilder.build();
+  }
+
+  private boolean isBoolOption(FeatureData incomingFeatureData) {
+    return incomingFeatureData.getOptions().getOption().equals(OptionType.bool);
+  }
+
+  private boolean isStringOption(FeatureData featureData) {
+    return featureData.getOptions().getOption().equals(OptionType.string);
   }
 
   private FeatureData.Builder mergeFeatureData(FeatureData existing, FeatureData incoming) {

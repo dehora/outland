@@ -71,7 +71,7 @@ class FeatureRegisterProcessor {
     collectionBuilder.setType(Names.optionCollectionType());
     collectionBuilder.setOption(feature.getOptions().getOption());
 
-    if (isBooleanOption(feature)) {
+    if (isBoolOption(feature)) {
       applyBooleanOptions(feature, builder, collectionBuilder);
     }
 
@@ -84,8 +84,16 @@ class FeatureRegisterProcessor {
     return feature.getOptions().getOption().equals(OptionType.string);
   }
 
-  private boolean isBooleanOption(Feature feature) {
+  private boolean isStringOption(NamespaceFeature incoming) {
+    return incoming.getFeature().getOptions().getOption().equals(OptionType.string);
+  }
+
+  private boolean isBoolOption(Feature feature) {
     return feature.getOptions().getOption().equals(OptionType.bool);
+  }
+
+  private boolean isBoolOption(NamespaceFeature incoming) {
+    return incoming.getFeature().getOptions().getOption().equals(OptionType.bool);
   }
 
   private void applyBooleanOptions(
@@ -146,7 +154,7 @@ class FeatureRegisterProcessor {
     optionCollectionBuilder.setType(Names.optionCollectionType());
     optionCollectionBuilder.setOption(incoming.getFeature().getOptions().getOption());
 
-    if (incoming.getFeature().getOptions().getOption().equals(OptionType.bool)) {
+    if (isBoolOption(incoming)) {
 
       if (incoming.getFeature().getOptions().getItemsCount() != 0) {
 
@@ -154,6 +162,13 @@ class FeatureRegisterProcessor {
         optionsProcessor.applyBooleanOptions(optionCollectionBuilder, options);
         featureDataBuilder.setOptions(optionCollectionBuilder);
       }
+    }
+
+    if (isStringOption(incoming)) {
+
+      final List<FeatureOption> options = incoming.getFeature().getOptions().getItemsList();
+      optionsProcessor.applyStringOptions(optionCollectionBuilder, options);
+      featureDataBuilder.setOptions(optionCollectionBuilder);
     }
   }
 
