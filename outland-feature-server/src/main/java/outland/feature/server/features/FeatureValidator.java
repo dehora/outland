@@ -1,6 +1,8 @@
 package outland.feature.server.features;
 
 import com.google.common.base.Strings;
+import com.google.common.collect.Sets;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -51,13 +53,25 @@ class FeatureValidator {
   }
 
   void validateOptionsThrowing(OptionCollection options) {
-    if (OptionType.bool == options.getOption()) {
+    if (isBooleanOption(options)) {
       validateBooleanOptionsThrowing(options);
+    }
+
+    if (isStringOption(options)) {
+      validateStringOptionsThrowing(options);
     }
 
     if (OptionType.flag != options.getOption()) {
       validateWeightsThrowing(options);
     }
+  }
+
+  private boolean isBooleanOption(OptionCollection options) {
+    return OptionType.bool == options.getOption();
+  }
+
+  private boolean isStringOption(OptionCollection options) {
+    return OptionType.string == options.getOption();
   }
 
   private void validateNamespaceFeaturesThrowing(Feature feature) {
@@ -99,6 +113,35 @@ class FeatureValidator {
       }
     });
   }
+
+  private void validateStringOptionsThrowing(OptionCollection options) {
+
+    if (options.getItemsCount() == 0) {
+      throw new ServiceException(Problem.clientProblem("insufficient_count_for_string_option_feature",
+          "A string option must have at least one option", 422));
+    }
+
+    final List<FeatureOption> itemsList = options.getItemsList();
+
+    final HashSet<String> names = Sets.newHashSetWithExpectedSize(itemsList.size());
+
+    for (FeatureOption featureOption : itemsList) {
+      if(Strings.isNullOrEmpty(featureOption.getName())) {
+        throw new ServiceException(Problem.clientProblem("empty_name_value_for_string_option_feature",
+            "A string option's names must be non-empty", 422));
+      }
+
+      names.add(featureOption.getName());
+    }
+
+    if(itemsList.size() != names.size()) {
+      throw new ServiceException(Problem.clientProblem("indistinct_name_value_for_string_option_feature",
+          "A string option's names must be distinct", 422));
+    }
+
+    names.clear();
+  }
+
 
   void validateOwner(Owner owner) {
     if (Strings.isNullOrEmpty(owner.getEmail()) && Strings.isNullOrEmpty(

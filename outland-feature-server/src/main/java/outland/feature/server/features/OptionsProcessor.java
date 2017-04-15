@@ -11,11 +11,23 @@ class OptionsProcessor {
   void applyBooleanOptions(
       OptionCollection.Builder collectionBuilder, List<FeatureOption> options) {
     for (FeatureOption option : options) {
-      final FeatureOption.Builder optionBuilder = FeatureOption.newBuilder().mergeFrom(option);
-      optionBuilder.setType(Names.optionType());
-      optionBuilder.setId(Names.option());
-      optionBuilder.setOption(OptionType.bool);
-      collectionBuilder.addItems(optionBuilder);
+      applyOptions(collectionBuilder, option, OptionType.bool);
     }
+  }
+
+  void applyStringOptions(
+      OptionCollection.Builder collectionBuilder, List<FeatureOption> options) {
+    for (FeatureOption option : options) {
+      applyOptions(collectionBuilder, option, OptionType.string);
+    }
+  }
+
+  private void applyOptions(OptionCollection.Builder collectionBuilder, FeatureOption option,
+      OptionType optionType) {
+    final FeatureOption.Builder optionBuilder = FeatureOption.newBuilder().mergeFrom(option);
+    optionBuilder.setOption(optionType);
+    optionBuilder.setType(Names.optionType());
+    optionBuilder.setId(Names.option());
+    collectionBuilder.addItems(optionBuilder);
   }
 }
