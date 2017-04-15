@@ -75,6 +75,21 @@ public class FeatureValidatorTest {
   }
 
   @Test
+  public void validateFeatureThrowingStringOptionCount() {
+    final Feature.Builder builder = Feature.newBuilder();
+
+    final OptionCollection.Builder collectionBuilder = OptionCollection.newBuilder()
+        .setOption(OptionType.string);
+
+    builder.setOwner(Owner.newBuilder().setName("Jayne").setUsername("jayne"))
+        .setKey("key1")
+        .setGroup("app1")
+        .setOptions(collectionBuilder);
+
+    callValidate(builder, "insufficient_count_for_string_option_feature", 422);
+  }
+
+  @Test
   public void validateFeatureThrowingStringEmptyAndNullNames() {
     final Feature.Builder builder = Feature.newBuilder();
 
