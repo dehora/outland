@@ -74,6 +74,14 @@ class FeatureRegisterProcessor {
     if (isBooleanOption(feature)) {
       applyBooleanOptions(feature, builder, collectionBuilder);
     }
+
+    if (isStringOption(feature)) {
+      applyStringOptions(feature, builder, collectionBuilder);
+    }
+  }
+
+  private boolean isStringOption(Feature feature) {
+    return feature.getOptions().getOption().equals(OptionType.string);
   }
 
   private boolean isBooleanOption(Feature feature) {
@@ -107,6 +115,14 @@ class FeatureRegisterProcessor {
 
       featureBuilder.setOptions(collectionBuilder);
     }
+  }
+
+  private void applyStringOptions(
+      Feature feature, Feature.Builder featureBuilder, OptionCollection.Builder collectionBuilder) {
+
+    final List<FeatureOption> options = feature.getOptions().getItemsList();
+    optionsProcessor.applyStringOptions(collectionBuilder, options);
+    featureBuilder.setOptions(collectionBuilder);
   }
 
   private void applyOwnerRegister(Feature registering, Feature.Builder builder) {
