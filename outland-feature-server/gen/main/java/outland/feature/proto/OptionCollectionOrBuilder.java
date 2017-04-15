@@ -8,26 +8,26 @@ public interface OptionCollectionOrBuilder extends
     com.google.protobuf.MessageOrBuilder {
 
   /**
-   * <code>string type = 1;</code>
+   * <code>optional string type = 1;</code>
    */
   java.lang.String getType();
   /**
-   * <code>string type = 1;</code>
+   * <code>optional string type = 1;</code>
    */
   com.google.protobuf.ByteString
       getTypeBytes();
 
   /**
-   * <code>.outland.OptionType option = 10;</code>
+   * <code>optional .outland.OptionType option = 10;</code>
    */
   int getOptionValue();
   /**
-   * <code>.outland.OptionType option = 10;</code>
+   * <code>optional .outland.OptionType option = 10;</code>
    */
   outland.feature.proto.OptionType getOption();
 
   /**
-   * <code>int32 maxweight = 11;</code>
+   * <code>optional int32 maxweight = 11;</code>
    */
   int getMaxweight();
 

@@ -8,22 +8,22 @@ public interface FeatureVersionOrBuilder extends
     com.google.protobuf.MessageOrBuilder {
 
   /**
-   * <code>string type = 1;</code>
+   * <code>optional string type = 1;</code>
    */
   java.lang.String getType();
   /**
-   * <code>string type = 1;</code>
+   * <code>optional string type = 1;</code>
    */
   com.google.protobuf.ByteString
       getTypeBytes();
 
   /**
-   * <code>int64 timestamp = 10;</code>
+   * <code>optional int64 timestamp = 10;</code>
    */
   long getTimestamp();
 
   /**
-   * <code>int64 counter = 11;</code>
+   * <code>optional int64 counter = 11;</code>
    */
   long getCounter();
 }

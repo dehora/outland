@@ -122,7 +122,7 @@ public  final class FeatureData extends
   public static final int TYPE_FIELD_NUMBER = 1;
   private volatile java.lang.Object type_;
   /**
-   * <code>string type = 1;</code>
+   * <code>optional string type = 1;</code>
    */
   public java.lang.String getType() {
     java.lang.Object ref = type_;
@@ -137,7 +137,7 @@ public  final class FeatureData extends
     }
   }
   /**
-   * <code>string type = 1;</code>
+   * <code>optional string type = 1;</code>
    */
   public com.google.protobuf.ByteString
       getTypeBytes() {
@@ -156,7 +156,7 @@ public  final class FeatureData extends
   public static final int ID_FIELD_NUMBER = 2;
   private volatile java.lang.Object id_;
   /**
-   * <code>string id = 2;</code>
+   * <code>optional string id = 2;</code>
    */
   public java.lang.String getId() {
     java.lang.Object ref = id_;
@@ -171,7 +171,7 @@ public  final class FeatureData extends
     }
   }
   /**
-   * <code>string id = 2;</code>
+   * <code>optional string id = 2;</code>
    */
   public com.google.protobuf.ByteString
       getIdBytes() {
@@ -190,7 +190,7 @@ public  final class FeatureData extends
   public static final int KEY_FIELD_NUMBER = 10;
   private volatile java.lang.Object key_;
   /**
-   * <code>string key = 10;</code>
+   * <code>optional string key = 10;</code>
    */
   public java.lang.String getKey() {
     java.lang.Object ref = key_;
@@ -205,7 +205,7 @@ public  final class FeatureData extends
     }
   }
   /**
-   * <code>string key = 10;</code>
+   * <code>optional string key = 10;</code>
    */
   public com.google.protobuf.ByteString
       getKeyBytes() {
@@ -224,13 +224,13 @@ public  final class FeatureData extends
   public static final int STATE_FIELD_NUMBER = 11;
   private int state_;
   /**
-   * <code>.outland.State state = 11;</code>
+   * <code>optional .outland.State state = 11;</code>
    */
   public int getStateValue() {
     return state_;
   }
   /**
-   * <code>.outland.State state = 11;</code>
+   * <code>optional .outland.State state = 11;</code>
    */
   public outland.feature.proto.State getState() {
     outland.feature.proto.State result = outland.feature.proto.State.valueOf(state_);
@@ -240,19 +240,19 @@ public  final class FeatureData extends
   public static final int OPTIONS_FIELD_NUMBER = 12;
   private outland.feature.proto.OptionCollection options_;
   /**
-   * <code>.outland.OptionCollection options = 12;</code>
+   * <code>optional .outland.OptionCollection options = 12;</code>
    */
   public boolean hasOptions() {
     return options_ != null;
   }
   /**
-   * <code>.outland.OptionCollection options = 12;</code>
+   * <code>optional .outland.OptionCollection options = 12;</code>
    */
   public outland.feature.proto.OptionCollection getOptions() {
     return options_ == null ? outland.feature.proto.OptionCollection.getDefaultInstance() : options_;
   }
   /**
-   * <code>.outland.OptionCollection options = 12;</code>
+   * <code>optional .outland.OptionCollection options = 12;</code>
    */
   public outland.feature.proto.OptionCollectionOrBuilder getOptionsOrBuilder() {
     return getOptions();
@@ -261,19 +261,19 @@ public  final class FeatureData extends
   public static final int VERSION_FIELD_NUMBER = 13;
   private outland.feature.proto.FeatureVersion version_;
   /**
-   * <code>.outland.FeatureVersion version = 13;</code>
+   * <code>optional .outland.FeatureVersion version = 13;</code>
    */
   public boolean hasVersion() {
     return version_ != null;
   }
   /**
-   * <code>.outland.FeatureVersion version = 13;</code>
+   * <code>optional .outland.FeatureVersion version = 13;</code>
    */
   public outland.feature.proto.FeatureVersion getVersion() {
     return version_ == null ? outland.feature.proto.FeatureVersion.getDefaultInstance() : version_;
   }
   /**
-   * <code>.outland.FeatureVersion version = 13;</code>
+   * <code>optional .outland.FeatureVersion version = 13;</code>
    */
   public outland.feature.proto.FeatureVersionOrBuilder getVersionOrBuilder() {
     return getVersion();
@@ -379,7 +379,7 @@ public  final class FeatureData extends
       return memoizedHashCode;
     }
     int hash = 41;
-    hash = (19 * hash) + getDescriptor().hashCode();
+    hash = (19 * hash) + getDescriptorForType().hashCode();
     hash = (37 * hash) + TYPE_FIELD_NUMBER;
     hash = (53 * hash) + getType().hashCode();
     hash = (37 * hash) + ID_FIELD_NUMBER;
@@ -660,7 +660,7 @@ public  final class FeatureData extends
 
     private java.lang.Object type_ = "";
     /**
-     * <code>string type = 1;</code>
+     * <code>optional string type = 1;</code>
      */
     public java.lang.String getType() {
       java.lang.Object ref = type_;
@@ -675,7 +675,7 @@ public  final class FeatureData extends
       }
     }
     /**
-     * <code>string type = 1;</code>
+     * <code>optional string type = 1;</code>
      */
     public com.google.protobuf.ByteString
         getTypeBytes() {
@@ -691,7 +691,7 @@ public  final class FeatureData extends
       }
     }
     /**
-     * <code>string type = 1;</code>
+     * <code>optional string type = 1;</code>
      */
     public Builder setType(
         java.lang.String value) {
@@ -704,7 +704,7 @@ public  final class FeatureData extends
       return this;
     }
     /**
-     * <code>string type = 1;</code>
+     * <code>optional string type = 1;</code>
      */
     public Builder clearType() {
       
@@ -713,7 +713,7 @@ public  final class FeatureData extends
       return this;
     }
     /**
-     * <code>string type = 1;</code>
+     * <code>optional string type = 1;</code>
      */
     public Builder setTypeBytes(
         com.google.protobuf.ByteString value) {
@@ -729,7 +729,7 @@ public  final class FeatureData extends
 
     private java.lang.Object id_ = "";
     /**
-     * <code>string id = 2;</code>
+     * <code>optional string id = 2;</code>
      */
     public java.lang.String getId() {
       java.lang.Object ref = id_;
@@ -744,7 +744,7 @@ public  final class FeatureData extends
       }
     }
     /**
-     * <code>string id = 2;</code>
+     * <code>optional string id = 2;</code>
      */
     public com.google.protobuf.ByteString
         getIdBytes() {
@@ -760,7 +760,7 @@ public  final class FeatureData extends
       }
     }
     /**
-     * <code>string id = 2;</code>
+     * <code>optional string id = 2;</code>
      */
     public Builder setId(
         java.lang.String value) {
@@ -773,7 +773,7 @@ public  final class FeatureData extends
       return this;
     }
     /**
-     * <code>string id = 2;</code>
+     * <code>optional string id = 2;</code>
      */
     public Builder clearId() {
       
@@ -782,7 +782,7 @@ public  final class FeatureData extends
       return this;
     }
     /**
-     * <code>string id = 2;</code>
+     * <code>optional string id = 2;</code>
      */
     public Builder setIdBytes(
         com.google.protobuf.ByteString value) {
@@ -798,7 +798,7 @@ public  final class FeatureData extends
 
     private java.lang.Object key_ = "";
     /**
-     * <code>string key = 10;</code>
+     * <code>optional string key = 10;</code>
      */
     public java.lang.String getKey() {
       java.lang.Object ref = key_;
@@ -813,7 +813,7 @@ public  final class FeatureData extends
       }
     }
     /**
-     * <code>string key = 10;</code>
+     * <code>optional string key = 10;</code>
      */
     public com.google.protobuf.ByteString
         getKeyBytes() {
@@ -829,7 +829,7 @@ public  final class FeatureData extends
       }
     }
     /**
-     * <code>string key = 10;</code>
+     * <code>optional string key = 10;</code>
      */
     public Builder setKey(
         java.lang.String value) {
@@ -842,7 +842,7 @@ public  final class FeatureData extends
       return this;
     }
     /**
-     * <code>string key = 10;</code>
+     * <code>optional string key = 10;</code>
      */
     public Builder clearKey() {
       
@@ -851,7 +851,7 @@ public  final class FeatureData extends
       return this;
     }
     /**
-     * <code>string key = 10;</code>
+     * <code>optional string key = 10;</code>
      */
     public Builder setKeyBytes(
         com.google.protobuf.ByteString value) {
@@ -867,13 +867,13 @@ public  final class FeatureData extends
 
     private int state_ = 0;
     /**
-     * <code>.outland.State state = 11;</code>
+     * <code>optional .outland.State state = 11;</code>
      */
     public int getStateValue() {
       return state_;
     }
     /**
-     * <code>.outland.State state = 11;</code>
+     * <code>optional .outland.State state = 11;</code>
      */
     public Builder setStateValue(int value) {
       state_ = value;
@@ -881,14 +881,14 @@ public  final class FeatureData extends
       return this;
     }
     /**
-     * <code>.outland.State state = 11;</code>
+     * <code>optional .outland.State state = 11;</code>
      */
     public outland.feature.proto.State getState() {
       outland.feature.proto.State result = outland.feature.proto.State.valueOf(state_);
       return result == null ? outland.feature.proto.State.UNRECOGNIZED : result;
     }
     /**
-     * <code>.outland.State state = 11;</code>
+     * <code>optional .outland.State state = 11;</code>
      */
     public Builder setState(outland.feature.proto.State value) {
       if (value == null) {
@@ -900,7 +900,7 @@ public  final class FeatureData extends
       return this;
     }
     /**
-     * <code>.outland.State state = 11;</code>
+     * <code>optional .outland.State state = 11;</code>
      */
     public Builder clearState() {
       
@@ -913,13 +913,13 @@ public  final class FeatureData extends
     private com.google.protobuf.SingleFieldBuilderV3<
         outland.feature.proto.OptionCollection, outland.feature.proto.OptionCollection.Builder, outland.feature.proto.OptionCollectionOrBuilder> optionsBuilder_;
     /**
-     * <code>.outland.OptionCollection options = 12;</code>
+     * <code>optional .outland.OptionCollection options = 12;</code>
      */
     public boolean hasOptions() {
       return optionsBuilder_ != null || options_ != null;
     }
     /**
-     * <code>.outland.OptionCollection options = 12;</code>
+     * <code>optional .outland.OptionCollection options = 12;</code>
      */
     public outland.feature.proto.OptionCollection getOptions() {
       if (optionsBuilder_ == null) {
@@ -929,7 +929,7 @@ public  final class FeatureData extends
       }
     }
     /**
-     * <code>.outland.OptionCollection options = 12;</code>
+     * <code>optional .outland.OptionCollection options = 12;</code>
      */
     public Builder setOptions(outland.feature.proto.OptionCollection value) {
       if (optionsBuilder_ == null) {
@@ -945,7 +945,7 @@ public  final class FeatureData extends
       return this;
     }
     /**
-     * <code>.outland.OptionCollection options = 12;</code>
+     * <code>optional .outland.OptionCollection options = 12;</code>
      */
     public Builder setOptions(
         outland.feature.proto.OptionCollection.Builder builderForValue) {
@@ -959,7 +959,7 @@ public  final class FeatureData extends
       return this;
     }
     /**
-     * <code>.outland.OptionCollection options = 12;</code>
+     * <code>optional .outland.OptionCollection options = 12;</code>
      */
     public Builder mergeOptions(outland.feature.proto.OptionCollection value) {
       if (optionsBuilder_ == null) {
@@ -977,7 +977,7 @@ public  final class FeatureData extends
       return this;
     }
     /**
-     * <code>.outland.OptionCollection options = 12;</code>
+     * <code>optional .outland.OptionCollection options = 12;</code>
      */
     public Builder clearOptions() {
       if (optionsBuilder_ == null) {
@@ -991,7 +991,7 @@ public  final class FeatureData extends
       return this;
     }
     /**
-     * <code>.outland.OptionCollection options = 12;</code>
+     * <code>optional .outland.OptionCollection options = 12;</code>
      */
     public outland.feature.proto.OptionCollection.Builder getOptionsBuilder() {
       
@@ -999,7 +999,7 @@ public  final class FeatureData extends
       return getOptionsFieldBuilder().getBuilder();
     }
     /**
-     * <code>.outland.OptionCollection options = 12;</code>
+     * <code>optional .outland.OptionCollection options = 12;</code>
      */
     public outland.feature.proto.OptionCollectionOrBuilder getOptionsOrBuilder() {
       if (optionsBuilder_ != null) {
@@ -1010,7 +1010,7 @@ public  final class FeatureData extends
       }
     }
     /**
-     * <code>.outland.OptionCollection options = 12;</code>
+     * <code>optional .outland.OptionCollection options = 12;</code>
      */
     private com.google.protobuf.SingleFieldBuilderV3<
         outland.feature.proto.OptionCollection, outland.feature.proto.OptionCollection.Builder, outland.feature.proto.OptionCollectionOrBuilder> 
@@ -1030,13 +1030,13 @@ public  final class FeatureData extends
     private com.google.protobuf.SingleFieldBuilderV3<
         outland.feature.proto.FeatureVersion, outland.feature.proto.FeatureVersion.Builder, outland.feature.proto.FeatureVersionOrBuilder> versionBuilder_;
     /**
-     * <code>.outland.FeatureVersion version = 13;</code>
+     * <code>optional .outland.FeatureVersion version = 13;</code>
      */
     public boolean hasVersion() {
       return versionBuilder_ != null || version_ != null;
     }
     /**
-     * <code>.outland.FeatureVersion version = 13;</code>
+     * <code>optional .outland.FeatureVersion version = 13;</code>
      */
     public outland.feature.proto.FeatureVersion getVersion() {
       if (versionBuilder_ == null) {
@@ -1046,7 +1046,7 @@ public  final class FeatureData extends
       }
     }
     /**
-     * <code>.outland.FeatureVersion version = 13;</code>
+     * <code>optional .outland.FeatureVersion version = 13;</code>
      */
     public Builder setVersion(outland.feature.proto.FeatureVersion value) {
       if (versionBuilder_ == null) {
@@ -1062,7 +1062,7 @@ public  final class FeatureData extends
       return this;
     }
     /**
-     * <code>.outland.FeatureVersion version = 13;</code>
+     * <code>optional .outland.FeatureVersion version = 13;</code>
      */
     public Builder setVersion(
         outland.feature.proto.FeatureVersion.Builder builderForValue) {
@@ -1076,7 +1076,7 @@ public  final class FeatureData extends
       return this;
     }
     /**
-     * <code>.outland.FeatureVersion version = 13;</code>
+     * <code>optional .outland.FeatureVersion version = 13;</code>
      */
     public Builder mergeVersion(outland.feature.proto.FeatureVersion value) {
       if (versionBuilder_ == null) {
@@ -1094,7 +1094,7 @@ public  final class FeatureData extends
       return this;
     }
     /**
-     * <code>.outland.FeatureVersion version = 13;</code>
+     * <code>optional .outland.FeatureVersion version = 13;</code>
      */
     public Builder clearVersion() {
       if (versionBuilder_ == null) {
@@ -1108,7 +1108,7 @@ public  final class FeatureData extends
       return this;
     }
     /**
-     * <code>.outland.FeatureVersion version = 13;</code>
+     * <code>optional .outland.FeatureVersion version = 13;</code>
      */
     public outland.feature.proto.FeatureVersion.Builder getVersionBuilder() {
       
@@ -1116,7 +1116,7 @@ public  final class FeatureData extends
       return getVersionFieldBuilder().getBuilder();
     }
     /**
-     * <code>.outland.FeatureVersion version = 13;</code>
+     * <code>optional .outland.FeatureVersion version = 13;</code>
      */
     public outland.feature.proto.FeatureVersionOrBuilder getVersionOrBuilder() {
       if (versionBuilder_ != null) {
@@ -1127,7 +1127,7 @@ public  final class FeatureData extends
       }
     }
     /**
-     * <code>.outland.FeatureVersion version = 13;</code>
+     * <code>optional .outland.FeatureVersion version = 13;</code>
      */
     private com.google.protobuf.SingleFieldBuilderV3<
         outland.feature.proto.FeatureVersion, outland.feature.proto.FeatureVersion.Builder, outland.feature.proto.FeatureVersionOrBuilder> 

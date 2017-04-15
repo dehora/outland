@@ -102,7 +102,7 @@ public  final class OptionCollection extends
   public static final int TYPE_FIELD_NUMBER = 1;
   private volatile java.lang.Object type_;
   /**
-   * <code>string type = 1;</code>
+   * <code>optional string type = 1;</code>
    */
   public java.lang.String getType() {
     java.lang.Object ref = type_;
@@ -117,7 +117,7 @@ public  final class OptionCollection extends
     }
   }
   /**
-   * <code>string type = 1;</code>
+   * <code>optional string type = 1;</code>
    */
   public com.google.protobuf.ByteString
       getTypeBytes() {
@@ -136,13 +136,13 @@ public  final class OptionCollection extends
   public static final int OPTION_FIELD_NUMBER = 10;
   private int option_;
   /**
-   * <code>.outland.OptionType option = 10;</code>
+   * <code>optional .outland.OptionType option = 10;</code>
    */
   public int getOptionValue() {
     return option_;
   }
   /**
-   * <code>.outland.OptionType option = 10;</code>
+   * <code>optional .outland.OptionType option = 10;</code>
    */
   public outland.feature.proto.OptionType getOption() {
     outland.feature.proto.OptionType result = outland.feature.proto.OptionType.valueOf(option_);
@@ -152,7 +152,7 @@ public  final class OptionCollection extends
   public static final int MAXWEIGHT_FIELD_NUMBER = 11;
   private int maxweight_;
   /**
-   * <code>int32 maxweight = 11;</code>
+   * <code>optional int32 maxweight = 11;</code>
    */
   public int getMaxweight() {
     return maxweight_;
@@ -271,7 +271,7 @@ public  final class OptionCollection extends
       return memoizedHashCode;
     }
     int hash = 41;
-    hash = (19 * hash) + getDescriptor().hashCode();
+    hash = (19 * hash) + getDescriptorForType().hashCode();
     hash = (37 * hash) + TYPE_FIELD_NUMBER;
     hash = (53 * hash) + getType().hashCode();
     hash = (37 * hash) + OPTION_FIELD_NUMBER;
@@ -556,7 +556,7 @@ public  final class OptionCollection extends
 
     private java.lang.Object type_ = "";
     /**
-     * <code>string type = 1;</code>
+     * <code>optional string type = 1;</code>
      */
     public java.lang.String getType() {
       java.lang.Object ref = type_;
@@ -571,7 +571,7 @@ public  final class OptionCollection extends
       }
     }
     /**
-     * <code>string type = 1;</code>
+     * <code>optional string type = 1;</code>
      */
     public com.google.protobuf.ByteString
         getTypeBytes() {
@@ -587,7 +587,7 @@ public  final class OptionCollection extends
       }
     }
     /**
-     * <code>string type = 1;</code>
+     * <code>optional string type = 1;</code>
      */
     public Builder setType(
         java.lang.String value) {
@@ -600,7 +600,7 @@ public  final class OptionCollection extends
       return this;
     }
     /**
-     * <code>string type = 1;</code>
+     * <code>optional string type = 1;</code>
      */
     public Builder clearType() {
       
@@ -609,7 +609,7 @@ public  final class OptionCollection extends
       return this;
     }
     /**
-     * <code>string type = 1;</code>
+     * <code>optional string type = 1;</code>
      */
     public Builder setTypeBytes(
         com.google.protobuf.ByteString value) {
@@ -625,13 +625,13 @@ public  final class OptionCollection extends
 
     private int option_ = 0;
     /**
-     * <code>.outland.OptionType option = 10;</code>
+     * <code>optional .outland.OptionType option = 10;</code>
      */
     public int getOptionValue() {
       return option_;
     }
     /**
-     * <code>.outland.OptionType option = 10;</code>
+     * <code>optional .outland.OptionType option = 10;</code>
      */
     public Builder setOptionValue(int value) {
       option_ = value;
@@ -639,14 +639,14 @@ public  final class OptionCollection extends
       return this;
     }
     /**
-     * <code>.outland.OptionType option = 10;</code>
+     * <code>optional .outland.OptionType option = 10;</code>
      */
     public outland.feature.proto.OptionType getOption() {
       outland.feature.proto.OptionType result = outland.feature.proto.OptionType.valueOf(option_);
       return result == null ? outland.feature.proto.OptionType.UNRECOGNIZED : result;
     }
     /**
-     * <code>.outland.OptionType option = 10;</code>
+     * <code>optional .outland.OptionType option = 10;</code>
      */
     public Builder setOption(outland.feature.proto.OptionType value) {
       if (value == null) {
@@ -658,7 +658,7 @@ public  final class OptionCollection extends
       return this;
     }
     /**
-     * <code>.outland.OptionType option = 10;</code>
+     * <code>optional .outland.OptionType option = 10;</code>
      */
     public Builder clearOption() {
       
@@ -669,13 +669,13 @@ public  final class OptionCollection extends
 
     private int maxweight_ ;
     /**
-     * <code>int32 maxweight = 11;</code>
+     * <code>optional int32 maxweight = 11;</code>
      */
     public int getMaxweight() {
       return maxweight_;
     }
     /**
-     * <code>int32 maxweight = 11;</code>
+     * <code>optional int32 maxweight = 11;</code>
      */
     public Builder setMaxweight(int value) {
       
@@ -684,7 +684,7 @@ public  final class OptionCollection extends
       return this;
     }
     /**
-     * <code>int32 maxweight = 11;</code>
+     * <code>optional int32 maxweight = 11;</code>
      */
     public Builder clearMaxweight() {
       
