@@ -38,6 +38,10 @@ enum OptionType {
     a boolean option. unlike a flag, the true and false values can be weighted
     */
     bool = 1;
+    /*
+    a string option. unlike a flag, the values can be weighted
+    */
+    string = 2;
 }
 
 message FeatureOption {

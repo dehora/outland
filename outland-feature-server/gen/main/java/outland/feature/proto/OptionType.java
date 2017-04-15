@@ -24,6 +24,14 @@ public enum OptionType
    * <code>bool = 1;</code>
    */
   bool(1),
+  /**
+   * <pre>
+   *a string option. unlike a flag, the values can be weighted
+   * </pre>
+   *
+   * <code>string = 2;</code>
+   */
+  string(2),
   UNRECOGNIZED(-1),
   ;
 
@@ -43,6 +51,14 @@ public enum OptionType
    * <code>bool = 1;</code>
    */
   public static final int bool_VALUE = 1;
+  /**
+   * <pre>
+   *a string option. unlike a flag, the values can be weighted
+   * </pre>
+   *
+   * <code>string = 2;</code>
+   */
+  public static final int string_VALUE = 2;
 
 
   public final int getNumber() {
@@ -65,6 +81,7 @@ public enum OptionType
     switch (value) {
       case 0: return flag;
       case 1: return bool;
+      case 2: return string;
       default: return null;
     }
   }
@@ -91,7 +108,8 @@ public enum OptionType
   }
   public static final com.google.protobuf.Descriptors.EnumDescriptor
       getDescriptor() {
-    return outland.feature.proto.FeatureMessage.getDescriptor().getEnumTypes().get(0);
+    return outland.feature.proto.FeatureMessage.getDescriptor()
+        .getEnumTypes().get(0);
   }
 
   private static final OptionType[] VALUES = values();

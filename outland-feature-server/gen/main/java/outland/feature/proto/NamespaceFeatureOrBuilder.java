@@ -8,35 +8,35 @@ public interface NamespaceFeatureOrBuilder extends
     com.google.protobuf.MessageOrBuilder {
 
   /**
-   * <code>string type = 1;</code>
+   * <code>optional string type = 1;</code>
    */
   java.lang.String getType();
   /**
-   * <code>string type = 1;</code>
+   * <code>optional string type = 1;</code>
    */
   com.google.protobuf.ByteString
       getTypeBytes();
 
   /**
-   * <code>string namespace = 10;</code>
+   * <code>optional string namespace = 10;</code>
    */
   java.lang.String getNamespace();
   /**
-   * <code>string namespace = 10;</code>
+   * <code>optional string namespace = 10;</code>
    */
   com.google.protobuf.ByteString
       getNamespaceBytes();
 
   /**
-   * <code>.outland.FeatureData feature = 11;</code>
+   * <code>optional .outland.FeatureData feature = 11;</code>
    */
   boolean hasFeature();
   /**
-   * <code>.outland.FeatureData feature = 11;</code>
+   * <code>optional .outland.FeatureData feature = 11;</code>
    */
   outland.feature.proto.FeatureData getFeature();
   /**
-   * <code>.outland.FeatureData feature = 11;</code>
+   * <code>optional .outland.FeatureData feature = 11;</code>
    */
   outland.feature.proto.FeatureDataOrBuilder getFeatureOrBuilder();
 }

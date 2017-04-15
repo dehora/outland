@@ -96,7 +96,7 @@ public  final class FeatureCollection extends
   public static final int TYPE_FIELD_NUMBER = 1;
   private volatile java.lang.Object type_;
   /**
-   * <code>string type = 1;</code>
+   * <code>optional string type = 1;</code>
    */
   public java.lang.String getType() {
     java.lang.Object ref = type_;
@@ -111,7 +111,7 @@ public  final class FeatureCollection extends
     }
   }
   /**
-   * <code>string type = 1;</code>
+   * <code>optional string type = 1;</code>
    */
   public com.google.protobuf.ByteString
       getTypeBytes() {
@@ -130,7 +130,7 @@ public  final class FeatureCollection extends
   public static final int GROUP_FIELD_NUMBER = 10;
   private volatile java.lang.Object group_;
   /**
-   * <code>string group = 10;</code>
+   * <code>optional string group = 10;</code>
    */
   public java.lang.String getGroup() {
     java.lang.Object ref = group_;
@@ -145,7 +145,7 @@ public  final class FeatureCollection extends
     }
   }
   /**
-   * <code>string group = 10;</code>
+   * <code>optional string group = 10;</code>
    */
   public com.google.protobuf.ByteString
       getGroupBytes() {
@@ -265,7 +265,7 @@ public  final class FeatureCollection extends
       return memoizedHashCode;
     }
     int hash = 41;
-    hash = (19 * hash) + getDescriptor().hashCode();
+    hash = (19 * hash) + getDescriptorForType().hashCode();
     hash = (37 * hash) + TYPE_FIELD_NUMBER;
     hash = (53 * hash) + getType().hashCode();
     hash = (37 * hash) + GROUP_FIELD_NUMBER;
@@ -543,7 +543,7 @@ public  final class FeatureCollection extends
 
     private java.lang.Object type_ = "";
     /**
-     * <code>string type = 1;</code>
+     * <code>optional string type = 1;</code>
      */
     public java.lang.String getType() {
       java.lang.Object ref = type_;
@@ -558,7 +558,7 @@ public  final class FeatureCollection extends
       }
     }
     /**
-     * <code>string type = 1;</code>
+     * <code>optional string type = 1;</code>
      */
     public com.google.protobuf.ByteString
         getTypeBytes() {
@@ -574,7 +574,7 @@ public  final class FeatureCollection extends
       }
     }
     /**
-     * <code>string type = 1;</code>
+     * <code>optional string type = 1;</code>
      */
     public Builder setType(
         java.lang.String value) {
@@ -587,7 +587,7 @@ public  final class FeatureCollection extends
       return this;
     }
     /**
-     * <code>string type = 1;</code>
+     * <code>optional string type = 1;</code>
      */
     public Builder clearType() {
       
@@ -596,7 +596,7 @@ public  final class FeatureCollection extends
       return this;
     }
     /**
-     * <code>string type = 1;</code>
+     * <code>optional string type = 1;</code>
      */
     public Builder setTypeBytes(
         com.google.protobuf.ByteString value) {
@@ -612,7 +612,7 @@ public  final class FeatureCollection extends
 
     private java.lang.Object group_ = "";
     /**
-     * <code>string group = 10;</code>
+     * <code>optional string group = 10;</code>
      */
     public java.lang.String getGroup() {
       java.lang.Object ref = group_;
@@ -627,7 +627,7 @@ public  final class FeatureCollection extends
       }
     }
     /**
-     * <code>string group = 10;</code>
+     * <code>optional string group = 10;</code>
      */
     public com.google.protobuf.ByteString
         getGroupBytes() {
@@ -643,7 +643,7 @@ public  final class FeatureCollection extends
       }
     }
     /**
-     * <code>string group = 10;</code>
+     * <code>optional string group = 10;</code>
      */
     public Builder setGroup(
         java.lang.String value) {
@@ -656,7 +656,7 @@ public  final class FeatureCollection extends
       return this;
     }
     /**
-     * <code>string group = 10;</code>
+     * <code>optional string group = 10;</code>
      */
     public Builder clearGroup() {
       
@@ -665,7 +665,7 @@ public  final class FeatureCollection extends
       return this;
     }
     /**
-     * <code>string group = 10;</code>
+     * <code>optional string group = 10;</code>
      */
     public Builder setGroupBytes(
         com.google.protobuf.ByteString value) {

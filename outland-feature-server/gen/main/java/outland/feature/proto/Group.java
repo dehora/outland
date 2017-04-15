@@ -79,10 +79,9 @@ public  final class Group extends
               mutable_bitField0_ |= 0x00000010;
             }
             com.google.protobuf.MapEntry<java.lang.String, java.lang.String>
-            properties__ = input.readMessage(
+            properties = input.readMessage(
                 PropertiesDefaultEntryHolder.defaultEntry.getParserForType(), extensionRegistry);
-            properties_.getMutableMap().put(
-                properties__.getKey(), properties__.getValue());
+            properties_.getMutableMap().put(properties.getKey(), properties.getValue());
             break;
           }
           case 82: {
@@ -161,7 +160,7 @@ public  final class Group extends
   public static final int TYPE_FIELD_NUMBER = 1;
   private volatile java.lang.Object type_;
   /**
-   * <code>string type = 1;</code>
+   * <code>optional string type = 1;</code>
    */
   public java.lang.String getType() {
     java.lang.Object ref = type_;
@@ -176,7 +175,7 @@ public  final class Group extends
     }
   }
   /**
-   * <code>string type = 1;</code>
+   * <code>optional string type = 1;</code>
    */
   public com.google.protobuf.ByteString
       getTypeBytes() {
@@ -195,7 +194,7 @@ public  final class Group extends
   public static final int ID_FIELD_NUMBER = 2;
   private volatile java.lang.Object id_;
   /**
-   * <code>string id = 2;</code>
+   * <code>optional string id = 2;</code>
    */
   public java.lang.String getId() {
     java.lang.Object ref = id_;
@@ -210,7 +209,7 @@ public  final class Group extends
     }
   }
   /**
-   * <code>string id = 2;</code>
+   * <code>optional string id = 2;</code>
    */
   public com.google.protobuf.ByteString
       getIdBytes() {
@@ -229,7 +228,7 @@ public  final class Group extends
   public static final int CREATED_FIELD_NUMBER = 3;
   private volatile java.lang.Object created_;
   /**
-   * <code>string created = 3;</code>
+   * <code>optional string created = 3;</code>
    */
   public java.lang.String getCreated() {
     java.lang.Object ref = created_;
@@ -244,7 +243,7 @@ public  final class Group extends
     }
   }
   /**
-   * <code>string created = 3;</code>
+   * <code>optional string created = 3;</code>
    */
   public com.google.protobuf.ByteString
       getCreatedBytes() {
@@ -263,7 +262,7 @@ public  final class Group extends
   public static final int UPDATED_FIELD_NUMBER = 4;
   private volatile java.lang.Object updated_;
   /**
-   * <code>string updated = 4;</code>
+   * <code>optional string updated = 4;</code>
    */
   public java.lang.String getUpdated() {
     java.lang.Object ref = updated_;
@@ -278,7 +277,7 @@ public  final class Group extends
     }
   }
   /**
-   * <code>string updated = 4;</code>
+   * <code>optional string updated = 4;</code>
    */
   public com.google.protobuf.ByteString
       getUpdatedBytes() {
@@ -373,7 +372,7 @@ public  final class Group extends
   public static final int KEY_FIELD_NUMBER = 10;
   private volatile java.lang.Object key_;
   /**
-   * <code>string key = 10;</code>
+   * <code>optional string key = 10;</code>
    */
   public java.lang.String getKey() {
     java.lang.Object ref = key_;
@@ -388,7 +387,7 @@ public  final class Group extends
     }
   }
   /**
-   * <code>string key = 10;</code>
+   * <code>optional string key = 10;</code>
    */
   public com.google.protobuf.ByteString
       getKeyBytes() {
@@ -407,7 +406,7 @@ public  final class Group extends
   public static final int NAME_FIELD_NUMBER = 11;
   private volatile java.lang.Object name_;
   /**
-   * <code>string name = 11;</code>
+   * <code>optional string name = 11;</code>
    */
   public java.lang.String getName() {
     java.lang.Object ref = name_;
@@ -422,7 +421,7 @@ public  final class Group extends
     }
   }
   /**
-   * <code>string name = 11;</code>
+   * <code>optional string name = 11;</code>
    */
   public com.google.protobuf.ByteString
       getNameBytes() {
@@ -441,19 +440,19 @@ public  final class Group extends
   public static final int OWNERS_FIELD_NUMBER = 12;
   private outland.feature.proto.OwnerCollection owners_;
   /**
-   * <code>.outland.OwnerCollection owners = 12;</code>
+   * <code>optional .outland.OwnerCollection owners = 12;</code>
    */
   public boolean hasOwners() {
     return owners_ != null;
   }
   /**
-   * <code>.outland.OwnerCollection owners = 12;</code>
+   * <code>optional .outland.OwnerCollection owners = 12;</code>
    */
   public outland.feature.proto.OwnerCollection getOwners() {
     return owners_ == null ? outland.feature.proto.OwnerCollection.getDefaultInstance() : owners_;
   }
   /**
-   * <code>.outland.OwnerCollection owners = 12;</code>
+   * <code>optional .outland.OwnerCollection owners = 12;</code>
    */
   public outland.feature.proto.OwnerCollectionOrBuilder getOwnersOrBuilder() {
     return getOwners();
@@ -462,19 +461,19 @@ public  final class Group extends
   public static final int GRANTED_FIELD_NUMBER = 13;
   private outland.feature.proto.AccessCollection granted_;
   /**
-   * <code>.outland.AccessCollection granted = 13;</code>
+   * <code>optional .outland.AccessCollection granted = 13;</code>
    */
   public boolean hasGranted() {
     return granted_ != null;
   }
   /**
-   * <code>.outland.AccessCollection granted = 13;</code>
+   * <code>optional .outland.AccessCollection granted = 13;</code>
    */
   public outland.feature.proto.AccessCollection getGranted() {
     return granted_ == null ? outland.feature.proto.AccessCollection.getDefaultInstance() : granted_;
   }
   /**
-   * <code>.outland.AccessCollection granted = 13;</code>
+   * <code>optional .outland.AccessCollection granted = 13;</code>
    */
   public outland.feature.proto.AccessCollectionOrBuilder getGrantedOrBuilder() {
     return getGranted();
@@ -504,12 +503,15 @@ public  final class Group extends
     if (!getUpdatedBytes().isEmpty()) {
       com.google.protobuf.GeneratedMessageV3.writeString(output, 4, updated_);
     }
-    com.google.protobuf.GeneratedMessageV3
-      .serializeStringMapTo(
-        output,
-        internalGetProperties(),
-        PropertiesDefaultEntryHolder.defaultEntry,
-        5);
+    for (java.util.Map.Entry<java.lang.String, java.lang.String> entry
+         : internalGetProperties().getMap().entrySet()) {
+      com.google.protobuf.MapEntry<java.lang.String, java.lang.String>
+      properties = PropertiesDefaultEntryHolder.defaultEntry.newBuilderForType()
+          .setKey(entry.getKey())
+          .setValue(entry.getValue())
+          .build();
+      output.writeMessage(5, properties);
+    }
     if (!getKeyBytes().isEmpty()) {
       com.google.protobuf.GeneratedMessageV3.writeString(output, 10, key_);
     }
@@ -544,12 +546,12 @@ public  final class Group extends
     for (java.util.Map.Entry<java.lang.String, java.lang.String> entry
          : internalGetProperties().getMap().entrySet()) {
       com.google.protobuf.MapEntry<java.lang.String, java.lang.String>
-      properties__ = PropertiesDefaultEntryHolder.defaultEntry.newBuilderForType()
+      properties = PropertiesDefaultEntryHolder.defaultEntry.newBuilderForType()
           .setKey(entry.getKey())
           .setValue(entry.getValue())
           .build();
       size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(5, properties__);
+          .computeMessageSize(5, properties);
     }
     if (!getKeyBytes().isEmpty()) {
       size += com.google.protobuf.GeneratedMessageV3.computeStringSize(10, key_);
@@ -614,7 +616,7 @@ public  final class Group extends
       return memoizedHashCode;
     }
     int hash = 41;
-    hash = (19 * hash) + getDescriptor().hashCode();
+    hash = (19 * hash) + getDescriptorForType().hashCode();
     hash = (37 * hash) + TYPE_FIELD_NUMBER;
     hash = (53 * hash) + getType().hashCode();
     hash = (37 * hash) + ID_FIELD_NUMBER;
@@ -949,7 +951,7 @@ public  final class Group extends
 
     private java.lang.Object type_ = "";
     /**
-     * <code>string type = 1;</code>
+     * <code>optional string type = 1;</code>
      */
     public java.lang.String getType() {
       java.lang.Object ref = type_;
@@ -964,7 +966,7 @@ public  final class Group extends
       }
     }
     /**
-     * <code>string type = 1;</code>
+     * <code>optional string type = 1;</code>
      */
     public com.google.protobuf.ByteString
         getTypeBytes() {
@@ -980,7 +982,7 @@ public  final class Group extends
       }
     }
     /**
-     * <code>string type = 1;</code>
+     * <code>optional string type = 1;</code>
      */
     public Builder setType(
         java.lang.String value) {
@@ -993,7 +995,7 @@ public  final class Group extends
       return this;
     }
     /**
-     * <code>string type = 1;</code>
+     * <code>optional string type = 1;</code>
      */
     public Builder clearType() {
       
@@ -1002,7 +1004,7 @@ public  final class Group extends
       return this;
     }
     /**
-     * <code>string type = 1;</code>
+     * <code>optional string type = 1;</code>
      */
     public Builder setTypeBytes(
         com.google.protobuf.ByteString value) {
@@ -1018,7 +1020,7 @@ public  final class Group extends
 
     private java.lang.Object id_ = "";
     /**
-     * <code>string id = 2;</code>
+     * <code>optional string id = 2;</code>
      */
     public java.lang.String getId() {
       java.lang.Object ref = id_;
@@ -1033,7 +1035,7 @@ public  final class Group extends
       }
     }
     /**
-     * <code>string id = 2;</code>
+     * <code>optional string id = 2;</code>
      */
     public com.google.protobuf.ByteString
         getIdBytes() {
@@ -1049,7 +1051,7 @@ public  final class Group extends
       }
     }
     /**
-     * <code>string id = 2;</code>
+     * <code>optional string id = 2;</code>
      */
     public Builder setId(
         java.lang.String value) {
@@ -1062,7 +1064,7 @@ public  final class Group extends
       return this;
     }
     /**
-     * <code>string id = 2;</code>
+     * <code>optional string id = 2;</code>
      */
     public Builder clearId() {
       
@@ -1071,7 +1073,7 @@ public  final class Group extends
       return this;
     }
     /**
-     * <code>string id = 2;</code>
+     * <code>optional string id = 2;</code>
      */
     public Builder setIdBytes(
         com.google.protobuf.ByteString value) {
@@ -1087,7 +1089,7 @@ public  final class Group extends
 
     private java.lang.Object created_ = "";
     /**
-     * <code>string created = 3;</code>
+     * <code>optional string created = 3;</code>
      */
     public java.lang.String getCreated() {
       java.lang.Object ref = created_;
@@ -1102,7 +1104,7 @@ public  final class Group extends
       }
     }
     /**
-     * <code>string created = 3;</code>
+     * <code>optional string created = 3;</code>
      */
     public com.google.protobuf.ByteString
         getCreatedBytes() {
@@ -1118,7 +1120,7 @@ public  final class Group extends
       }
     }
     /**
-     * <code>string created = 3;</code>
+     * <code>optional string created = 3;</code>
      */
     public Builder setCreated(
         java.lang.String value) {
@@ -1131,7 +1133,7 @@ public  final class Group extends
       return this;
     }
     /**
-     * <code>string created = 3;</code>
+     * <code>optional string created = 3;</code>
      */
     public Builder clearCreated() {
       
@@ -1140,7 +1142,7 @@ public  final class Group extends
       return this;
     }
     /**
-     * <code>string created = 3;</code>
+     * <code>optional string created = 3;</code>
      */
     public Builder setCreatedBytes(
         com.google.protobuf.ByteString value) {
@@ -1156,7 +1158,7 @@ public  final class Group extends
 
     private java.lang.Object updated_ = "";
     /**
-     * <code>string updated = 4;</code>
+     * <code>optional string updated = 4;</code>
      */
     public java.lang.String getUpdated() {
       java.lang.Object ref = updated_;
@@ -1171,7 +1173,7 @@ public  final class Group extends
       }
     }
     /**
-     * <code>string updated = 4;</code>
+     * <code>optional string updated = 4;</code>
      */
     public com.google.protobuf.ByteString
         getUpdatedBytes() {
@@ -1187,7 +1189,7 @@ public  final class Group extends
       }
     }
     /**
-     * <code>string updated = 4;</code>
+     * <code>optional string updated = 4;</code>
      */
     public Builder setUpdated(
         java.lang.String value) {
@@ -1200,7 +1202,7 @@ public  final class Group extends
       return this;
     }
     /**
-     * <code>string updated = 4;</code>
+     * <code>optional string updated = 4;</code>
      */
     public Builder clearUpdated() {
       
@@ -1209,7 +1211,7 @@ public  final class Group extends
       return this;
     }
     /**
-     * <code>string updated = 4;</code>
+     * <code>optional string updated = 4;</code>
      */
     public Builder setUpdatedBytes(
         com.google.protobuf.ByteString value) {
@@ -1300,8 +1302,7 @@ public  final class Group extends
     }
 
     public Builder clearProperties() {
-      internalGetMutableProperties().getMutableMap()
-          .clear();
+      getMutableProperties().clear();
       return this;
     }
     /**
@@ -1311,8 +1312,7 @@ public  final class Group extends
     public Builder removeProperties(
         java.lang.String key) {
       if (key == null) { throw new java.lang.NullPointerException(); }
-      internalGetMutableProperties().getMutableMap()
-          .remove(key);
+      getMutableProperties().remove(key);
       return this;
     }
     /**
@@ -1331,8 +1331,7 @@ public  final class Group extends
         java.lang.String value) {
       if (key == null) { throw new java.lang.NullPointerException(); }
       if (value == null) { throw new java.lang.NullPointerException(); }
-      internalGetMutableProperties().getMutableMap()
-          .put(key, value);
+      getMutableProperties().put(key, value);
       return this;
     }
     /**
@@ -1341,14 +1340,13 @@ public  final class Group extends
 
     public Builder putAllProperties(
         java.util.Map<java.lang.String, java.lang.String> values) {
-      internalGetMutableProperties().getMutableMap()
-          .putAll(values);
+      getMutableProperties().putAll(values);
       return this;
     }
 
     private java.lang.Object key_ = "";
     /**
-     * <code>string key = 10;</code>
+     * <code>optional string key = 10;</code>
      */
     public java.lang.String getKey() {
       java.lang.Object ref = key_;
@@ -1363,7 +1361,7 @@ public  final class Group extends
       }
     }
     /**
-     * <code>string key = 10;</code>
+     * <code>optional string key = 10;</code>
      */
     public com.google.protobuf.ByteString
         getKeyBytes() {
@@ -1379,7 +1377,7 @@ public  final class Group extends
       }
     }
     /**
-     * <code>string key = 10;</code>
+     * <code>optional string key = 10;</code>
      */
     public Builder setKey(
         java.lang.String value) {
@@ -1392,7 +1390,7 @@ public  final class Group extends
       return this;
     }
     /**
-     * <code>string key = 10;</code>
+     * <code>optional string key = 10;</code>
      */
     public Builder clearKey() {
       
@@ -1401,7 +1399,7 @@ public  final class Group extends
       return this;
     }
     /**
-     * <code>string key = 10;</code>
+     * <code>optional string key = 10;</code>
      */
     public Builder setKeyBytes(
         com.google.protobuf.ByteString value) {
@@ -1417,7 +1415,7 @@ public  final class Group extends
 
     private java.lang.Object name_ = "";
     /**
-     * <code>string name = 11;</code>
+     * <code>optional string name = 11;</code>
      */
     public java.lang.String getName() {
       java.lang.Object ref = name_;
@@ -1432,7 +1430,7 @@ public  final class Group extends
       }
     }
     /**
-     * <code>string name = 11;</code>
+     * <code>optional string name = 11;</code>
      */
     public com.google.protobuf.ByteString
         getNameBytes() {
@@ -1448,7 +1446,7 @@ public  final class Group extends
       }
     }
     /**
-     * <code>string name = 11;</code>
+     * <code>optional string name = 11;</code>
      */
     public Builder setName(
         java.lang.String value) {
@@ -1461,7 +1459,7 @@ public  final class Group extends
       return this;
     }
     /**
-     * <code>string name = 11;</code>
+     * <code>optional string name = 11;</code>
      */
     public Builder clearName() {
       
@@ -1470,7 +1468,7 @@ public  final class Group extends
       return this;
     }
     /**
-     * <code>string name = 11;</code>
+     * <code>optional string name = 11;</code>
      */
     public Builder setNameBytes(
         com.google.protobuf.ByteString value) {
@@ -1488,13 +1486,13 @@ public  final class Group extends
     private com.google.protobuf.SingleFieldBuilderV3<
         outland.feature.proto.OwnerCollection, outland.feature.proto.OwnerCollection.Builder, outland.feature.proto.OwnerCollectionOrBuilder> ownersBuilder_;
     /**
-     * <code>.outland.OwnerCollection owners = 12;</code>
+     * <code>optional .outland.OwnerCollection owners = 12;</code>
      */
     public boolean hasOwners() {
       return ownersBuilder_ != null || owners_ != null;
     }
     /**
-     * <code>.outland.OwnerCollection owners = 12;</code>
+     * <code>optional .outland.OwnerCollection owners = 12;</code>
      */
     public outland.feature.proto.OwnerCollection getOwners() {
       if (ownersBuilder_ == null) {
@@ -1504,7 +1502,7 @@ public  final class Group extends
       }
     }
     /**
-     * <code>.outland.OwnerCollection owners = 12;</code>
+     * <code>optional .outland.OwnerCollection owners = 12;</code>
      */
     public Builder setOwners(outland.feature.proto.OwnerCollection value) {
       if (ownersBuilder_ == null) {
@@ -1520,7 +1518,7 @@ public  final class Group extends
       return this;
     }
     /**
-     * <code>.outland.OwnerCollection owners = 12;</code>
+     * <code>optional .outland.OwnerCollection owners = 12;</code>
      */
     public Builder setOwners(
         outland.feature.proto.OwnerCollection.Builder builderForValue) {
@@ -1534,7 +1532,7 @@ public  final class Group extends
       return this;
     }
     /**
-     * <code>.outland.OwnerCollection owners = 12;</code>
+     * <code>optional .outland.OwnerCollection owners = 12;</code>
      */
     public Builder mergeOwners(outland.feature.proto.OwnerCollection value) {
       if (ownersBuilder_ == null) {
@@ -1552,7 +1550,7 @@ public  final class Group extends
       return this;
     }
     /**
-     * <code>.outland.OwnerCollection owners = 12;</code>
+     * <code>optional .outland.OwnerCollection owners = 12;</code>
      */
     public Builder clearOwners() {
       if (ownersBuilder_ == null) {
@@ -1566,7 +1564,7 @@ public  final class Group extends
       return this;
     }
     /**
-     * <code>.outland.OwnerCollection owners = 12;</code>
+     * <code>optional .outland.OwnerCollection owners = 12;</code>
      */
     public outland.feature.proto.OwnerCollection.Builder getOwnersBuilder() {
       
@@ -1574,7 +1572,7 @@ public  final class Group extends
       return getOwnersFieldBuilder().getBuilder();
     }
     /**
-     * <code>.outland.OwnerCollection owners = 12;</code>
+     * <code>optional .outland.OwnerCollection owners = 12;</code>
      */
     public outland.feature.proto.OwnerCollectionOrBuilder getOwnersOrBuilder() {
       if (ownersBuilder_ != null) {
@@ -1585,7 +1583,7 @@ public  final class Group extends
       }
     }
     /**
-     * <code>.outland.OwnerCollection owners = 12;</code>
+     * <code>optional .outland.OwnerCollection owners = 12;</code>
      */
     private com.google.protobuf.SingleFieldBuilderV3<
         outland.feature.proto.OwnerCollection, outland.feature.proto.OwnerCollection.Builder, outland.feature.proto.OwnerCollectionOrBuilder> 
@@ -1605,13 +1603,13 @@ public  final class Group extends
     private com.google.protobuf.SingleFieldBuilderV3<
         outland.feature.proto.AccessCollection, outland.feature.proto.AccessCollection.Builder, outland.feature.proto.AccessCollectionOrBuilder> grantedBuilder_;
     /**
-     * <code>.outland.AccessCollection granted = 13;</code>
+     * <code>optional .outland.AccessCollection granted = 13;</code>
      */
     public boolean hasGranted() {
       return grantedBuilder_ != null || granted_ != null;
     }
     /**
-     * <code>.outland.AccessCollection granted = 13;</code>
+     * <code>optional .outland.AccessCollection granted = 13;</code>
      */
     public outland.feature.proto.AccessCollection getGranted() {
       if (grantedBuilder_ == null) {
@@ -1621,7 +1619,7 @@ public  final class Group extends
       }
     }
     /**
-     * <code>.outland.AccessCollection granted = 13;</code>
+     * <code>optional .outland.AccessCollection granted = 13;</code>
      */
     public Builder setGranted(outland.feature.proto.AccessCollection value) {
       if (grantedBuilder_ == null) {
@@ -1637,7 +1635,7 @@ public  final class Group extends
       return this;
     }
     /**
-     * <code>.outland.AccessCollection granted = 13;</code>
+     * <code>optional .outland.AccessCollection granted = 13;</code>
      */
     public Builder setGranted(
         outland.feature.proto.AccessCollection.Builder builderForValue) {
@@ -1651,7 +1649,7 @@ public  final class Group extends
       return this;
     }
     /**
-     * <code>.outland.AccessCollection granted = 13;</code>
+     * <code>optional .outland.AccessCollection granted = 13;</code>
      */
     public Builder mergeGranted(outland.feature.proto.AccessCollection value) {
       if (grantedBuilder_ == null) {
@@ -1669,7 +1667,7 @@ public  final class Group extends
       return this;
     }
     /**
-     * <code>.outland.AccessCollection granted = 13;</code>
+     * <code>optional .outland.AccessCollection granted = 13;</code>
      */
     public Builder clearGranted() {
       if (grantedBuilder_ == null) {
@@ -1683,7 +1681,7 @@ public  final class Group extends
       return this;
     }
     /**
-     * <code>.outland.AccessCollection granted = 13;</code>
+     * <code>optional .outland.AccessCollection granted = 13;</code>
      */
     public outland.feature.proto.AccessCollection.Builder getGrantedBuilder() {
       
@@ -1691,7 +1689,7 @@ public  final class Group extends
       return getGrantedFieldBuilder().getBuilder();
     }
     /**
-     * <code>.outland.AccessCollection granted = 13;</code>
+     * <code>optional .outland.AccessCollection granted = 13;</code>
      */
     public outland.feature.proto.AccessCollectionOrBuilder getGrantedOrBuilder() {
       if (grantedBuilder_ != null) {
@@ -1702,7 +1700,7 @@ public  final class Group extends
       }
     }
     /**
-     * <code>.outland.AccessCollection granted = 13;</code>
+     * <code>optional .outland.AccessCollection granted = 13;</code>
      */
     private com.google.protobuf.SingleFieldBuilderV3<
         outland.feature.proto.AccessCollection, outland.feature.proto.AccessCollection.Builder, outland.feature.proto.AccessCollectionOrBuilder> 

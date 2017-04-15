@@ -8,41 +8,41 @@ public interface FeatureOrBuilder extends
     com.google.protobuf.MessageOrBuilder {
 
   /**
-   * <code>string type = 1;</code>
+   * <code>optional string type = 1;</code>
    */
   java.lang.String getType();
   /**
-   * <code>string type = 1;</code>
+   * <code>optional string type = 1;</code>
    */
   com.google.protobuf.ByteString
       getTypeBytes();
 
   /**
-   * <code>string id = 2;</code>
+   * <code>optional string id = 2;</code>
    */
   java.lang.String getId();
   /**
-   * <code>string id = 2;</code>
+   * <code>optional string id = 2;</code>
    */
   com.google.protobuf.ByteString
       getIdBytes();
 
   /**
-   * <code>string created = 3;</code>
+   * <code>optional string created = 3;</code>
    */
   java.lang.String getCreated();
   /**
-   * <code>string created = 3;</code>
+   * <code>optional string created = 3;</code>
    */
   com.google.protobuf.ByteString
       getCreatedBytes();
 
   /**
-   * <code>string updated = 4;</code>
+   * <code>optional string updated = 4;</code>
    */
   java.lang.String getUpdated();
   /**
-   * <code>string updated = 4;</code>
+   * <code>optional string updated = 4;</code>
    */
   com.google.protobuf.ByteString
       getUpdatedBytes();
@@ -82,93 +82,93 @@ public interface FeatureOrBuilder extends
       java.lang.String key);
 
   /**
-   * <code>string key = 10;</code>
+   * <code>optional string key = 10;</code>
    */
   java.lang.String getKey();
   /**
-   * <code>string key = 10;</code>
+   * <code>optional string key = 10;</code>
    */
   com.google.protobuf.ByteString
       getKeyBytes();
 
   /**
-   * <code>string group = 11;</code>
+   * <code>optional string group = 11;</code>
    */
   java.lang.String getGroup();
   /**
-   * <code>string group = 11;</code>
+   * <code>optional string group = 11;</code>
    */
   com.google.protobuf.ByteString
       getGroupBytes();
 
   /**
-   * <code>.outland.State state = 12;</code>
+   * <code>optional .outland.State state = 12;</code>
    */
   int getStateValue();
   /**
-   * <code>.outland.State state = 12;</code>
+   * <code>optional .outland.State state = 12;</code>
    */
   outland.feature.proto.State getState();
 
   /**
-   * <code>string description = 13;</code>
+   * <code>optional string description = 13;</code>
    */
   java.lang.String getDescription();
   /**
-   * <code>string description = 13;</code>
+   * <code>optional string description = 13;</code>
    */
   com.google.protobuf.ByteString
       getDescriptionBytes();
 
   /**
-   * <code>.outland.Owner owner = 14;</code>
+   * <code>optional .outland.Owner owner = 14;</code>
    */
   boolean hasOwner();
   /**
-   * <code>.outland.Owner owner = 14;</code>
+   * <code>optional .outland.Owner owner = 14;</code>
    */
   outland.feature.proto.Owner getOwner();
   /**
-   * <code>.outland.Owner owner = 14;</code>
+   * <code>optional .outland.Owner owner = 14;</code>
    */
   outland.feature.proto.OwnerOrBuilder getOwnerOrBuilder();
 
   /**
-   * <code>.outland.OptionCollection options = 15;</code>
+   * <code>optional .outland.OptionCollection options = 15;</code>
    */
   boolean hasOptions();
   /**
-   * <code>.outland.OptionCollection options = 15;</code>
+   * <code>optional .outland.OptionCollection options = 15;</code>
    */
   outland.feature.proto.OptionCollection getOptions();
   /**
-   * <code>.outland.OptionCollection options = 15;</code>
+   * <code>optional .outland.OptionCollection options = 15;</code>
    */
   outland.feature.proto.OptionCollectionOrBuilder getOptionsOrBuilder();
 
   /**
-   * <code>.outland.FeatureVersion version = 16;</code>
+   * <code>optional .outland.FeatureVersion version = 16;</code>
    */
   boolean hasVersion();
   /**
-   * <code>.outland.FeatureVersion version = 16;</code>
+   * <code>optional .outland.FeatureVersion version = 16;</code>
    */
   outland.feature.proto.FeatureVersion getVersion();
   /**
-   * <code>.outland.FeatureVersion version = 16;</code>
+   * <code>optional .outland.FeatureVersion version = 16;</code>
    */
   outland.feature.proto.FeatureVersionOrBuilder getVersionOrBuilder();
 
   /**
-   * <code>.outland.NamespaceFeatureCollection namespaces = 17;</code>
+   * <code>optional .outland.NamespaceFeatureCollection namespaces = 17;</code>
    */
   boolean hasNamespaces();
   /**
-   * <code>.outland.NamespaceFeatureCollection namespaces = 17;</code>
+   * <code>optional .outland.NamespaceFeatureCollection namespaces = 17;</code>
    */
   outland.feature.proto.NamespaceFeatureCollection getNamespaces();
   /**
-   * <code>.outland.NamespaceFeatureCollection namespaces = 17;</code>
+   * <code>optional .outland.NamespaceFeatureCollection namespaces = 17;</code>
    */
   outland.feature.proto.NamespaceFeatureCollectionOrBuilder getNamespacesOrBuilder();
 }

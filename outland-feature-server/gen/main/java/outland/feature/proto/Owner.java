@@ -103,7 +103,7 @@ public  final class Owner extends
   public static final int TYPE_FIELD_NUMBER = 1;
   private volatile java.lang.Object type_;
   /**
-   * <code>string type = 1;</code>
+   * <code>optional string type = 1;</code>
    */
   public java.lang.String getType() {
     java.lang.Object ref = type_;
@@ -118,7 +118,7 @@ public  final class Owner extends
     }
   }
   /**
-   * <code>string type = 1;</code>
+   * <code>optional string type = 1;</code>
    */
   public com.google.protobuf.ByteString
       getTypeBytes() {
@@ -137,7 +137,7 @@ public  final class Owner extends
   public static final int ID_FIELD_NUMBER = 2;
   private volatile java.lang.Object id_;
   /**
-   * <code>string id = 2;</code>
+   * <code>optional string id = 2;</code>
    */
   public java.lang.String getId() {
     java.lang.Object ref = id_;
@@ -152,7 +152,7 @@ public  final class Owner extends
     }
   }
   /**
-   * <code>string id = 2;</code>
+   * <code>optional string id = 2;</code>
    */
   public com.google.protobuf.ByteString
       getIdBytes() {
@@ -171,7 +171,7 @@ public  final class Owner extends
   public static final int USERNAME_FIELD_NUMBER = 10;
   private volatile java.lang.Object username_;
   /**
-   * <code>string username = 10;</code>
+   * <code>optional string username = 10;</code>
    */
   public java.lang.String getUsername() {
     java.lang.Object ref = username_;
@@ -186,7 +186,7 @@ public  final class Owner extends
     }
   }
   /**
-   * <code>string username = 10;</code>
+   * <code>optional string username = 10;</code>
    */
   public com.google.protobuf.ByteString
       getUsernameBytes() {
@@ -205,7 +205,7 @@ public  final class Owner extends
   public static final int EMAIL_FIELD_NUMBER = 11;
   private volatile java.lang.Object email_;
   /**
-   * <code>string email = 11;</code>
+   * <code>optional string email = 11;</code>
    */
   public java.lang.String getEmail() {
     java.lang.Object ref = email_;
@@ -220,7 +220,7 @@ public  final class Owner extends
     }
   }
   /**
-   * <code>string email = 11;</code>
+   * <code>optional string email = 11;</code>
    */
   public com.google.protobuf.ByteString
       getEmailBytes() {
@@ -239,7 +239,7 @@ public  final class Owner extends
   public static final int NAME_FIELD_NUMBER = 12;
   private volatile java.lang.Object name_;
   /**
-   * <code>string name = 12;</code>
+   * <code>optional string name = 12;</code>
    */
   public java.lang.String getName() {
     java.lang.Object ref = name_;
@@ -254,7 +254,7 @@ public  final class Owner extends
     }
   }
   /**
-   * <code>string name = 12;</code>
+   * <code>optional string name = 12;</code>
    */
   public com.google.protobuf.ByteString
       getNameBytes() {
@@ -354,7 +354,7 @@ public  final class Owner extends
       return memoizedHashCode;
     }
     int hash = 41;
-    hash = (19 * hash) + getDescriptor().hashCode();
+    hash = (19 * hash) + getDescriptorForType().hashCode();
     hash = (37 * hash) + TYPE_FIELD_NUMBER;
     hash = (53 * hash) + getType().hashCode();
     hash = (37 * hash) + ID_FIELD_NUMBER;
@@ -609,7 +609,7 @@ public  final class Owner extends
 
     private java.lang.Object type_ = "";
     /**
-     * <code>string type = 1;</code>
+     * <code>optional string type = 1;</code>
      */
     public java.lang.String getType() {
       java.lang.Object ref = type_;
@@ -624,7 +624,7 @@ public  final class Owner extends
       }
     }
     /**
-     * <code>string type = 1;</code>
+     * <code>optional string type = 1;</code>
      */
     public com.google.protobuf.ByteString
         getTypeBytes() {
@@ -640,7 +640,7 @@ public  final class Owner extends
       }
     }
     /**
-     * <code>string type = 1;</code>
+     * <code>optional string type = 1;</code>
      */
     public Builder setType(
         java.lang.String value) {
@@ -653,7 +653,7 @@ public  final class Owner extends
       return this;
     }
     /**
-     * <code>string type = 1;</code>
+     * <code>optional string type = 1;</code>
      */
     public Builder clearType() {
       
@@ -662,7 +662,7 @@ public  final class Owner extends
       return this;
     }
     /**
-     * <code>string type = 1;</code>
+     * <code>optional string type = 1;</code>
      */
     public Builder setTypeBytes(
         com.google.protobuf.ByteString value) {
@@ -678,7 +678,7 @@ public  final class Owner extends
 
     private java.lang.Object id_ = "";
     /**
-     * <code>string id = 2;</code>
+     * <code>optional string id = 2;</code>
      */
     public java.lang.String getId() {
       java.lang.Object ref = id_;
@@ -693,7 +693,7 @@ public  final class Owner extends
       }
     }
     /**
-     * <code>string id = 2;</code>
+     * <code>optional string id = 2;</code>
      */
     public com.google.protobuf.ByteString
         getIdBytes() {
@@ -709,7 +709,7 @@ public  final class Owner extends
       }
     }
     /**
-     * <code>string id = 2;</code>
+     * <code>optional string id = 2;</code>
      */
     public Builder setId(
         java.lang.String value) {
@@ -722,7 +722,7 @@ public  final class Owner extends
       return this;
     }
     /**
-     * <code>string id = 2;</code>
+     * <code>optional string id = 2;</code>
      */
     public Builder clearId() {
       
@@ -731,7 +731,7 @@ public  final class Owner extends
       return this;
     }
     /**
-     * <code>string id = 2;</code>
+     * <code>optional string id = 2;</code>
      */
     public Builder setIdBytes(
         com.google.protobuf.ByteString value) {
@@ -747,7 +747,7 @@ public  final class Owner extends
 
     private java.lang.Object username_ = "";
     /**
-     * <code>string username = 10;</code>
+     * <code>optional string username = 10;</code>
      */
     public java.lang.String getUsername() {
       java.lang.Object ref = username_;
@@ -762,7 +762,7 @@ public  final class Owner extends
       }
     }
     /**
-     * <code>string username = 10;</code>
+     * <code>optional string username = 10;</code>
      */
     public com.google.protobuf.ByteString
         getUsernameBytes() {
@@ -778,7 +778,7 @@ public  final class Owner extends
       }
     }
     /**
-     * <code>string username = 10;</code>
+     * <code>optional string username = 10;</code>
      */
     public Builder setUsername(
         java.lang.String value) {
@@ -791,7 +791,7 @@ public  final class Owner extends
       return this;
     }
     /**
-     * <code>string username = 10;</code>
+     * <code>optional string username = 10;</code>
      */
     public Builder clearUsername() {
       
@@ -800,7 +800,7 @@ public  final class Owner extends
       return this;
     }
     /**
-     * <code>string username = 10;</code>
+     * <code>optional string username = 10;</code>
      */
     public Builder setUsernameBytes(
         com.google.protobuf.ByteString value) {
@@ -816,7 +816,7 @@ public  final class Owner extends
 
     private java.lang.Object email_ = "";
     /**
-     * <code>string email = 11;</code>
+     * <code>optional string email = 11;</code>
      */
     public java.lang.String getEmail() {
       java.lang.Object ref = email_;
@@ -831,7 +831,7 @@ public  final class Owner extends
       }
     }
     /**
-     * <code>string email = 11;</code>
+     * <code>optional string email = 11;</code>
      */
     public com.google.protobuf.ByteString
         getEmailBytes() {
@@ -847,7 +847,7 @@ public  final class Owner extends
       }
     }
     /**
-     * <code>string email = 11;</code>
+     * <code>optional string email = 11;</code>
      */
     public Builder setEmail(
         java.lang.String value) {
@@ -860,7 +860,7 @@ public  final class Owner extends
       return this;
     }
     /**
-     * <code>string email = 11;</code>
+     * <code>optional string email = 11;</code>
      */
     public Builder clearEmail() {
       
@@ -869,7 +869,7 @@ public  final class Owner extends
       return this;
     }
     /**
-     * <code>string email = 11;</code>
+     * <code>optional string email = 11;</code>
      */
     public Builder setEmailBytes(
         com.google.protobuf.ByteString value) {
@@ -885,7 +885,7 @@ public  final class Owner extends
 
     private java.lang.Object name_ = "";
     /**
-     * <code>string name = 12;</code>
+     * <code>optional string name = 12;</code>
      */
     public java.lang.String getName() {
       java.lang.Object ref = name_;
@@ -900,7 +900,7 @@ public  final class Owner extends
       }
     }
     /**
-     * <code>string name = 12;</code>
+     * <code>optional string name = 12;</code>
      */
     public com.google.protobuf.ByteString
         getNameBytes() {
@@ -916,7 +916,7 @@ public  final class Owner extends
       }
     }
     /**
-     * <code>string name = 12;</code>
+     * <code>optional string name = 12;</code>
      */
     public Builder setName(
         java.lang.String value) {
@@ -929,7 +929,7 @@ public  final class Owner extends
       return this;
     }
     /**
-     * <code>string name = 12;</code>
+     * <code>optional string name = 12;</code>
      */
     public Builder clearName() {
       
@@ -938,7 +938,7 @@ public  final class Owner extends
       return this;
     }
     /**
-     * <code>string name = 12;</code>
+     * <code>optional string name = 12;</code>
      */
     public Builder setNameBytes(
         com.google.protobuf.ByteString value) {

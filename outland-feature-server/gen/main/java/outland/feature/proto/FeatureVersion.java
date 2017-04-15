@@ -87,7 +87,7 @@ public  final class FeatureVersion extends
   public static final int TYPE_FIELD_NUMBER = 1;
   private volatile java.lang.Object type_;
   /**
-   * <code>string type = 1;</code>
+   * <code>optional string type = 1;</code>
    */
   public java.lang.String getType() {
     java.lang.Object ref = type_;
@@ -102,7 +102,7 @@ public  final class FeatureVersion extends
     }
   }
   /**
-   * <code>string type = 1;</code>
+   * <code>optional string type = 1;</code>
    */
   public com.google.protobuf.ByteString
       getTypeBytes() {
@@ -121,7 +121,7 @@ public  final class FeatureVersion extends
   public static final int TIMESTAMP_FIELD_NUMBER = 10;
   private long timestamp_;
   /**
-   * <code>int64 timestamp = 10;</code>
+   * <code>optional int64 timestamp = 10;</code>
    */
   public long getTimestamp() {
     return timestamp_;
@@ -130,7 +130,7 @@ public  final class FeatureVersion extends
   public static final int COUNTER_FIELD_NUMBER = 11;
   private long counter_;
   /**
-   * <code>int64 counter = 11;</code>
+   * <code>optional int64 counter = 11;</code>
    */
   public long getCounter() {
     return counter_;
@@ -206,7 +206,7 @@ public  final class FeatureVersion extends
       return memoizedHashCode;
     }
     int hash = 41;
-    hash = (19 * hash) + getDescriptor().hashCode();
+    hash = (19 * hash) + getDescriptorForType().hashCode();
     hash = (37 * hash) + TYPE_FIELD_NUMBER;
     hash = (53 * hash) + getType().hashCode();
     hash = (37 * hash) + TIMESTAMP_FIELD_NUMBER;
@@ -443,7 +443,7 @@ public  final class FeatureVersion extends
 
     private java.lang.Object type_ = "";
     /**
-     * <code>string type = 1;</code>
+     * <code>optional string type = 1;</code>
      */
     public java.lang.String getType() {
       java.lang.Object ref = type_;
@@ -458,7 +458,7 @@ public  final class FeatureVersion extends
       }
     }
     /**
-     * <code>string type = 1;</code>
+     * <code>optional string type = 1;</code>
      */
     public com.google.protobuf.ByteString
         getTypeBytes() {
@@ -474,7 +474,7 @@ public  final class FeatureVersion extends
       }
     }
     /**
-     * <code>string type = 1;</code>
+     * <code>optional string type = 1;</code>
      */
     public Builder setType(
         java.lang.String value) {
@@ -487,7 +487,7 @@ public  final class FeatureVersion extends
       return this;
     }
     /**
-     * <code>string type = 1;</code>
+     * <code>optional string type = 1;</code>
      */
     public Builder clearType() {
       
@@ -496,7 +496,7 @@ public  final class FeatureVersion extends
       return this;
     }
     /**
-     * <code>string type = 1;</code>
+     * <code>optional string type = 1;</code>
      */
     public Builder setTypeBytes(
         com.google.protobuf.ByteString value) {
@@ -512,13 +512,13 @@ public  final class FeatureVersion extends
 
     private long timestamp_ ;
     /**
-     * <code>int64 timestamp = 10;</code>
+     * <code>optional int64 timestamp = 10;</code>
      */
     public long getTimestamp() {
       return timestamp_;
     }
     /**
-     * <code>int64 timestamp = 10;</code>
+     * <code>optional int64 timestamp = 10;</code>
      */
     public Builder setTimestamp(long value) {
       
@@ -527,7 +527,7 @@ public  final class FeatureVersion extends
       return this;
     }
     /**
-     * <code>int64 timestamp = 10;</code>
+     * <code>optional int64 timestamp = 10;</code>
      */
     public Builder clearTimestamp() {
       
@@ -538,13 +538,13 @@ public  final class FeatureVersion extends
 
     private long counter_ ;
     /**
-     * <code>int64 counter = 11;</code>
+     * <code>optional int64 counter = 11;</code>
      */
     public long getCounter() {
       return counter_;
     }
     /**
-     * <code>int64 counter = 11;</code>
+     * <code>optional int64 counter = 11;</code>
      */
     public Builder setCounter(long value) {
       
@@ -553,7 +553,7 @@ public  final class FeatureVersion extends
       return this;
     }
     /**
-     * <code>int64 counter = 11;</code>
+     * <code>optional int64 counter = 11;</code>
      */
     public Builder clearCounter() {
       

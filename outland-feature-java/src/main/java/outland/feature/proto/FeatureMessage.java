@@ -150,10 +150,11 @@ public final class FeatureMessage {
       "\030\n \001(\t\022\014\n\004name\030\013 \001(\t\022(\n\006owners\030\014 \001(\0132\030.o" +
       "utland.OwnerCollection\022*\n\007granted\030\r \001(\0132" +
       "\031.outland.AccessCollection\0321\n\017Properties" +
-      "Entry\022\013\n\003key\030\001 \001(\t\022\r\n\005value\030\002 \001(\t:\0028\001* \n" +
-      "\nOptionType\022\010\n\004flag\020\000\022\010\n\004bool\020\001*\"\n\005State" +
-      "\022\010\n\004none\020\000\022\007\n\003off\020\001\022\006\n\002on\020\002B+\n\025outland.f",
-      "eature.protoB\016FeatureMessageH\001P\001b\006proto3"
+      "Entry\022\013\n\003key\030\001 \001(\t\022\r\n\005value\030\002 \001(\t:\0028\001*,\n" +
+      "\nOptionType\022\010\n\004flag\020\000\022\010\n\004bool\020\001\022\n\n\006strin" +
+      "g\020\002*\"\n\005State\022\010\n\004none\020\000\022\007\n\003off\020\001\022\006\n\002on\020\002B",
+      "+\n\025outland.feature.protoB\016FeatureMessage" +
+      "H\001P\001b\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
