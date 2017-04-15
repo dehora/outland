@@ -71,32 +71,41 @@ class FeatureRegisterProcessor {
     collectionBuilder.setType(Names.optionCollectionType());
     collectionBuilder.setOption(feature.getOptions().getOption());
 
-    if (feature.getOptions().getOption().equals(OptionType.bool)) {
-      if (feature.getOptions().getItemsCount() != 0) {
+    if (isBooleanOption(feature)) {
+      applyBooleanOptions(feature, builder, collectionBuilder);
+    }
+  }
 
-        final List<FeatureOption> options = feature.getOptions().getItemsList();
-        optionsProcessor.applyBooleanOptions(collectionBuilder, options);
-        builder.setOptions(collectionBuilder);
-      } else {
+  private boolean isBooleanOption(Feature feature) {
+    return feature.getOptions().getOption().equals(OptionType.bool);
+  }
 
-        collectionBuilder.addItems(FeatureOption.newBuilder()
-            .setType(Names.optionType())
-            .setId(Names.option())
-            .setName("false")
-            .setValue("false")
-            .setOption(OptionType.bool)
-            .setWeight(5_000));
+  private void applyBooleanOptions(
+      Feature feature, Feature.Builder featureBuilder, OptionCollection.Builder collectionBuilder) {
+    if (feature.getOptions().getItemsCount() != 0) {
 
-        collectionBuilder.addItems(FeatureOption.newBuilder()
-            .setType(Names.optionType())
-            .setId(Names.option())
-            .setName("true")
-            .setValue("true")
-            .setOption(OptionType.bool)
-            .setWeight(5_000));
+      final List<FeatureOption> options = feature.getOptions().getItemsList();
+      optionsProcessor.applyBooleanOptions(collectionBuilder, options);
+      featureBuilder.setOptions(collectionBuilder);
+    } else {
 
-        builder.setOptions(collectionBuilder);
-      }
+      collectionBuilder.addItems(FeatureOption.newBuilder()
+          .setType(Names.optionType())
+          .setId(Names.option())
+          .setName("false")
+          .setValue("false")
+          .setOption(OptionType.bool)
+          .setWeight(5_000));
+
+      collectionBuilder.addItems(FeatureOption.newBuilder()
+          .setType(Names.optionType())
+          .setId(Names.option())
+          .setName("true")
+          .setValue("true")
+          .setOption(OptionType.bool)
+          .setWeight(5_000));
+
+      featureBuilder.setOptions(collectionBuilder);
     }
   }
 
