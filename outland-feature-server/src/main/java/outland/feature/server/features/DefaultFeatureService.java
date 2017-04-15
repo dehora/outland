@@ -186,10 +186,21 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
 
   @Override public Feature add(Feature feature, NamespaceFeature namespaceFeature) {
 
-    logger.info("{} {}", kvp("op", "addNamespaceFeature"),
-        TextFormat.shortDebugString(namespaceFeature));
+    logger.info("{} {}", kvp("op", "addNamespaceFeature"), toString(namespaceFeature));
 
     featureValidator.validateFeatureDataNewCandidateThrowing(feature, namespaceFeature);
+
+    final List<NamespaceFeature> namespaceFeatures =
+        featureUpdateProcessor.buildMergedNamespaceFeatures(feature, namespaceFeature);
+
+    return update(feature, namespaceFeatures);
+  }
+
+  @Override
+  public Feature updateNamespaceFeature(Feature feature, NamespaceFeature namespaceFeature) {
+    logger.info("{} {}", kvp("op", "updateNamespaceFeature"), toString(namespaceFeature));
+
+    featureValidator.validateFeatureDataUpdateCandidateThrowing(feature, namespaceFeature);
 
     final List<NamespaceFeature> namespaceFeatures =
         featureUpdateProcessor.buildMergedNamespaceFeatures(feature, namespaceFeature);
@@ -271,5 +282,9 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
 
   private String toString(Feature feature) {
     return TextFormat.shortDebugString(feature);
+  }
+
+  private String toString(NamespaceFeature namespaceFeature) {
+    return TextFormat.shortDebugString(namespaceFeature);
   }
 }
