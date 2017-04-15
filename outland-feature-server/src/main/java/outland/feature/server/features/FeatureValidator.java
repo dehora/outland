@@ -53,7 +53,7 @@ class FeatureValidator {
   }
 
   void validateOptionsThrowing(OptionCollection options) {
-    if (isBooleanOption(options)) {
+    if (isBoolOption(options)) {
       validateBooleanOptionsThrowing(options);
     }
 
@@ -66,7 +66,7 @@ class FeatureValidator {
     }
   }
 
-  private boolean isBooleanOption(OptionCollection options) {
+  private boolean isBoolOption(OptionCollection options) {
     return OptionType.bool == options.getOption();
   }
 
