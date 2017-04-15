@@ -180,7 +180,7 @@ public class FeatureResource {
   @Path("/{group}/{feature_key}/namespaces")
   @Produces(MediaType.APPLICATION_JSON)
   @PermitAll
-  @Timed(name = "addService")
+  @Timed(name = "addNamespaceFeature")
   public Response addNamespaceFeature(
       @Auth AuthPrincipal principal,
       @PathParam("group") String group,
@@ -189,6 +189,22 @@ public class FeatureResource {
   ) throws AuthenticationException {
 
     return postUpdate(principal, group, featureKey, f -> featureService.add(f, namespaceFeature));
+  }
+
+  @POST
+  @Path("/{group}/{feature_key}/namespaces/{namespace}")
+  @Produces(MediaType.APPLICATION_JSON)
+  @PermitAll
+  @Timed(name = "updateNamespaceFeature")
+  public Response updateNamespaceFeature(
+      @Auth AuthPrincipal principal,
+      @PathParam("group") String group,
+      @PathParam("feature_key") String featureKey,
+      @PathParam("namespace") String namespace,
+      NamespaceFeature namespaceFeature
+  ) throws AuthenticationException {
+
+    return postUpdate(principal, group, featureKey, f -> featureService.updateNamespaceFeature(f, namespaceFeature));
   }
 
   @DELETE

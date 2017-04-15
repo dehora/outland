@@ -22,5 +22,7 @@ public interface FeatureService {
 
   Feature add(Feature feature, NamespaceFeature namespaceFeature);
 
+  Feature updateNamespaceFeature(Feature feature, NamespaceFeature namespaceFeature);
+
   Feature removeNamespaceFeature(String group, String featureKey, String namespace);
 }

@@ -1,10 +1,13 @@
 package outland.feature.server.features;
 
+import com.google.common.base.Joiner;
 import com.google.common.base.Strings;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import outland.feature.proto.Feature;
 import outland.feature.proto.FeatureData;
@@ -52,7 +55,115 @@ class FeatureValidator {
     }
   }
 
-  void validateOptionsThrowing(OptionCollection options) {
+  void validateOwner(Owner owner) {
+    if (Strings.isNullOrEmpty(owner.getEmail()) && Strings.isNullOrEmpty(
+        owner.getUsername())) {
+      throw new ServiceException(Problem.clientProblem("incomplete_owner",
+          "An owner must have an email or a username", 422));
+    }
+  }
+
+  void validateFeatureDataMergeCandidates(FeatureData existing, FeatureData incoming) {
+
+    this.validateFeatureDataKeysMatch(existing, incoming);
+    this.validateOptionsThrowing(incoming.getOptions());
+    this.validateOptionIdsForUpdate(existing.getOptions(), incoming.getOptions());
+  }
+
+  void validateFeatureDataNewCandidateThrowing(Feature existingFeature, NamespaceFeature incoming) {
+
+    validateKeysMatch(existingFeature.getKey(), incoming.getFeature().getKey());
+
+    final OptionType existingOptionType = existingFeature.getOptions().getOption();
+
+    final OptionCollection incomingOptions = incoming.getFeature().getOptions();
+    final OptionType incomingOptionType = incomingOptions.getOption();
+
+    if (!existingOptionType.equals(incomingOptionType)) {
+      throw new ServiceException(
+          Problem.clientProblem("namespace_feature_option_mismatch",
+              "namespace feature option type must be the same as the parent feature's",
+              422));
+    }
+
+    validateOptionsThrowing(incomingOptions);
+  }
+
+  void validateFeatureDataUpdateCandidateThrowing(
+      Feature existingFeature, NamespaceFeature incoming) {
+
+    final FeatureData incomingFeature = incoming.getFeature();
+
+    boolean found = false;
+    final List<String> namespaces = Lists.newArrayList();
+    final List<NamespaceFeature> namespaceFeatures = existingFeature.getNamespaces().getItemsList();
+    for (NamespaceFeature namespaceFeature : namespaceFeatures) {
+      namespaces.add(namespaceFeature.getNamespace());
+      if(namespaceFeature.getNamespace().equals(incoming.getNamespace())) {
+        found = true;
+        break;
+      }
+    }
+
+    if (!found) {
+      final String names = Joiner.on(", ").join(namespaces);
+      throw new ServiceException(
+          Problem.clientProblem("no_such_namespace",
+              "the '" + incoming.getNamespace()
+                  + "' namespace being updated was not found, known namespaces: "
+                  + names,
+              404));
+    }
+
+    namespaces.clear();
+
+    validateKeysMatch(existingFeature.getKey(), incomingFeature.getKey());
+
+    if(incoming.getFeature().hasOptions()) {
+      final OptionType existingOptionType = existingFeature.getOptions().getOption();
+      final OptionCollection incomingFeatureOptions = incomingFeature.getOptions();
+      final OptionType incomingOptionType = incomingFeatureOptions.getOption();
+      if (!existingOptionType.equals(incomingOptionType)) {
+        throw new ServiceException(
+            Problem.clientProblem("namespace_feature_option_mismatch",
+                "namespace feature option type must be the same as the parent feature's",
+                422));
+      }
+
+      if (OptionType.flag != incomingFeatureOptions.getOption()) {
+        validateOptionsHaveIdsThrowing(incomingFeatureOptions);
+        validateOptionIdsForUpdate(existingFeature.getOptions(), incomingFeatureOptions);
+      }
+
+      if (OptionType.flag != existingFeature.getOptions().getOption()
+          && incomingFeatureOptions.getItemsCount() != 0) {
+        // only validate options if they're sent and we're not a flag type
+        validateOptionsThrowing(incomingFeatureOptions);
+      }
+    }
+
+  }
+
+  void validateOptionIdsForUpdate(OptionCollection existing, OptionCollection update) {
+
+    if (update.getItemsCount() == 0) {
+      // no options sent in update, skip
+      return;
+    }
+
+    final Set<String> firstSet =
+        existing.getItemsList().stream().map(FeatureOption::getId).collect(Collectors.toSet());
+    final Set<String> secondSet =
+        update.getItemsList().stream().map(FeatureOption::getId).collect(Collectors.toSet());
+
+    if (!firstSet.equals(secondSet)) {
+      throw new ServiceException(
+          Problem.clientProblem("option_ids_mismatch", "option ids must be the same",
+              422));
+    }
+  }
+
+  private void validateOptionsThrowing(OptionCollection options) {
     if (isBoolOption(options)) {
       validateBooleanOptionsThrowing(options);
     }
@@ -66,23 +177,7 @@ class FeatureValidator {
     }
   }
 
-  private boolean isBoolOption(OptionCollection options) {
-    return OptionType.bool == options.getOption();
-  }
-
-  private boolean isStringOption(OptionCollection options) {
-    return OptionType.string == options.getOption();
-  }
-
-  private void validateNamespaceFeaturesThrowing(Feature feature) {
-
-    final List<NamespaceFeature> itemsList = feature.getNamespaces().getItemsList();
-    for (NamespaceFeature namespaceFeature : itemsList) {
-      validateFeatureDataNewCandidateThrowing(feature, namespaceFeature);
-    }
-  }
-
-  void validateBooleanOptionsThrowing(OptionCollection options) {
+  private void validateBooleanOptionsThrowing(OptionCollection options) {
 
     if (options.getItemsCount() != 2) {
       throw new ServiceException(Problem.clientProblem("wrong_options_for_bool_feature",
@@ -114,6 +209,30 @@ class FeatureValidator {
     });
   }
 
+  private void validateFeatureDataKeysMatch(FeatureData existing, FeatureData update) {
+
+    final String existingKey = existing.getKey();
+    final String updateKey = update.getKey();
+
+    validateKeysMatch(existingKey, updateKey);
+  }
+
+  private boolean isBoolOption(OptionCollection options) {
+    return OptionType.bool == options.getOption();
+  }
+
+  private boolean isStringOption(OptionCollection options) {
+    return OptionType.string == options.getOption();
+  }
+
+  private void validateNamespaceFeaturesThrowing(Feature feature) {
+
+    final List<NamespaceFeature> itemsList = feature.getNamespaces().getItemsList();
+    for (NamespaceFeature namespaceFeature : itemsList) {
+      validateFeatureDataNewCandidateThrowing(feature, namespaceFeature);
+    }
+  }
+
   private void validateStringOptionsThrowing(OptionCollection options) {
 
     if (options.getItemsCount() == 0) {
@@ -140,68 +259,6 @@ class FeatureValidator {
     }
 
     names.clear();
-  }
-
-
-  void validateOwner(Owner owner) {
-    if (Strings.isNullOrEmpty(owner.getEmail()) && Strings.isNullOrEmpty(
-        owner.getUsername())) {
-      throw new ServiceException(Problem.clientProblem("incomplete_owner",
-          "An owner must have an email or a username", 422));
-    }
-  }
-
-  void validateFeatureDataMergeCandidates(FeatureData existing, FeatureData incoming) {
-
-    this.validateFeatureDataKeysMatch(existing, incoming);
-    this.validateOptionsThrowing(incoming.getOptions());
-    this.validateOptionIdsForUpdate(existing.getOptions(), incoming.getOptions());
-  }
-
-  void validateFeatureDataKeysMatch(FeatureData existing, FeatureData update) {
-
-    final String existingKey = existing.getKey();
-    final String updateKey = update.getKey();
-
-    validateKeysMatch(existingKey, updateKey);
-  }
-
-  void validateFeatureDataNewCandidateThrowing(Feature existingFeature, NamespaceFeature incoming) {
-
-    validateKeysMatch(existingFeature.getKey(), incoming.getFeature().getKey());
-
-    final OptionType existingOptionType = existingFeature.getOptions().getOption();
-
-    final OptionCollection incomingOptions = incoming.getFeature().getOptions();
-    final OptionType incomingOptionType = incomingOptions.getOption();
-
-    if (!existingOptionType.equals(incomingOptionType)) {
-      throw new ServiceException(
-          Problem.clientProblem("namespace_feature_option_mismatch",
-              "namespace feature option type must be the same as the parent feature's",
-              422));
-    }
-
-    validateOptionsThrowing(incomingOptions);
-  }
-
-  void validateOptionIdsForUpdate(OptionCollection existing, OptionCollection update) {
-
-    if (update.getItemsCount() == 0) {
-      // no options sent in update, skip
-      return;
-    }
-
-    final Set<String> firstSet =
-        existing.getItemsList().stream().map(FeatureOption::getId).collect(Collectors.toSet());
-    final Set<String> secondSet =
-        update.getItemsList().stream().map(FeatureOption::getId).collect(Collectors.toSet());
-
-    if (!firstSet.equals(secondSet)) {
-      throw new ServiceException(
-          Problem.clientProblem("option_ids_mismatch", "option ids must be the same",
-              422));
-    }
   }
 
   private void validateKeysThrowing(Feature feature) {
@@ -247,7 +304,13 @@ class FeatureValidator {
   }
 
   private void validateOptionsHaveIdsThrowing(Feature feature) {
-    feature.getOptions().getItemsList().forEach(option -> {
+    final OptionCollection options = feature.getOptions();
+
+    validateOptionsHaveIdsThrowing(options);
+  }
+
+  private void validateOptionsHaveIdsThrowing(OptionCollection options) {
+    options.getItemsList().forEach(option -> {
       validateFeatureKeyThrowing(option.getId(), Problem.clientProblem("missing_id_for_option",
           "A feature update must have ids for its options", 422));
     });
