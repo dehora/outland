@@ -29,7 +29,7 @@ public class FeatureClient {
   private final String namespace;
   private final boolean localStoreEnabled;
   private final MetricRegistry metricRegistry;
-  private final Evaluator evaluator;
+
 
   public FeatureClient(Builder builder) {
     this.serverConfiguration = builder.serverConfiguration;
@@ -61,7 +61,6 @@ public class FeatureClient {
     }
 
     this.featureStore = builder.featureStore;
-    evaluator = new Evaluator();
   }
 
   /**
@@ -282,36 +281,23 @@ public class FeatureClient {
   }
 
   private boolean enabledInner(String group, String featureKey) {
-    final FeatureRecord maybe = featureStore.find(group, featureKey);
+    final FeatureRecord record = featureStore.find(group, featureKey);
 
-    if (maybe == null) {
+    if (record == null) {
       return false;
     }
 
-    return evaluate(maybe.feature());
+    return record.evaluate(this.namespace);
   }
 
   private boolean enabledThrowingInner(String group, String featureKey) {
-    final FeatureRecord maybe = featureStore.find(group, featureKey);
+    final FeatureRecord record = featureStore.find(group, featureKey);
 
-    if (maybe == null) {
+    if (record == null) {
       return throwNotFound(group, featureKey);
     }
 
-    return evaluate(maybe.feature());
-  }
-
-  private boolean evaluate(Feature feature) {
-
-    if(feature == null) {
-      return false;
-    }
-
-    if(this.namespace.equals(ServerConfiguration.DEFAULT_NAMESPACE)) {
-      return evaluator.evaluate(feature);
-    }
-
-    return evaluator.evaluate(feature, namespace);
+    return record.evaluate(this.namespace);
   }
 
   private boolean throwNotFound(String group, String featureKey) {
