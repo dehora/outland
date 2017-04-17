@@ -19,6 +19,7 @@ public  final class OptionCollection extends
     option_ = 0;
     maxweight_ = 0;
     items_ = java.util.Collections.emptyList();
+    control_ = "";
   }
 
   @java.lang.Override
@@ -70,6 +71,12 @@ public  final class OptionCollection extends
             }
             items_.add(
                 input.readMessage(outland.feature.proto.FeatureOption.parser(), extensionRegistry));
+            break;
+          }
+          case 106: {
+            java.lang.String s = input.readStringRequireUtf8();
+
+            control_ = s;
             break;
           }
         }
@@ -193,6 +200,40 @@ public  final class OptionCollection extends
     return items_.get(index);
   }
 
+  public static final int CONTROL_FIELD_NUMBER = 13;
+  private volatile java.lang.Object control_;
+  /**
+   * <code>optional string control = 13;</code>
+   */
+  public java.lang.String getControl() {
+    java.lang.Object ref = control_;
+    if (ref instanceof java.lang.String) {
+      return (java.lang.String) ref;
+    } else {
+      com.google.protobuf.ByteString bs = 
+          (com.google.protobuf.ByteString) ref;
+      java.lang.String s = bs.toStringUtf8();
+      control_ = s;
+      return s;
+    }
+  }
+  /**
+   * <code>optional string control = 13;</code>
+   */
+  public com.google.protobuf.ByteString
+      getControlBytes() {
+    java.lang.Object ref = control_;
+    if (ref instanceof java.lang.String) {
+      com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString.copyFromUtf8(
+              (java.lang.String) ref);
+      control_ = b;
+      return b;
+    } else {
+      return (com.google.protobuf.ByteString) ref;
+    }
+  }
+
   private byte memoizedIsInitialized = -1;
   public final boolean isInitialized() {
     byte isInitialized = memoizedIsInitialized;
@@ -217,6 +258,9 @@ public  final class OptionCollection extends
     for (int i = 0; i < items_.size(); i++) {
       output.writeMessage(12, items_.get(i));
     }
+    if (!getControlBytes().isEmpty()) {
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 13, control_);
+    }
   }
 
   public int getSerializedSize() {
@@ -238,6 +282,9 @@ public  final class OptionCollection extends
     for (int i = 0; i < items_.size(); i++) {
       size += com.google.protobuf.CodedOutputStream
         .computeMessageSize(12, items_.get(i));
+    }
+    if (!getControlBytes().isEmpty()) {
+      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(13, control_);
     }
     memoizedSize = size;
     return size;
@@ -262,6 +309,8 @@ public  final class OptionCollection extends
         == other.getMaxweight());
     result = result && getItemsList()
         .equals(other.getItemsList());
+    result = result && getControl()
+        .equals(other.getControl());
     return result;
   }
 
@@ -282,6 +331,8 @@ public  final class OptionCollection extends
       hash = (37 * hash) + ITEMS_FIELD_NUMBER;
       hash = (53 * hash) + getItemsList().hashCode();
     }
+    hash = (37 * hash) + CONTROL_FIELD_NUMBER;
+    hash = (53 * hash) + getControl().hashCode();
     hash = (29 * hash) + unknownFields.hashCode();
     memoizedHashCode = hash;
     return hash;
@@ -413,6 +464,8 @@ public  final class OptionCollection extends
       } else {
         itemsBuilder_.clear();
       }
+      control_ = "";
+
       return this;
     }
 
@@ -449,6 +502,7 @@ public  final class OptionCollection extends
       } else {
         result.items_ = itemsBuilder_.build();
       }
+      result.control_ = control_;
       result.bitField0_ = to_bitField0_;
       onBuilt();
       return result;
@@ -526,6 +580,10 @@ public  final class OptionCollection extends
             itemsBuilder_.addAllMessages(other.items_);
           }
         }
+      }
+      if (!other.getControl().isEmpty()) {
+        control_ = other.control_;
+        onChanged();
       }
       onChanged();
       return this;
@@ -931,6 +989,75 @@ public  final class OptionCollection extends
         items_ = null;
       }
       return itemsBuilder_;
+    }
+
+    private java.lang.Object control_ = "";
+    /**
+     * <code>optional string control = 13;</code>
+     */
+    public java.lang.String getControl() {
+      java.lang.Object ref = control_;
+      if (!(ref instanceof java.lang.String)) {
+        com.google.protobuf.ByteString bs =
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        control_ = s;
+        return s;
+      } else {
+        return (java.lang.String) ref;
+      }
+    }
+    /**
+     * <code>optional string control = 13;</code>
+     */
+    public com.google.protobuf.ByteString
+        getControlBytes() {
+      java.lang.Object ref = control_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        control_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+    /**
+     * <code>optional string control = 13;</code>
+     */
+    public Builder setControl(
+        java.lang.String value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  
+      control_ = value;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>optional string control = 13;</code>
+     */
+    public Builder clearControl() {
+      
+      control_ = getDefaultInstance().getControl();
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>optional string control = 13;</code>
+     */
+    public Builder setControlBytes(
+        com.google.protobuf.ByteString value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+      
+      control_ = value;
+      onChanged();
+      return this;
     }
     public final Builder setUnknownFields(
         final com.google.protobuf.UnknownFieldSet unknownFields) {

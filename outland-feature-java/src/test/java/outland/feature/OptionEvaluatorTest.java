@@ -1,5 +1,8 @@
 package outland.feature;
 
+import com.google.common.collect.Lists;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.stream.IntStream;
 import org.junit.Test;
 import outland.feature.proto.Feature;
@@ -59,7 +62,7 @@ public class OptionEvaluatorTest {
     assertEquals(0.9999d, oe.normalize(9_999), 0.0d);
     assertEquals(1.0d, oe.normalize(10_000), 0.0d);
 
-    // overflown values are an entry bug, but are capped to 0.0..1.0
+    // overflown buildValues are an entry bug, but are capped to 0.0..1.0
     assertEquals(1.0d, oe.normalize(11_000), 0.0d);
     assertEquals(0.0d, oe.normalize(-1), 0.0d);
   }

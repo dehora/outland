@@ -2,15 +2,12 @@ package outland.feature;
 
 import java.util.List;
 import outland.feature.proto.Feature;
-import outland.feature.proto.FeatureData;
 import outland.feature.proto.FeatureOption;
 import outland.feature.proto.OptionCollection;
 import outland.feature.proto.OptionType;
 import outland.feature.proto.State;
 
 class OptionEvaluator {
-
-  private static final int MAX_WEIGHT = 10_000;
 
   @VisibleForTesting
   boolean evaluateBooleanOptions(Feature feature) {
@@ -23,7 +20,7 @@ class OptionEvaluator {
     }
 
     if(! state.equals(State.on)) {
-      return false; // todo: replace with a fallback when we add fallbacks for options
+      return false;
     }
 
     final List<FeatureOption> optionsList = options.getItemsList();
@@ -40,9 +37,7 @@ class OptionEvaluator {
     }
 
     // normalise to 0.0..1.0
-    double n1 = normalize(weight1);
-    double n2 = normalize(weight2);
-
+    final double n1 = normalize(weight1);
     if (Math.random() < n1) {
       return Boolean.parseBoolean(option1.getValue());
     } else {
@@ -51,16 +46,29 @@ class OptionEvaluator {
   }
 
   double normalize(int weight) {
-    double v = (weight - 0.0d) / (MAX_WEIGHT - 0.0d);
+    return Weights.normalize(weight);
+  }
 
-    if (v > 1.0d) {
-      return 1.0d;
+  public String evaluateStringOptions(OptionCollection options, State state) {
+
+    if (!options.getOption().equals(OptionType.string)) {
+      return null; // todo: throw this?
     }
 
-    if (v < 0.0d) {
-      return 0.0d;
+    if(! state.equals(State.on)) {
+      String value = null;
+      final String control = options.getControl();
+      final List<FeatureOption> itemsList = options.getItemsList();
+      for (FeatureOption featureOption : itemsList) {
+        if(featureOption.getName().equals(control)) {
+          value = featureOption.getValue();
+          break;
+        }
+      }
+
+      return value;
     }
 
-    return v;
+    return  new OptionWeightedEvaluator(options.getItemsList()).select().getValue();
   }
 }

@@ -196,10 +196,27 @@ public class FeatureClient {
    * configured, the feature does not exist or there was an internal error.
    */
   public boolean enabledForThrowing(String group, String featureKey) {
-    FeatureException.throwIfNull(group, "Please supply a defaultGroup");
+    FeatureException.throwIfNull(group, "Please supply a group");
     FeatureException.throwIfNull(featureKey, "Please supply a featureKey");
 
     return enabledThrowingInner(group, featureKey);
+  }
+
+  public String selectString(String group, String featureKey) {
+    FeatureException.throwIfNull(group, "Please supply a group");
+    FeatureException.throwIfNull(featureKey, "Please supply a featureKey");
+
+    final Feature feature = featureStore.find(group, featureKey);
+
+    if (feature == null) {
+      return null;
+    }
+
+    if(this.namespace.equals(ServerConfiguration.DEFAULT_NAMESPACE)) {
+      return evaluator.evaluateStringOption(feature);
+    }
+
+    return evaluator.evaluateStringOption(feature, namespace);
   }
 
   /**
