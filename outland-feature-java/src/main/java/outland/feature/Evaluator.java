@@ -48,4 +48,12 @@ public class Evaluator {
 
     return false;
   }
+
+  public String evaluateStringOption(Feature feature) {
+    return new OptionEvaluator().evaluateStringOptions(feature.getOptions(), feature.getState());
+  }
+
+  public String evaluateStringOption(Feature feature, String namespace) {
+    return null;
+  }
 }
