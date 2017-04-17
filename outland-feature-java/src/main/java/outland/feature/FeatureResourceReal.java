@@ -19,6 +19,7 @@ class FeatureResourceReal implements FeatureResource {
   private final AuthorizationProvider authorizationProvider;
   private final String group;
   private final URI baseUri;
+  private final FeatureSupport featureSupport = new FeatureSupport();
 
   FeatureResourceReal(
       ResourceProvider resourceProvider,
@@ -170,15 +171,11 @@ class FeatureResourceReal implements FeatureResource {
   }
 
   private FeatureCollection toFeatureCollection(String json) throws InvalidProtocolBufferException {
-    FeatureCollection.Builder builder = FeatureCollection.newBuilder();
-    JsonFormat.parser().ignoringUnknownFields().merge(json, builder);
-    return builder.build();
+    return featureSupport.toFeatureCollection(json);
   }
 
   private Feature toFeature(String json) throws InvalidProtocolBufferException {
-    Feature.Builder builder = Feature.newBuilder();
-    JsonFormat.parser().ignoringUnknownFields().merge(json, builder);
-    return builder.build();
+    return featureSupport.toFeature(json);
   }
 
   private Response getRequest(String nsKey, String url) {
