@@ -163,7 +163,7 @@ class FeatureValidator {
     }
   }
 
-  private void validateOptionsThrowing(OptionCollection options) {
+  void validateOptionsThrowing(OptionCollection options) {
     if (isBoolOption(options)) {
       validateBooleanOptionsThrowing(options);
     }
@@ -207,6 +207,15 @@ class FeatureValidator {
             "A bool option must have a value of 'false' and a name of 'false'", 422));
       }
     });
+
+    final String control = options.getControl();
+
+    if(!Strings.isNullOrEmpty(control) && !("false".equals(control) || "true".equals(control))) {
+      throw new ServiceException(
+          Problem.clientProblem("no_such_control_option",
+              "the '" + control + "' option names was not found in the options list.",
+              422));
+    }
   }
 
   private void validateFeatureDataKeysMatch(FeatureData existing, FeatureData update) {
@@ -242,7 +251,7 @@ class FeatureValidator {
 
     final List<FeatureOption> itemsList = options.getItemsList();
 
-    final HashSet<String> names = Sets.newHashSetWithExpectedSize(itemsList.size());
+    final HashSet<String> optionNames = Sets.newHashSetWithExpectedSize(itemsList.size());
 
     for (FeatureOption featureOption : itemsList) {
       if(Strings.isNullOrEmpty(featureOption.getName())) {
@@ -250,15 +259,26 @@ class FeatureValidator {
             "A string option's names must be non-empty", 422));
       }
 
-      names.add(featureOption.getName());
+      optionNames.add(featureOption.getName());
     }
 
-    if(itemsList.size() != names.size()) {
+    if(itemsList.size() != optionNames.size()) {
       throw new ServiceException(Problem.clientProblem("indistinct_name_value_for_string_option_feature",
           "A string option's names must be distinct", 422));
     }
 
-    names.clear();
+    final String control = options.getControl();
+
+    if(!Strings.isNullOrEmpty(control) && !optionNames.contains(control)) {
+      throw new ServiceException(
+          Problem.clientProblem("no_such_control_option",
+              "the '" + control
+                  + "' option names was not found in the options list, known names: "
+                  + Joiner.on(", ").join(optionNames),
+              422));
+    }
+
+    optionNames.clear();
   }
 
   private void validateKeysThrowing(Feature feature) {
