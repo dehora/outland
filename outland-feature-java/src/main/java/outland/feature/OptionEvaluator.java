@@ -10,8 +10,6 @@ import outland.feature.proto.State;
 
 class OptionEvaluator {
 
-  private static final int MAX_WEIGHT = 10_000;
-
   @VisibleForTesting
   boolean evaluateBooleanOptions(Feature feature) {
     return evaluateBooleanOptions(feature.getOptions(), feature.getState());
@@ -51,16 +49,6 @@ class OptionEvaluator {
   }
 
   double normalize(int weight) {
-    double v = (weight - 0.0d) / (MAX_WEIGHT - 0.0d);
-
-    if (v > 1.0d) {
-      return 1.0d;
-    }
-
-    if (v < 0.0d) {
-      return 0.0d;
-    }
-
-    return v;
+    return Weights.normalize(weight);
   }
 }
