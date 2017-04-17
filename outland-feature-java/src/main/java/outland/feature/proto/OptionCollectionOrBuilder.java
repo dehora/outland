@@ -54,4 +54,14 @@ public interface OptionCollectionOrBuilder extends
    */
   outland.feature.proto.FeatureOptionOrBuilder getItemsOrBuilder(
       int index);
+
+  /**
+   * <code>optional string control = 13;</code>
+   */
+  java.lang.String getControl();
+  /**
+   * <code>optional string control = 13;</code>
+   */
+  com.google.protobuf.ByteString
+      getControlBytes();
 }
