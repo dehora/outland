@@ -1,6 +1,5 @@
 package outland.feature;
 
-import java.util.Optional;
 import outland.feature.proto.Feature;
 import outland.feature.proto.FeatureCollection;
 
@@ -10,7 +9,7 @@ class FeatureStoreNone implements FeatureStore {
     return null;
   }
 
-  @Override public Feature find(String group, String key) {
+  @Override public FeatureRecord find(String group, String key) {
     return null;
   }
 

@@ -10,7 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import outland.feature.proto.Feature;
 
-class HttpCacheLoader extends CacheLoader<String, Feature> {
+class HttpCacheLoader extends CacheLoader<String, FeatureRecord> {
 
   private static final Logger logger = LoggerFactory.getLogger(FeatureClient.class.getSimpleName());
 
@@ -30,7 +30,7 @@ class HttpCacheLoader extends CacheLoader<String, Feature> {
     this.backingFeatureStore = backingFeatureStore;
   }
 
-  @Override public Feature load(String key) throws Exception {
+  @Override public FeatureRecord load(String key) throws Exception {
 
     final String[] storageKeySplit = FeatureStoreKeys.storageKeySplit(key);
 
@@ -42,14 +42,14 @@ class HttpCacheLoader extends CacheLoader<String, Feature> {
     }
 
     backingFeatureStore.put(feature);
-    return feature;
+    return newFeatureRecord(feature);
   }
 
-  @Override public ListenableFuture<Feature> reload(String key, Feature oldValue)
+  @Override public ListenableFuture<FeatureRecord> reload(String key, FeatureRecord oldValue)
       throws Exception {
 
     final String[] storageKeySplit = FeatureStoreKeys.storageKeySplit(key);
-    ListenableFutureTask<Feature>
+    ListenableFutureTask<FeatureRecord>
         t = ListenableFutureTask.create(
         () -> httpLoad(storageKeySplit[0], storageKeySplit[1], oldValue));
     reloadExecutor.execute(t);
@@ -61,10 +61,10 @@ class HttpCacheLoader extends CacheLoader<String, Feature> {
     return resources.features().findByKey(group, featureKey);
   }
 
-  private Feature httpLoad(String group, String featureKey, Feature oldValue) {
+  private FeatureRecord httpLoad(String group, String featureKey, FeatureRecord oldValue) {
     try {
       logger.info("op=background_cache_load_from_api, group={}, feature_key={}", group, featureKey);
-      return resources.features().findByKey(group, featureKey);
+      return newFeatureRecord(resources.features().findByKey(group, featureKey));
     } catch (FeatureException e) {
       logger.error(
           String.format(
@@ -73,5 +73,9 @@ class HttpCacheLoader extends CacheLoader<String, Feature> {
               group, featureKey, e.getMessage()));
       return oldValue;
     }
+  }
+
+  private FeatureRecord newFeatureRecord(Feature feature) {
+    return FeatureRecord.build(feature);
   }
 }

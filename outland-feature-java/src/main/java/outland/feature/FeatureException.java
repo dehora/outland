@@ -1,5 +1,7 @@
 package outland.feature;
 
+import com.google.common.base.Strings;
+
 /**
  * The top level exception thrown by the client. All client exceptions extend this.
  */
@@ -15,6 +17,22 @@ public class FeatureException extends RuntimeException {
    */
   static <T> T throwIfNull(T arg, String message) {
     if (arg == null) {
+      IllegalArgumentException cause = new IllegalArgumentException(message);
+      throw new FeatureException(Problem.configProblem(cause.getMessage(), ""), cause);
+    }
+    return arg;
+  }
+
+  /**
+   * Throw a FeatureException if the argument is null or empty.
+   *
+   * @param arg the string to check
+   * @param message the exception message
+   * @return the string if not null
+   * @throws IllegalArgumentException if {@code arg} is {@code null} or empty
+   */
+  static String throwIfNullOrEmpty(String arg, String message) {
+    if (Strings.isNullOrEmpty(arg)) {
       IllegalArgumentException cause = new IllegalArgumentException(message);
       throw new FeatureException(Problem.configProblem(cause.getMessage(), ""), cause);
     }

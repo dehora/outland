@@ -9,14 +9,18 @@ import outland.feature.proto.NamespaceFeature;
 import outland.feature.proto.OptionCollection;
 import outland.feature.proto.OptionType;
 
-public class FeatureRecord {
+class FeatureRecord {
+
+  static FeatureRecord build(Feature feature) {
+    return new FeatureRecord(feature);
+  }
 
   private final Feature feature;
   private final Map<String, NamespaceFeature> namespaceFeatureMap = Maps.newHashMap();
   private final Map<String, FeatureOption> namespaceControlFeatureOptionMap = Maps.newHashMap();
   private FeatureOption controlFeatureOption;
 
-  public FeatureRecord(Feature feature) {
+  private FeatureRecord(Feature feature) {
     this.feature = feature;
     prepare();
   }

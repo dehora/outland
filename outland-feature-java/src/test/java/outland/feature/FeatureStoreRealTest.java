@@ -249,7 +249,7 @@ public class FeatureStoreRealTest {
       return null;
     }
 
-    @Override public Feature find(String group, String key) throws FeatureException {
+    @Override public FeatureRecord find(String group, String key) throws FeatureException {
       throw new FeatureException(Problem.localProblem("failstore", ""));
     }
 
