@@ -60,6 +60,7 @@ message OptionCollection {
     OptionType option = 10;
     int32 maxweight = 11;
     repeated FeatureOption items = 12;
+    string control = 13;
 }
 
 enum State {

@@ -112,49 +112,49 @@ public final class FeatureMessage {
       "\n\rFeatureOption\022\014\n\004type\030\001 \001(\t\022\n\n\002id\030\002 \001(" +
       "\t\022#\n\006option\030\n \001(\0162\023.outland.OptionType\022\014" +
       "\n\004name\030\013 \001(\t\022\r\n\005value\030\014 \001(\t\022\016\n\006weight\030\r " +
-      "\001(\005\"\177\n\020OptionCollection\022\014\n\004type\030\001 \001(\t\022#\n",
-      "\006option\030\n \001(\0162\023.outland.OptionType\022\021\n\tma" +
-      "xweight\030\013 \001(\005\022%\n\005items\030\014 \003(\0132\026.outland.F" +
-      "eatureOption\"\251\001\n\013FeatureData\022\014\n\004type\030\001 \001" +
-      "(\t\022\n\n\002id\030\002 \001(\t\022\013\n\003key\030\n \001(\t\022\035\n\005state\030\013 \001" +
-      "(\0162\016.outland.State\022*\n\007options\030\014 \001(\0132\031.ou" +
-      "tland.OptionCollection\022(\n\007version\030\r \001(\0132" +
-      "\027.outland.FeatureVersion\"Z\n\020NamespaceFea" +
-      "ture\022\014\n\004type\030\001 \001(\t\022\021\n\tnamespace\030\n \001(\t\022%\n" +
-      "\007feature\030\013 \001(\0132\024.outland.FeatureData\"T\n\032" +
-      "NamespaceFeatureCollection\022\014\n\004type\030\001 \001(\t",
-      "\022(\n\005items\030\n \003(\0132\031.outland.NamespaceFeatu" +
-      "re\"\254\003\n\007Feature\022\014\n\004type\030\001 \001(\t\022\n\n\002id\030\002 \001(\t" +
-      "\022\017\n\007created\030\003 \001(\t\022\017\n\007updated\030\004 \001(\t\0224\n\npr" +
-      "operties\030\005 \003(\0132 .outland.Feature.Propert" +
-      "iesEntry\022\013\n\003key\030\n \001(\t\022\r\n\005group\030\013 \001(\t\022\035\n\005" +
-      "state\030\014 \001(\0162\016.outland.State\022\023\n\013descripti" +
-      "on\030\r \001(\t\022\035\n\005owner\030\016 \001(\0132\016.outland.Owner\022" +
-      "*\n\007options\030\017 \001(\0132\031.outland.OptionCollect" +
-      "ion\022(\n\007version\030\020 \001(\0132\027.outland.FeatureVe" +
-      "rsion\0227\n\nnamespaces\030\021 \001(\0132#.outland.Name",
-      "spaceFeatureCollection\0321\n\017PropertiesEntr" +
-      "y\022\013\n\003key\030\001 \001(\t\022\r\n\005value\030\002 \001(\t:\0028\001\"Q\n\021Fea" +
-      "tureCollection\022\014\n\004type\030\001 \001(\t\022\r\n\005group\030\n " +
-      "\001(\t\022\037\n\005items\030\013 \003(\0132\020.outland.Feature\"D\n\r" +
-      "ServiceAccess\022\014\n\004type\030\001 \001(\t\022\n\n\002id\030\002 \001(\t\022" +
-      "\014\n\004name\030\n \001(\t\022\013\n\003key\030\013 \001(\t\"W\n\014MemberAcce" +
-      "ss\022\014\n\004type\030\001 \001(\t\022\n\n\002id\030\002 \001(\t\022\014\n\004name\030\n \001" +
-      "(\t\022\020\n\010username\030\013 \001(\t\022\r\n\005email\030\014 \001(\t\"r\n\020A" +
-      "ccessCollection\022\014\n\004type\030\001 \001(\t\022(\n\010service" +
-      "s\030\n \003(\0132\026.outland.ServiceAccess\022&\n\007membe",
-      "rs\030\013 \003(\0132\025.outland.MemberAccess\"\233\002\n\005Grou" +
-      "p\022\014\n\004type\030\001 \001(\t\022\n\n\002id\030\002 \001(\t\022\017\n\007created\030\003" +
-      " \001(\t\022\017\n\007updated\030\004 \001(\t\0222\n\nproperties\030\005 \003(" +
-      "\0132\036.outland.Group.PropertiesEntry\022\013\n\003key" +
-      "\030\n \001(\t\022\014\n\004name\030\013 \001(\t\022(\n\006owners\030\014 \001(\0132\030.o" +
-      "utland.OwnerCollection\022*\n\007granted\030\r \001(\0132" +
-      "\031.outland.AccessCollection\0321\n\017Properties" +
-      "Entry\022\013\n\003key\030\001 \001(\t\022\r\n\005value\030\002 \001(\t:\0028\001*,\n" +
-      "\nOptionType\022\010\n\004flag\020\000\022\010\n\004bool\020\001\022\n\n\006strin" +
-      "g\020\002*\"\n\005State\022\010\n\004none\020\000\022\007\n\003off\020\001\022\006\n\002on\020\002B",
-      "+\n\025outland.feature.protoB\016FeatureMessage" +
-      "H\001P\001b\006proto3"
+      "\001(\005\"\220\001\n\020OptionCollection\022\014\n\004type\030\001 \001(\t\022#",
+      "\n\006option\030\n \001(\0162\023.outland.OptionType\022\021\n\tm" +
+      "axweight\030\013 \001(\005\022%\n\005items\030\014 \003(\0132\026.outland." +
+      "FeatureOption\022\017\n\007control\030\r \001(\t\"\251\001\n\013Featu" +
+      "reData\022\014\n\004type\030\001 \001(\t\022\n\n\002id\030\002 \001(\t\022\013\n\003key\030" +
+      "\n \001(\t\022\035\n\005state\030\013 \001(\0162\016.outland.State\022*\n\007" +
+      "options\030\014 \001(\0132\031.outland.OptionCollection" +
+      "\022(\n\007version\030\r \001(\0132\027.outland.FeatureVersi" +
+      "on\"Z\n\020NamespaceFeature\022\014\n\004type\030\001 \001(\t\022\021\n\t" +
+      "namespace\030\n \001(\t\022%\n\007feature\030\013 \001(\0132\024.outla" +
+      "nd.FeatureData\"T\n\032NamespaceFeatureCollec",
+      "tion\022\014\n\004type\030\001 \001(\t\022(\n\005items\030\n \003(\0132\031.outl" +
+      "and.NamespaceFeature\"\254\003\n\007Feature\022\014\n\004type" +
+      "\030\001 \001(\t\022\n\n\002id\030\002 \001(\t\022\017\n\007created\030\003 \001(\t\022\017\n\007u" +
+      "pdated\030\004 \001(\t\0224\n\nproperties\030\005 \003(\0132 .outla" +
+      "nd.Feature.PropertiesEntry\022\013\n\003key\030\n \001(\t\022" +
+      "\r\n\005group\030\013 \001(\t\022\035\n\005state\030\014 \001(\0162\016.outland." +
+      "State\022\023\n\013description\030\r \001(\t\022\035\n\005owner\030\016 \001(" +
+      "\0132\016.outland.Owner\022*\n\007options\030\017 \001(\0132\031.out" +
+      "land.OptionCollection\022(\n\007version\030\020 \001(\0132\027" +
+      ".outland.FeatureVersion\0227\n\nnamespaces\030\021 ",
+      "\001(\0132#.outland.NamespaceFeatureCollection" +
+      "\0321\n\017PropertiesEntry\022\013\n\003key\030\001 \001(\t\022\r\n\005valu" +
+      "e\030\002 \001(\t:\0028\001\"Q\n\021FeatureCollection\022\014\n\004type" +
+      "\030\001 \001(\t\022\r\n\005group\030\n \001(\t\022\037\n\005items\030\013 \003(\0132\020.o" +
+      "utland.Feature\"D\n\rServiceAccess\022\014\n\004type\030" +
+      "\001 \001(\t\022\n\n\002id\030\002 \001(\t\022\014\n\004name\030\n \001(\t\022\013\n\003key\030\013" +
+      " \001(\t\"W\n\014MemberAccess\022\014\n\004type\030\001 \001(\t\022\n\n\002id" +
+      "\030\002 \001(\t\022\014\n\004name\030\n \001(\t\022\020\n\010username\030\013 \001(\t\022\r" +
+      "\n\005email\030\014 \001(\t\"r\n\020AccessCollection\022\014\n\004typ" +
+      "e\030\001 \001(\t\022(\n\010services\030\n \003(\0132\026.outland.Serv",
+      "iceAccess\022&\n\007members\030\013 \003(\0132\025.outland.Mem" +
+      "berAccess\"\233\002\n\005Group\022\014\n\004type\030\001 \001(\t\022\n\n\002id\030" +
+      "\002 \001(\t\022\017\n\007created\030\003 \001(\t\022\017\n\007updated\030\004 \001(\t\022" +
+      "2\n\nproperties\030\005 \003(\0132\036.outland.Group.Prop" +
+      "ertiesEntry\022\013\n\003key\030\n \001(\t\022\014\n\004name\030\013 \001(\t\022(" +
+      "\n\006owners\030\014 \001(\0132\030.outland.OwnerCollection" +
+      "\022*\n\007granted\030\r \001(\0132\031.outland.AccessCollec" +
+      "tion\0321\n\017PropertiesEntry\022\013\n\003key\030\001 \001(\t\022\r\n\005" +
+      "value\030\002 \001(\t:\0028\001*,\n\nOptionType\022\010\n\004flag\020\000\022" +
+      "\010\n\004bool\020\001\022\n\n\006string\020\002*\"\n\005State\022\010\n\004none\020\000",
+      "\022\007\n\003off\020\001\022\006\n\002on\020\002B+\n\025outland.feature.pro" +
+      "toB\016FeatureMessageH\001P\001b\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -197,7 +197,7 @@ public final class FeatureMessage {
     internal_static_outland_OptionCollection_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_outland_OptionCollection_descriptor,
-        new java.lang.String[] { "Type", "Option", "Maxweight", "Items", });
+        new java.lang.String[] { "Type", "Option", "Maxweight", "Items", "Control", });
     internal_static_outland_FeatureData_descriptor =
       getDescriptor().getMessageTypes().get(5);
     internal_static_outland_FeatureData_fieldAccessorTable = new
