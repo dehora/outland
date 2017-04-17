@@ -6,7 +6,7 @@ import outland.feature.proto.OptionCollection;
 import outland.feature.proto.OptionType;
 import outland.feature.proto.State;
 
-public class OptionEvaluatorBool {
+class OptionEvaluatorBool {
 
   boolean evaluateBooleanOptions(OptionCollection options, State state) {
     if (!options.getOption().equals(OptionType.bool)) {
@@ -19,30 +19,16 @@ public class OptionEvaluatorBool {
 
     final List<FeatureOption> optionsList = options.getItemsList();
 
-    // only two options for a flag type
-    final FeatureOption option1 = optionsList.get(0);
-    final FeatureOption option2 = optionsList.get(1);
-
-    final int weight1 = option1.getWeight();
-    final int weight2 = option2.getWeight();
-
-    if (weight1 == 0 && weight2 == 0) { // zero/missing waits treated as a plain toggle
+    if (optionsList.get(0).getWeight() == 0 && optionsList.get(1).getWeight() == 0) {
+      // zero/missing weights treated as a plain toggle
       return state.equals(State.on);
     }
 
-    // normalise to 0.0..1.0
-    double n1 = normalize(weight1);
-    double n2 = normalize(weight2);
-
-    if (Math.random() < n1) {
-      return Boolean.parseBoolean(option1.getValue());
-    } else {
-      return Boolean.parseBoolean(option2.getValue());
-    }
+    return select(optionsList);
   }
 
-  double normalize(int weight) {
-    return Weights.normalize(weight);
+  private boolean select(List<FeatureOption> optionsList) {
+    final FeatureOption select = new OptionEvaluatorWeighted(optionsList).select();
+    return Boolean.parseBoolean(select.getValue());
   }
-
 }
