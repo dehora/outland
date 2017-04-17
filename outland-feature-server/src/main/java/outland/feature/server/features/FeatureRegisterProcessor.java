@@ -70,6 +70,7 @@ class FeatureRegisterProcessor {
     collectionBuilder.setMaxweight(DEFAULT_MAXWEIGHT);
     collectionBuilder.setType(Names.optionCollectionType());
     collectionBuilder.setOption(feature.getOptions().getOption());
+    collectionBuilder.setControl(feature.getOptions().getControl());
 
     if (isBoolOption(feature)) {
       applyBooleanOptions(feature, builder, collectionBuilder);
@@ -153,6 +154,7 @@ class FeatureRegisterProcessor {
     optionCollectionBuilder.setMaxweight(DEFAULT_MAXWEIGHT);
     optionCollectionBuilder.setType(Names.optionCollectionType());
     optionCollectionBuilder.setOption(incoming.getFeature().getOptions().getOption());
+    optionCollectionBuilder.setControl(incoming.getFeature().getOptions().getControl());
 
     if (isBoolOption(incoming)) {
 
