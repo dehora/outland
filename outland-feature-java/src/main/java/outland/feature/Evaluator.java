@@ -1,40 +1,25 @@
 package outland.feature;
 
-import java.util.List;
-import outland.feature.proto.Feature;
 import outland.feature.proto.NamespaceFeature;
-import outland.feature.proto.NamespaceFeatureCollection;
 import outland.feature.proto.OptionCollection;
 import outland.feature.proto.OptionType;
 import outland.feature.proto.State;
 
 public class Evaluator {
 
-  boolean evaluate(Feature feature, String namespace) {
-
-    final NamespaceFeatureCollection namespaces = feature.getNamespaces();
-    final List<NamespaceFeature> features = namespaces.getItemsList();
-
-    NamespaceFeature target = null;
-
-    // todo: o(1) this
-
-    for (NamespaceFeature namespaceFeature : features) {
-      if(namespaceFeature.getNamespace().equals(namespace)) {
-        target = namespaceFeature;
-        break;
-      }
-    }
-
-    if(target == null) {
-      return evaluate(feature.getOptions(), feature.getState());
-    } else {
-      return evaluate(target.getFeature().getOptions(), target.getFeature().getState());
-    }
+  boolean evaluate(FeatureRecord record) {
+    return evaluate(record.feature().getOptions(), record.feature().getState());
   }
 
-  boolean evaluate(Feature feature) {
-    return evaluate(feature.getOptions(), feature.getState());
+  boolean evaluate(FeatureRecord record, String namespace) {
+
+    final NamespaceFeature target = record.namespace(namespace);
+    if (target != null) {
+      return evaluate(target.getFeature().getOptions(), target.getFeature().getState());
+    } else {
+      // use the feature's default options
+      return evaluate(record.feature().getOptions(), record.feature().getState());
+    }
   }
 
   private boolean evaluate(OptionCollection options, State state) {

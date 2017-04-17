@@ -19,9 +19,11 @@ class FeatureRecord {
   private final Map<String, NamespaceFeature> namespaceFeatureMap = Maps.newHashMap();
   private final Map<String, FeatureOption> namespaceControlFeatureOptionMap = Maps.newHashMap();
   private FeatureOption controlFeatureOption;
+  private final Evaluator evaluator;
 
   private FeatureRecord(Feature feature) {
     this.feature = feature;
+    this.evaluator = new Evaluator();
     prepare();
   }
 
@@ -39,6 +41,13 @@ class FeatureRecord {
 
   FeatureOption controlFeatureOption(String namespace) {
     return namespaceControlFeatureOptionMap.get(namespace);
+  }
+
+  boolean evaluate(String namespace) {
+    if(namespace.equals(ServerConfiguration.DEFAULT_NAMESPACE)) {
+      return evaluator.evaluate(this);
+    }
+    return evaluator.evaluate(this, namespace);
   }
 
   private void prepare() {
