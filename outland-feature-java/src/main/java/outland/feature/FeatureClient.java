@@ -86,7 +86,7 @@ public class FeatureClient {
    * The feature is considered enabled if the underlying {@link Feature} has a state equal
    * to  {@link State#on}. The call will return false for the following scenarios:
    * <ol>
-   * <li>If the underlying {@link Feature} has a state equal to {@link Feature.State#off}.</li>
+   * <li>If the underlying {@link Feature} has a state equal to {@link State#off}.</li>
    * <li>The {@link Feature} is enabled, but is a boolean option type and the boolean option
    * evaluated to false. </li>
    * <li>If the feature does not exist.</li>
@@ -127,8 +127,8 @@ public class FeatureClient {
    * </p>
    *
    * @param featureKey the feature key defined for the feature
-   * @return true if the feature is enabled ({@link Feature.State#on}). Returns false if the feature
-   * is not enabled ({@link Feature.State#off}).
+   * @return true if the feature is enabled ({@link State#on}). Returns false if the feature
+   * is not enabled ({@link State#off}).
    * @throws FeatureException if the supplied featureKey is null, the default group has not been
    * configured, the feature does not exist or there was an internal error.
    */
@@ -149,9 +149,9 @@ public class FeatureClient {
    * </p>
    * <p>
    * The feature is considered enabled if the underlying {@link Feature} has a state equal
-   * to  {@link Feature.State#on}. The call will return false for the following scenarios:
+   * to  {@link State#on}. The call will return false for the following scenarios:
    * <ol>
-   * <li>If the underlying {@link Feature} has a state equal to {@link Feature.State#off}.</li>
+   * <li>If the underlying {@link Feature} has a state equal to {@link State#off}.</li>
    * <li>The {@link Feature} is enabled, but is a boolean option type and the boolean option
    * evaluated to false. </li>
    * <li>If the feature does not exist.</li>
@@ -189,8 +189,8 @@ public class FeatureClient {
    *
    * @param group the group the feature belongs to.
    * @param featureKey the feature key defined for the feature
-   * @return true if the feature is enabled ({@link Feature.State#on}). Returns false if the feature
-   * is not enabled ({@link Feature.State#off}).
+   * @return true if the feature is enabled ({@link State#on}). Returns false if the feature
+   * is not enabled ({@link State#off}).
    * @throws FeatureException if the supplied featureKey is null, the default group has not been
    * configured, the feature does not exist or there was an internal error.
    */
