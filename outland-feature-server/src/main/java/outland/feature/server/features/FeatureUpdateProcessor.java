@@ -289,6 +289,7 @@ class FeatureUpdateProcessor {
     optionCollectionBuilder.setMaxweight(DEFAULT_MAXWEIGHT);
     optionCollectionBuilder.setType(Names.optionCollectionType());
     optionCollectionBuilder.setOption(incomingFeatureData.getOptions().getOption());
+    optionCollectionBuilder.setControl(incomingFeatureData.getOptions().getControl());
 
     if (isBoolOption(incomingFeatureData)) {
       if (incomingFeatureData.getOptions().getItemsCount() != 0) {
