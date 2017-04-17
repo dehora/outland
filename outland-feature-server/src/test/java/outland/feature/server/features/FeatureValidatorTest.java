@@ -286,6 +286,67 @@ public class FeatureValidatorTest {
   }
 
   @Test
+  public void testControl() {
+
+    OptionCollection.Builder strings = OptionCollection.newBuilder()
+        .setOption(OptionType.string)
+        .setControl("opt-gray")
+        .addItems(FeatureOption.newBuilder().setValue("red").setName("opt-red").setWeight(3000).setId("r"))
+        .addItems(FeatureOption.newBuilder().setValue("green").setName("opt-green").setWeight(2000).setId("g"))
+        .addItems(FeatureOption.newBuilder().setValue("blue").setName("opt-blue").setWeight(5000).setId("b"));
+
+    try {
+      new FeatureValidator().validateOptionsThrowing(strings.build());
+      fail("options with an unknown control should fail");
+    } catch (ServiceException e) {
+      assertEquals(422, e.problem().status());
+      assertSame("no_such_control_option", e.problem().title());
+    }
+
+    strings = OptionCollection.newBuilder()
+        .setOption(OptionType.string)
+        .setControl("opt-red")
+        .addItems(FeatureOption.newBuilder().setValue("red").setName("opt-red").setWeight(3000).setId("r"))
+        .addItems(FeatureOption.newBuilder().setValue("green").setName("opt-green").setWeight(2000).setId("g"))
+        .addItems(FeatureOption.newBuilder().setValue("blue").setName("opt-blue").setWeight(5000).setId("b"));
+
+    try {
+      new FeatureValidator().validateOptionsThrowing(strings.build());
+    } catch (ServiceException e) {
+      fail("string options with matching control should validate");
+    }
+
+    OptionCollection.Builder booleans = OptionCollection.newBuilder()
+        .setOption(OptionType.string)
+        .setControl("opt-gray")
+        .addItems(FeatureOption.newBuilder().setValue("true").setName("true").setWeight(3000).setId("r"))
+        .addItems(FeatureOption.newBuilder().setValue("false").setName("false").setWeight(7000).setId("g"))
+        ;
+
+    try {
+      new FeatureValidator().validateOptionsThrowing(booleans.build());
+      fail("options with an unknown control should fail");
+    } catch (ServiceException e) {
+      assertEquals(422, e.problem().status());
+      assertSame("no_such_control_option", e.problem().title());
+    }
+
+    booleans = OptionCollection.newBuilder()
+        .setOption(OptionType.string)
+        .setControl("false")
+        .addItems(FeatureOption.newBuilder().setValue("true").setName("true").setWeight(3000).setId("r"))
+        .addItems(FeatureOption.newBuilder().setValue("false").setName("false").setWeight(7000).setId("g"))
+    ;
+
+    try {
+      new FeatureValidator().validateOptionsThrowing(booleans.build());
+    } catch (ServiceException e) {
+      fail("boolean options with matching control should validate");
+    }
+
+  }
+
+  @Test
   public void validateFeatureThrowingBoolOptionOk() {
     Feature.Builder builder = Feature.newBuilder();
 
