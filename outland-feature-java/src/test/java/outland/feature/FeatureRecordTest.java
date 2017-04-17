@@ -13,7 +13,7 @@ public class FeatureRecordTest {
   @Test
   public void testPrepare() {
     final Feature feature = TestSupport.loadFeature("json/feature-1.json");
-    FeatureRecord record = new FeatureRecord(feature);
+    FeatureRecord record = FeatureRecord.build(feature);
 
     assertEquals(feature, record.feature());
 

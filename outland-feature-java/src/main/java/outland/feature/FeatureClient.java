@@ -282,23 +282,23 @@ public class FeatureClient {
   }
 
   private boolean enabledInner(String group, String featureKey) {
-    final Feature maybe = featureStore.find(group, featureKey);
+    final FeatureRecord maybe = featureStore.find(group, featureKey);
 
     if (maybe == null) {
       return false;
     }
 
-    return evaluate(maybe);
+    return evaluate(maybe.feature());
   }
 
   private boolean enabledThrowingInner(String group, String featureKey) {
-    final Feature maybe = featureStore.find(group, featureKey);
+    final FeatureRecord maybe = featureStore.find(group, featureKey);
 
     if (maybe == null) {
       return throwNotFound(group, featureKey);
     }
 
-    return evaluate(maybe);
+    return evaluate(maybe.feature());
   }
 
   private boolean evaluate(Feature feature) {

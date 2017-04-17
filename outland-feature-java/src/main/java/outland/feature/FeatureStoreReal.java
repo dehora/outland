@@ -5,7 +5,6 @@ import com.google.common.cache.LoadingCache;
 import com.google.common.util.concurrent.UncheckedExecutionException;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ExecutionException;
@@ -26,7 +25,7 @@ class FeatureStoreReal implements FeatureStore {
 
   private final FeatureClient client;
   private final FeatureStoreLocal backingFeatureStore;
-  private LoadingCache<String, Feature> featureCache;
+  private LoadingCache<String, FeatureRecord> featureCache;
   private long maxCacheSize = FeatureStoreReal.MAX_CACHE_SIZE;
   private int initialCacheSize = FeatureStoreReal.INITIAL_CAPACITY;
   private long refreshCacheAfterWriteSeconds = FeatureStoreReal.REFRESH_AFTER_WRITE_S;
@@ -55,7 +54,7 @@ class FeatureStoreReal implements FeatureStore {
     logger.info("op=put, storage=cache, group={}, feature_key={} storage_key={}",
         feature.getGroup(), feature.getKey(), storageKey);
 
-    featureCache.put(storageKey, feature);
+    featureCache.put(storageKey, newFeatureRecord(feature));
 
     // stash in our local backing store to provide a fast local loader
     backingFeatureStore.put(feature);
@@ -63,7 +62,7 @@ class FeatureStoreReal implements FeatureStore {
     return null;
   }
 
-  @Override public Feature find(String group, String featureKey) {
+  @Override public FeatureRecord find(String group, String featureKey) {
     try {
 
       final String storageKey = FeatureStoreKeys.storageKey(group, featureKey);
@@ -106,12 +105,12 @@ class FeatureStoreReal implements FeatureStore {
     if (client.localStoreEnabled()) {
       // flush in memory keys to local store
       try {
-        final ConcurrentMap<String, Feature> map = featureCache.asMap();
-        final Set<Map.Entry<String, Feature>> entries = map.entrySet();
-        for (Map.Entry<String, Feature> entry : entries) {
+        final ConcurrentMap<String, FeatureRecord> map = featureCache.asMap();
+        final Set<Map.Entry<String, FeatureRecord>> entries = map.entrySet();
+        for (Map.Entry<String, FeatureRecord> entry : entries) {
           logger.info("op=close, action=flush_feature_to_local_store, group={}, feature_key={}",
-              entry.getValue().getGroup(), entry.getValue().getKey());
-          backingFeatureStore.put(entry.getValue());
+              entry.getValue().feature().getGroup(), entry.getValue().feature().getKey());
+          backingFeatureStore.put(entry.getValue().feature());
         }
       } catch (Exception e) {
         logger.warn("{} {}", e.getClass(), e.getMessage());
@@ -121,7 +120,7 @@ class FeatureStoreReal implements FeatureStore {
     backingFeatureStore.close();
   }
 
-  private LoadingCache<String, Feature> buildCache(FeatureClient client,
+  private LoadingCache<String, FeatureRecord> buildCache(FeatureClient client,
       FeatureStoreLocal backingFeatureStore) {
     return CacheBuilder.newBuilder()
         .recordStats()
@@ -198,7 +197,8 @@ class FeatureStoreReal implements FeatureStore {
 
         // access cache directly to avoid writing back out to store
         itemsList.forEach(
-            f -> featureCache.put(FeatureStoreKeys.storageKey(f.getGroup(), f.getKey()), f));
+            f -> featureCache.put(
+                FeatureStoreKeys.storageKey(f.getGroup(), f.getKey()), newFeatureRecord(f)));
         return true;
       } else {
         logger.warn("op=populateCache, action=load, source=local, result=null");
@@ -209,5 +209,9 @@ class FeatureStoreReal implements FeatureStore {
     }
 
     return false;
+  }
+
+  private FeatureRecord newFeatureRecord(Feature f) {
+    return FeatureRecord.build(f);
   }
 }
