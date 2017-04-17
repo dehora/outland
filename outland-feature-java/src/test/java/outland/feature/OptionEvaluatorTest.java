@@ -44,27 +44,6 @@ public class OptionEvaluatorTest {
   }
 
   @Test
-  public void testNormalize() {
-    OptionEvaluator oe = new OptionEvaluator();
-
-    assertEquals(0.0d, oe.normalize(0), 0.0d);
-    assertEquals(0.0001d, oe.normalize(1), 0.0d);
-    assertEquals(0.001d, oe.normalize(10), 0.0d);
-    assertEquals(0.01d, oe.normalize(100), 0.0d);
-    assertEquals(0.1d, oe.normalize(1000), 0.0d);
-    assertEquals(0.25d, oe.normalize(2500), 0.0d);
-    assertEquals(0.3d, oe.normalize(3000), 0.0d);
-    assertEquals(0.3333d, oe.normalize(3333), 0.0d);
-    assertEquals(0.7001d, oe.normalize(7001), 0.0d);
-    assertEquals(0.9999d, oe.normalize(9_999), 0.0d);
-    assertEquals(1.0d, oe.normalize(10_000), 0.0d);
-
-    // overflown values are an entry bug, but are capped to 0.0..1.0
-    assertEquals(1.0d, oe.normalize(11_000), 0.0d);
-    assertEquals(0.0d, oe.normalize(-1), 0.0d);
-  }
-
-  @Test
   public void testZeroWeight() {
     FeatureOption f = FeatureOption.newBuilder()
         .setName("false").setValue("false").setWeight(0).build();
