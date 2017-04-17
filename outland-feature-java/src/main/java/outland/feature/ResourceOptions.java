@@ -1,5 +1,6 @@
 package outland.feature;
 
+import com.google.common.base.Strings;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -37,7 +38,7 @@ class ResourceOptions {
   }
 
   public ResourceOptions group(String group) {
-    FeatureException.throwIfNull(this.group, "Please provide a group");
+    FeatureException.throwIfNullOrEmpty(group, "Please provide a group");
     this.group = group;
     return this;
   }
@@ -52,5 +53,9 @@ class ResourceOptions {
 
   public String scope() {
     return scope;
+  }
+
+  public String group() {
+    return group;
   }
 }

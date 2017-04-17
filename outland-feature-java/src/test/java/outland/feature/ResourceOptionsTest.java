@@ -9,6 +9,25 @@ import static org.junit.Assert.*;
 public class ResourceOptionsTest {
 
   @Test
+  public void testGroup() {
+    ResourceOptions ro = new ResourceOptions();
+
+    try {
+      ro.group(null);
+      fail();
+    } catch (Exception ignored) {
+    }
+
+    try {
+      ro.group("");
+      fail();
+    } catch (Exception ignored) {
+    }
+
+    assertEquals("grp", ro.group("grp").group());
+  }
+
+  @Test
   public void testScope() {
     ResourceOptions ro = new ResourceOptions();
 
