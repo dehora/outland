@@ -87,7 +87,7 @@ class FeatureRecord {
       return select();
     }
 
-    if(! enabled(namespace)) {
+    if (!enabled(namespace)) {
       // if the namespace is off, try its control option, or fallback to the default control
       return selectControlOption(namespace);
     }

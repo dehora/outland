@@ -1,6 +1,5 @@
 package outland.feature;
 
-import com.google.common.base.Strings;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;

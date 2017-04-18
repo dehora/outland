@@ -25,23 +25,23 @@ class FeatureStoreReal implements FeatureStore {
 
   private final FeatureClient client;
   private final FeatureStoreLocal backingFeatureStore;
-  private LoadingCache<String, FeatureRecord> featureCache;
-  private long maxCacheSize = FeatureStoreReal.MAX_CACHE_SIZE;
-  private int initialCacheSize = FeatureStoreReal.INITIAL_CAPACITY;
-  private long refreshCacheAfterWriteSeconds = FeatureStoreReal.REFRESH_AFTER_WRITE_S;
-
   @VisibleForTesting AtomicBoolean loadFromApiSuccessful = new AtomicBoolean(false);
   @VisibleForTesting AtomicBoolean loadFromLocalSuccessful = new AtomicBoolean(false);
   @VisibleForTesting AtomicBoolean loadFromApiAttempted = new AtomicBoolean(false);
   @VisibleForTesting AtomicBoolean loadFromLocalAttempted = new AtomicBoolean(false);
+  private LoadingCache<String, FeatureRecord> featureCache;
+  private long maxCacheSize = FeatureStoreReal.MAX_CACHE_SIZE;
+  private int initialCacheSize = FeatureStoreReal.INITIAL_CAPACITY;
+  private long refreshCacheAfterWriteSeconds = FeatureStoreReal.REFRESH_AFTER_WRITE_S;
 
   FeatureStoreReal(FeatureClient client, FeatureStoreLocal backingFeatureStore) {
     this.client = client;
     this.backingFeatureStore = backingFeatureStore;
     this.featureCache = buildCache(client, backingFeatureStore);
     this.maxCacheSize = client.serverConfiguration().maxCacheSize();
-    this.initialCacheSize  = client.serverConfiguration().initialCacheSize();
-    this.refreshCacheAfterWriteSeconds = client.serverConfiguration().refreshCacheAfterWriteSeconds();
+    this.initialCacheSize = client.serverConfiguration().initialCacheSize();
+    this.refreshCacheAfterWriteSeconds =
+        client.serverConfiguration().refreshCacheAfterWriteSeconds();
   }
 
   void open() {
@@ -181,7 +181,7 @@ class FeatureStoreReal implements FeatureStore {
     try {
 
       FeatureCollection all = null;
-      if(client.defaultGroup() == null) {
+      if (client.defaultGroup() == null) {
         logger.info("op=loadedFromLocal, action=attempt_load_multi_group, source=local");
         all = backingFeatureStore.loadAll();
       } else {
@@ -205,7 +205,7 @@ class FeatureStoreReal implements FeatureStore {
       }
     } catch (FeatureException e) {
       logger.error(String.format("op=populateCache, action=load, source=local, err=%s",
-              e.problem().toMessage()));
+          e.problem().toMessage()));
     }
 
     return false;

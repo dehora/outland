@@ -199,13 +199,12 @@ class FeatureStoreRocksDb implements FeatureStoreLocal, MeterTimer {
         /*
          iterator.seek(prefix) is a start point not a filter, we need to check our keys
           */
-        if(key.startsWith(prefixString)) {
+        if (key.startsWith(prefixString)) {
           final Feature feature = Feature.newBuilder().mergeFrom(iterator.value()).build();
           logger.info("op=findAll, storage=rocks, group={}, feature_key={}",
               group, feature.getKey());
           builder.addItems(feature);
         }
-
       }
     } catch (Exception e) {
       throw new FeatureException(

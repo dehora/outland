@@ -9,7 +9,7 @@ interface FeatureStoreLocal {
 
   FeatureCollection loadAll() throws FeatureException;
 
-  FeatureCollection findAll(String group)  throws FeatureException;
+  FeatureCollection findAll(String group) throws FeatureException;
 
   void close() throws FeatureException;
 }

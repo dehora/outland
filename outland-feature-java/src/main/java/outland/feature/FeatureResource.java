@@ -12,8 +12,9 @@ public interface FeatureResource {
   /**
    * Create a new feature.
    * <p>
-   *   Other the a null argument check the client does not validate what is sent to server.
+   * Other the a null argument check the client does not validate what is sent to server.
    * </p>
+   *
    * @param feature the new feature
    * @return the resulting feature returned by the server.
    * @throws FeatureException for a request error or null argument.
@@ -23,9 +24,10 @@ public interface FeatureResource {
   /**
    * Update a new feature.
    * <p>
-   *   Other the a null argument check the client does not validate what is sent to server.
+   * Other the a null argument check the client does not validate what is sent to server.
    * </p>
-   * @param feature  the updated feature.
+   *
+   * @param feature the updated feature.
    * @return the resulting feature update returned by the server.
    * @throws FeatureException for a request error or null argument.
    */
@@ -53,8 +55,8 @@ public interface FeatureResource {
    *
    * @return the results in a collection.
    * @throws FeatureException for a request error or missing default group
-   * @see ServerConfiguration#defaultGroup
    * @throws FeatureException for a request error or null/empty arguments
+   * @see ServerConfiguration#defaultGroup
    */
   FeatureCollection listFeatures() throws FeatureException;
 
