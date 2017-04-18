@@ -4,7 +4,7 @@
 - Build: [![CircleCI](https://circleci.com/gh/dehora/outland.svg?style=svg)](https://circleci.com/gh/dehora/outland)
 - Client Download: [ ![Download](https://api.bintray.com/packages/dehora/maven/outland-feature-java/images/download.svg) ](https://bintray.com/dehora/maven/outland-feature-java/_latestVersion)
 - Server Download: [ ![Download](https://api.bintray.com/packages/dehora/maven/outland-feature-server/images/download.svg) ](https://bintray.com/dehora/maven/outland-feature-server/_latestVersion)
-- Source Release: [0.0.10](https://github.com/dehora/outland/releases/tag/0.0.10)
+- Source Release: [0.0.11](https://github.com/dehora/outland/releases/tag/0.0.11)
 - Contact: [maintainers](https://github.com/dehora/outland/blob/master/MAINTAINERS)
 
 # Outland
@@ -727,7 +727,7 @@ and add the project declaration to `pom.xml`:
 <dependency>
   <groupId>net.dehora.outland</groupId>
   <artifactId>outland-feature-java</artifactId>
-  <version>0.0.10</version>
+  <version>0.0.11</version>
 </dependency>
 ```
 
@@ -745,7 +745,7 @@ and add the project to the `dependencies` block in `build.gradle`:
 
 ```groovy
 dependencies {
-  compile 'net.dehora.outland:outland-feature-java:0.0.10'
+  compile 'net.dehora.outland:outland-feature-java:0.0.11'
 }  
 ```
 
@@ -760,7 +760,7 @@ resolvers += "jcenter" at "http://jcenter.bintray.com"
 and add the project to `libraryDependencies` in `build.sbt`:
 
 ```scala
-libraryDependencies += "net.dehora.outland" % "outland-feature-client" % "0.0.10"
+libraryDependencies += "net.dehora.outland" % "outland-feature-client" % "0.0.11"
 ```
 
 
