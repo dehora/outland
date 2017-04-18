@@ -206,6 +206,24 @@ public class FeatureClient {
    * Evaluate a boolean type option.
    *
    * <p>
+   * This is a convenience call for {@link #evaluateBoolean(String, String)}
+   * where the group argument is taken from  {@link #defaultGroup()}.
+   * </p>
+   *
+   * @param featureKey  the feature key defined for the feature
+   * @return true if the feature evaluates to "true". Returns false if the feature
+   * evaluates to "false". Always return false if the feature is set to {@link State#off}.
+   * @throws FeatureException if the supplied featureKey is null.
+   */
+  public boolean evaluateBoolean(String featureKey) {
+    FeatureException.throwIfNull(featureKey, "Please supply a featureKey");
+
+    return evaluateBooleanInner(defaultGroup, featureKey);
+  }
+  /**
+   * Evaluate a boolean type option.
+   *
+   * <p>
    * This will check the feature's bool options and return true or false, factoring
    * in the weights of the options. This means a feature that is set to {@link State#on} can return
    * false due to the weight sampling step. Features that are set to {@link State#off} always
@@ -235,6 +253,25 @@ public class FeatureClient {
 
   /**
    * Evaluate a boolean type option.
+   * <p>
+   * This is a convenience call for {@link #evaluateBooleanThrowing(String, String)}
+   * where the group argument is taken from  {@link #defaultGroup()}.
+   * </p>
+   *
+   * @param featureKey  the feature key defined for the feature
+   * @return true if the feature evaluates to "true". Returns false if the feature
+   * evaluates to "false". Always return false if the feature is set to  {@link State#off}.
+   * @throws FeatureException if the supplied featureKey is null, the feature does
+   * not exist, or is not a boolean option type.
+   */
+  public boolean evaluateBooleanThrowing(String featureKey) {
+    FeatureException.throwIfNull(featureKey, "Please supply a featureKey");
+
+    return evaluateBooleanInnerThrowing(defaultGroup, featureKey);
+  }
+
+  /**
+   * Evaluate a boolean type option.
    *
    * <p>
    * This is same as {@link #evaluateBoolean(String, String)} except it will throw a
@@ -254,6 +291,24 @@ public class FeatureClient {
     FeatureException.throwIfNull(featureKey, "Please supply a featureKey");
 
     return evaluateBooleanInnerThrowing(group, featureKey);
+  }
+
+  /**
+   * Evaluate a string type option.
+   *
+   * <p>
+   * This is a convenience call for {@link #evaluateString(String, String)}
+   * where the group argument is taken from  {@link #defaultGroup()}.
+   * </p>
+   *
+   * @param featureKey  the feature key defined for the feature
+   * @return the evaluated option or the control value if the feature is set to {@link State#off}.
+   * @throws FeatureException if the supplied featureKey is null.
+   */
+  public String evaluateString(String featureKey) {
+    FeatureException.throwIfNull(featureKey, "Please supply a featureKey");
+
+    return evaluateInner(defaultGroup, featureKey);
   }
 
   /**
@@ -281,7 +336,26 @@ public class FeatureClient {
     FeatureException.throwIfNull(featureKey, "Please supply a featureKey");
 
     // all option values are raw strings, we can pass through to the general method
-    return evaluate(group, featureKey);
+    return evaluateInner(group, featureKey);
+  }
+
+  /**
+   * Evaluate a string type option.
+   *
+   * <p>
+   * This is a convenience call for {@link #evaluateStringThrowing(String, String)}
+   * where the group argument is taken from  {@link #defaultGroup()}.
+   * </p>
+   *
+   * @param featureKey  the feature key defined for the feature
+   * @return the evaluated option or the control value if the feature is set to {@link State#off}.
+   * @throws FeatureException if the supplied featureKey is null, the feature does
+   * not exist, or is not a string option type.
+   */
+  public String evaluateStringThrowing(String featureKey) {
+    FeatureException.throwIfNull(featureKey, "Please supply a featureKey");
+
+    return evaluateThrowing(defaultGroup, featureKey);
   }
 
   /**
@@ -303,6 +377,25 @@ public class FeatureClient {
     FeatureException.throwIfNull(featureKey, "Please supply a featureKey");
 
     return evaluateThrowing(group, featureKey);
+  }
+
+  /**
+   * Evaluate an option returning one of its values.
+   *
+   * <p>
+   * This is a convenience call for {@link #evaluate(String, String)}
+   * where the group argument is taken from  {@link #defaultGroup()}.
+   * </p>
+   *
+   * @param featureKey  the feature key defined for the feature
+   * @return the evaluated option, the control value if the feature is set to {@link State#off},
+   * or the empty string if the feature is not found.
+   * @throws FeatureException if the supplied featureKey is null.
+   */
+  public String evaluate(String featureKey) {
+    FeatureException.throwIfNull(featureKey, "Please supply a featureKey");
+
+    return evaluateInner(defaultGroup, featureKey);
   }
 
   /**
@@ -331,6 +424,25 @@ public class FeatureClient {
     FeatureException.throwIfNull(featureKey, "Please supply a featureKey");
 
     return evaluateInner(group, featureKey);
+  }
+
+  /**
+   * Evaluate an option returning one of its values.
+   *
+   * <p>
+   * This is a convenience call for {@link #evaluateThrowing(String, String)}
+   * where the group argument is taken from  {@link #defaultGroup()}.
+   * </p>
+   *
+   * @param featureKey  the feature key defined for the feature
+   * @return the evaluated option or the control value if the feature is set to {@link State#off}.
+   * @throws FeatureException if the supplied featureKey is null, the feature does
+   * not exist, or is a flag type.
+   */
+  public String evaluateThrowing(String featureKey) {
+    FeatureException.throwIfNull(featureKey, "Please supply a featureKey");
+
+    return evaluateInnerThrowing(defaultGroup, featureKey);
   }
 
   /**
@@ -447,7 +559,7 @@ public class FeatureClient {
     final FeatureRecord record = featureStore.find(group, featureKey);
 
     if (record == null) {
-      return throwNotFound(group, featureKey);
+      throwNotFound(group, featureKey);
     }
 
     return record.enabled(this.namespace);
@@ -503,7 +615,7 @@ public class FeatureClient {
     return record.evaluate(this.namespace);
   }
 
-  private boolean throwNotFound(String group, String featureKey) {
+  private void throwNotFound(String group, String featureKey) {
     throw new FeatureException(
         Problem.noSuchFeature("feature_not_found",
             String.format(
@@ -511,14 +623,13 @@ public class FeatureClient {
                 featureKey, group)));
   }
 
-  private boolean throwMismatchedOption(String group, String featureKey,
+  private void throwMismatchedOption(String group, String featureKey,
       OptionType expected, OptionType actual) {
     throw new FeatureException(
         Problem.noSuchFeature("mismatched_option_type", String.format(
             "feature %s in group %s expected option type %s but received %s and raising an error "
                 + "was requested", featureKey, group, expected.name(), actual.name())));
   }
-
 
   /**
    * Prepares and creates a {@link FeatureClient}.
