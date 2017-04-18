@@ -22,6 +22,7 @@
     - [Start a Server with Docker](#start-a-server-with-docker)
     - [Create a Group and some Features via the API](#create-a-group-and-some-features-via-the-api)
     - [Enable a Feature](#enable-a-feature)
+    - [Add a Feature Namespace](#add-a-feature-namespace)
   - [Client](#client)
     - [Add the client library](#add-the-client-library)
     - [Evaluate a Feature](#evaluate-a-feature)
@@ -30,8 +31,12 @@
   - [Summary: Features, Groups and Namespaces](#summary-features-groups-and-namespaces)
   - [Features](#features)
   - [Feature Flags and Feature Options](#feature-flags-and-feature-options)
+    - [Option Selection](#option-selection)
+    - [Boolean Options](#boolean-options)
+    - [String Options](#string-options)
+    - [Option Controls](#option-controls)
   - [Groups](#groups)
-  - [Group Access](#group-access)
+    - [Group Access Control](#group-access-control)
   - [Namespaces](#namespaces)
     - [Pattern: using namespaces for environments](#pattern-using-namespaces-for-environments)
 - [Installation](#installation)
@@ -412,36 +417,141 @@ evaluation depends on the kind of feature.
 The `Flag` is the simplest kind of feature and probably the one you're most familiar with. When a 
 flag is on it evaluates to true and you're good to go. 
   
-An `Option` is more involved and has two stages. First, the `on` or `off` state is checked, and 
-if the state is `off` it's skipped just like a Flag. Second, if the state `on`, the feature's 
-available options are evaluated and one of them is selected. Each option has a weight and the 
-probability of an option being selected is a function of its weight.
+An `Option` is more involved and has two stages:
 
-Let's take a boolean feature option as an example. A boolean feature will have two options, "true" 
-and "false". Now suppose "false" had a weight of 90%, and "true" had a weight of 10%. 
-Then the feature is processed roughly like this:
+- First, the `on` or `off` state is checked to see if it's enabled, and if the state is `off` it's skipped just like a Flag. 
 
-- If the state is `off`, the feature is skipped.
-- If the state is `on`, the "true" and "false" options are evaluated.
-- 9 times out of 10 the evaluation will return "false".
-- 1 time out of 10 the evaluation will return "true".
-
-This makes the boolean option ideal for scenarios like canary rollouts where a controlled 
-percentage of traffic is sent to the new code. As we see things going well, we can increase 
-the weight of the "true" option allowing more requests to hit it. If it's not working out we 
-can increase the "false" weight, biasing traffic away from the new feature. Worst case if it's a 
-bust we can back out by setting the feature's state to `off` and disabling the feature altogether.
+- Second, if the state `on`, the feature's available options are evaluated and one of them is selected. 
 
 A Flag can be considered a reductive form of Option, where the weight of a Flag is wholly allocated 
 to its state. But Flags are such a common case we work with them using their state directly 
 and use the Option form for more advanced scenarios.   
 
-A boolean feature can only have true and false options, and this is the only option type available
-right now, but string and numeric options are planned. For example a "String" feature 
-could have 3 options, "red", "green" and "blue", each with a weight, 10%, 20%, and 70%  which 
-biases the evaluation. One time in ten the "red" option will be returned, two times out of ten 
-it'll be "green", and seven times out of ten it'll be "blue". This gives us a path beyond on/off 
-toggles to things like A/B testing and multi-armed bandits.
+### Option Selection
+
+Each option has a _weight_ and the probability of an option being selected is proportional to its weight. 
+
+Let's take a boolean feature option as an example. A boolean feature will have two options, "true" 
+and "false". Now suppose "false" had a weight of 90%, and "true" had a weight of 10%. 
+Then the feature is processed roughly like this:
+
+- If the state is `off`, the selection is skipped and the control value is returned.
+- If the state is `on`, the "true" and "false" options are evaluated.
+- 9 times out of 10 the evaluation will select "false".
+- 1 time out of 10 the evaluation will select "true".
+
+This is sometimes called ["roulette wheel selection"](https://en.wikipedia.org/wiki/Fitness_proportionate_selection) and is how the client decides which option to return.
+
+The process of returning an option is called "selection". Note that this is different to 
+determining if a feature is enabled. In the client the distinction is made by using 
+`enabled` calls to check feature state and `select` calls to return an option value:
+
+```java
+// select returns one of the option values
+String selection = client.select("colors");
+
+// but enabled just checks to see if the feature is on:
+boolean on = client.enabled("colors");
+```
+
+### Boolean Options
+
+A _boolean_ feature  option can only have true and false options, each of which can be given a weight. This makes the boolean option ideal for scenarios like canary rollouts where a 
+controlled percentage of traffic is sent to the new code. As we see things going well, we can increase the weight of the "true" option allowing more requests to hit it. If it's not working 
+out we can increase the "false" weight, biasing traffic away from the new feature. Worst case 
+if it's a bust we can back out by setting the feature's state to `off` and disabling the 
+feature altogether. 
+
+Weights can be entirely allocated to one of the boolean options. For example you can give 
+the "true" option all the weight by setting the "false" option to 0, as shown in this 
+JSON fragment:
+
+```json
+{
+  "key": "bool-weighted-all-true",
+  "group": "group1",
+  "state": "on",
+  "description": "A test feature option",
+  "options": {
+    "option": "bool",
+    "maxweight": 10000,
+    "items": [
+      {
+        "name": "true",
+        "value": "true",
+        "weight": 10000
+      },
+      {
+        "name": "false",
+        "value": "false",
+        "weight": 0
+      }
+    ],
+    "control": "false"
+  }
+}
+```
+
+When these weights are evaluated the true option will always be returned. 
+
+### String Options
+
+A string feature can have multiple options, again each of which can be given a weight. For 
+example a "color" feature could have 3 options, "red", "green" and "blue", each with a weight, biasing their selection to 10%, 20%, and 70% such that one time in ten the "red" option will be returned, two times out of ten it'll be "green", and seven times out of ten it'll be "blue".  
+This JSON fragment shows what that would look like:
+
+```json
+{
+  "key": "colors",
+  "group": "group1",
+  "state": "on",
+  "description": "A test feature string",
+  "options": {
+    "option": "string",
+    "maxweight": 10000,
+    "items": [
+      {
+        "name": "option-blue",
+        "value": "blue",
+        "weight": 7000
+      },
+      {
+        "name": "option-green",
+        "value": "green",
+        "weight": 2000
+      },
+      {
+        "name": "option-red",
+        "value": "red",
+        "weight": 1000
+      }
+    ],
+    "control": "option-green"
+  }
+}
+```
+
+This gives us a path beyond on/off toggles to things like A/B testing and multi-armed bandits.
+
+Like boolean options string features can be given weights and one string can be allocated all 
+the weight. Again as with booleans a string feature can have a `"control"` field indicating 
+which option should be selected if the feature is off. In fact, the boolean option can 
+be considered a special case of a string option that is understood by the server and client.
+
+### Option Controls
+
+Note the last example has a field called `"control"` that is set to the `"option-green"`.  A  control defines which option should be returned if the feature is set to `off` - when the 
+feature is off the selection algorithm will return the option named by the control. If 
+the control is not declared the return value will default to an empty string in the 
+client. 
+
+Controls are useful as fallbacks and for test experiment scenarios such as A/B tests 
+can act as the value shown to the group outside the experiment.
+
+Sometimes you want the control option to be different from the selection candidates. The 
+easiest way to do that is to define an option whose weight is 0. This means it will never 
+be selected when the feature is enabled, but is available for use as the control option when 
+the feature is disabled.
 
 ## Groups
 
@@ -465,7 +575,7 @@ Finally, the Group construct enables multi-tenancy, allowing multiple teams to s
 same Outland service. There's nothing to stop you running multiple Outland servers but it 
 can be nice to leverage shared infrastructure and reduce heavy lifting.
 
-## Group Access
+### Group Access Control
 
 As well as grouping features, an Group can _grant_ access to one or more services 
 (typically running systems), or to one or members (typically individual or teams). Grants allow 
