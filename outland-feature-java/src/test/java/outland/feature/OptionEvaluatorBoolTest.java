@@ -12,24 +12,34 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-public class OptionEvaluatorTest {
+public class OptionEvaluatorBoolTest {
 
   @Test
   public void testNotOne() {
-    OptionEvaluator oe = new OptionEvaluator();
+    OptionEvaluatorBool oe = new OptionEvaluatorBool();
 
-    assertFalse(oe.evaluateBooleanOptions(Feature.newBuilder()
+    final Feature feature = Feature.newBuilder()
         .setState(State.off)
-        .build()));
+        .build();
 
-    assertFalse(oe.evaluateBooleanOptions(Feature.newBuilder()
+    final OptionEvaluatorWeighted evaluator =
+        new OptionEvaluatorWeighted(feature.getOptions().getItemsList());
+
+    assertFalse(oe.evaluateBooleanOptions(feature.getOptions(), feature.getState(), evaluator));
+
+    final Feature feature1 = Feature.newBuilder()
         .setState(State.none)
-        .build()));
+        .build();
+
+    final OptionEvaluatorWeighted evaluator1 =
+        new OptionEvaluatorWeighted(feature.getOptions().getItemsList());
+
+    assertFalse(oe.evaluateBooleanOptions(feature1.getOptions(), feature.getState(), evaluator1));
   }
 
   @Test
   public void testOptionCollectionFlag() {
-    OptionEvaluator oe = new OptionEvaluator();
+    OptionEvaluatorBool oe = new OptionEvaluatorBool();
 
     OptionCollection collection = OptionCollection.newBuilder()
         .setOption(OptionType.flag)
@@ -40,7 +50,11 @@ public class OptionEvaluatorTest {
         .setState(State.on)
         .build();
 
-    assertFalse(oe.evaluateBooleanOptions(feature1));
+    assertFalse(oe.evaluateBooleanOptions(
+        feature1.getOptions(),
+        feature1.getState(),
+        new OptionEvaluatorWeighted(feature1.getOptions().getItemsList())
+    ));
   }
 
   @Test
@@ -62,8 +76,13 @@ public class OptionEvaluatorTest {
         .setState(State.on)
         .build();
 
-    OptionEvaluator oe = new OptionEvaluator();
-    assertEquals(true, oe.evaluateBooleanOptions(feature1));
+    OptionEvaluatorBool oe = new OptionEvaluatorBool();
+    assertEquals(true, oe.evaluateBooleanOptions(
+        feature1.getOptions(),
+        feature1.getState(),
+        new OptionEvaluatorWeighted(feature1.getOptions().getItemsList())
+
+    ));
   }
 
   @Test
@@ -85,8 +104,12 @@ public class OptionEvaluatorTest {
         .setOptions(collection).setState(State.on)
         .build();
 
-    OptionEvaluator oe = new OptionEvaluator();
-    oe.evaluateBooleanOptions(feature1);
+    OptionEvaluatorBool oe = new OptionEvaluatorBool();
+    oe.evaluateBooleanOptions(
+        feature1.getOptions(),
+        feature1.getState(),
+        new OptionEvaluatorWeighted(feature1.getOptions().getItemsList())
+    );
 
     final int[] fCount = {0};
     final int[] tCount = {0};
@@ -96,7 +119,11 @@ public class OptionEvaluatorTest {
     IntStream.range(0, runs).forEach(
         i -> {
           @SuppressWarnings("unused")
-          int noop = oe.evaluateBooleanOptions(feature1) ? tCount[0]++ : fCount[0]++;
+          int noop = oe.evaluateBooleanOptions(
+              feature1.getOptions(),
+              feature1.getState(),
+              new OptionEvaluatorWeighted(feature1.getOptions().getItemsList())
+          ) ? tCount[0]++ : fCount[0]++;
         }
     );
 
@@ -131,9 +158,13 @@ public class OptionEvaluatorTest {
         .setOptions(collection).setState(State.on)
         .build();
 
-    OptionEvaluator oe = new OptionEvaluator();
+    OptionEvaluatorBool oe = new OptionEvaluatorBool();
 
-    IntStream.range(0, 10000).forEach(i -> assertFalse(oe.evaluateBooleanOptions(feature1)));
+    IntStream.range(0, 10000).forEach(i -> assertFalse(oe.evaluateBooleanOptions(
+        feature1.getOptions(),
+        feature1.getState(),
+        new OptionEvaluatorWeighted(feature1.getOptions().getItemsList())
+    )));
   }
 
   @Test
@@ -155,9 +186,13 @@ public class OptionEvaluatorTest {
         .setOptions(collection).setState(State.on)
         .build();
 
-    OptionEvaluator oe = new OptionEvaluator();
+    OptionEvaluatorBool oe = new OptionEvaluatorBool();
 
-    IntStream.range(0, 1000).forEach(i -> assertTrue(oe.evaluateBooleanOptions(feature1)));
+    IntStream.range(0, 1000).forEach(i -> assertTrue(oe.evaluateBooleanOptions(
+        feature1.getOptions(),
+        feature1.getState(),
+        new OptionEvaluatorWeighted(feature1.getOptions().getItemsList())
+    )));
   }
 
   @Test
@@ -215,8 +250,12 @@ public class OptionEvaluatorTest {
         .setState(State.on  )
         .build();
 
-    OptionEvaluator oe = new OptionEvaluator();
-    oe.evaluateBooleanOptions(feature1);
+    OptionEvaluatorBool oe = new OptionEvaluatorBool();
+    oe.evaluateBooleanOptions(
+        feature1.getOptions(),
+        feature1.getState(),
+        new OptionEvaluatorWeighted(feature1.getOptions().getItemsList())
+    );
 
     final int[] fCount = {0};
     final int[] tCount = {0};
@@ -224,7 +263,11 @@ public class OptionEvaluatorTest {
     IntStream.range(0, runs).forEach(
         i -> {
           @SuppressWarnings("unused")
-          int noop = oe.evaluateBooleanOptions(feature1) ? tCount[0]++ : fCount[0]++;
+          int noop = oe.evaluateBooleanOptions(
+              feature1.getOptions(),
+              feature1.getState(),
+              new OptionEvaluatorWeighted(feature1.getOptions().getItemsList())
+          ) ? tCount[0]++ : fCount[0]++;
         }
     );
 

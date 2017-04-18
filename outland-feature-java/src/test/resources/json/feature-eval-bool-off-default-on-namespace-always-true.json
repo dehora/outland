@@ -5,8 +5,8 @@
   "updated": "2017-04-17T21:24:21.407+01:00",
   "properties": {
   },
-  "key": "s11",
-  "group": "g5",
+  "key": "bool-off",
+  "group": "group1",
   "state": "off",
   "description": "A test feature flag",
   "owner": {
@@ -18,35 +18,27 @@
   },
   "options": {
     "type": "option.collection",
-    "option": "string",
+    "option": "bool",
     "maxweight": 10000,
     "items": [
       {
         "type": "option",
         "id": "opt_01bdysctnfqmvn0b9k2h8d12y1",
-        "option": "string",
-        "name": "option-blue",
-        "value": "blue",
-        "weight": 5000
+        "option": "bool",
+        "name": "true",
+        "value": "true",
+        "weight": 10000
       },
       {
         "type": "option",
         "id": "opt_01bdysctnfk0ak0am7np3p1trm",
-        "option": "string",
-        "name": "option-green",
-        "value": "green",
-        "weight": 3000
-      },
-      {
-        "type": "option",
-        "id": "opt_01bdysctnf0ts71wzjy44m0xcj",
-        "option": "string",
-        "name": "option-red",
-        "value": "red",
-        "weight": 2000
+        "option": "bool",
+        "name": "false",
+        "value": "false",
+        "weight": 0
       }
     ],
-    "control": "option-green"
+    "control": "false"
   },
   "version": {
     "type": "version",
@@ -58,43 +50,35 @@
     "items": [
       {
         "type": "nsfeature",
-        "namespace": "staging",
+        "namespace": "development",
         "feature": {
           "type": "nsfeature",
           "id": "nsfeat_01bdysctnfrtmh1qn1v9zs0tn7",
-          "key": "strings-off",
-          "state": "on",
+          "key": "bool-off",
+          "state": "off",
           "options": {
             "type": "option.collection",
-            "option": "string",
+            "option": "bool",
             "maxweight": 10000,
             "items": [
               {
                 "type": "option",
                 "id": "opt_01bdysctnfbsbx0kcax5900r7m",
-                "option": "string",
-                "name": "option-blue",
-                "value": "blue",
-                "weight": 5000
+                "option": "bool",
+                "name": "true",
+                "value": "true",
+                "weight": 0
               },
               {
                 "type": "option",
                 "id": "opt_01bdysctnfjef70jkbpbej0kye",
-                "option": "string",
-                "name": "option-green",
-                "value": "green",
-                "weight": 3000
-              },
-              {
-                "type": "option",
-                "id": "opt_01bdysctnfgez21ah26qjk0mc0",
-                "option": "string",
-                "name": "option-red",
-                "value": "red",
-                "weight": 2000
+                "option": "bool",
+                "name": "false",
+                "value": "false",
+                "weight": 10000
               }
             ],
-            "control": "option-blue"
+            "control": "true"
           },
           "version": {
             "type": "version",
