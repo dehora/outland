@@ -16,7 +16,7 @@ public class OptionEvaluatorTest {
 
   @Test
   public void testNotOne() {
-    OptionEvaluator oe = new OptionEvaluator();
+    OptionEvaluatorBool oe = new OptionEvaluatorBool();
 
     assertFalse(oe.evaluateBooleanOptions(Feature.newBuilder()
         .setState(State.off)
@@ -29,7 +29,7 @@ public class OptionEvaluatorTest {
 
   @Test
   public void testOptionCollectionFlag() {
-    OptionEvaluator oe = new OptionEvaluator();
+    OptionEvaluatorBool oe = new OptionEvaluatorBool();
 
     OptionCollection collection = OptionCollection.newBuilder()
         .setOption(OptionType.flag)
@@ -62,7 +62,7 @@ public class OptionEvaluatorTest {
         .setState(State.on)
         .build();
 
-    OptionEvaluator oe = new OptionEvaluator();
+    OptionEvaluatorBool oe = new OptionEvaluatorBool();
     assertEquals(true, oe.evaluateBooleanOptions(feature1));
   }
 
@@ -85,7 +85,7 @@ public class OptionEvaluatorTest {
         .setOptions(collection).setState(State.on)
         .build();
 
-    OptionEvaluator oe = new OptionEvaluator();
+    OptionEvaluatorBool oe = new OptionEvaluatorBool();
     oe.evaluateBooleanOptions(feature1);
 
     final int[] fCount = {0};
@@ -131,7 +131,7 @@ public class OptionEvaluatorTest {
         .setOptions(collection).setState(State.on)
         .build();
 
-    OptionEvaluator oe = new OptionEvaluator();
+    OptionEvaluatorBool oe = new OptionEvaluatorBool();
 
     IntStream.range(0, 10000).forEach(i -> assertFalse(oe.evaluateBooleanOptions(feature1)));
   }
@@ -155,7 +155,7 @@ public class OptionEvaluatorTest {
         .setOptions(collection).setState(State.on)
         .build();
 
-    OptionEvaluator oe = new OptionEvaluator();
+    OptionEvaluatorBool oe = new OptionEvaluatorBool();
 
     IntStream.range(0, 1000).forEach(i -> assertTrue(oe.evaluateBooleanOptions(feature1)));
   }
@@ -215,7 +215,7 @@ public class OptionEvaluatorTest {
         .setState(State.on  )
         .build();
 
-    OptionEvaluator oe = new OptionEvaluator();
+    OptionEvaluatorBool oe = new OptionEvaluatorBool();
     oe.evaluateBooleanOptions(feature1);
 
     final int[] fCount = {0};
