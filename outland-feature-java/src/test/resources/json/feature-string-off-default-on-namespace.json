@@ -25,7 +25,7 @@
         "type": "option",
         "id": "opt_01bdysctnfqmvn0b9k2h8d12y1",
         "option": "string",
-        "name": "option-blue",
+        "key": "option-blue",
         "value": "blue",
         "weight": 5000
       },
@@ -33,7 +33,7 @@
         "type": "option",
         "id": "opt_01bdysctnfk0ak0am7np3p1trm",
         "option": "string",
-        "name": "option-green",
+        "key": "option-green",
         "value": "green",
         "weight": 0
       },
@@ -41,7 +41,7 @@
         "type": "option",
         "id": "opt_01bdysctnf0ts71wzjy44m0xcj",
         "option": "string",
-        "name": "option-red",
+        "key": "option-red",
         "value": "red",
         "weight": 5000
       }
@@ -73,7 +73,7 @@
                 "type": "option",
                 "id": "opt_01bdysctnfbsbx0kcax5900r7m",
                 "option": "string",
-                "name": "option-blue",
+                "key": "option-blue",
                 "value": "blue",
                 "weight": 5000
               },
@@ -81,7 +81,7 @@
                 "type": "option",
                 "id": "opt_01bdysctnfjef70jkbpbej0kye",
                 "option": "string",
-                "name": "option-green",
+                "key": "option-green",
                 "value": "green",
                 "weight": 3000
               },
@@ -89,7 +89,7 @@
                 "type": "option",
                 "id": "opt_01bdysctnfgez21ah26qjk0mc0",
                 "option": "string",
-                "name": "option-red",
+                "key": "option-red",
                 "value": "red",
                 "weight": 2000
               }

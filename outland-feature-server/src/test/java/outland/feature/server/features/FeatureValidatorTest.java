@@ -35,9 +35,9 @@ public class FeatureValidatorTest {
 
     final OptionCollection.Builder collectionBuilder = OptionCollection.newBuilder()
         .setOption(OptionType.string)
-        .addItems(FeatureOption.newBuilder().setValue("red").setName("opt-red").setWeight(5000))
-        .addItems(FeatureOption.newBuilder().setValue("green").setName("opt-green").setWeight(3000))
-        .addItems(FeatureOption.newBuilder().setValue("blue").setName("opt-blue").setWeight(2000));
+        .addItems(FeatureOption.newBuilder().setValue("red").setKey("opt-red").setWeight(5000))
+        .addItems(FeatureOption.newBuilder().setValue("green").setKey("opt-green").setWeight(3000))
+        .addItems(FeatureOption.newBuilder().setValue("blue").setKey("opt-blue").setWeight(2000));
 
     builder.setOwner(Owner.newBuilder().setName("Jayne").setUsername("jayne"))
         .setKey("key1")
@@ -57,9 +57,9 @@ public class FeatureValidatorTest {
 
     final OptionCollection.Builder collectionBuilder = OptionCollection.newBuilder()
         .setOption(OptionType.string)
-        .addItems(FeatureOption.newBuilder().setValue("red").setName("opt-red").setWeight(5000).setId("r"))
-        .addItems(FeatureOption.newBuilder().setValue("green").setName("opt-green").setWeight(3000).setId("g"))
-        .addItems(FeatureOption.newBuilder().setValue("blue").setName("opt-blue").setWeight(2000).setId("b"));
+        .addItems(FeatureOption.newBuilder().setValue("red").setKey("opt-red").setWeight(5000).setId("r"))
+        .addItems(FeatureOption.newBuilder().setValue("green").setKey("opt-green").setWeight(3000).setId("g"))
+        .addItems(FeatureOption.newBuilder().setValue("blue").setKey("opt-blue").setWeight(2000).setId("b"));
 
     builder.setOwner(Owner.newBuilder().setName("Jayne").setUsername("jayne"))
         .setKey("key1")
@@ -95,31 +95,31 @@ public class FeatureValidatorTest {
 
     final OptionCollection.Builder collectionBuilder = OptionCollection.newBuilder()
         .setOption(OptionType.string)
-        .addItems(FeatureOption.newBuilder().setValue("red").setName("").setWeight(5000))
-        .addItems(FeatureOption.newBuilder().setValue("green").setName("opt-green").setWeight(3000))
-        .addItems(FeatureOption.newBuilder().setValue("blue").setName("opt-blue").setWeight(2000));
+        .addItems(FeatureOption.newBuilder().setValue("red").setKey("").setWeight(5000))
+        .addItems(FeatureOption.newBuilder().setValue("green").setKey("opt-green").setWeight(3000))
+        .addItems(FeatureOption.newBuilder().setValue("blue").setKey("opt-blue").setWeight(2000));
 
     builder.setOwner(Owner.newBuilder().setName("Jayne").setUsername("jayne"))
         .setKey("key1")
         .setGroup("app1")
         .setOptions(collectionBuilder);
 
-    callValidate(builder, "empty_name_value_for_string_option_feature", 422);
+    callValidate(builder, "empty_key_value_for_string_option_feature", 422);
 
     Feature.Builder builder1 = Feature.newBuilder();
 
     final OptionCollection.Builder collectionBuilder1 = OptionCollection.newBuilder()
         .setOption(OptionType.string)
         .addItems(FeatureOption.newBuilder().setValue("red").setWeight(5000))
-        .addItems(FeatureOption.newBuilder().setValue("green").setName("opt-green").setWeight(3000))
-        .addItems(FeatureOption.newBuilder().setValue("blue").setName("opt-blue").setWeight(2000));
+        .addItems(FeatureOption.newBuilder().setValue("green").setKey("opt-green").setWeight(3000))
+        .addItems(FeatureOption.newBuilder().setValue("blue").setKey("opt-blue").setWeight(2000));
 
     builder1.setOwner(Owner.newBuilder().setName("Jayne").setUsername("jayne"))
         .setKey("key1")
         .setGroup("app1")
         .setOptions(collectionBuilder1);
 
-    callValidate(builder, "empty_name_value_for_string_option_feature", 422);
+    callValidate(builder, "empty_key_value_for_string_option_feature", 422);
   }
 
   @Test
@@ -128,16 +128,16 @@ public class FeatureValidatorTest {
 
     final OptionCollection.Builder collectionBuilder = OptionCollection.newBuilder()
         .setOption(OptionType.string)
-        .addItems(FeatureOption.newBuilder().setValue("red").setName("opt-red").setWeight(5000))
-        .addItems(FeatureOption.newBuilder().setValue("red").setName("opt-red").setWeight(3000))
-        .addItems(FeatureOption.newBuilder().setValue("blue").setName("opt-blue").setWeight(2000));
+        .addItems(FeatureOption.newBuilder().setValue("red").setKey("opt-red").setWeight(5000))
+        .addItems(FeatureOption.newBuilder().setValue("red").setKey("opt-red").setWeight(3000))
+        .addItems(FeatureOption.newBuilder().setValue("blue").setKey("opt-blue").setWeight(2000));
 
     builder.setOwner(Owner.newBuilder().setName("Jayne").setUsername("jayne"))
         .setKey("key1")
         .setGroup("app1")
         .setOptions(collectionBuilder);
 
-    callValidate(builder, "indistinct_name_value_for_string_option_feature", 422);
+    callValidate(builder, "indistinct_key_value_for_string_option_feature", 422);
   }
 
   @Test
@@ -145,9 +145,9 @@ public class FeatureValidatorTest {
     Feature.Builder builder = Feature.newBuilder();
     OptionCollection.Builder collectionBuilder = OptionCollection.newBuilder()
         .setOption(OptionType.string)
-        .addItems(FeatureOption.newBuilder().setValue("red").setName("opt-red").setWeight(5000))   // no id here
-        .addItems(FeatureOption.newBuilder().setValue("green").setName("opt-green").setWeight(3000).setId("g"))
-        .addItems(FeatureOption.newBuilder().setValue("blue").setName("opt-blue").setWeight(2000).setId("b"));
+        .addItems(FeatureOption.newBuilder().setValue("red").setKey("opt-red").setWeight(5000))   // no id here
+        .addItems(FeatureOption.newBuilder().setValue("green").setKey("opt-green").setWeight(3000).setId("g"))
+        .addItems(FeatureOption.newBuilder().setValue("blue").setKey("opt-blue").setWeight(2000).setId("b"));
 
     builder.setOwner(Owner.newBuilder().setName("Jayne").setUsername("jayne"))
         .setKey("key1")
@@ -164,9 +164,9 @@ public class FeatureValidatorTest {
 
     OptionCollection.Builder collectionBuilder = OptionCollection.newBuilder()
         .setOption(OptionType.string)
-        .addItems(FeatureOption.newBuilder().setValue("red").setName("opt-red").setId("r"))
-        .addItems(FeatureOption.newBuilder().setValue("green").setName("opt-green").setId("g"))
-        .addItems(FeatureOption.newBuilder().setValue("blue").setName("opt-blue").setId("b"));
+        .addItems(FeatureOption.newBuilder().setValue("red").setKey("opt-red").setId("r"))
+        .addItems(FeatureOption.newBuilder().setValue("green").setKey("opt-green").setId("g"))
+        .addItems(FeatureOption.newBuilder().setValue("blue").setKey("opt-blue").setId("b"));
 
     builder.setOwner(Owner.newBuilder().setName("Jayne").setUsername("jayne"))
         .setKey("key1")
@@ -185,9 +185,9 @@ public class FeatureValidatorTest {
 
     OptionCollection.Builder collectionBuilder = OptionCollection.newBuilder()
         .setOption(OptionType.string)
-        .addItems(FeatureOption.newBuilder().setValue("red").setName("opt-red").setWeight(0).setId("r"))
-        .addItems(FeatureOption.newBuilder().setValue("green").setName("opt-green").setWeight(-1).setId("g"))
-        .addItems(FeatureOption.newBuilder().setValue("blue").setName("opt-blue").setWeight(0).setId("b"));
+        .addItems(FeatureOption.newBuilder().setValue("red").setKey("opt-red").setWeight(0).setId("r"))
+        .addItems(FeatureOption.newBuilder().setValue("green").setKey("opt-green").setWeight(-1).setId("g"))
+        .addItems(FeatureOption.newBuilder().setValue("blue").setKey("opt-blue").setWeight(0).setId("b"));
 
     builder.setOwner(Owner.newBuilder().setName("Jayne").setUsername("jayne"))
         .setKey("key1")
@@ -203,9 +203,9 @@ public class FeatureValidatorTest {
     builder = Feature.newBuilder();
     collectionBuilder = OptionCollection.newBuilder()
         .setOption(OptionType.string)
-        .addItems(FeatureOption.newBuilder().setValue("red").setName("opt-red").setWeight(0).setId("r"))
-        .addItems(FeatureOption.newBuilder().setValue("green").setName("opt-green").setWeight(10_001).setId("g"))
-        .addItems(FeatureOption.newBuilder().setValue("blue").setName("opt-blue").setWeight(0).setId("b"));
+        .addItems(FeatureOption.newBuilder().setValue("red").setKey("opt-red").setWeight(0).setId("r"))
+        .addItems(FeatureOption.newBuilder().setValue("green").setKey("opt-green").setWeight(10_001).setId("g"))
+        .addItems(FeatureOption.newBuilder().setValue("blue").setKey("opt-blue").setWeight(0).setId("b"));
 
     builder.setOwner(Owner.newBuilder().setName("Jayne").setUsername("jayne"))
         .setKey("key1")
@@ -223,9 +223,9 @@ public class FeatureValidatorTest {
     Feature.Builder builder = Feature.newBuilder();
     OptionCollection.Builder collectionBuilder = OptionCollection.newBuilder()
         .setOption(OptionType.string)
-        .addItems(FeatureOption.newBuilder().setValue("red").setName("opt-red").setWeight(3000).setId("r"))
-        .addItems(FeatureOption.newBuilder().setValue("green").setName("opt-green").setWeight(2000).setId("g"))
-        .addItems(FeatureOption.newBuilder().setValue("blue").setName("opt-blue").setWeight(5001).setId("b"));
+        .addItems(FeatureOption.newBuilder().setValue("red").setKey("opt-red").setWeight(3000).setId("r"))
+        .addItems(FeatureOption.newBuilder().setValue("green").setKey("opt-green").setWeight(2000).setId("g"))
+        .addItems(FeatureOption.newBuilder().setValue("blue").setKey("opt-blue").setWeight(5001).setId("b"));
 
     builder.setOwner(Owner.newBuilder().setName("Jayne").setUsername("jayne"))
         .setKey("key1")
@@ -243,18 +243,18 @@ public class FeatureValidatorTest {
 
     OptionCollection.Builder existing = OptionCollection.newBuilder()
         .setOption(OptionType.string)
-        .addItems(FeatureOption.newBuilder().setValue("red").setName("opt-red").setWeight(3000).setId("r"))
-        .addItems(FeatureOption.newBuilder().setValue("green").setName("opt-green").setWeight(2000).setId("g"))
-        .addItems(FeatureOption.newBuilder().setValue("blue").setName("opt-blue").setWeight(5000).setId("b"));
+        .addItems(FeatureOption.newBuilder().setValue("red").setKey("opt-red").setWeight(3000).setId("r"))
+        .addItems(FeatureOption.newBuilder().setValue("green").setKey("opt-green").setWeight(2000).setId("g"))
+        .addItems(FeatureOption.newBuilder().setValue("blue").setKey("opt-blue").setWeight(5000).setId("b"));
 
 
     OptionCollection.Builder update = OptionCollection.newBuilder()
         .setOption(OptionType.string)
-        .addItems(FeatureOption.newBuilder().setValue("red").setName("opt-red").setWeight(3000).setId("r"))
-        .addItems(FeatureOption.newBuilder().setValue("green").setName("opt-green").setWeight(2000).setId("g"))
-        .addItems(FeatureOption.newBuilder().setValue("blue").setName("opt-blue").setWeight(5000).setId("b"))
+        .addItems(FeatureOption.newBuilder().setValue("red").setKey("opt-red").setWeight(3000).setId("r"))
+        .addItems(FeatureOption.newBuilder().setValue("green").setKey("opt-green").setWeight(2000).setId("g"))
+        .addItems(FeatureOption.newBuilder().setValue("blue").setKey("opt-blue").setWeight(5000).setId("b"))
         // option id y is not already existing
-        .addItems(FeatureOption.newBuilder().setValue("yello").setName("opt-yello").setWeight(5000).setId("y"))
+        .addItems(FeatureOption.newBuilder().setValue("yello").setKey("opt-yello").setWeight(5000).setId("y"))
         ;
 
 
@@ -272,9 +272,9 @@ public class FeatureValidatorTest {
 
     OptionCollection.Builder existing = OptionCollection.newBuilder()
         .setOption(OptionType.string)
-        .addItems(FeatureOption.newBuilder().setValue("red").setName("opt-red").setWeight(3000).setId("r"))
-        .addItems(FeatureOption.newBuilder().setValue("green").setName("opt-green").setWeight(2000).setId("g"))
-        .addItems(FeatureOption.newBuilder().setValue("blue").setName("opt-blue").setWeight(5000).setId("b"));
+        .addItems(FeatureOption.newBuilder().setValue("red").setKey("opt-red").setWeight(3000).setId("r"))
+        .addItems(FeatureOption.newBuilder().setValue("green").setKey("opt-green").setWeight(2000).setId("g"))
+        .addItems(FeatureOption.newBuilder().setValue("blue").setKey("opt-blue").setWeight(5000).setId("b"));
 
     OptionCollection.Builder update = OptionCollection.newBuilder();
 
@@ -291,9 +291,9 @@ public class FeatureValidatorTest {
     OptionCollection.Builder strings = OptionCollection.newBuilder()
         .setOption(OptionType.string)
         .setControl("opt-gray")
-        .addItems(FeatureOption.newBuilder().setValue("red").setName("opt-red").setWeight(3000).setId("r"))
-        .addItems(FeatureOption.newBuilder().setValue("green").setName("opt-green").setWeight(2000).setId("g"))
-        .addItems(FeatureOption.newBuilder().setValue("blue").setName("opt-blue").setWeight(5000).setId("b"));
+        .addItems(FeatureOption.newBuilder().setValue("red").setKey("opt-red").setWeight(3000).setId("r"))
+        .addItems(FeatureOption.newBuilder().setValue("green").setKey("opt-green").setWeight(2000).setId("g"))
+        .addItems(FeatureOption.newBuilder().setValue("blue").setKey("opt-blue").setWeight(5000).setId("b"));
 
     try {
       new FeatureValidator().validateOptionsThrowing(strings.build());
@@ -306,9 +306,9 @@ public class FeatureValidatorTest {
     strings = OptionCollection.newBuilder()
         .setOption(OptionType.string)
         .setControl("opt-red")
-        .addItems(FeatureOption.newBuilder().setValue("red").setName("opt-red").setWeight(3000).setId("r"))
-        .addItems(FeatureOption.newBuilder().setValue("green").setName("opt-green").setWeight(2000).setId("g"))
-        .addItems(FeatureOption.newBuilder().setValue("blue").setName("opt-blue").setWeight(5000).setId("b"));
+        .addItems(FeatureOption.newBuilder().setValue("red").setKey("opt-red").setWeight(3000).setId("r"))
+        .addItems(FeatureOption.newBuilder().setValue("green").setKey("opt-green").setWeight(2000).setId("g"))
+        .addItems(FeatureOption.newBuilder().setValue("blue").setKey("opt-blue").setWeight(5000).setId("b"));
 
     try {
       new FeatureValidator().validateOptionsThrowing(strings.build());
@@ -319,8 +319,8 @@ public class FeatureValidatorTest {
     OptionCollection.Builder booleans = OptionCollection.newBuilder()
         .setOption(OptionType.string)
         .setControl("opt-gray")
-        .addItems(FeatureOption.newBuilder().setValue("true").setName("true").setWeight(3000).setId("r"))
-        .addItems(FeatureOption.newBuilder().setValue("false").setName("false").setWeight(7000).setId("g"))
+        .addItems(FeatureOption.newBuilder().setValue("true").setKey("true").setWeight(3000).setId("r"))
+        .addItems(FeatureOption.newBuilder().setValue("false").setKey("false").setWeight(7000).setId("g"))
         ;
 
     try {
@@ -334,8 +334,8 @@ public class FeatureValidatorTest {
     booleans = OptionCollection.newBuilder()
         .setOption(OptionType.string)
         .setControl("false")
-        .addItems(FeatureOption.newBuilder().setValue("true").setName("true").setWeight(3000).setId("r"))
-        .addItems(FeatureOption.newBuilder().setValue("false").setName("false").setWeight(7000).setId("g"))
+        .addItems(FeatureOption.newBuilder().setValue("true").setKey("true").setWeight(3000).setId("r"))
+        .addItems(FeatureOption.newBuilder().setValue("false").setKey("false").setWeight(7000).setId("g"))
     ;
 
     try {
@@ -352,8 +352,8 @@ public class FeatureValidatorTest {
 
     OptionCollection.Builder collectionBuilder = OptionCollection.newBuilder()
         .setOption(OptionType.bool)
-        .addItems(FeatureOption.newBuilder().setValue("true").setName("true").setWeight(5500))
-        .addItems(FeatureOption.newBuilder().setValue("false").setName("false").setWeight(4500));
+        .addItems(FeatureOption.newBuilder().setValue("true").setKey("true").setWeight(5500))
+        .addItems(FeatureOption.newBuilder().setValue("false").setKey("false").setWeight(4500));
 
     builder.setOwner(Owner.newBuilder().setName("Jayne").setUsername("jayne"))
         .setKey("key1")
@@ -374,8 +374,8 @@ public class FeatureValidatorTest {
 
     OptionCollection.Builder collectionBuilder = OptionCollection.newBuilder()
         .setOption(OptionType.bool)
-        .addItems(FeatureOption.newBuilder().setValue("true").setName("true").setWeight(5500).setId("a"))
-        .addItems(FeatureOption.newBuilder().setValue("false").setName("false").setWeight(4500).setId("b"));
+        .addItems(FeatureOption.newBuilder().setValue("true").setKey("true").setWeight(5500).setId("a"))
+        .addItems(FeatureOption.newBuilder().setValue("false").setKey("false").setWeight(4500).setId("b"));
 
     builder.setOwner(Owner.newBuilder().setName("Jayne").setUsername("jayne"))
         .setKey("key1")
@@ -428,7 +428,7 @@ public class FeatureValidatorTest {
 
     OptionCollection.Builder collectionBuilder = OptionCollection.newBuilder()
         .setOption(OptionType.bool)
-        .addItems(FeatureOption.newBuilder().setValue("true").setName("true"))
+        .addItems(FeatureOption.newBuilder().setValue("true").setKey("true"))
         ;
 
     builder.setOwner(Owner.newBuilder().setName("Jayne").setUsername("jayne"))
@@ -446,8 +446,8 @@ public class FeatureValidatorTest {
 
     OptionCollection.Builder collectionBuilder = OptionCollection.newBuilder()
         .setOption(OptionType.bool)
-        .addItems(FeatureOption.newBuilder().setValue("true").setName("true"))
-        .addItems(FeatureOption.newBuilder().setValue("false").setName("alse"))
+        .addItems(FeatureOption.newBuilder().setValue("true").setKey("true"))
+        .addItems(FeatureOption.newBuilder().setValue("false").setKey("alse"))
         ;
 
     builder.setOwner(Owner.newBuilder().setName("Jayne").setUsername("jayne"))
@@ -456,7 +456,7 @@ public class FeatureValidatorTest {
         .setOptions(collectionBuilder)
     ;
 
-    callValidate(builder, "wrong_name_for_bool_feature", 422);
+    callValidate(builder, "wrong_key_for_bool_feature", 422);
   }
 
   @Test
@@ -465,8 +465,8 @@ public class FeatureValidatorTest {
 
     OptionCollection.Builder collectionBuilder = OptionCollection.newBuilder()
         .setOption(OptionType.bool)
-        .addItems(FeatureOption.newBuilder().setValue("rue").setName("true"))
-        .addItems(FeatureOption.newBuilder().setValue("false").setName("false"));
+        .addItems(FeatureOption.newBuilder().setValue("rue").setKey("true"))
+        .addItems(FeatureOption.newBuilder().setValue("false").setKey("false"));
 
     builder.setOwner(Owner.newBuilder().setName("Jayne").setUsername("jayne"))
         .setKey("key1")
@@ -483,8 +483,8 @@ public class FeatureValidatorTest {
 
     OptionCollection.Builder collectionBuilder = OptionCollection.newBuilder()
         .setOption(OptionType.bool)
-        .addItems(FeatureOption.newBuilder().setValue("true").setName("false"))
-        .addItems(FeatureOption.newBuilder().setValue("false").setName("false"));
+        .addItems(FeatureOption.newBuilder().setValue("true").setKey("false"))
+        .addItems(FeatureOption.newBuilder().setValue("false").setKey("false"));
 
     builder.setOwner(Owner.newBuilder().setName("Jayne").setUsername("jayne"))
         .setKey("key1")
@@ -492,14 +492,14 @@ public class FeatureValidatorTest {
         .setOptions(collectionBuilder)
     ;
 
-    callValidate(builder, "mismatched_name_value_for_bool_feature", 422);
+    callValidate(builder, "mismatched_key_value_for_bool_feature", 422);
 
     builder = Feature.newBuilder();
 
     collectionBuilder = OptionCollection.newBuilder()
         .setOption(OptionType.bool)
-        .addItems(FeatureOption.newBuilder().setValue("true").setName("true"))
-        .addItems(FeatureOption.newBuilder().setValue("false").setName("true"));
+        .addItems(FeatureOption.newBuilder().setValue("true").setKey("true"))
+        .addItems(FeatureOption.newBuilder().setValue("false").setKey("true"));
 
     builder.setOwner(Owner.newBuilder().setName("Jayne").setUsername("jayne"))
         .setKey("key1")
@@ -507,7 +507,7 @@ public class FeatureValidatorTest {
         .setOptions(collectionBuilder)
     ;
 
-    callValidate(builder, "mismatched_name_value_for_bool_feature", 422);
+    callValidate(builder, "mismatched_key_value_for_bool_feature", 422);
   }
 
   @Test
@@ -516,8 +516,8 @@ public class FeatureValidatorTest {
 
     OptionCollection.Builder collectionBuilder = OptionCollection.newBuilder()
         .setOption(OptionType.bool)
-        .addItems(FeatureOption.newBuilder().setValue("true").setName("true"))
-        .addItems(FeatureOption.newBuilder().setValue("false").setName("false"));
+        .addItems(FeatureOption.newBuilder().setValue("true").setKey("true"))
+        .addItems(FeatureOption.newBuilder().setValue("false").setKey("false"));
 
     builder.setOwner(Owner.newBuilder().setName("Jayne").setUsername("jayne"))
         .setKey("key1")
@@ -536,8 +536,8 @@ public class FeatureValidatorTest {
 
     OptionCollection.Builder collectionBuilder = OptionCollection.newBuilder()
         .setOption(OptionType.bool)
-        .addItems(FeatureOption.newBuilder().setValue("true").setName("true"))
-        .addItems(FeatureOption.newBuilder().setValue("false").setName("false").setWeight(-1));
+        .addItems(FeatureOption.newBuilder().setValue("true").setKey("true"))
+        .addItems(FeatureOption.newBuilder().setValue("false").setKey("false").setWeight(-1));
 
     builder.setOwner(Owner.newBuilder().setName("Jayne").setUsername("jayne"))
         .setKey("key1")
@@ -553,8 +553,8 @@ public class FeatureValidatorTest {
     builder = Feature.newBuilder();
     collectionBuilder = OptionCollection.newBuilder()
         .setOption(OptionType.bool)
-        .addItems(FeatureOption.newBuilder().setValue("true").setName("true"))
-        .addItems(FeatureOption.newBuilder().setValue("false").setName("false").setWeight(10_001));
+        .addItems(FeatureOption.newBuilder().setValue("true").setKey("true"))
+        .addItems(FeatureOption.newBuilder().setValue("false").setKey("false").setWeight(10_001));
     builder.setOwner(Owner.newBuilder().setName("Jayne").setUsername("jayne"))
         .setKey("key1")
         .setGroup("app1")
@@ -571,8 +571,8 @@ public class FeatureValidatorTest {
     Feature.Builder builder = Feature.newBuilder();
     OptionCollection.Builder collectionBuilder = OptionCollection.newBuilder()
         .setOption(OptionType.bool)
-        .addItems(FeatureOption.newBuilder().setValue("true").setName("true").setWeight(5000))
-        .addItems(FeatureOption.newBuilder().setValue("false").setName("false").setWeight(5001));
+        .addItems(FeatureOption.newBuilder().setValue("true").setKey("true").setWeight(5000))
+        .addItems(FeatureOption.newBuilder().setValue("false").setKey("false").setWeight(5001));
 
     builder.setOwner(Owner.newBuilder().setName("Jayne").setUsername("jayne"))
         .setKey("key1")
@@ -590,8 +590,8 @@ public class FeatureValidatorTest {
     Feature.Builder builder = Feature.newBuilder();
     OptionCollection.Builder collectionBuilder = OptionCollection.newBuilder()
         .setOption(OptionType.bool)
-        .addItems(FeatureOption.newBuilder().setValue("true").setName("true").setWeight(5500))  // no id here
-        .addItems(FeatureOption.newBuilder().setValue("false").setName("false").setWeight(5001).setId("b"));
+        .addItems(FeatureOption.newBuilder().setValue("true").setKey("true").setWeight(5500))  // no id here
+        .addItems(FeatureOption.newBuilder().setValue("false").setKey("false").setWeight(5001).setId("b"));
 
     builder.setOwner(Owner.newBuilder().setName("Jayne").setUsername("jayne"))
         .setKey("key1")
@@ -607,8 +607,8 @@ public class FeatureValidatorTest {
 
     OptionCollection.Builder existing = OptionCollection.newBuilder()
         .setOption(OptionType.bool)
-        .addItems(FeatureOption.newBuilder().setValue("true").setName("true"))
-        .addItems(FeatureOption.newBuilder().setValue("false").setName("false"));
+        .addItems(FeatureOption.newBuilder().setValue("true").setKey("true"))
+        .addItems(FeatureOption.newBuilder().setValue("false").setKey("false"));
 
     OptionCollection.Builder update = OptionCollection.newBuilder();
 
@@ -624,14 +624,14 @@ public class FeatureValidatorTest {
 
     OptionCollection.Builder existing = OptionCollection.newBuilder()
         .setOption(OptionType.bool)
-        .addItems(FeatureOption.newBuilder().setValue("true").setName("true").setId("1"))
-        .addItems(FeatureOption.newBuilder().setValue("false").setName("false").setId("2"));
+        .addItems(FeatureOption.newBuilder().setValue("true").setKey("true").setId("1"))
+        .addItems(FeatureOption.newBuilder().setValue("false").setKey("false").setId("2"));
 
     OptionCollection.Builder update = OptionCollection.newBuilder()
         .setOption(OptionType.bool)
-        .addItems(FeatureOption.newBuilder().setValue("true").setName("true").setId("1"))
+        .addItems(FeatureOption.newBuilder().setValue("true").setKey("true").setId("1"))
         // option id 3 is not already existing
-        .addItems(FeatureOption.newBuilder().setValue("false").setName("false").setId("3"));
+        .addItems(FeatureOption.newBuilder().setValue("false").setKey("false").setId("3"));
 
     try {
       new FeatureValidator().validateOptionIdsForUpdate(existing.build(), update.build());

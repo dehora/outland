@@ -185,10 +185,10 @@ class FeatureValidator {
     }
 
     options.getItemsList().forEach(option -> {
-      final String name = option.getName();
-      if (!"true".equals(name) && !"false".equals(name)) {
-        throw new ServiceException(Problem.clientProblem("wrong_name_for_bool_feature",
-            "A bool option must have a name of 'true' or 'false'", 422));
+      final String key = option.getKey();
+      if (!"true".equals(key) && !"false".equals(key)) {
+        throw new ServiceException(Problem.clientProblem("wrong_key_for_bool_feature",
+            "A bool option must have a key of 'true' or 'false'", 422));
       }
 
       final String value = option.getValue();
@@ -197,14 +197,14 @@ class FeatureValidator {
             "A bool option must have a value of 'true' or 'false'", 422));
       }
 
-      if ("true".equals(value) && !"true".equals(name)) {
-        throw new ServiceException(Problem.clientProblem("mismatched_name_value_for_bool_feature",
-            "A bool option must have a value of 'true' and a name of 'true'", 422));
+      if ("true".equals(value) && !"true".equals(key)) {
+        throw new ServiceException(Problem.clientProblem("mismatched_key_value_for_bool_feature",
+            "A bool option must have a value of 'true' and a key of 'true'", 422));
       }
 
-      if ("false".equals(value) && !"false".equals(name)) {
-        throw new ServiceException(Problem.clientProblem("mismatched_name_value_for_bool_feature",
-            "A bool option must have a value of 'false' and a name of 'false'", 422));
+      if ("false".equals(value) && !"false".equals(key)) {
+        throw new ServiceException(Problem.clientProblem("mismatched_key_value_for_bool_feature",
+            "A bool option must have a value of 'false' and a key of 'false'", 422));
       }
     });
 
@@ -213,7 +213,7 @@ class FeatureValidator {
     if(!Strings.isNullOrEmpty(control) && !("false".equals(control) || "true".equals(control))) {
       throw new ServiceException(
           Problem.clientProblem("no_such_control_option",
-              "the '" + control + "' option names was not found in the options list.",
+              "the '" + control + "' option key was not found in the options list.",
               422));
     }
   }
@@ -251,34 +251,34 @@ class FeatureValidator {
 
     final List<FeatureOption> itemsList = options.getItemsList();
 
-    final HashSet<String> optionNames = Sets.newHashSetWithExpectedSize(itemsList.size());
+    final HashSet<String> optionKeys = Sets.newHashSetWithExpectedSize(itemsList.size());
 
     for (FeatureOption featureOption : itemsList) {
-      if(Strings.isNullOrEmpty(featureOption.getName())) {
-        throw new ServiceException(Problem.clientProblem("empty_name_value_for_string_option_feature",
-            "A string option's names must be non-empty", 422));
+      if(Strings.isNullOrEmpty(featureOption.getKey())) {
+        throw new ServiceException(Problem.clientProblem("empty_key_value_for_string_option_feature",
+            "A string option's keys must be non-empty", 422));
       }
 
-      optionNames.add(featureOption.getName());
+      optionKeys.add(featureOption.getKey());
     }
 
-    if(itemsList.size() != optionNames.size()) {
-      throw new ServiceException(Problem.clientProblem("indistinct_name_value_for_string_option_feature",
-          "A string option's names must be distinct", 422));
+    if(itemsList.size() != optionKeys.size()) {
+      throw new ServiceException(Problem.clientProblem("indistinct_key_value_for_string_option_feature",
+          "A string option's keys must be distinct", 422));
     }
 
     final String control = options.getControl();
 
-    if(!Strings.isNullOrEmpty(control) && !optionNames.contains(control)) {
+    if(!Strings.isNullOrEmpty(control) && !optionKeys.contains(control)) {
       throw new ServiceException(
           Problem.clientProblem("no_such_control_option",
               "the '" + control
-                  + "' option names was not found in the options list, known names: "
-                  + Joiner.on(", ").join(optionNames),
+                  + "' option key was not found in the options list, known keys: "
+                  + Joiner.on(", ").join(optionKeys),
               422));
     }
 
-    optionNames.clear();
+    optionKeys.clear();
   }
 
   private void validateKeysThrowing(Feature feature) {

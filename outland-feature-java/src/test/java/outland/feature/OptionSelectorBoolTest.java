@@ -60,10 +60,10 @@ public class OptionSelectorBoolTest {
   @Test
   public void testZeroWeight() {
     FeatureOption f = FeatureOption.newBuilder()
-        .setName("false").setValue("false").setWeight(0).build();
+        .setKey("false").setValue("false").setWeight(0).build();
 
     FeatureOption t = FeatureOption.newBuilder()
-        .setName("true").setValue("true").setWeight(0).build();
+        .setKey("true").setValue("true").setWeight(0).build();
 
     OptionCollection collection = OptionCollection.newBuilder()
         .setOption(OptionType.bool)
@@ -89,10 +89,10 @@ public class OptionSelectorBoolTest {
   public void testSelectFair() {
 
     FeatureOption f = FeatureOption.newBuilder()
-        .setName("false").setValue("false").setWeight(5_000).build();
+        .setKey("false").setValue("false").setWeight(5_000).build();
 
     FeatureOption t = FeatureOption.newBuilder()
-        .setName("true").setValue("true").setWeight(5_000).build();
+        .setKey("true").setValue("true").setWeight(5_000).build();
 
     OptionCollection collection = OptionCollection.newBuilder()
         .setOption(OptionType.bool)
@@ -143,10 +143,10 @@ public class OptionSelectorBoolTest {
   public void testSelectAlwaysTrue() {
 
     FeatureOption f = FeatureOption.newBuilder()
-        .setName("false").setValue("false").setWeight(10_000).build();
+        .setKey("false").setValue("false").setWeight(10_000).build();
 
     FeatureOption t = FeatureOption.newBuilder()
-        .setName("true").setValue("true").setWeight(0).build();
+        .setKey("true").setValue("true").setWeight(0).build();
 
     OptionCollection collection = OptionCollection.newBuilder()
         .setOption(OptionType.bool)
@@ -171,10 +171,10 @@ public class OptionSelectorBoolTest {
   public void testSelectAlwaysFalse() {
 
     FeatureOption f = FeatureOption.newBuilder()
-        .setName("false").setValue("false").setWeight(0).build();
+        .setKey("false").setValue("false").setWeight(0).build();
 
     FeatureOption t = FeatureOption.newBuilder()
-        .setName("true").setValue("true").setWeight(10_000).build();
+        .setKey("true").setValue("true").setWeight(10_000).build();
 
     OptionCollection collection = OptionCollection.newBuilder()
         .setOption(OptionType.bool)
@@ -228,13 +228,13 @@ public class OptionSelectorBoolTest {
     final int ratio = fWeight/tWeight;
 
     FeatureOption f = FeatureOption.newBuilder()
-        .setName("false")
+        .setKey("false")
         .setValue("false")
         .setWeight(fWeight)
         .build();
 
     FeatureOption t = FeatureOption.newBuilder()
-        .setName("true")
+        .setKey("true")
         .setValue("true")
         .setWeight(tWeight)
         .build();
