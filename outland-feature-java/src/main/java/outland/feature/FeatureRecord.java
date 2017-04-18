@@ -19,13 +19,11 @@ class FeatureRecord {
   private final Map<String, FeatureOption> namespaceControlFeatureOptionMap = Maps.newHashMap();
   private final Map<String, OptionEvaluatorWeighted> namespaceOptionEvaluatorWeightedMap =
       Maps.newHashMap();
-  private final FeatureRecordStateChecker featureRecordStateChecker;
   private OptionEvaluatorWeighted optionEvaluatorWeighted;
   private FeatureOption controlFeatureOption;
 
   private FeatureRecord(Feature feature) {
     this.feature = feature;
-    this.featureRecordStateChecker = new FeatureRecordStateChecker();
     prepare();
   }
 
@@ -184,8 +182,8 @@ class FeatureRecord {
 
   @Override public int hashCode() {
     return Objects.hash(optionEvaluatorWeighted, feature, namespaceFeatureMap,
-        namespaceControlFeatureOptionMap, namespaceOptionEvaluatorWeightedMap, controlFeatureOption,
-        featureRecordStateChecker);
+        namespaceControlFeatureOptionMap, namespaceOptionEvaluatorWeightedMap,
+        controlFeatureOption);
   }
 
   @Override public boolean equals(Object o) {
@@ -199,8 +197,7 @@ class FeatureRecord {
             record.namespaceControlFeatureOptionMap) &&
         Objects.equals(namespaceOptionEvaluatorWeightedMap,
             record.namespaceOptionEvaluatorWeightedMap) &&
-        Objects.equals(controlFeatureOption, record.controlFeatureOption) &&
-        Objects.equals(featureRecordStateChecker, record.featureRecordStateChecker);
+        Objects.equals(controlFeatureOption, record.controlFeatureOption);
   }
 
   @Override public String toString() {
@@ -211,7 +208,6 @@ class FeatureRecord {
         .add("namespaceControlFeatureOptionMap", namespaceControlFeatureOptionMap)
         .add("namespaceOptionEvaluatorWeightedMap", namespaceOptionEvaluatorWeightedMap)
         .add("controlFeatureOption", controlFeatureOption)
-        .add("featureRecordStateChecker", featureRecordStateChecker)
         .toString();
   }
 }
