@@ -1,5 +1,6 @@
 package outland.feature;
 
+import com.google.common.collect.Sets;
 import java.util.stream.IntStream;
 import org.junit.Test;
 import outland.feature.proto.Feature;
@@ -9,9 +10,20 @@ import outland.feature.proto.NamespaceFeature;
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertFalse;
 import static junit.framework.TestCase.assertTrue;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertSame;
 
 public class FeatureRecordTest {
+
+  @Test
+  public void testEvaluateDefault() {
+    FeatureRecord stringRecord = FeatureRecord.build(TestSupport.loadFeature(
+        "json/feature-eval-string-off-default-on-namespace-off-namespace.json"));
+
+    assertEquals("an off feature returns its control option",
+        "green", stringRecord.evaluate("*"));
+  }
 
   @Test
   public void testEvaluateOptions() {
@@ -215,5 +227,19 @@ public class FeatureRecordTest {
 
     assertNotNull(record.optionEvaluatorWeighted());
     assertNotNull(record.optionEvaluatorWeighted("staging"));
+  }
+
+  @Test
+  public void testEquals() {
+    final Feature feature = TestSupport.loadFeature(
+        "json/feature-eval-string-off-default-on-namespace-off-namespace.json");
+    final Feature feature1 = TestSupport.loadFeature(
+        "json/feature-eval-string-off-default-on-namespace-off-namespace.json");
+    final Feature feature2 = TestSupport.loadFeature("json/feature-1.json");
+
+    assertEquals(feature, feature1);
+    assertNotEquals(feature, feature2);
+    assertSame(2, Sets.newHashSet(feature, feature1, feature2).size());
+    assertEquals(feature.toString(), feature1.toString());
   }
 }
