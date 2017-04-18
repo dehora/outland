@@ -69,11 +69,11 @@ curl -i http://localhost:8180/features \
 	"options": {
 	  "option": "bool",
 	  "items": [{
-		"name": "false",
+		"key": "false",
 		"value": "false",
 		"weight": 0
     }, {
-      "name": "true",
+      "key": "true",
       "value": "true",
       "weight": 10000
     }]
@@ -109,7 +109,7 @@ curl -i http://localhost:8180/features \
             "options": {
               "option": "bool",
               "items": [{
-              "name": "false",
+              "key": "false",
               "value": "false",
               "weight": 0
               }, {
@@ -127,7 +127,7 @@ curl -i http://localhost:8180/features \
             "options": {
               "option": "bool",
               "items": [{
-              "name": "false",
+              "key": "false",
               "value": "false",
               "weight": 10000
               }, {

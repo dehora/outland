@@ -203,7 +203,7 @@ public class FeatureRecordTest {
 
     final FeatureOption controlFeatureOption = record.controlFeatureOption();
     assertNotNull(controlFeatureOption);
-    assertEquals("option-green", controlFeatureOption.getName());
+    assertEquals("option-green", controlFeatureOption.getKey());
     assertEquals("green", controlFeatureOption.getValue());
     assertEquals(3000, controlFeatureOption.getWeight());
 
@@ -217,7 +217,7 @@ public class FeatureRecordTest {
     final String control = staging.getFeature().getOptions().getControl();
     for (FeatureOption featureOption : staging.getFeature().getOptions().getItemsList()) {
 
-      if (featureOption.getName().equals(control)) {
+      if (featureOption.getKey().equals(control)) {
         stagingControlOptionData = featureOption;
         break;
       }

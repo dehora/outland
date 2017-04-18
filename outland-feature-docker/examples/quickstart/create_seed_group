@@ -69,11 +69,11 @@ curl -i http://localhost:8180/features \
 	"options": {
 	  "option": "bool",
 	  "items": [{
-		"name": "false",
+		"key": "false",
 		"value": "false",
 		"weight": 9000
     }, {
-      "name": "true",
+      "key": "true",
       "value": "true",
       "weight": 1000
     }]

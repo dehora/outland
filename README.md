@@ -248,12 +248,12 @@ curl -v http://localhost:8180/features \
     "option": "bool",
     "items":[
       {
-        "name":"false",
+        "key":"false",
         "value":"false",
         "weight": 9500
       },
       {
-        "name": "true",
+        "key": "true",
         "value": "true",
         "weight": 500
       }
@@ -477,12 +477,12 @@ JSON fragment:
     "maxweight": 10000,
     "items": [
       {
-        "name": "true",
+        "key": "true",
         "value": "true",
         "weight": 10000
       },
       {
-        "name": "false",
+        "key": "false",
         "value": "false",
         "weight": 0
       }
@@ -511,17 +511,17 @@ This JSON fragment shows what that would look like:
     "maxweight": 10000,
     "items": [
       {
-        "name": "option-blue",
+        "key": "option-blue",
         "value": "blue",
         "weight": 7000
       },
       {
-        "name": "option-green",
+        "key": "option-green",
         "value": "green",
         "weight": 2000
       },
       {
-        "name": "option-red",
+        "key": "option-red",
         "value": "red",
         "weight": 1000
       }
@@ -623,12 +623,12 @@ curl -v http://localhost:8180/features/testgroup-1/testfeature-2/namespaces \
       "option": "bool",
       "items": [
         {
-          "name": "false",
+          "key": "false",
           "value": "false",
           "weight": 9900
         },
         {
-          "name": "true",
+          "key": "true",
           "value": "true",
           "weight": 100
         }

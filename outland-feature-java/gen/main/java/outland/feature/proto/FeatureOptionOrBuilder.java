@@ -37,14 +37,14 @@ public interface FeatureOptionOrBuilder extends
   outland.feature.proto.OptionType getOption();
 
   /**
-   * <code>optional string name = 11;</code>
+   * <code>optional string key = 11;</code>
    */
-  java.lang.String getName();
+  java.lang.String getKey();
   /**
-   * <code>optional string name = 11;</code>
+   * <code>optional string key = 11;</code>
    */
   com.google.protobuf.ByteString
-      getNameBytes();
+      getKeyBytes();
 
   /**
    * <code>optional string value = 12;</code>

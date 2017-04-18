@@ -164,7 +164,7 @@ class FeatureRecord {
   }
 
   private boolean matchesControlOption(String control, FeatureOption featureOption) {
-    return !Strings.isNullOrEmpty(control) && featureOption.getName().equals(control);
+    return !Strings.isNullOrEmpty(control) && featureOption.getKey().equals(control);
   }
 
   private boolean isOptionalType() {

@@ -109,7 +109,7 @@ class FeatureRegisterProcessor {
       collectionBuilder.addItems(FeatureOption.newBuilder()
           .setType(Names.optionType())
           .setId(Names.option())
-          .setName("false")
+          .setKey("false")
           .setValue("false")
           .setOption(OptionType.bool)
           .setWeight(5_000));
@@ -117,7 +117,7 @@ class FeatureRegisterProcessor {
       collectionBuilder.addItems(FeatureOption.newBuilder()
           .setType(Names.optionType())
           .setId(Names.option())
-          .setName("true")
+          .setKey("true")
           .setValue("true")
           .setOption(OptionType.bool)
           .setWeight(5_000));

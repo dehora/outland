@@ -25,7 +25,7 @@
         "type": "option",
         "id": "opt_01bdysctnfqmvn0b9k2h8d12y1",
         "option": "bool",
-        "name": "true",
+        "key": "true",
         "value": "true",
         "weight": 0
       },
@@ -33,7 +33,7 @@
         "type": "option",
         "id": "opt_01bdysctnfk0ak0am7np3p1trm",
         "option": "bool",
-        "name": "false",
+        "key": "false",
         "value": "false",
         "weight": 10000
       }
@@ -65,7 +65,7 @@
                 "type": "option",
                 "id": "opt_01bdysctnfbsbx0kcax5900r7m",
                 "option": "bool",
-                "name": "true",
+                "key": "true",
                 "value": "true",
                 "weight": 0
               },
@@ -73,7 +73,7 @@
                 "type": "option",
                 "id": "opt_01bdysctnfjef70jkbpbej0kye",
                 "option": "bool",
-                "name": "false",
+                "key": "false",
                 "value": "false",
                 "weight": 10000
               }

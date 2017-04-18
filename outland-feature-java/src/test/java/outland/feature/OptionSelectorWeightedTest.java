@@ -20,10 +20,10 @@ public class OptionSelectorWeightedTest {
     selected about 40% of the time.
      */
     final ArrayList<FeatureOption> itemList = Lists.newArrayList(
-        FeatureOption.newBuilder().setName("10%").setWeight(1_000).build(),
-        FeatureOption.newBuilder().setName("20%").setWeight(2_000).build(),
-        FeatureOption.newBuilder().setName("30%").setWeight(3_000).build(),
-        FeatureOption.newBuilder().setName("40%").setWeight(4_000).build()
+        FeatureOption.newBuilder().setKey("10%").setWeight(1_000).build(),
+        FeatureOption.newBuilder().setKey("20%").setWeight(2_000).build(),
+        FeatureOption.newBuilder().setKey("30%").setWeight(3_000).build(),
+        FeatureOption.newBuilder().setKey("40%").setWeight(4_000).build()
     );
 
     final OptionSelectorWeighted or = new OptionSelectorWeighted(itemList);
