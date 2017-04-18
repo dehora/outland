@@ -5,8 +5,8 @@
   "updated": "2017-04-17T21:24:21.407+01:00",
   "properties": {
   },
-  "key": "s11",
-  "group": "g5",
+  "key": "string-off",
+  "group": "group1",
   "state": "off",
   "description": "A test feature flag",
   "owner": {
@@ -58,11 +58,11 @@
     "items": [
       {
         "type": "nsfeature",
-        "namespace": "staging",
+        "namespace": "development",
         "feature": {
           "type": "nsfeature",
           "id": "nsfeat_01bdysctnfrtmh1qn1v9zs0tn7",
-          "key": "strings-off",
+          "key": "string-off",
           "state": "on",
           "options": {
             "type": "option.collection",

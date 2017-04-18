@@ -56,9 +56,13 @@ class FeatureRecord {
     return namespaceOptionEvaluatorWeightedMap.get(namespace);
   }
 
-  boolean evaluate(String namespace) {
+  boolean enabled() {
+    return evaluator.evaluate(this);
+  }
+
+  boolean enabled(String namespace) {
     if (namespace.equals(ServerConfiguration.DEFAULT_NAMESPACE)) {
-      return evaluator.evaluate(this);
+      return enabled();
     }
     return evaluator.evaluate(this, namespace);
   }

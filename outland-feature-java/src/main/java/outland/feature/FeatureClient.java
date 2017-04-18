@@ -287,7 +287,7 @@ public class FeatureClient {
       return false;
     }
 
-    return record.evaluate(this.namespace);
+    return record.enabled(this.namespace);
   }
 
   private boolean enabledThrowingInner(String group, String featureKey) {
@@ -297,7 +297,7 @@ public class FeatureClient {
       return throwNotFound(group, featureKey);
     }
 
-    return record.evaluate(this.namespace);
+    return record.enabled(this.namespace);
   }
 
   private boolean throwNotFound(String group, String featureKey) {

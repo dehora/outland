@@ -34,14 +34,20 @@ class Evaluator {
 
   private boolean evaluate(
       OptionCollection options, State state, OptionEvaluatorWeighted evaluator) {
-    if (options.getOption().equals(OptionType.flag)) {
-      return state.equals(State.on);
-    }
 
+    /*
+      boolean options are evaluated for their state and then if on, their weighted result. this
+      means they can return false even if their state is true due to sampling the weight.
+     */
     if (options.getOption().equals(OptionType.bool)) {
       return new OptionEvaluatorBool().evaluateBooleanOptions(options, state, evaluator);
     }
 
-    return false;
+    /*
+      for any other type, check the state. this includes non flag options like strings and
+      numbers. for those types their basic evaluation is also their state and they have dedicated
+      calls to return a result value.
+     */
+    return state.equals(State.on);
   }
 }
