@@ -5,7 +5,7 @@ buildscript {
     jcenter()
   }
   dependencies {
-    classpath "com.google.protobuf:protobuf-gradle-plugin:0.8.0"
+    classpath "com.google.protobuf:protobuf-gradle-plugin:0.8.1"
   }
 }
 
@@ -32,30 +32,23 @@ dependencies {
   testCompile project.libs.okhttp3mockwebserver
 }
 
-sourceSets {
-  main {
-    java {
-      srcDir "src/main/resources"
-    }
-    proto {
-      srcDir "src/main/proto"
-    }
-  }
-
-  test {
-    java {
-      srcDir "src/test/resources"
-    }
-  }
-}
-
 protobuf {
-  generatedFilesBaseDir = "$projectDir/src"
+  generatedFilesBaseDir = "$projectDir/gen"
   protoc {
     artifact = project.libs.protoc
   }
 }
 
+clean {
+  delete protobuf.generatedFilesBaseDir
+}
+
+idea {
+  module {
+    sourceDirs += file("${protobuf.generatedFilesBaseDir}/main/java");
+    sourceDirs += file("${protobuf.generatedFilesBaseDir}/main/proto");
+  }
+}
 
 idea {
   module {
