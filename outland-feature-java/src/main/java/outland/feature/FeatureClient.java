@@ -87,7 +87,7 @@ public class FeatureClient {
    * <ol>
    * <li>If the underlying {@link Feature} has a state equal to {@link State#off}.</li>
    * <li>The {@link Feature} is enabled, but is a boolean option type and the boolean option
-   * evaluated to false. </li>
+   * selected to false. </li>
    * <li>If the feature does not exist.</li>
    * <li>If there was an internal error. </li>
    * </ol>
@@ -152,7 +152,7 @@ public class FeatureClient {
    * <ol>
    * <li>If the underlying {@link Feature} has a state equal to {@link State#off}.</li>
    * <li>The {@link Feature} is enabled, but is a boolean option type and the boolean option
-   * evaluated to false. </li>
+   * selected to false. </li>
    * <li>If the feature does not exist.</li>
    * <li>If there was an internal error. </li>
    * </ol>
@@ -201,268 +201,268 @@ public class FeatureClient {
   }
 
   /**
-   * Evaluate a boolean type option.
+   * Select a boolean type option.
    *
    * <p>
-   * This is a convenience call for {@link #evaluateBoolean(String, String)}
+   * This is a convenience call for {@link #selectBoolean(String, String)}
    * where the group argument is taken from  {@link #defaultGroup()}.
    * </p>
    *
    * @param featureKey the feature key defined for the feature
-   * @return true if the feature evaluates to "true". Returns false if the feature evaluates to
+   * @return true if the feature selects to "true". Returns false if the feature selects to
    * "false". Always return false if the feature is set to {@link State#off}.
    * @throws FeatureException if the supplied featureKey is null.
    */
-  public boolean evaluateBoolean(String featureKey) {
+  public boolean selectBoolean(String featureKey) {
     FeatureException.throwIfNull(featureKey, "Please supply a featureKey");
 
-    return evaluateBooleanInner(defaultGroup, featureKey);
+    return selectBooleanInner(defaultGroup, featureKey);
   }
 
   /**
-   * Evaluate a boolean type option.
+   * Select a boolean type option.
    *
    * <p>
    * This will check the feature's bool options and return true or false, factoring
    * in the weights of the options. This means a feature that is set to {@link State#on} can return
    * false due to the weight sampling step. Features that are set to {@link State#off} always
-   * evaluate to false.
+   * select to false.
    * </p>
    *
    * <p>
    * <b>Warning:</b> passing a non-bool {@link OptionType} to this method will have the feature's
-   * {@link State} evaluated, that is, the result of a non-bool type for this method
-   * is the same as {@link #enabledFor(String, String)}. Also, evaluating a non-existent feature
+   * {@link State} selected, that is, the result of a non-bool type for this method
+   * is the same as {@link #enabledFor(String, String)}. Also, selecting a non-existent feature
    * results in false. If you want to force an error in these cases, call
-   * {@link #evaluateBooleanThrowing(String, String)}.
+   * {@link #selectBooleanThrowing(String, String)}.
    * </p>
    *
    * @param group the group the feature belongs to.
    * @param featureKey the feature key defined for the feature
-   * @return true if the feature evaluates to "true". Returns false if the feature evaluates to
+   * @return true if the feature selects to "true". Returns false if the feature selects to
    * "false". Always return false if the feature is set to {@link State#off}.
    * @throws FeatureException if the supplied group or featureKey is null.
    */
-  public boolean evaluateBoolean(String group, String featureKey) {
+  public boolean selectBoolean(String group, String featureKey) {
     FeatureException.throwIfNull(group, "Please supply a group");
     FeatureException.throwIfNull(featureKey, "Please supply a featureKey");
 
-    return evaluateBooleanInner(group, featureKey);
+    return selectBooleanInner(group, featureKey);
   }
 
   /**
-   * Evaluate a boolean type option.
+   * Select a boolean type option.
    * <p>
-   * This is a convenience call for {@link #evaluateBooleanThrowing(String, String)}
+   * This is a convenience call for {@link #selectBooleanThrowing(String, String)}
    * where the group argument is taken from  {@link #defaultGroup()}.
    * </p>
    *
    * @param featureKey the feature key defined for the feature
-   * @return true if the feature evaluates to "true". Returns false if the feature evaluates to
+   * @return true if the feature selects to "true". Returns false if the feature selects to
    * "false". Always return false if the feature is set to  {@link State#off}.
    * @throws FeatureException if the supplied featureKey is null, the feature does not exist, or is
    * not a boolean option type.
    */
-  public boolean evaluateBooleanThrowing(String featureKey) {
+  public boolean selectBooleanThrowing(String featureKey) {
     FeatureException.throwIfNull(featureKey, "Please supply a featureKey");
 
-    return evaluateBooleanInnerThrowing(defaultGroup, featureKey);
+    return selectBooleanInnerThrowing(defaultGroup, featureKey);
   }
 
   /**
-   * Evaluate a boolean type option.
+   * Select a boolean type option.
    *
    * <p>
-   * This is same as {@link #evaluateBoolean(String, String)} except it will throw a
+   * This is same as {@link #selectBoolean(String, String)} except it will throw a
    * {@link FeatureException} if the feature does not exist or the discovered option
    * was not a bool type.
    * </p>
    *
    * @param group the group the feature belongs to.
    * @param featureKey the feature key defined for the feature
-   * @return true if the feature evaluates to "true". Returns false if the feature evaluates to
+   * @return true if the feature selects to "true". Returns false if the feature selects to
    * "false". Always return false if the feature is set to  {@link State#off}.
    * @throws FeatureException if the supplied group or featureKey is null, the feature does not
    * exist, or is not a boolean option type.
    */
-  public boolean evaluateBooleanThrowing(String group, String featureKey) {
+  public boolean selectBooleanThrowing(String group, String featureKey) {
     FeatureException.throwIfNull(group, "Please supply a group");
     FeatureException.throwIfNull(featureKey, "Please supply a featureKey");
 
-    return evaluateBooleanInnerThrowing(group, featureKey);
+    return selectBooleanInnerThrowing(group, featureKey);
   }
 
   /**
-   * Evaluate a string type option.
+   * Select a string type option.
    *
    * <p>
-   * This is a convenience call for {@link #evaluateString(String, String)}
+   * This is a convenience call for {@link #selectString(String, String)}
    * where the group argument is taken from  {@link #defaultGroup()}.
    * </p>
    *
    * @param featureKey the feature key defined for the feature
-   * @return the evaluated option or the control value if the feature is set to {@link State#off}.
+   * @return the selected option or the control value if the feature is set to {@link State#off}.
    * @throws FeatureException if the supplied featureKey is null.
    */
-  public String evaluateString(String featureKey) {
+  public String selectString(String featureKey) {
     FeatureException.throwIfNull(featureKey, "Please supply a featureKey");
 
-    return evaluateInner(defaultGroup, featureKey);
+    return selectInner(defaultGroup, featureKey);
   }
 
   /**
-   * Evaluate a string type option.
+   * Select a string type option.
    *
    * <p>
    * This will check the feature's string options and return a value, factoring
    * in the weights of the options. Features that are set to {@link State#off} always
-   * evaluate to their control value.
+   * select to their control value.
    * </p>
    *
    * <p>
    * For non-string option types (eg a bool) their raw string values are returned. Non-existent
    * features will return the empty string (""). If you want to force an error for a missing
-   * feature, call {@link #evaluateStringThrowing(String, String)}.
+   * feature, call {@link #selectStringThrowing(String, String)}.
    * </p>
    *
    * @param group the group the feature belongs to.
    * @param featureKey the feature key defined for the feature
-   * @return the evaluated option or the control value if the feature is set to {@link State#off}.
+   * @return the selected option or the control value if the feature is set to {@link State#off}.
    * @throws FeatureException if the supplied group or featureKey is null.
    */
-  public String evaluateString(String group, String featureKey) {
+  public String selectString(String group, String featureKey) {
     FeatureException.throwIfNull(group, "Please supply a group");
     FeatureException.throwIfNull(featureKey, "Please supply a featureKey");
 
     // all option values are raw strings, we can pass through to the general method
-    return evaluateInner(group, featureKey);
+    return selectInner(group, featureKey);
   }
 
   /**
-   * Evaluate a string type option.
+   * Select a string type option.
    *
    * <p>
-   * This is a convenience call for {@link #evaluateStringThrowing(String, String)}
+   * This is a convenience call for {@link #selectStringThrowing(String, String)}
    * where the group argument is taken from  {@link #defaultGroup()}.
    * </p>
    *
    * @param featureKey the feature key defined for the feature
-   * @return the evaluated option or the control value if the feature is set to {@link State#off}.
+   * @return the selected option or the control value if the feature is set to {@link State#off}.
    * @throws FeatureException if the supplied featureKey is null, the feature does not exist, or is
    * not a string option type.
    */
-  public String evaluateStringThrowing(String featureKey) {
+  public String selectStringThrowing(String featureKey) {
     FeatureException.throwIfNull(featureKey, "Please supply a featureKey");
 
-    return evaluateThrowing(defaultGroup, featureKey);
+    return selectThrowing(defaultGroup, featureKey);
   }
 
   /**
-   * Evaluate a string type option.
+   * Select a string type option.
    *
    * <p>
-   * This is same as {@link #evaluateString(String, String)} except it will throw a
+   * This is same as {@link #selectString(String, String)} except it will throw a
    * {@link FeatureException} if the feature does not exist or the option type is not a string.
    * </p>
    *
    * @param group the group the feature belongs to.
    * @param featureKey the feature key defined for the feature
-   * @return the evaluated option or the control value if the feature is set to {@link State#off}.
+   * @return the selected option or the control value if the feature is set to {@link State#off}.
    * @throws FeatureException if the supplied group or featureKey is null, the feature does not
    * exist, or is not a string option type.
    */
-  public String evaluateStringThrowing(String group, String featureKey) {
+  public String selectStringThrowing(String group, String featureKey) {
     FeatureException.throwIfNull(group, "Please supply a group");
     FeatureException.throwIfNull(featureKey, "Please supply a featureKey");
 
-    return evaluateThrowing(group, featureKey);
+    return selectThrowing(group, featureKey);
   }
 
   /**
-   * Evaluate an option returning one of its values.
+   * Select an option returning one of its values.
    *
    * <p>
-   * This is a convenience call for {@link #evaluate(String, String)}
+   * This is a convenience call for {@link #select(String, String)}
    * where the group argument is taken from  {@link #defaultGroup()}.
    * </p>
    *
    * @param featureKey the feature key defined for the feature
-   * @return the evaluated option, the control value if the feature is set to {@link State#off}, or
+   * @return the selected option, the control value if the feature is set to {@link State#off}, or
    * the empty string if the feature is not found.
    * @throws FeatureException if the supplied featureKey is null.
    */
-  public String evaluate(String featureKey) {
+  public String select(String featureKey) {
     FeatureException.throwIfNull(featureKey, "Please supply a featureKey");
 
-    return evaluateInner(defaultGroup, featureKey);
+    return selectInner(defaultGroup, featureKey);
   }
 
   /**
-   * Evaluate an option returning one of its values.
+   * Select an option returning one of its values.
    *
    * <p>
    * This will check the feature's options and return a value, factoring
    * in the weights of the options. Features that are set to {@link State#off} always
-   * evaluate to their control value.
+   * select to their control value.
    * </p>
    *
    * <p>
    * For all option types their raw string values are returned. Non-existent
    * features and feature flags will return the empty string (""). If you want to force an error
-   * for a missing feature or a flag call, use {@link #evaluateStringThrowing(String, String)}.
+   * for a missing feature or a flag call, use {@link #selectStringThrowing(String, String)}.
    * </p>
    *
    * @param group the group the feature belongs to.
    * @param featureKey the feature key defined for the feature
-   * @return the evaluated option, the control value if the feature is set to {@link State#off}, or
+   * @return the selected option, the control value if the feature is set to {@link State#off}, or
    * the empty string if the feature is not found.
    * @throws FeatureException if the supplied group or featureKey is null.
    */
-  public String evaluate(String group, String featureKey) {
+  public String select(String group, String featureKey) {
     FeatureException.throwIfNull(group, "Please supply a group");
     FeatureException.throwIfNull(featureKey, "Please supply a featureKey");
 
-    return evaluateInner(group, featureKey);
+    return selectInner(group, featureKey);
   }
 
   /**
-   * Evaluate an option returning one of its values.
+   * Select an option returning one of its values.
    *
    * <p>
-   * This is a convenience call for {@link #evaluateThrowing(String, String)}
+   * This is a convenience call for {@link #selectThrowing(String, String)}
    * where the group argument is taken from  {@link #defaultGroup()}.
    * </p>
    *
    * @param featureKey the feature key defined for the feature
-   * @return the evaluated option or the control value if the feature is set to {@link State#off}.
+   * @return the selected option or the control value if the feature is set to {@link State#off}.
    * @throws FeatureException if the supplied featureKey is null, the feature does not exist, or is
    * a flag type.
    */
-  public String evaluateThrowing(String featureKey) {
+  public String selectThrowing(String featureKey) {
     FeatureException.throwIfNull(featureKey, "Please supply a featureKey");
 
-    return evaluateInnerThrowing(defaultGroup, featureKey);
+    return selectInnerThrowing(defaultGroup, featureKey);
   }
 
   /**
-   * Evaluate an option returning one of its values.
+   * Select an option returning one of its values.
    *
    * <p>
-   * This is same as {@link #evaluate(String, String)} except it will throw a
+   * This is same as {@link #select(String, String)} except it will throw a
    * {@link FeatureException} if the feature does not exist or the option type is a flag.
    * </p>
    *
    * @param group the group the feature belongs to.
    * @param featureKey the feature key defined for the feature
-   * @return the evaluated option or the control value if the feature is set to {@link State#off}.
+   * @return the selected option or the control value if the feature is set to {@link State#off}.
    * @throws FeatureException if the supplied group or featureKey is null, the feature does not
    * exist, or is a flag type.
    */
-  public String evaluateThrowing(String group, String featureKey) {
+  public String selectThrowing(String group, String featureKey) {
     FeatureException.throwIfNull(group, "Please supply a group");
     FeatureException.throwIfNull(featureKey, "Please supply a featureKey");
 
-    return evaluateInnerThrowing(group, featureKey);
+    return selectInnerThrowing(group, featureKey);
   }
 
   /**
@@ -564,17 +564,17 @@ public class FeatureClient {
     return record.enabled(this.namespace);
   }
 
-  private boolean evaluateBooleanInner(String group, String featureKey) {
+  private boolean selectBooleanInner(String group, String featureKey) {
     final FeatureRecord record = featureStore.find(group, featureKey);
 
     if (record == null) {
       return false;
     }
 
-    return record.evaluateBoolean(this.namespace);
+    return record.selectBoolean(this.namespace);
   }
 
-  private boolean evaluateBooleanInnerThrowing(String group, String featureKey) {
+  private boolean selectBooleanInnerThrowing(String group, String featureKey) {
     final FeatureRecord record = featureStore.find(group, featureKey);
 
     if (record == null) {
@@ -586,20 +586,20 @@ public class FeatureClient {
           group, featureKey, OptionType.bool, record.feature().getOptions().getOption());
     }
 
-    return record.evaluateBoolean(this.namespace);
+    return record.selectBoolean(this.namespace);
   }
 
-  private String evaluateInner(String group, String featureKey) {
+  private String selectInner(String group, String featureKey) {
     final FeatureRecord record = featureStore.find(group, featureKey);
 
     if (record == null) {
       return "";
     }
 
-    return record.evaluate(this.namespace);
+    return record.select(this.namespace);
   }
 
-  private String evaluateInnerThrowing(String group, String featureKey) {
+  private String selectInnerThrowing(String group, String featureKey) {
     final FeatureRecord record = featureStore.find(group, featureKey);
 
     if (record == null) {
@@ -611,7 +611,7 @@ public class FeatureClient {
           group, featureKey, OptionType.string, record.feature().getOptions().getOption());
     }
 
-    return record.evaluate(this.namespace);
+    return record.select(this.namespace);
   }
 
   private void throwNotFound(String group, String featureKey) {
