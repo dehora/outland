@@ -1,5 +1,25 @@
 ### Changes
 
+### 0.0.11
+
+#### Server
+
+- Adds support for string based options (OptionType "string").
+- Allows an option's collection to have a default/fallback ("control").
+- Supports updating namespaces via API.
+- Caches group data on feature server.
+
+#### Client
+
+- Introduces client signatures for selecting options based on weights/control values.
+- Supports selecting string/bool options using a roulette wheel selection
+- Adds a FeatureRecord wrapper for features to memoize some data/calls (eg weights).
+- Moves enabled and selection checks into FeatureRecord.
+- Adds default group method signatures to FeatureClient.
+- Fixes group guard check on ResourceOptions.
+- Increases test coverage.
+- Moves client generated proto files to dedicated src folder.
+
 ### 0.0.10
 
 #### Server
