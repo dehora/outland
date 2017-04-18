@@ -87,18 +87,9 @@ class FeatureRecord {
       return evaluate();
     }
 
-
     if(! enabled(namespace)) {
-
       // if the namespace is off, try its control option, or fallback to the default control
-
-      final FeatureOption featureOption = namespaceControlFeatureOptionMap.get(namespace);
-
-      if (featureOption != null) {
-        return featureOption.getValue();
-      }
-
-      return controlFeatureOption.getValue();
+      return evaluateControlOption(namespace);
     }
 
     // from here, we're in an enabled namespace
@@ -110,13 +101,7 @@ class FeatureRecord {
     }
 
     // this is probably bad/missing feature data
-
-    final FeatureOption featureOption = namespaceControlFeatureOptionMap.get(namespace);
-
-    if (featureOption != null) {
-      return featureOption.getValue();
-    }
-    return controlFeatureOption.getValue();
+    return evaluateControlOption(namespace);
   }
 
   boolean evaluateBoolean() {
@@ -125,6 +110,16 @@ class FeatureRecord {
 
   boolean evaluateBoolean(String namespace) {
     return Boolean.parseBoolean(evaluate(namespace));
+  }
+
+  private String evaluateControlOption(String namespace) {
+    final FeatureOption featureOption = namespaceControlFeatureOptionMap.get(namespace);
+
+    if (featureOption != null) {
+      return featureOption.getValue();
+    }
+
+    return controlFeatureOption.getValue();
   }
 
   private boolean isDefaultNamespace(String namespace) {
