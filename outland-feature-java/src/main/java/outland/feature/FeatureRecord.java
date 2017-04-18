@@ -1,8 +1,10 @@
 package outland.feature;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Strings;
 import com.google.common.collect.Maps;
 import java.util.Map;
+import java.util.Objects;
 import outland.feature.proto.Feature;
 import outland.feature.proto.FeatureOption;
 import outland.feature.proto.NamespaceFeature;
@@ -11,23 +13,23 @@ import outland.feature.proto.OptionType;
 
 class FeatureRecord {
 
-  private OptionEvaluatorWeighted optionEvaluatorWeighted;
-
-  static FeatureRecord build(Feature feature) {
-    return new FeatureRecord(feature);
-  }
-
   private final Feature feature;
   private final Map<String, NamespaceFeature> namespaceFeatureMap = Maps.newHashMap();
   private final Map<String, FeatureOption> namespaceControlFeatureOptionMap = Maps.newHashMap();
-  private final Map<String, OptionEvaluatorWeighted> namespaceOptionEvaluatorWeightedMap = Maps.newHashMap();
-  private FeatureOption controlFeatureOption;
+  private final Map<String, OptionEvaluatorWeighted> namespaceOptionEvaluatorWeightedMap =
+      Maps.newHashMap();
   private final Evaluator evaluator;
+  private OptionEvaluatorWeighted optionEvaluatorWeighted;
+  private FeatureOption controlFeatureOption;
 
   private FeatureRecord(Feature feature) {
     this.feature = feature;
     this.evaluator = new Evaluator();
     prepare();
+  }
+
+  static FeatureRecord build(Feature feature) {
+    return new FeatureRecord(feature);
   }
 
   public Feature feature() {
@@ -46,16 +48,16 @@ class FeatureRecord {
     return namespaceControlFeatureOptionMap.get(namespace);
   }
 
-  public OptionEvaluatorWeighted optionEvaluatorWeighted() {
+  OptionEvaluatorWeighted optionEvaluatorWeighted() {
     return optionEvaluatorWeighted;
   }
 
-  public OptionEvaluatorWeighted optionEvaluatorWeighted(String namespace) {
+  OptionEvaluatorWeighted optionEvaluatorWeighted(String namespace) {
     return namespaceOptionEvaluatorWeightedMap.get(namespace);
   }
 
   boolean evaluate(String namespace) {
-    if(namespace.equals(ServerConfiguration.DEFAULT_NAMESPACE)) {
+    if (namespace.equals(ServerConfiguration.DEFAULT_NAMESPACE)) {
       return evaluator.evaluate(this);
     }
     return evaluator.evaluate(this, namespace);
@@ -110,4 +112,36 @@ class FeatureRecord {
     return !options.getOption().equals(OptionType.flag);
   }
 
+  @Override public int hashCode() {
+    return Objects.hash(optionEvaluatorWeighted, feature, namespaceFeatureMap,
+        namespaceControlFeatureOptionMap, namespaceOptionEvaluatorWeightedMap, controlFeatureOption,
+        evaluator);
+  }
+
+  @Override public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    FeatureRecord record = (FeatureRecord) o;
+    return Objects.equals(optionEvaluatorWeighted, record.optionEvaluatorWeighted) &&
+        Objects.equals(feature, record.feature) &&
+        Objects.equals(namespaceFeatureMap, record.namespaceFeatureMap) &&
+        Objects.equals(namespaceControlFeatureOptionMap,
+            record.namespaceControlFeatureOptionMap) &&
+        Objects.equals(namespaceOptionEvaluatorWeightedMap,
+            record.namespaceOptionEvaluatorWeightedMap) &&
+        Objects.equals(controlFeatureOption, record.controlFeatureOption) &&
+        Objects.equals(evaluator, record.evaluator);
+  }
+
+  @Override public String toString() {
+    return MoreObjects.toStringHelper(this)
+        .add("optionEvaluatorWeighted", optionEvaluatorWeighted)
+        .add("feature", feature)
+        .add("namespaceFeatureMap", namespaceFeatureMap)
+        .add("namespaceControlFeatureOptionMap", namespaceControlFeatureOptionMap)
+        .add("namespaceOptionEvaluatorWeightedMap", namespaceOptionEvaluatorWeightedMap)
+        .add("controlFeatureOption", controlFeatureOption)
+        .add("evaluator", evaluator)
+        .toString();
+  }
 }
