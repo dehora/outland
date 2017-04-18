@@ -28,7 +28,7 @@ public class Evaluator {
     }
 
     if (options.getOption().equals(OptionType.bool)) {
-      return new OptionEvaluator().evaluateBooleanOptions(options, state);
+      return new  OptionEvaluatorBool().evaluateBooleanOptions(options, state);
     }
 
     return false;
