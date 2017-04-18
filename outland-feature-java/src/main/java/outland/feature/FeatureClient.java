@@ -13,7 +13,6 @@ import outland.feature.proto.State;
 /**
  * A client which can be used to check feature state and access the feature management APIs.
  * Clients must be created via a {@link FeatureClient.Builder}.
- *
  */
 public class FeatureClient {
 
@@ -30,7 +29,6 @@ public class FeatureClient {
   private final String namespace;
   private final boolean localStoreEnabled;
   private final MetricRegistry metricRegistry;
-
 
   public FeatureClient(Builder builder) {
     this.serverConfiguration = builder.serverConfiguration;
@@ -105,8 +103,8 @@ public class FeatureClient {
    * @param featureKey the feature key defined for the feature
    * @return true if the feature is enabled. Returns false if the feature is not enabled, not known,
    * or there was an internal error.
-   * @throws FeatureException if the supplied featureKey is null, or, the default group has not
-   * been configured.
+   * @throws FeatureException if the supplied featureKey is null, or, the default group has not been
+   * configured.
    */
   public boolean enabled(String featureKey) {
     throwIfNoDefaultNamespace();
@@ -128,8 +126,8 @@ public class FeatureClient {
    * </p>
    *
    * @param featureKey the feature key defined for the feature
-   * @return true if the feature is enabled ({@link State#on}). Returns false if the feature
-   * is not enabled ({@link State#off}).
+   * @return true if the feature is enabled ({@link State#on}). Returns false if the feature is not
+   * enabled ({@link State#off}).
    * @throws FeatureException if the supplied featureKey is null, the default group has not been
    * configured, the feature does not exist or there was an internal error.
    */
@@ -171,8 +169,8 @@ public class FeatureClient {
    * @param featureKey the feature key defined for the feature
    * @return true if the feature is enabled. Returns false if the feature is not enabled, not known,
    * or there was an internal error.
-   * @throws FeatureException if the supplied featureKey is null, or, the default group has not
-   * been configured.
+   * @throws FeatureException if the supplied featureKey is null, or, the default group has not been
+   * configured.
    */
   public boolean enabledFor(String group, String featureKey) {
     FeatureException.throwIfNull(group, "Please supply a defaultGroup");
@@ -190,8 +188,8 @@ public class FeatureClient {
    *
    * @param group the group the feature belongs to.
    * @param featureKey the feature key defined for the feature
-   * @return true if the feature is enabled ({@link State#on}). Returns false if the feature
-   * is not enabled ({@link State#off}).
+   * @return true if the feature is enabled ({@link State#on}). Returns false if the feature is not
+   * enabled ({@link State#off}).
    * @throws FeatureException if the supplied featureKey is null, the default group has not been
    * configured, the feature does not exist or there was an internal error.
    */
@@ -210,9 +208,9 @@ public class FeatureClient {
    * where the group argument is taken from  {@link #defaultGroup()}.
    * </p>
    *
-   * @param featureKey  the feature key defined for the feature
-   * @return true if the feature evaluates to "true". Returns false if the feature
-   * evaluates to "false". Always return false if the feature is set to {@link State#off}.
+   * @param featureKey the feature key defined for the feature
+   * @return true if the feature evaluates to "true". Returns false if the feature evaluates to
+   * "false". Always return false if the feature is set to {@link State#off}.
    * @throws FeatureException if the supplied featureKey is null.
    */
   public boolean evaluateBoolean(String featureKey) {
@@ -220,6 +218,7 @@ public class FeatureClient {
 
     return evaluateBooleanInner(defaultGroup, featureKey);
   }
+
   /**
    * Evaluate a boolean type option.
    *
@@ -231,17 +230,17 @@ public class FeatureClient {
    * </p>
    *
    * <p>
-   *   <b>Warning:</b> passing a non-bool {@link OptionType} to this method will have the feature's
-   *   {@link State} evaluated, that is, the result of a non-bool type for this method
-   *   is the same as {@link #enabledFor(String, String)}. Also, evaluating a non-existent feature
-   *   results in false. If you want to force an error in these cases, call
-   *   {@link #evaluateBooleanThrowing(String, String)}.
+   * <b>Warning:</b> passing a non-bool {@link OptionType} to this method will have the feature's
+   * {@link State} evaluated, that is, the result of a non-bool type for this method
+   * is the same as {@link #enabledFor(String, String)}. Also, evaluating a non-existent feature
+   * results in false. If you want to force an error in these cases, call
+   * {@link #evaluateBooleanThrowing(String, String)}.
    * </p>
    *
-   * @param group  the group the feature belongs to.
-   * @param featureKey  the feature key defined for the feature
-   * @return true if the feature evaluates to "true". Returns false if the feature
-   * evaluates to "false". Always return false if the feature is set to {@link State#off}.
+   * @param group the group the feature belongs to.
+   * @param featureKey the feature key defined for the feature
+   * @return true if the feature evaluates to "true". Returns false if the feature evaluates to
+   * "false". Always return false if the feature is set to {@link State#off}.
    * @throws FeatureException if the supplied group or featureKey is null.
    */
   public boolean evaluateBoolean(String group, String featureKey) {
@@ -258,11 +257,11 @@ public class FeatureClient {
    * where the group argument is taken from  {@link #defaultGroup()}.
    * </p>
    *
-   * @param featureKey  the feature key defined for the feature
-   * @return true if the feature evaluates to "true". Returns false if the feature
-   * evaluates to "false". Always return false if the feature is set to  {@link State#off}.
-   * @throws FeatureException if the supplied featureKey is null, the feature does
-   * not exist, or is not a boolean option type.
+   * @param featureKey the feature key defined for the feature
+   * @return true if the feature evaluates to "true". Returns false if the feature evaluates to
+   * "false". Always return false if the feature is set to  {@link State#off}.
+   * @throws FeatureException if the supplied featureKey is null, the feature does not exist, or is
+   * not a boolean option type.
    */
   public boolean evaluateBooleanThrowing(String featureKey) {
     FeatureException.throwIfNull(featureKey, "Please supply a featureKey");
@@ -279,12 +278,12 @@ public class FeatureClient {
    * was not a bool type.
    * </p>
    *
-   * @param group  the group the feature belongs to.
-   * @param featureKey  the feature key defined for the feature
-   * @return true if the feature evaluates to "true". Returns false if the feature
-   * evaluates to "false". Always return false if the feature is set to  {@link State#off}.
-   * @throws FeatureException if the supplied group or featureKey is null, the feature does
-   * not exist, or is not a boolean option type.
+   * @param group the group the feature belongs to.
+   * @param featureKey the feature key defined for the feature
+   * @return true if the feature evaluates to "true". Returns false if the feature evaluates to
+   * "false". Always return false if the feature is set to  {@link State#off}.
+   * @throws FeatureException if the supplied group or featureKey is null, the feature does not
+   * exist, or is not a boolean option type.
    */
   public boolean evaluateBooleanThrowing(String group, String featureKey) {
     FeatureException.throwIfNull(group, "Please supply a group");
@@ -301,7 +300,7 @@ public class FeatureClient {
    * where the group argument is taken from  {@link #defaultGroup()}.
    * </p>
    *
-   * @param featureKey  the feature key defined for the feature
+   * @param featureKey the feature key defined for the feature
    * @return the evaluated option or the control value if the feature is set to {@link State#off}.
    * @throws FeatureException if the supplied featureKey is null.
    */
@@ -326,8 +325,8 @@ public class FeatureClient {
    * feature, call {@link #evaluateStringThrowing(String, String)}.
    * </p>
    *
-   * @param group  the group the feature belongs to.
-   * @param featureKey  the feature key defined for the feature
+   * @param group the group the feature belongs to.
+   * @param featureKey the feature key defined for the feature
    * @return the evaluated option or the control value if the feature is set to {@link State#off}.
    * @throws FeatureException if the supplied group or featureKey is null.
    */
@@ -347,10 +346,10 @@ public class FeatureClient {
    * where the group argument is taken from  {@link #defaultGroup()}.
    * </p>
    *
-   * @param featureKey  the feature key defined for the feature
+   * @param featureKey the feature key defined for the feature
    * @return the evaluated option or the control value if the feature is set to {@link State#off}.
-   * @throws FeatureException if the supplied featureKey is null, the feature does
-   * not exist, or is not a string option type.
+   * @throws FeatureException if the supplied featureKey is null, the feature does not exist, or is
+   * not a string option type.
    */
   public String evaluateStringThrowing(String featureKey) {
     FeatureException.throwIfNull(featureKey, "Please supply a featureKey");
@@ -366,11 +365,11 @@ public class FeatureClient {
    * {@link FeatureException} if the feature does not exist or the option type is not a string.
    * </p>
    *
-   * @param group  the group the feature belongs to.
-   * @param featureKey  the feature key defined for the feature
+   * @param group the group the feature belongs to.
+   * @param featureKey the feature key defined for the feature
    * @return the evaluated option or the control value if the feature is set to {@link State#off}.
-   * @throws FeatureException if the supplied group or featureKey is null, the feature does
-   * not exist, or is not a string option type.
+   * @throws FeatureException if the supplied group or featureKey is null, the feature does not
+   * exist, or is not a string option type.
    */
   public String evaluateStringThrowing(String group, String featureKey) {
     FeatureException.throwIfNull(group, "Please supply a group");
@@ -387,9 +386,9 @@ public class FeatureClient {
    * where the group argument is taken from  {@link #defaultGroup()}.
    * </p>
    *
-   * @param featureKey  the feature key defined for the feature
-   * @return the evaluated option, the control value if the feature is set to {@link State#off},
-   * or the empty string if the feature is not found.
+   * @param featureKey the feature key defined for the feature
+   * @return the evaluated option, the control value if the feature is set to {@link State#off}, or
+   * the empty string if the feature is not found.
    * @throws FeatureException if the supplied featureKey is null.
    */
   public String evaluate(String featureKey) {
@@ -413,10 +412,10 @@ public class FeatureClient {
    * for a missing feature or a flag call, use {@link #evaluateStringThrowing(String, String)}.
    * </p>
    *
-   * @param group  the group the feature belongs to.
-   * @param featureKey  the feature key defined for the feature
-   * @return the evaluated option, the control value if the feature is set to {@link State#off},
-   * or the empty string if the feature is not found.
+   * @param group the group the feature belongs to.
+   * @param featureKey the feature key defined for the feature
+   * @return the evaluated option, the control value if the feature is set to {@link State#off}, or
+   * the empty string if the feature is not found.
    * @throws FeatureException if the supplied group or featureKey is null.
    */
   public String evaluate(String group, String featureKey) {
@@ -434,10 +433,10 @@ public class FeatureClient {
    * where the group argument is taken from  {@link #defaultGroup()}.
    * </p>
    *
-   * @param featureKey  the feature key defined for the feature
+   * @param featureKey the feature key defined for the feature
    * @return the evaluated option or the control value if the feature is set to {@link State#off}.
-   * @throws FeatureException if the supplied featureKey is null, the feature does
-   * not exist, or is a flag type.
+   * @throws FeatureException if the supplied featureKey is null, the feature does not exist, or is
+   * a flag type.
    */
   public String evaluateThrowing(String featureKey) {
     FeatureException.throwIfNull(featureKey, "Please supply a featureKey");
@@ -453,11 +452,11 @@ public class FeatureClient {
    * {@link FeatureException} if the feature does not exist or the option type is a flag.
    * </p>
    *
-   * @param group  the group the feature belongs to.
-   * @param featureKey  the feature key defined for the feature
+   * @param group the group the feature belongs to.
+   * @param featureKey the feature key defined for the feature
    * @return the evaluated option or the control value if the feature is set to {@link State#off}.
-   * @throws FeatureException if the supplied group or featureKey is null, the feature does
-   * not exist, or is a flag type.
+   * @throws FeatureException if the supplied group or featureKey is null, the feature does not
+   * exist, or is a flag type.
    */
   public String evaluateThrowing(String group, String featureKey) {
     FeatureException.throwIfNull(group, "Please supply a group");
