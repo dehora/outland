@@ -13,7 +13,7 @@ import static org.junit.Assert.assertNotNull;
 public class FeatureRecordTest {
 
   @Test
-  public void testEvaluateString() {
+  public void testEnabledString() {
 
     /*
      test state level evaluation of a string option. when we're looking at strings wrt
@@ -34,7 +34,7 @@ public class FeatureRecordTest {
   }
 
   @Test
-  public void testEvaluateBool() {
+  public void testEnabledBool() {
 
     /*
      test state level evaluation of a bool option. when we're looking at bools wrt
