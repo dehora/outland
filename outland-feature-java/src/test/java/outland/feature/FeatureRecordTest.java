@@ -7,6 +7,7 @@ import outland.feature.proto.NamespaceFeature;
 
 import static junit.framework.TestCase.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 public class FeatureRecordTest {
 
@@ -40,5 +41,9 @@ public class FeatureRecordTest {
     }
 
     assertEquals(stagingControlOptionData, stagingControlOptionRecord);
+
+
+    assertNotNull(record.optionEvaluatorWeighted());
+    assertNotNull(record.optionEvaluatorWeighted("staging"));
   }
 }
