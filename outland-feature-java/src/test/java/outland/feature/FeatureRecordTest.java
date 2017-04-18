@@ -1,5 +1,6 @@
 package outland.feature;
 
+import java.util.stream.IntStream;
 import org.junit.Test;
 import outland.feature.proto.Feature;
 import outland.feature.proto.FeatureOption;
@@ -11,6 +12,61 @@ import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertNotNull;
 
 public class FeatureRecordTest {
+
+  @Test
+  public void testEvaluateOptions() {
+
+    // IntStream iterations are there to stress sampler
+
+    FeatureRecord stringRecord = FeatureRecord.build(TestSupport.loadFeature(
+        "json/feature-eval-string-off-default-on-namespace-off-namespace.json"));
+
+    IntStream.range(0, 100).forEach(
+        i -> {
+          assertEquals("an off feature returns its control option",
+              "green", stringRecord.evaluate());
+
+          // production: off control: red, red's weight is 0 so can't be sampled
+          assertEquals("an off namespace feature returns its control option",
+              "red", stringRecord.evaluate("production"));
+
+          // development: on control: blue, red weight :10000 => sample fixed to always be red
+          assertEquals("an on namespace feature returns its weighted option",
+              "red", stringRecord.evaluate("development"));
+        });
+
+    FeatureRecord boolRecord1 = FeatureRecord.build(TestSupport.loadFeature(
+        "json/feature-eval-bool-off-default-on-namespace-always-true.json"));
+
+    IntStream.range(0, 100).forEach(
+        i -> {
+          // weighted to 10K true so an eval can't return anything but true
+          assertEquals("an off bool returns its control option",
+              "false", boolRecord1.evaluate());
+
+          // weighted to 10K true with a false control, so has to return true if on
+          assertEquals("an on namespace feature returns its weighted option",
+              "true", boolRecord1.evaluate("development"));
+        });
+
+    FeatureRecord boolRecord2 = FeatureRecord.build(TestSupport.loadFeature(
+        "json/feature-eval-bool-on-default-off-namespace-always-false.json"));
+
+    IntStream.range(0, 100).forEach(
+        i -> {
+          // false control weighted to 10K true so an eval can't return anything but true
+          assertEquals("an on bool returns its weighted option",
+              "true", boolRecord2.evaluate());
+
+          /*
+          this one's a bit strange. the namespace is off and the weights are 100% false
+           but the control is true, so we expect the off to evaluate into "true"
+            */
+          assertEquals("an off namespace feature returns its control option, even if "
+                  + "that control is 'true'",
+              "true", boolRecord2.evaluate("development"));
+        });
+  }
 
   @Test
   public void testEnabledFlag() {
@@ -27,7 +83,6 @@ public class FeatureRecordTest {
         record1.enabled("missing"));
     assertFalse("false when an existing namespace state is off",
         record1.enabled(namespace));
-
 
     final Feature feature =
         TestSupport.loadFeature("json/feature-flag-off-default-on-namespace.json");
@@ -82,7 +137,6 @@ public class FeatureRecordTest {
         record1.enabled("missing"));
     assertTrue("true when an existing namespace state is on but the weights 100% biased false",
         record1.enabled(namespace));
-
 
     final Feature feature =
         TestSupport.loadFeature("json/feature-bool-off-default-on-namespace-always-true.json");

@@ -75,17 +75,18 @@ class FeatureRecord {
     return target.getFeature().getState().equals(State.on);
   }
 
+  String evaluate() {
+    if (enabled()) {
+      return optionEvaluatorWeighted().select().getValue();
+    }
+
+    return controlFeatureOption.getValue();
+  }
+
   String evaluate(String namespace) {
 
     if (isDefaultNamespace(namespace)) {
-
-      // if the default is on, use the base evaluator or fallback to control if off
-
-      if (enabled()) {
-        return optionEvaluatorWeighted().select().getValue();
-      }
-
-      return controlFeatureOption.getValue();
+      return evaluate();
     }
 
 

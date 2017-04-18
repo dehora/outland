@@ -75,6 +75,53 @@
                 "option": "string",
                 "name": "option-blue",
                 "value": "blue",
+                "weight": 0
+              },
+              {
+                "type": "option",
+                "id": "opt_01bdysctnfjef70jkbpbej0kye",
+                "option": "string",
+                "name": "option-green",
+                "value": "green",
+                "weight": 0
+              },
+              {
+                "type": "option",
+                "id": "opt_01bdysctnfgez21ah26qjk0mc0",
+                "option": "string",
+                "name": "option-red",
+                "value": "red",
+                "weight": 10000
+              }
+            ],
+            "control": "option-blue"
+          },
+          "version": {
+            "type": "version",
+            "timestamp": "1492460661423000",
+            "counter": "0"
+          }
+        }
+      },
+      {
+        "type": "nsfeature",
+        "namespace": "production",
+        "feature": {
+          "type": "nsfeature",
+          "id": "nsfeat_01bdysctnfrtmh1qn1v9zs0tn7",
+          "key": "flag-off",
+          "state": "off",
+          "options": {
+            "type": "option.collection",
+            "option": "string",
+            "maxweight": 10000,
+            "items": [
+              {
+                "type": "option",
+                "id": "opt_01bdysctnfbsbx0kcax5900r7m",
+                "option": "string",
+                "name": "option-blue",
+                "value": "blue",
                 "weight": 5000
               },
               {
@@ -83,7 +130,7 @@
                 "option": "string",
                 "name": "option-green",
                 "value": "green",
-                "weight": 3000
+                "weight": 5000
               },
               {
                 "type": "option",
@@ -91,10 +138,10 @@
                 "option": "string",
                 "name": "option-red",
                 "value": "red",
-                "weight": 2000
+                "weight": 0
               }
             ],
-            "control": "option-blue"
+            "control": "option-red"
           },
           "version": {
             "type": "version",
