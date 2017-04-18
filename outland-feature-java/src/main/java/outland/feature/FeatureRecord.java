@@ -11,6 +11,8 @@ import outland.feature.proto.OptionType;
 
 class FeatureRecord {
 
+  private OptionEvaluatorWeighted optionEvaluatorWeighted;
+
   static FeatureRecord build(Feature feature) {
     return new FeatureRecord(feature);
   }
@@ -18,6 +20,7 @@ class FeatureRecord {
   private final Feature feature;
   private final Map<String, NamespaceFeature> namespaceFeatureMap = Maps.newHashMap();
   private final Map<String, FeatureOption> namespaceControlFeatureOptionMap = Maps.newHashMap();
+  private final Map<String, OptionEvaluatorWeighted> namespaceOptionEvaluatorWeightedMap = Maps.newHashMap();
   private FeatureOption controlFeatureOption;
   private final Evaluator evaluator;
 
@@ -43,6 +46,14 @@ class FeatureRecord {
     return namespaceControlFeatureOptionMap.get(namespace);
   }
 
+  public OptionEvaluatorWeighted optionEvaluatorWeighted() {
+    return optionEvaluatorWeighted;
+  }
+
+  public OptionEvaluatorWeighted optionEvaluatorWeighted(String namespace) {
+    return namespaceOptionEvaluatorWeightedMap.get(namespace);
+  }
+
   boolean evaluate(String namespace) {
     if(namespace.equals(ServerConfiguration.DEFAULT_NAMESPACE)) {
       return evaluator.evaluate(this);
@@ -65,6 +76,7 @@ class FeatureRecord {
           break;
         }
       }
+      optionEvaluatorWeighted = new OptionEvaluatorWeighted(options.getItemsList());
     }
   }
 
@@ -80,6 +92,8 @@ class FeatureRecord {
             break;
           }
         }
+        namespaceOptionEvaluatorWeightedMap.put(
+            namespaceFeature.getNamespace(), new OptionEvaluatorWeighted(options.getItemsList()));
       }
     }
   }
