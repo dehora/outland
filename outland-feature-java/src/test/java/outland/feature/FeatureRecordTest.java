@@ -69,6 +69,37 @@ public class FeatureRecordTest {
   }
 
   @Test
+  public void testEvaluateBoolOptions() {
+
+    // same as testEvaluateOptions but with the evaluateBoolean wrapper
+
+    FeatureRecord boolRecord1 = FeatureRecord.build(TestSupport.loadFeature(
+        "json/feature-eval-bool-off-default-on-namespace-always-true.json"));
+
+    IntStream.range(0, 100).forEach(
+        i -> {
+          assertFalse("an off bool returns its control option",
+              boolRecord1.evaluateBoolean());
+
+          assertTrue("an on namespace feature returns its weighted option",
+              boolRecord1.evaluateBoolean("development"));
+        });
+
+    FeatureRecord boolRecord2 = FeatureRecord.build(TestSupport.loadFeature(
+        "json/feature-eval-bool-on-default-off-namespace-always-false.json"));
+
+    IntStream.range(0, 100).forEach(
+        i -> {
+          assertTrue("an on bool returns its weighted option",
+              boolRecord2.evaluateBoolean());
+
+          assertTrue("an off namespace feature returns its control option, even if "
+                  + "that control is 'true'",
+              boolRecord2.evaluateBoolean("development"));
+        });
+  }
+
+  @Test
   public void testEnabledFlag() {
 
     final String namespace = "staging";

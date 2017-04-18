@@ -121,6 +121,10 @@ class FeatureRecord {
     return controlFeatureOption.getValue();
   }
 
+  boolean evaluateBoolean() {
+    return Boolean.parseBoolean(evaluate());
+  }
+
   boolean evaluateBoolean(String namespace) {
     return Boolean.parseBoolean(evaluate(namespace));
   }
