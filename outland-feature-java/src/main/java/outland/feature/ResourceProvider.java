@@ -5,8 +5,7 @@ package outland.feature;
  * to make requests against the server. Acts as a {@link FunctionalInterface} and
  * can be used via a lambda expression.
  */
-@FunctionalInterface
-interface ResourceProvider {
+@FunctionalInterface interface ResourceProvider {
 
   /**
    * Supply a new resource to access the server.

@@ -3,7 +3,6 @@ package outland.feature;
 import com.codahale.metrics.Meter;
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.Timer;
-import java.util.Optional;
 import outland.feature.proto.Feature;
 import outland.feature.proto.FeatureCollection;
 

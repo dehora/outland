@@ -4,7 +4,6 @@ import java.net.URI;
 
 /**
  * Allows access to the API via resource classes.
- *
  */
 public class Resources {
 

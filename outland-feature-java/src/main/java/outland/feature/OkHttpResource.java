@@ -118,7 +118,8 @@ class OkHttpResource implements Resource {
   }
 
   private void applyAuthHeaderIfPresent(ResourceOptions options, Request.Builder builder) {
-    options.supplyToken().ifPresent(t -> builder.header(HEADER_AUTHORIZATION, t.realm() +" "+t.credential()));
+    options.supplyToken()
+        .ifPresent(t -> builder.header(HEADER_AUTHORIZATION, t.realm() + " " + t.credential()));
   }
 
   Response executeRequest(Request.Builder builder) {

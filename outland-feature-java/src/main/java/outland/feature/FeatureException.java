@@ -7,6 +7,25 @@ import com.google.common.base.Strings;
  */
 public class FeatureException extends RuntimeException {
 
+  private Problem problem;
+
+  /**
+   * @param problem the Problem detail
+   */
+  public FeatureException(Problem problem) {
+    super(problem.toMessage());
+    this.problem = problem;
+  }
+
+  /**
+   * @param problem the Problem detail
+   * @param cause the cause
+   */
+  public FeatureException(Problem problem, Throwable cause) {
+    super(problem.toMessage(), cause);
+    this.problem = problem;
+  }
+
   /**
    * Throw a FeatureException if the argument is null.
    *
@@ -37,25 +56,6 @@ public class FeatureException extends RuntimeException {
       throw new FeatureException(Problem.configProblem(cause.getMessage(), ""), cause);
     }
     return arg;
-  }
-
-  private Problem problem;
-
-  /**
-   * @param problem the Problem detail
-   */
-  public FeatureException(Problem problem) {
-    super(problem.toMessage());
-    this.problem = problem;
-  }
-
-  /**
-   * @param problem the Problem detail
-   * @param cause the cause
-   */
-  public FeatureException(Problem problem, Throwable cause) {
-    super(problem.toMessage(), cause);
-    this.problem = problem;
   }
 
   /**

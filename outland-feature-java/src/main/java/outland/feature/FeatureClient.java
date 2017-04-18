@@ -209,8 +209,8 @@ public class FeatureClient {
    * </p>
    *
    * @param featureKey the feature key defined for the feature
-   * @return true if the feature selects to "true". Returns false if the feature selects to
-   * "false". Always return false if the feature is set to {@link State#off}.
+   * @return true if the feature selects to "true". Returns false if the feature selects to "false".
+   * Always return false if the feature is set to {@link State#off}.
    * @throws FeatureException if the supplied featureKey is null.
    */
   public boolean selectBoolean(String featureKey) {
@@ -239,8 +239,8 @@ public class FeatureClient {
    *
    * @param group the group the feature belongs to.
    * @param featureKey the feature key defined for the feature
-   * @return true if the feature selects to "true". Returns false if the feature selects to
-   * "false". Always return false if the feature is set to {@link State#off}.
+   * @return true if the feature selects to "true". Returns false if the feature selects to "false".
+   * Always return false if the feature is set to {@link State#off}.
    * @throws FeatureException if the supplied group or featureKey is null.
    */
   public boolean selectBoolean(String group, String featureKey) {
@@ -258,8 +258,8 @@ public class FeatureClient {
    * </p>
    *
    * @param featureKey the feature key defined for the feature
-   * @return true if the feature selects to "true". Returns false if the feature selects to
-   * "false". Always return false if the feature is set to  {@link State#off}.
+   * @return true if the feature selects to "true". Returns false if the feature selects to "false".
+   * Always return false if the feature is set to  {@link State#off}.
    * @throws FeatureException if the supplied featureKey is null, the feature does not exist, or is
    * not a boolean option type.
    */
@@ -280,8 +280,8 @@ public class FeatureClient {
    *
    * @param group the group the feature belongs to.
    * @param featureKey the feature key defined for the feature
-   * @return true if the feature selects to "true". Returns false if the feature selects to
-   * "false". Always return false if the feature is set to  {@link State#off}.
+   * @return true if the feature selects to "true". Returns false if the feature selects to "false".
+   * Always return false if the feature is set to  {@link State#off}.
    * @throws FeatureException if the supplied group or featureKey is null, the feature does not
    * exist, or is not a boolean option type.
    */

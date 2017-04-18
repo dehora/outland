@@ -1,7 +1,6 @@
 package outland.feature;
 
 import com.google.protobuf.InvalidProtocolBufferException;
-import com.google.protobuf.util.JsonFormat;
 import java.io.IOException;
 import java.net.URI;
 import java.util.concurrent.TimeUnit;
@@ -68,7 +67,7 @@ class FeatureResourceReal implements FeatureResource {
   }
 
   @Override public Feature findByKey(String featureKey) {
-    if(group == null) {
+    if (group == null) {
       throw new FeatureException(Problem.configProblem("find_by_key_with_no_group",
           "Find by key cannot be called with only a feature key and no default group configured. "
               + "Please configure a default group or use the group/feature method."));
@@ -80,7 +79,7 @@ class FeatureResourceReal implements FeatureResource {
   }
 
   @Override public FeatureCollection listFeatures() {
-    if(group == null) {
+    if (group == null) {
       throw new FeatureException(Problem.configProblem("list_features_multi_with_no_group",
           "List features cannot be called with only a feature key and no default group configured."
               + "Please configure a default group or use the group/feature method."));
@@ -90,10 +89,11 @@ class FeatureResourceReal implements FeatureResource {
   }
 
   @Override public FeatureCollection listFeaturesSince(long timestamp, TimeUnit timeUnit) {
-    if(group ==  null) {
-      throw new FeatureException(Problem.configProblem("list_features_since_multi_with_no_group_key",
-          "List features since cannot be called with only a feature key and no default group configured."
-              + "Please configure a default group or use the group/feature method."));
+    if (group == null) {
+      throw new FeatureException(
+          Problem.configProblem("list_features_since_multi_with_no_group_key",
+              "List features since cannot be called with only a feature key and no default group configured."
+                  + "Please configure a default group or use the group/feature method."));
     }
 
     FeatureException.throwIfNull(timeUnit, "Please supply a timeUnit");
@@ -102,18 +102,18 @@ class FeatureResourceReal implements FeatureResource {
   }
 
   @Override
+  public FeatureCollection listFeatures(String group) {
+    FeatureException.throwIfNull(group, "Please supply a group");
+
+    return listFeaturesInner(group);
+  }
+
+  @Override
   public Feature findByKey(String group, String featureKey) {
     FeatureException.throwIfNull(group, "Please supply a group");
     FeatureException.throwIfNull(featureKey, "Please supply a featureKey");
 
     return findByKeyInner(group, featureKey);
-  }
-
-  @Override
-  public FeatureCollection listFeatures(String group) {
-    FeatureException.throwIfNull(group, "Please supply a group");
-
-    return listFeaturesInner(group);
   }
 
   @Override

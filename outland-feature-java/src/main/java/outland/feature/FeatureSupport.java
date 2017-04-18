@@ -18,5 +18,4 @@ class FeatureSupport {
     JsonFormat.parser().ignoringUnknownFields().merge(json, builder);
     return builder.build();
   }
-
 }

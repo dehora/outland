@@ -12,7 +12,6 @@ public class Authorization {
   private final String credential;
 
   /**
-   *
    * @param realm the realm defined for the authorization mechanism
    * @param credential the credential for the authorization mechanism, such as a token.
    */
