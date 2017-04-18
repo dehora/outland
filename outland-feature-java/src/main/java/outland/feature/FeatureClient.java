@@ -108,7 +108,7 @@ public class FeatureClient {
    */
   public boolean enabled(String featureKey) {
     throwIfNoDefaultNamespace();
-    FeatureException.throwIfNull(featureKey, "Please supply a feature key");
+    FeatureException.throwIfNullOrEmpty(featureKey, "Please supply a feature key");
 
     //noinspection ConstantConditions
     return enabledInner(defaultGroup, featureKey);
@@ -173,8 +173,8 @@ public class FeatureClient {
    * configured.
    */
   public boolean enabledFor(String group, String featureKey) {
-    FeatureException.throwIfNull(group, "Please supply a defaultGroup");
-    FeatureException.throwIfNull(featureKey, "Please supply a featureKey");
+    FeatureException.throwIfNullOrEmpty(group, "Please supply a defaultGroup");
+    FeatureException.throwIfNullOrEmpty(featureKey, "Please supply a featureKey");
 
     return enabledInner(group, featureKey);
   }
@@ -194,8 +194,8 @@ public class FeatureClient {
    * configured, the feature does not exist or there was an internal error.
    */
   public boolean enabledForThrowing(String group, String featureKey) {
-    FeatureException.throwIfNull(group, "Please supply a defaultGroup");
-    FeatureException.throwIfNull(featureKey, "Please supply a featureKey");
+    FeatureException.throwIfNullOrEmpty(group, "Please supply a defaultGroup");
+    FeatureException.throwIfNullOrEmpty(featureKey, "Please supply a featureKey");
 
     return enabledThrowingInner(group, featureKey);
   }
@@ -214,7 +214,7 @@ public class FeatureClient {
    * @throws FeatureException if the supplied featureKey is null.
    */
   public boolean selectBoolean(String featureKey) {
-    FeatureException.throwIfNull(featureKey, "Please supply a featureKey");
+    FeatureException.throwIfNullOrEmpty(featureKey, "Please supply a featureKey");
 
     return selectBooleanInner(defaultGroup, featureKey);
   }
@@ -264,7 +264,7 @@ public class FeatureClient {
    * not a boolean option type.
    */
   public boolean selectBooleanThrowing(String featureKey) {
-    FeatureException.throwIfNull(featureKey, "Please supply a featureKey");
+    FeatureException.throwIfNullOrEmpty(featureKey, "Please supply a featureKey");
 
     return selectBooleanInnerThrowing(defaultGroup, featureKey);
   }
@@ -286,8 +286,8 @@ public class FeatureClient {
    * exist, or is not a boolean option type.
    */
   public boolean selectBooleanThrowing(String group, String featureKey) {
-    FeatureException.throwIfNull(group, "Please supply a group");
-    FeatureException.throwIfNull(featureKey, "Please supply a featureKey");
+    FeatureException.throwIfNullOrEmpty(group, "Please supply a group");
+    FeatureException.throwIfNullOrEmpty(featureKey, "Please supply a featureKey");
 
     return selectBooleanInnerThrowing(group, featureKey);
   }
@@ -305,7 +305,7 @@ public class FeatureClient {
    * @throws FeatureException if the supplied featureKey is null.
    */
   public String selectString(String featureKey) {
-    FeatureException.throwIfNull(featureKey, "Please supply a featureKey");
+    FeatureException.throwIfNullOrEmpty(featureKey, "Please supply a featureKey");
 
     return selectInner(defaultGroup, featureKey);
   }
@@ -331,8 +331,8 @@ public class FeatureClient {
    * @throws FeatureException if the supplied group or featureKey is null.
    */
   public String selectString(String group, String featureKey) {
-    FeatureException.throwIfNull(group, "Please supply a group");
-    FeatureException.throwIfNull(featureKey, "Please supply a featureKey");
+    FeatureException.throwIfNullOrEmpty(group, "Please supply a group");
+    FeatureException.throwIfNullOrEmpty(featureKey, "Please supply a featureKey");
 
     // all option values are raw strings, we can pass through to the general method
     return selectInner(group, featureKey);
@@ -352,7 +352,7 @@ public class FeatureClient {
    * not a string option type.
    */
   public String selectStringThrowing(String featureKey) {
-    FeatureException.throwIfNull(featureKey, "Please supply a featureKey");
+    FeatureException.throwIfNullOrEmpty(featureKey, "Please supply a featureKey");
 
     return selectThrowing(defaultGroup, featureKey);
   }
@@ -372,8 +372,8 @@ public class FeatureClient {
    * exist, or is not a string option type.
    */
   public String selectStringThrowing(String group, String featureKey) {
-    FeatureException.throwIfNull(group, "Please supply a group");
-    FeatureException.throwIfNull(featureKey, "Please supply a featureKey");
+    FeatureException.throwIfNullOrEmpty(group, "Please supply a group");
+    FeatureException.throwIfNullOrEmpty(featureKey, "Please supply a featureKey");
 
     return selectThrowing(group, featureKey);
   }
@@ -392,7 +392,7 @@ public class FeatureClient {
    * @throws FeatureException if the supplied featureKey is null.
    */
   public String select(String featureKey) {
-    FeatureException.throwIfNull(featureKey, "Please supply a featureKey");
+    FeatureException.throwIfNullOrEmpty(featureKey, "Please supply a featureKey");
 
     return selectInner(defaultGroup, featureKey);
   }
@@ -419,8 +419,8 @@ public class FeatureClient {
    * @throws FeatureException if the supplied group or featureKey is null.
    */
   public String select(String group, String featureKey) {
-    FeatureException.throwIfNull(group, "Please supply a group");
-    FeatureException.throwIfNull(featureKey, "Please supply a featureKey");
+    FeatureException.throwIfNullOrEmpty(group, "Please supply a group");
+    FeatureException.throwIfNullOrEmpty(featureKey, "Please supply a featureKey");
 
     return selectInner(group, featureKey);
   }
@@ -439,7 +439,7 @@ public class FeatureClient {
    * a flag type.
    */
   public String selectThrowing(String featureKey) {
-    FeatureException.throwIfNull(featureKey, "Please supply a featureKey");
+    FeatureException.throwIfNullOrEmpty(featureKey, "Please supply a featureKey");
 
     return selectInnerThrowing(defaultGroup, featureKey);
   }
@@ -459,8 +459,8 @@ public class FeatureClient {
    * exist, or is a flag type.
    */
   public String selectThrowing(String group, String featureKey) {
-    FeatureException.throwIfNull(group, "Please supply a group");
-    FeatureException.throwIfNull(featureKey, "Please supply a featureKey");
+    FeatureException.throwIfNullOrEmpty(group, "Please supply a group");
+    FeatureException.throwIfNullOrEmpty(featureKey, "Please supply a featureKey");
 
     return selectInnerThrowing(group, featureKey);
   }

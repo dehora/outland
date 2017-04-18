@@ -1,14 +1,7 @@
 package outland.feature;
 
+import java.util.function.Supplier;
 import org.junit.Test;
-import outland.feature.proto.Feature;
-import outland.feature.proto.FeatureData;
-import outland.feature.proto.FeatureOption;
-import outland.feature.proto.NamespaceFeature;
-import outland.feature.proto.NamespaceFeatureCollection;
-import outland.feature.proto.OptionCollection;
-import outland.feature.proto.OptionType;
-import outland.feature.proto.State;
 
 import static junit.framework.TestCase.assertTrue;
 import static junit.framework.TestCase.fail;
@@ -17,6 +10,86 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 
 public class FeatureClientTest {
+
+  @Test
+  public void testGuards() {
+
+    ServerConfiguration serverConfiguration =
+        new ServerConfiguration()
+            .baseURI("http://localhost")
+            .defaultGroup("the_app");
+
+    final FeatureClient client = FeatureClient.newBuilder()
+        .serverConfiguration(serverConfiguration)
+        .localFeatureStore(new FeatureStoreLocalNone())
+        .featureStore(new FeatureStoreNone())
+        .build();
+
+    expectIllegalArgument(() -> client.enabled(null));
+    expectIllegalArgument(() -> client.enabled(""));
+
+    expectIllegalArgument(() -> client.enabledFor("grp", null));
+    expectIllegalArgument(() -> client.enabledFor("", "f"));
+    expectIllegalArgument(() -> client.enabledFor(null, "f"));
+    expectIllegalArgument(() -> client.enabledFor("g", ""));
+
+    expectIllegalArgument(() -> client.enabledForThrowing("grp", null));
+    expectIllegalArgument(() -> client.enabledForThrowing("", "f"));
+    expectIllegalArgument(() -> client.enabledForThrowing(null, "f"));
+    expectIllegalArgument(() -> client.enabledForThrowing("g", ""));
+
+    expectIllegalArgument(() -> client.select(""));
+    expectIllegalArgument(() -> client.select(null));
+
+    expectIllegalArgument(() -> client.select("", "f"));
+    expectIllegalArgument(() -> client.select(null, "f"));
+    expectIllegalArgument(() -> client.select("g", ""));
+    expectIllegalArgument(() -> client.select("g", null));
+
+    expectIllegalArgument(() -> client.selectThrowing("" ));
+    expectIllegalArgument(() -> client.selectThrowing(null ));
+
+    expectIllegalArgument(() -> client.selectThrowing("", "f"));
+    expectIllegalArgument(() -> client.selectThrowing(null, "f"));
+    expectIllegalArgument(() -> client.selectThrowing("g", ""));
+    expectIllegalArgument(() -> client.selectThrowing("g", null));
+
+    expectIllegalArgument(() -> client.selectBoolean(""));
+    expectIllegalArgument(() -> client.selectBoolean(null));
+
+    expectIllegalArgument(() -> client.selectBooleanThrowing(""));
+    expectIllegalArgument(() -> client.selectBooleanThrowing(null));
+
+    expectIllegalArgument(() -> client.selectBooleanThrowing("", "f"));
+    expectIllegalArgument(() -> client.selectBooleanThrowing(null, "f"));
+    expectIllegalArgument(() -> client.selectBooleanThrowing("g", ""));
+    expectIllegalArgument(() -> client.selectBooleanThrowing("g", null));
+
+    expectIllegalArgument(() -> client.selectString(""));
+    expectIllegalArgument(() -> client.selectString(null));
+
+    expectIllegalArgument(() -> client.selectString("", "f"));
+    expectIllegalArgument(() -> client.selectString(null, "f"));
+    expectIllegalArgument(() -> client.selectString("g", ""));
+    expectIllegalArgument(() -> client.selectString("g", null));
+
+    expectIllegalArgument(() -> client.selectStringThrowing(""));
+    expectIllegalArgument(() -> client.selectStringThrowing(null));
+
+    expectIllegalArgument(() -> client.selectStringThrowing("", "f"));
+    expectIllegalArgument(() -> client.selectStringThrowing(null, "f"));
+    expectIllegalArgument(() -> client.selectStringThrowing("g", ""));
+    expectIllegalArgument(() -> client.selectStringThrowing("g", null));
+  }
+
+  private void expectIllegalArgument(Supplier supplier) {
+    try {
+      supplier.get();
+      fail();
+    } catch (FeatureException e) {
+      assertTrue(e.getCause() instanceof IllegalArgumentException);
+    }
+  }
 
   @Test
   public void testWithAndWithoutDefaultNamespaceIsOk() {
