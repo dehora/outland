@@ -12,34 +12,34 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-public class OptionEvaluatorBoolTest {
+public class OptionSelectorBoolTest {
 
   @Test
   public void testNotOne() {
-    OptionEvaluatorBool oe = new OptionEvaluatorBool();
+    OptionSelectorBool oe = new OptionSelectorBool();
 
     final Feature feature = Feature.newBuilder()
         .setState(State.off)
         .build();
 
-    final OptionEvaluatorWeighted evaluator =
-        new OptionEvaluatorWeighted(feature.getOptions().getItemsList());
+    final OptionSelectorWeighted selector =
+        new OptionSelectorWeighted(feature.getOptions().getItemsList());
 
-    assertFalse(oe.evaluateBooleanOptions(feature.getOptions(), feature.getState(), evaluator));
+    assertFalse(oe.selectBooleanOptions(feature.getOptions(), feature.getState(), selector));
 
     final Feature feature1 = Feature.newBuilder()
         .setState(State.none)
         .build();
 
-    final OptionEvaluatorWeighted evaluator1 =
-        new OptionEvaluatorWeighted(feature.getOptions().getItemsList());
+    final OptionSelectorWeighted selector1 =
+        new OptionSelectorWeighted(feature.getOptions().getItemsList());
 
-    assertFalse(oe.evaluateBooleanOptions(feature1.getOptions(), feature.getState(), evaluator1));
+    assertFalse(oe.selectBooleanOptions(feature1.getOptions(), feature.getState(), selector1));
   }
 
   @Test
   public void testOptionCollectionFlag() {
-    OptionEvaluatorBool oe = new OptionEvaluatorBool();
+    OptionSelectorBool oe = new OptionSelectorBool();
 
     OptionCollection collection = OptionCollection.newBuilder()
         .setOption(OptionType.flag)
@@ -50,10 +50,10 @@ public class OptionEvaluatorBoolTest {
         .setState(State.on)
         .build();
 
-    assertFalse(oe.evaluateBooleanOptions(
+    assertFalse(oe.selectBooleanOptions(
         feature1.getOptions(),
         feature1.getState(),
-        new OptionEvaluatorWeighted(feature1.getOptions().getItemsList())
+        new OptionSelectorWeighted(feature1.getOptions().getItemsList())
     ));
   }
 
@@ -76,17 +76,17 @@ public class OptionEvaluatorBoolTest {
         .setState(State.on)
         .build();
 
-    OptionEvaluatorBool oe = new OptionEvaluatorBool();
-    assertEquals(true, oe.evaluateBooleanOptions(
+    OptionSelectorBool oe = new OptionSelectorBool();
+    assertEquals(true, oe.selectBooleanOptions(
         feature1.getOptions(),
         feature1.getState(),
-        new OptionEvaluatorWeighted(feature1.getOptions().getItemsList())
+        new OptionSelectorWeighted(feature1.getOptions().getItemsList())
 
     ));
   }
 
   @Test
-  public void testEvalFair() {
+  public void testSelectFair() {
 
     FeatureOption f = FeatureOption.newBuilder()
         .setName("false").setValue("false").setWeight(5_000).build();
@@ -104,11 +104,11 @@ public class OptionEvaluatorBoolTest {
         .setOptions(collection).setState(State.on)
         .build();
 
-    OptionEvaluatorBool oe = new OptionEvaluatorBool();
-    oe.evaluateBooleanOptions(
+    OptionSelectorBool oe = new OptionSelectorBool();
+    oe.selectBooleanOptions(
         feature1.getOptions(),
         feature1.getState(),
-        new OptionEvaluatorWeighted(feature1.getOptions().getItemsList())
+        new OptionSelectorWeighted(feature1.getOptions().getItemsList())
     );
 
     final int[] fCount = {0};
@@ -119,10 +119,10 @@ public class OptionEvaluatorBoolTest {
     IntStream.range(0, runs).forEach(
         i -> {
           @SuppressWarnings("unused")
-          int noop = oe.evaluateBooleanOptions(
+          int noop = oe.selectBooleanOptions(
               feature1.getOptions(),
               feature1.getState(),
-              new OptionEvaluatorWeighted(feature1.getOptions().getItemsList())
+              new OptionSelectorWeighted(feature1.getOptions().getItemsList())
           ) ? tCount[0]++ : fCount[0]++;
         }
     );
@@ -140,7 +140,7 @@ public class OptionEvaluatorBoolTest {
   }
 
   @Test
-  public void testEvalAlwaysTrue() {
+  public void testSelectAlwaysTrue() {
 
     FeatureOption f = FeatureOption.newBuilder()
         .setName("false").setValue("false").setWeight(10_000).build();
@@ -158,17 +158,17 @@ public class OptionEvaluatorBoolTest {
         .setOptions(collection).setState(State.on)
         .build();
 
-    OptionEvaluatorBool oe = new OptionEvaluatorBool();
+    OptionSelectorBool oe = new OptionSelectorBool();
 
-    IntStream.range(0, 10000).forEach(i -> assertFalse(oe.evaluateBooleanOptions(
+    IntStream.range(0, 10000).forEach(i -> assertFalse(oe.selectBooleanOptions(
         feature1.getOptions(),
         feature1.getState(),
-        new OptionEvaluatorWeighted(feature1.getOptions().getItemsList())
+        new OptionSelectorWeighted(feature1.getOptions().getItemsList())
     )));
   }
 
   @Test
-  public void testEvalAlwaysFalse() {
+  public void testSelectAlwaysFalse() {
 
     FeatureOption f = FeatureOption.newBuilder()
         .setName("false").setValue("false").setWeight(0).build();
@@ -186,44 +186,44 @@ public class OptionEvaluatorBoolTest {
         .setOptions(collection).setState(State.on)
         .build();
 
-    OptionEvaluatorBool oe = new OptionEvaluatorBool();
+    OptionSelectorBool oe = new OptionSelectorBool();
 
-    IntStream.range(0, 1000).forEach(i -> assertTrue(oe.evaluateBooleanOptions(
+    IntStream.range(0, 1000).forEach(i -> assertTrue(oe.selectBooleanOptions(
         feature1.getOptions(),
         feature1.getState(),
-        new OptionEvaluatorWeighted(feature1.getOptions().getItemsList())
+        new OptionSelectorWeighted(feature1.getOptions().getItemsList())
     )));
   }
 
   @Test
-  public void testEval80_20() {
+  public void testSelect80_20() {
     final int tWeight = 2_000;
     final int fWeight = 8_000;
     final int runs = 10000;
     int nearestNth = runs / 10;
-    testEval_Smaller_to_Larger_Bias(tWeight, fWeight, runs, nearestNth);
+    testSelect_Smaller_to_Larger_Bias(tWeight, fWeight, runs, nearestNth);
   }
 
   @Test
-  public void testEval90_10() {
+  public void testSelect90_10() {
     final int tWeight = 1_000;
     final int fWeight = 9_000;
     final int runs = 10000;
     int nearestNth = runs / 10;
-    testEval_Smaller_to_Larger_Bias(tWeight, fWeight, runs, nearestNth);
+    testSelect_Smaller_to_Larger_Bias(tWeight, fWeight, runs, nearestNth);
   }
 
   @Test
-  public void testEval60_40() {
+  public void testSelect60_40() {
     final int tWeight = 4_000;
     final int fWeight = 6_000;
     final int runs = 10000;
     int nearestNth = runs / 10;
 
-    testEval_Smaller_to_Larger_Bias(tWeight, fWeight, runs, nearestNth);
+    testSelect_Smaller_to_Larger_Bias(tWeight, fWeight, runs, nearestNth);
   }
 
-  private void testEval_Smaller_to_Larger_Bias(int tWeight, int fWeight, int runs, int nearestNth) {
+  private void testSelect_Smaller_to_Larger_Bias(int tWeight, int fWeight, int runs, int nearestNth) {
 
     final int ratio = fWeight/tWeight;
 
@@ -250,11 +250,11 @@ public class OptionEvaluatorBoolTest {
         .setState(State.on  )
         .build();
 
-    OptionEvaluatorBool oe = new OptionEvaluatorBool();
-    oe.evaluateBooleanOptions(
+    OptionSelectorBool oe = new OptionSelectorBool();
+    oe.selectBooleanOptions(
         feature1.getOptions(),
         feature1.getState(),
-        new OptionEvaluatorWeighted(feature1.getOptions().getItemsList())
+        new OptionSelectorWeighted(feature1.getOptions().getItemsList())
     );
 
     final int[] fCount = {0};
@@ -263,10 +263,10 @@ public class OptionEvaluatorBoolTest {
     IntStream.range(0, runs).forEach(
         i -> {
           @SuppressWarnings("unused")
-          int noop = oe.evaluateBooleanOptions(
+          int noop = oe.selectBooleanOptions(
               feature1.getOptions(),
               feature1.getState(),
-              new OptionEvaluatorWeighted(feature1.getOptions().getItemsList())
+              new OptionSelectorWeighted(feature1.getOptions().getItemsList())
           ) ? tCount[0]++ : fCount[0]++;
         }
     );

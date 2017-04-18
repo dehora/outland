@@ -10,7 +10,7 @@ import outland.feature.proto.FeatureOption;
 
 import static org.junit.Assert.assertTrue;
 
-public class OptionEvaluatorWeightedTest {
+public class OptionSelectorWeightedTest {
 
   @Test
   public void testFairStrings() {
@@ -26,7 +26,7 @@ public class OptionEvaluatorWeightedTest {
         FeatureOption.newBuilder().setName("40%").setWeight(4_000).build()
     );
 
-    final OptionEvaluatorWeighted or = new OptionEvaluatorWeighted(itemList);
+    final OptionSelectorWeighted or = new OptionSelectorWeighted(itemList);
     final int[] resultFrequencies = new int[4];
     final int nearestRoundTo = 1_000;
 
@@ -71,13 +71,13 @@ public class OptionEvaluatorWeightedTest {
         FeatureOption.newBuilder().setWeight(0).build(),
         FeatureOption.newBuilder().setWeight(10000).build()
     );
-    OptionEvaluatorWeighted or1 = new OptionEvaluatorWeighted(itemList1);
+    OptionSelectorWeighted or1 = new OptionSelectorWeighted(itemList1);
     IntStream.range(0, 10000).forEach(i -> assertTrue(10000 == or1.select().getWeight()));
 
     final ArrayList<FeatureOption> itemList2 = Lists.newArrayList(
         FeatureOption.newBuilder().setWeight(10000).build()
     );
-    OptionEvaluatorWeighted or2 = new OptionEvaluatorWeighted(itemList2);
+    OptionSelectorWeighted or2 = new OptionSelectorWeighted(itemList2);
     IntStream.range(0, 10000).forEach(i -> assertTrue(10000 == or2.select().getWeight()));
   }
 }

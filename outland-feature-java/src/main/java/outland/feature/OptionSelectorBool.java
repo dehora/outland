@@ -6,12 +6,12 @@ import outland.feature.proto.OptionCollection;
 import outland.feature.proto.OptionType;
 import outland.feature.proto.State;
 
-class OptionEvaluatorBool {
+class OptionSelectorBool {
 
-  boolean evaluateBooleanOptions(
+  boolean selectBooleanOptions(
       OptionCollection options,
       State state,
-      OptionEvaluatorWeighted optionEvaluatorWeighted
+      OptionSelectorWeighted optionSelectorWeighted
   ) {
     if (!options.getOption().equals(OptionType.bool)) {
       return false; // todo: throw this?
@@ -28,6 +28,6 @@ class OptionEvaluatorBool {
       return state.equals(State.on);
     }
 
-    return Boolean.parseBoolean(optionEvaluatorWeighted.select().getValue());
+    return Boolean.parseBoolean(optionSelectorWeighted.select().getValue());
   }
 }

@@ -4,12 +4,12 @@ import java.util.Arrays;
 import java.util.List;
 import outland.feature.proto.FeatureOption;
 
-public class OptionEvaluatorWeighted {
+public class OptionSelectorWeighted {
 
   private final double[] wheel;
   private final FeatureOption[] values;
 
-  OptionEvaluatorWeighted(List<FeatureOption> options) {
+  OptionSelectorWeighted(List<FeatureOption> options) {
     wheel = buildWheel(options);
     values = buildValues(options);
   }

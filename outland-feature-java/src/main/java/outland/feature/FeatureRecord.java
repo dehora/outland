@@ -17,9 +17,9 @@ class FeatureRecord {
   private final Feature feature;
   private final Map<String, NamespaceFeature> namespaceFeatureMap = Maps.newHashMap();
   private final Map<String, FeatureOption> namespaceControlFeatureOptionMap = Maps.newHashMap();
-  private final Map<String, OptionEvaluatorWeighted> namespaceOptionEvaluatorWeightedMap =
+  private final Map<String, OptionSelectorWeighted> namespaceOptionSelectorWeightedMap =
       Maps.newHashMap();
-  private OptionEvaluatorWeighted optionEvaluatorWeighted;
+  private OptionSelectorWeighted optionSelectorWeighted;
   private FeatureOption controlFeatureOption;
 
   private FeatureRecord(Feature feature) {
@@ -47,12 +47,12 @@ class FeatureRecord {
     return namespaceControlFeatureOptionMap.get(namespace);
   }
 
-  OptionEvaluatorWeighted optionEvaluatorWeighted() {
-    return optionEvaluatorWeighted;
+  OptionSelectorWeighted optionSelectorWeighted() {
+    return optionSelectorWeighted;
   }
 
-  OptionEvaluatorWeighted optionEvaluatorWeighted(String namespace) {
-    return namespaceOptionEvaluatorWeightedMap.get(namespace);
+  OptionSelectorWeighted optionSelectorWeighted(String namespace) {
+    return namespaceOptionSelectorWeightedMap.get(namespace);
   }
 
   boolean enabled() {
@@ -73,46 +73,46 @@ class FeatureRecord {
     return target.getFeature().getState().equals(State.on);
   }
 
-  String evaluate() {
+  String select() {
     if (enabled()) {
-      return optionEvaluatorWeighted().select().getValue();
+      return optionSelectorWeighted().select().getValue();
     }
 
     return controlFeatureOption.getValue();
   }
 
-  String evaluate(String namespace) {
+  String select(String namespace) {
 
     if (isDefaultNamespace(namespace)) {
-      return evaluate();
+      return select();
     }
 
     if(! enabled(namespace)) {
       // if the namespace is off, try its control option, or fallback to the default control
-      return evaluateControlOption(namespace);
+      return selectControlOption(namespace);
     }
 
     // from here, we're in an enabled namespace
 
-    final OptionEvaluatorWeighted namespaceEvaluator = optionEvaluatorWeighted(namespace);
+    final OptionSelectorWeighted selector = optionSelectorWeighted(namespace);
 
-    if (namespaceEvaluator != null) {
-      return namespaceEvaluator.select().getValue();
+    if (selector != null) {
+      return selector.select().getValue();
     }
 
     // this is probably bad/missing feature data
-    return evaluateControlOption(namespace);
+    return selectControlOption(namespace);
   }
 
-  boolean evaluateBoolean() {
-    return Boolean.parseBoolean(evaluate());
+  boolean selectBoolean() {
+    return Boolean.parseBoolean(select());
   }
 
-  boolean evaluateBoolean(String namespace) {
-    return Boolean.parseBoolean(evaluate(namespace));
+  boolean selectBoolean(String namespace) {
+    return Boolean.parseBoolean(select(namespace));
   }
 
-  private String evaluateControlOption(String namespace) {
+  private String selectControlOption(String namespace) {
     final FeatureOption featureOption = namespaceControlFeatureOptionMap.get(namespace);
 
     if (featureOption != null) {
@@ -141,7 +141,7 @@ class FeatureRecord {
           break;
         }
       }
-      optionEvaluatorWeighted = new OptionEvaluatorWeighted(options.getItemsList());
+      optionSelectorWeighted = new OptionSelectorWeighted(options.getItemsList());
     }
   }
 
@@ -157,8 +157,8 @@ class FeatureRecord {
             break;
           }
         }
-        namespaceOptionEvaluatorWeightedMap.put(
-            namespaceFeature.getNamespace(), new OptionEvaluatorWeighted(options.getItemsList()));
+        namespaceOptionSelectorWeightedMap.put(
+            namespaceFeature.getNamespace(), new OptionSelectorWeighted(options.getItemsList()));
       }
     }
   }
@@ -176,8 +176,8 @@ class FeatureRecord {
   }
 
   @Override public int hashCode() {
-    return Objects.hash(optionEvaluatorWeighted, feature, namespaceFeatureMap,
-        namespaceControlFeatureOptionMap, namespaceOptionEvaluatorWeightedMap,
+    return Objects.hash(optionSelectorWeighted, feature, namespaceFeatureMap,
+        namespaceControlFeatureOptionMap, namespaceOptionSelectorWeightedMap,
         controlFeatureOption);
   }
 
@@ -185,23 +185,23 @@ class FeatureRecord {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
     FeatureRecord record = (FeatureRecord) o;
-    return Objects.equals(optionEvaluatorWeighted, record.optionEvaluatorWeighted) &&
+    return Objects.equals(optionSelectorWeighted, record.optionSelectorWeighted) &&
         Objects.equals(feature, record.feature) &&
         Objects.equals(namespaceFeatureMap, record.namespaceFeatureMap) &&
         Objects.equals(namespaceControlFeatureOptionMap,
             record.namespaceControlFeatureOptionMap) &&
-        Objects.equals(namespaceOptionEvaluatorWeightedMap,
-            record.namespaceOptionEvaluatorWeightedMap) &&
+        Objects.equals(namespaceOptionSelectorWeightedMap,
+            record.namespaceOptionSelectorWeightedMap) &&
         Objects.equals(controlFeatureOption, record.controlFeatureOption);
   }
 
   @Override public String toString() {
     return MoreObjects.toStringHelper(this)
-        .add("optionEvaluatorWeighted", optionEvaluatorWeighted)
+        .add("optionSelectorWeighted", optionSelectorWeighted)
         .add("feature", feature)
         .add("namespaceFeatureMap", namespaceFeatureMap)
         .add("namespaceControlFeatureOptionMap", namespaceControlFeatureOptionMap)
-        .add("namespaceOptionEvaluatorWeightedMap", namespaceOptionEvaluatorWeightedMap)
+        .add("namespaceOptionSelectorWeightedMap", namespaceOptionSelectorWeightedMap)
         .add("controlFeatureOption", controlFeatureOption)
         .toString();
   }
