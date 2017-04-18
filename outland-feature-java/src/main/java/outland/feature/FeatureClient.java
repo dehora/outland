@@ -7,6 +7,7 @@ import okhttp3.OkHttpClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import outland.feature.proto.Feature;
+import outland.feature.proto.OptionType;
 import outland.feature.proto.State;
 
 /**
@@ -202,6 +203,158 @@ public class FeatureClient {
   }
 
   /**
+   * Evaluate a boolean type option.
+   *
+   * <p>
+   * This will check the feature's bool options and return true or false, factoring
+   * in the weights of the options. This means a feature that is set to {@link State#on} can return
+   * false due to the weight sampling step. Features that are set to {@link State#off} always
+   * evaluate to false.
+   * </p>
+   *
+   * <p>
+   *   <b>Warning:</b> passing a non-bool {@link OptionType} to this method will have the feature's
+   *   {@link State} evaluated, that is, the result of a non-bool type for this method
+   *   is the same as {@link #enabledFor(String, String)}. Also, evaluating a non-existent feature
+   *   results in false. If you want to force an error in these cases, call
+   *   {@link #evaluateBooleanThrowing(String, String)}.
+   * </p>
+   *
+   * @param group  the group the feature belongs to.
+   * @param featureKey  the feature key defined for the feature
+   * @return true if the feature evaluates to "true". Returns false if the feature
+   * evaluates to "false". Always return false if the feature is set to {@link State#off}.
+   * @throws FeatureException if the supplied group or featureKey is null.
+   */
+  public boolean evaluateBoolean(String group, String featureKey) {
+    FeatureException.throwIfNull(group, "Please supply a group");
+    FeatureException.throwIfNull(featureKey, "Please supply a featureKey");
+
+    return evaluateBooleanInner(group, featureKey);
+  }
+
+  /**
+   * Evaluate a boolean type option.
+   *
+   * <p>
+   * This is same as {@link #evaluateBoolean(String, String)} except it will throw a
+   * {@link FeatureException} if the feature does not exist or the discovered option
+   * was not a bool type.
+   * </p>
+   *
+   * @param group  the group the feature belongs to.
+   * @param featureKey  the feature key defined for the feature
+   * @return true if the feature evaluates to "true". Returns false if the feature
+   * evaluates to "false". Always return false if the feature is set to  {@link State#off}.
+   * @throws FeatureException if the supplied group or featureKey is null, the feature does
+   * not exist, or is not a boolean option type.
+   */
+  public boolean evaluateBooleanThrowing(String group, String featureKey) {
+    FeatureException.throwIfNull(group, "Please supply a group");
+    FeatureException.throwIfNull(featureKey, "Please supply a featureKey");
+
+    return evaluateBooleanInnerThrowing(group, featureKey);
+  }
+
+  /**
+   * Evaluate a string type option.
+   *
+   * <p>
+   * This will check the feature's string options and return a value, factoring
+   * in the weights of the options. Features that are set to {@link State#off} always
+   * evaluate to their control value.
+   * </p>
+   *
+   * <p>
+   * For non-string option types (eg a bool) their raw string values are returned. Non-existent
+   * features will return the empty string (""). If you want to force an error for a missing
+   * feature, call {@link #evaluateStringThrowing(String, String)}.
+   * </p>
+   *
+   * @param group  the group the feature belongs to.
+   * @param featureKey  the feature key defined for the feature
+   * @return the evaluated option or the control value if the feature is set to {@link State#off}.
+   * @throws FeatureException if the supplied group or featureKey is null.
+   */
+  public String evaluateString(String group, String featureKey) {
+    FeatureException.throwIfNull(group, "Please supply a group");
+    FeatureException.throwIfNull(featureKey, "Please supply a featureKey");
+
+    // all option values are raw strings, we can pass through to the general method
+    return evaluate(group, featureKey);
+  }
+
+  /**
+   * Evaluate a string type option.
+   *
+   * <p>
+   * This is same as {@link #evaluateString(String, String)} except it will throw a
+   * {@link FeatureException} if the feature does not exist or the option type is not a string.
+   * </p>
+   *
+   * @param group  the group the feature belongs to.
+   * @param featureKey  the feature key defined for the feature
+   * @return the evaluated option or the control value if the feature is set to {@link State#off}.
+   * @throws FeatureException if the supplied group or featureKey is null, the feature does
+   * not exist, or is not a string option type.
+   */
+  public String evaluateStringThrowing(String group, String featureKey) {
+    FeatureException.throwIfNull(group, "Please supply a group");
+    FeatureException.throwIfNull(featureKey, "Please supply a featureKey");
+
+    return evaluateThrowing(group, featureKey);
+  }
+
+  /**
+   * Evaluate an option returning one of its values.
+   *
+   * <p>
+   * This will check the feature's options and return a value, factoring
+   * in the weights of the options. Features that are set to {@link State#off} always
+   * evaluate to their control value.
+   * </p>
+   *
+   * <p>
+   * For all option types their raw string values are returned. Non-existent
+   * features and feature flags will return the empty string (""). If you want to force an error
+   * for a missing feature or a flag call, use {@link #evaluateStringThrowing(String, String)}.
+   * </p>
+   *
+   * @param group  the group the feature belongs to.
+   * @param featureKey  the feature key defined for the feature
+   * @return the evaluated option, the control value if the feature is set to {@link State#off},
+   * or the empty string if the feature is not found.
+   * @throws FeatureException if the supplied group or featureKey is null.
+   */
+  public String evaluate(String group, String featureKey) {
+    FeatureException.throwIfNull(group, "Please supply a group");
+    FeatureException.throwIfNull(featureKey, "Please supply a featureKey");
+
+    return evaluateInner(group, featureKey);
+  }
+
+  /**
+   * Evaluate an option returning one of its values.
+   *
+   * <p>
+   * This is same as {@link #evaluate(String, String)} except it will throw a
+   * {@link FeatureException} if the feature does not exist or the option type is a flag.
+   * </p>
+   *
+   * @param group  the group the feature belongs to.
+   * @param featureKey  the feature key defined for the feature
+   * @return the evaluated option or the control value if the feature is set to {@link State#off}.
+   * @throws FeatureException if the supplied group or featureKey is null, the feature does
+   * not exist, or is a flag type.
+   */
+  public String evaluateThrowing(String group, String featureKey) {
+    FeatureException.throwIfNull(group, "Please supply a group");
+    FeatureException.throwIfNull(featureKey, "Please supply a featureKey");
+
+    return evaluateInnerThrowing(group, featureKey);
+  }
+
+  /**
    * Entry point for the feature management APIs.
    *
    * @return a way to access feature management APIs.
@@ -300,6 +453,56 @@ public class FeatureClient {
     return record.enabled(this.namespace);
   }
 
+  private boolean evaluateBooleanInner(String group, String featureKey) {
+    final FeatureRecord record = featureStore.find(group, featureKey);
+
+    if (record == null) {
+      return false;
+    }
+
+    return record.evaluateBoolean(this.namespace);
+  }
+
+  private boolean evaluateBooleanInnerThrowing(String group, String featureKey) {
+    final FeatureRecord record = featureStore.find(group, featureKey);
+
+    if (record == null) {
+      throwNotFound(group, featureKey);
+    }
+
+    if (!record.feature().getOptions().getOption().equals(OptionType.bool)) {
+      throwMismatchedOption(
+          group, featureKey, OptionType.bool, record.feature().getOptions().getOption());
+    }
+
+    return record.evaluateBoolean(this.namespace);
+  }
+
+  private String evaluateInner(String group, String featureKey) {
+    final FeatureRecord record = featureStore.find(group, featureKey);
+
+    if (record == null) {
+      return "";
+    }
+
+    return record.evaluate(this.namespace);
+  }
+
+  private String evaluateInnerThrowing(String group, String featureKey) {
+    final FeatureRecord record = featureStore.find(group, featureKey);
+
+    if (record == null) {
+      throwNotFound(group, featureKey);
+    }
+
+    if (record.feature().getOptions().getOption().equals(OptionType.flag)) {
+      throwMismatchedOption(
+          group, featureKey, OptionType.string, record.feature().getOptions().getOption());
+    }
+
+    return record.evaluate(this.namespace);
+  }
+
   private boolean throwNotFound(String group, String featureKey) {
     throw new FeatureException(
         Problem.noSuchFeature("feature_not_found",
@@ -307,6 +510,15 @@ public class FeatureClient {
                 "feature %s for defaultGroup %s was not found and raising an error was requested",
                 featureKey, group)));
   }
+
+  private boolean throwMismatchedOption(String group, String featureKey,
+      OptionType expected, OptionType actual) {
+    throw new FeatureException(
+        Problem.noSuchFeature("mismatched_option_type", String.format(
+            "feature %s in group %s expected option type %s but received %s and raising an error "
+                + "was requested", featureKey, group, expected.name(), actual.name())));
+  }
+
 
   /**
    * Prepares and creates a {@link FeatureClient}.

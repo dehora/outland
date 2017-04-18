@@ -10,6 +10,7 @@ import outland.feature.proto.FeatureOption;
 import outland.feature.proto.NamespaceFeature;
 import outland.feature.proto.OptionCollection;
 import outland.feature.proto.OptionType;
+import outland.feature.proto.State;
 
 class FeatureRecord {
 
@@ -18,13 +19,13 @@ class FeatureRecord {
   private final Map<String, FeatureOption> namespaceControlFeatureOptionMap = Maps.newHashMap();
   private final Map<String, OptionEvaluatorWeighted> namespaceOptionEvaluatorWeightedMap =
       Maps.newHashMap();
-  private final Evaluator evaluator;
+  private final FeatureRecordStateChecker featureRecordStateChecker;
   private OptionEvaluatorWeighted optionEvaluatorWeighted;
   private FeatureOption controlFeatureOption;
 
   private FeatureRecord(Feature feature) {
     this.feature = feature;
-    this.evaluator = new Evaluator();
+    this.featureRecordStateChecker = new FeatureRecordStateChecker();
     prepare();
   }
 
@@ -57,14 +58,74 @@ class FeatureRecord {
   }
 
   boolean enabled() {
-    return evaluator.evaluate(this);
+    return feature().getState().equals(State.on);
   }
 
   boolean enabled(String namespace) {
-    if (namespace.equals(ServerConfiguration.DEFAULT_NAMESPACE)) {
+    if (isDefaultNamespace(namespace)) {
       return enabled();
     }
-    return evaluator.evaluate(this, namespace);
+
+    final NamespaceFeature target = namespace(namespace);
+
+    if (target == null) {
+      return enabled();
+    }
+
+    return target.getFeature().getState().equals(State.on);
+  }
+
+  String evaluate(String namespace) {
+
+    if (isDefaultNamespace(namespace)) {
+
+      // if the default is on, use the base evaluator or fallback to control if off
+
+      if (enabled()) {
+        return optionEvaluatorWeighted().select().getValue();
+      }
+
+      return controlFeatureOption.getValue();
+    }
+
+
+    if(! enabled(namespace)) {
+
+      // if the namespace is off, try its control option, or fallback to the default control
+
+      final FeatureOption featureOption = namespaceControlFeatureOptionMap.get(namespace);
+
+      if (featureOption != null) {
+        return featureOption.getValue();
+      }
+
+      return controlFeatureOption.getValue();
+    }
+
+    // from here, we're in an enabled namespace
+
+    final OptionEvaluatorWeighted namespaceEvaluator = optionEvaluatorWeighted(namespace);
+
+    if (namespaceEvaluator != null) {
+      return namespaceEvaluator.select().getValue();
+    }
+
+    // this is probably bad/missing feature data
+
+    final FeatureOption featureOption = namespaceControlFeatureOptionMap.get(namespace);
+
+    if (featureOption != null) {
+      return featureOption.getValue();
+    }
+    return controlFeatureOption.getValue();
+  }
+
+  boolean evaluateBoolean(String namespace) {
+    return Boolean.parseBoolean(evaluate(namespace));
+  }
+
+  private boolean isDefaultNamespace(String namespace) {
+    return ServerConfiguration.DEFAULT_NAMESPACE.equals(namespace);
   }
 
   private void prepare() {
@@ -119,7 +180,7 @@ class FeatureRecord {
   @Override public int hashCode() {
     return Objects.hash(optionEvaluatorWeighted, feature, namespaceFeatureMap,
         namespaceControlFeatureOptionMap, namespaceOptionEvaluatorWeightedMap, controlFeatureOption,
-        evaluator);
+        featureRecordStateChecker);
   }
 
   @Override public boolean equals(Object o) {
@@ -134,7 +195,7 @@ class FeatureRecord {
         Objects.equals(namespaceOptionEvaluatorWeightedMap,
             record.namespaceOptionEvaluatorWeightedMap) &&
         Objects.equals(controlFeatureOption, record.controlFeatureOption) &&
-        Objects.equals(evaluator, record.evaluator);
+        Objects.equals(featureRecordStateChecker, record.featureRecordStateChecker);
   }
 
   @Override public String toString() {
@@ -145,7 +206,7 @@ class FeatureRecord {
         .add("namespaceControlFeatureOptionMap", namespaceControlFeatureOptionMap)
         .add("namespaceOptionEvaluatorWeightedMap", namespaceOptionEvaluatorWeightedMap)
         .add("controlFeatureOption", controlFeatureOption)
-        .add("evaluator", evaluator)
+        .add("featureRecordStateChecker", featureRecordStateChecker)
         .toString();
   }
 }

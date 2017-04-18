@@ -5,7 +5,7 @@
   "updated": "2017-04-17T21:24:21.407+01:00",
   "properties": {
   },
-  "key": "string-off",
+  "key": "flag-off",
   "group": "group1",
   "state": "off",
   "description": "A test feature flag",
@@ -18,7 +18,7 @@
   },
   "options": {
     "type": "option.collection",
-    "option": "string",
+    "option": "bool",
     "maxweight": 10000,
     "items": [
       {
@@ -62,7 +62,7 @@
         "feature": {
           "type": "nsfeature",
           "id": "nsfeat_01bdysctnfrtmh1qn1v9zs0tn7",
-          "key": "string-off",
+          "key": "flag-off",
           "state": "on",
           "options": {
             "type": "option.collection",
