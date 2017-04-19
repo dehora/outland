@@ -258,14 +258,14 @@ public class FeatureClient {
    * want to throw an exception for a missing feature, use {@link #enabledThrowing}.
    * </p>
    *
-   * @param group the group the feature belongs to.
    * @param featureKey the feature key defined for the feature
+   * @param group the group the feature belongs to.
    * @return true if the feature is enabled. Returns false if the feature is not enabled, not known,
    * or there was an internal error.
    * @throws FeatureException if the supplied featureKey is null, or, the default group has not been
    * configured.
    */
-  public boolean enabled(String group, String featureKey) {
+  public boolean enabled(String featureKey, String group) {
     FeatureException.throwIfNullOrEmpty(group, "Please supply a defaultGroup");
     FeatureException.throwIfNullOrEmpty(featureKey, "Please supply a featureKey");
 
@@ -279,14 +279,14 @@ public class FeatureClient {
    * {@link FeatureException} if the feature does not exist or there is an internal exception.
    * </p>
    *
-   * @param group the group the feature belongs to.
    * @param featureKey the feature key defined for the feature
+   * @param group the group the feature belongs to.
    * @return true if the feature is enabled ({@link State#on}). Returns false if the feature is not
    * enabled ({@link State#off}).
    * @throws FeatureException if the supplied featureKey is null, the default group has not been
    * configured, the feature does not exist or there was an internal error.
    */
-  public boolean enabledThrowing(String group, String featureKey) {
+  public boolean enabledThrowing(String featureKey, String group) {
     FeatureException.throwIfNullOrEmpty(group, "Please supply a defaultGroup");
     FeatureException.throwIfNullOrEmpty(featureKey, "Please supply a featureKey");
 
@@ -330,13 +330,13 @@ public class FeatureClient {
    * {@link #selectBooleanThrowing(String, String)}.
    * </p>
    *
-   * @param group the group the feature belongs to.
    * @param featureKey the feature key defined for the feature
+   * @param group the group the feature belongs to.
    * @return true if the feature selects to "true". Returns false if the feature selects to "false".
    * Always return false if the feature is set to {@link State#off}.
    * @throws FeatureException if the supplied group or featureKey is null.
    */
-  public boolean selectBoolean(String group, String featureKey) {
+  public boolean selectBoolean(String featureKey, String group) {
     FeatureException.throwIfNull(group, "Please supply a group");
     FeatureException.throwIfNull(featureKey, "Please supply a featureKey");
 
@@ -371,14 +371,14 @@ public class FeatureClient {
    * was not a bool type.
    * </p>
    *
-   * @param group the group the feature belongs to.
    * @param featureKey the feature key defined for the feature
+   * @param group the group the feature belongs to.
    * @return true if the feature selects to "true". Returns false if the feature selects to "false".
    * Always return false if the feature is set to  {@link State#off}.
    * @throws FeatureException if the supplied group or featureKey is null, the feature does not
    * exist, or is not a boolean option type.
    */
-  public boolean selectBooleanThrowing(String group, String featureKey) {
+  public boolean selectBooleanThrowing(String featureKey, String group) {
     FeatureException.throwIfNullOrEmpty(group, "Please supply a group");
     FeatureException.throwIfNullOrEmpty(featureKey, "Please supply a featureKey");
 
@@ -418,12 +418,12 @@ public class FeatureClient {
    * feature, call {@link #selectStringThrowing(String, String)}.
    * </p>
    *
-   * @param group the group the feature belongs to.
    * @param featureKey the feature key defined for the feature
+   * @param group the group the feature belongs to.
    * @return the selected option or the control value if the feature is set to {@link State#off}.
    * @throws FeatureException if the supplied group or featureKey is null.
    */
-  public String selectString(String group, String featureKey) {
+  public String selectString(String featureKey, String group) {
     FeatureException.throwIfNullOrEmpty(group, "Please supply a group");
     FeatureException.throwIfNullOrEmpty(featureKey, "Please supply a featureKey");
 
@@ -447,7 +447,7 @@ public class FeatureClient {
   public String selectStringThrowing(String featureKey) {
     FeatureException.throwIfNullOrEmpty(featureKey, "Please supply a featureKey");
 
-    return selectThrowing(defaultGroup, featureKey);
+    return selectThrowing(featureKey, defaultGroup);
   }
 
   /**
@@ -458,17 +458,17 @@ public class FeatureClient {
    * {@link FeatureException} if the feature does not exist or the option type is not a string.
    * </p>
    *
-   * @param group the group the feature belongs to.
    * @param featureKey the feature key defined for the feature
+   * @param group the group the feature belongs to.
    * @return the selected option or the control value if the feature is set to {@link State#off}.
    * @throws FeatureException if the supplied group or featureKey is null, the feature does not
    * exist, or is not a string option type.
    */
-  public String selectStringThrowing(String group, String featureKey) {
+  public String selectStringThrowing(String featureKey, String group) {
     FeatureException.throwIfNullOrEmpty(group, "Please supply a group");
     FeatureException.throwIfNullOrEmpty(featureKey, "Please supply a featureKey");
 
-    return selectThrowing(group, featureKey);
+    return selectThrowing(featureKey, group);
   }
 
   /**
@@ -505,13 +505,13 @@ public class FeatureClient {
    * for a missing feature or a flag call, use {@link #selectStringThrowing(String, String)}.
    * </p>
    *
-   * @param group the group the feature belongs to.
    * @param featureKey the feature key defined for the feature
+   * @param group the group the feature belongs to.
    * @return the selected option, the control value if the feature is set to {@link State#off}, or
    * the empty string if the feature is not found.
    * @throws FeatureException if the supplied group or featureKey is null.
    */
-  public String select(String group, String featureKey) {
+  public String select(String featureKey, String group) {
     FeatureException.throwIfNullOrEmpty(group, "Please supply a group");
     FeatureException.throwIfNullOrEmpty(featureKey, "Please supply a featureKey");
 
@@ -545,13 +545,13 @@ public class FeatureClient {
    * {@link FeatureException} if the feature does not exist or the option type is a flag.
    * </p>
    *
-   * @param group the group the feature belongs to.
    * @param featureKey the feature key defined for the feature
+   * @param group the group the feature belongs to.
    * @return the selected option or the control value if the feature is set to {@link State#off}.
    * @throws FeatureException if the supplied group or featureKey is null, the feature does not
    * exist, or is a flag type.
    */
-  public String selectThrowing(String group, String featureKey) {
+  public String selectThrowing(String featureKey, String group) {
     FeatureException.throwIfNullOrEmpty(group, "Please supply a group");
     FeatureException.throwIfNullOrEmpty(featureKey, "Please supply a featureKey");
 
