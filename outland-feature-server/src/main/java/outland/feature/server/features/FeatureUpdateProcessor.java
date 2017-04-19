@@ -300,7 +300,7 @@ class FeatureUpdateProcessor {
       }
     }
 
-    if(isStringOption(incomingFeatureData)) {
+    if (isStringOption(incomingFeatureData)) {
       if (incomingFeatureData.getOptions().getItemsCount() != 0) {
         final List<FeatureOption> options = incomingFeatureData.getOptions().getItemsList();
         optionsProcessor.applyBooleanOptions(optionCollectionBuilder, options);
@@ -346,7 +346,7 @@ class FeatureUpdateProcessor {
       featureDataBuilder.setOptions(wipOptionsBuilder);
     }
 
-    if(isStringOption(incomingFeatureData)
+    if (isStringOption(incomingFeatureData)
         && incomingFeatureData.getOptions().getItemsCount() != 0) {
       featureDataBuilder.clearOptions();
       final OptionCollection.Builder wipOptionsBuilder = OptionCollection.newBuilder();

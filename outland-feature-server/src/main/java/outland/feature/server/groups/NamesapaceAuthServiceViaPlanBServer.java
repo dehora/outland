@@ -40,6 +40,7 @@ public class NamesapaceAuthServiceViaPlanBServer implements NamesapaceAuthServic
 
   private final OkHttpClient client;
   private final URI tokenLookupUri;
+
   @Inject
   public NamesapaceAuthServiceViaPlanBServer(
       @Named("OAuthServiceClient") OkHttpClient client,

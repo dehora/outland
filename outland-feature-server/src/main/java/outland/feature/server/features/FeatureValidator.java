@@ -7,7 +7,6 @@ import com.google.common.collect.Sets;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import outland.feature.proto.Feature;
 import outland.feature.proto.FeatureData;
@@ -99,7 +98,7 @@ class FeatureValidator {
     final List<NamespaceFeature> namespaceFeatures = existingFeature.getNamespaces().getItemsList();
     for (NamespaceFeature namespaceFeature : namespaceFeatures) {
       namespaces.add(namespaceFeature.getNamespace());
-      if(namespaceFeature.getNamespace().equals(incoming.getNamespace())) {
+      if (namespaceFeature.getNamespace().equals(incoming.getNamespace())) {
         found = true;
         break;
       }
@@ -119,7 +118,7 @@ class FeatureValidator {
 
     validateKeysMatch(existingFeature.getKey(), incomingFeature.getKey());
 
-    if(incoming.getFeature().hasOptions()) {
+    if (incoming.getFeature().hasOptions()) {
       final OptionType existingOptionType = existingFeature.getOptions().getOption();
       final OptionCollection incomingFeatureOptions = incomingFeature.getOptions();
       final OptionType incomingOptionType = incomingFeatureOptions.getOption();
@@ -141,7 +140,6 @@ class FeatureValidator {
         validateOptionsThrowing(incomingFeatureOptions);
       }
     }
-
   }
 
   void validateOptionIdsForUpdate(OptionCollection existing, OptionCollection update) {
@@ -210,7 +208,7 @@ class FeatureValidator {
 
     final String control = options.getControl();
 
-    if(!Strings.isNullOrEmpty(control) && !("false".equals(control) || "true".equals(control))) {
+    if (!Strings.isNullOrEmpty(control) && !("false".equals(control) || "true".equals(control))) {
       throw new ServiceException(
           Problem.clientProblem("no_such_control_option",
               "the '" + control + "' option key was not found in the options list.",
@@ -245,8 +243,9 @@ class FeatureValidator {
   private void validateStringOptionsThrowing(OptionCollection options) {
 
     if (options.getItemsCount() == 0) {
-      throw new ServiceException(Problem.clientProblem("insufficient_count_for_string_option_feature",
-          "A string option must have at least one option", 422));
+      throw new ServiceException(
+          Problem.clientProblem("insufficient_count_for_string_option_feature",
+              "A string option must have at least one option", 422));
     }
 
     final List<FeatureOption> itemsList = options.getItemsList();
@@ -254,22 +253,24 @@ class FeatureValidator {
     final HashSet<String> optionKeys = Sets.newHashSetWithExpectedSize(itemsList.size());
 
     for (FeatureOption featureOption : itemsList) {
-      if(Strings.isNullOrEmpty(featureOption.getKey())) {
-        throw new ServiceException(Problem.clientProblem("empty_key_value_for_string_option_feature",
-            "A string option's keys must be non-empty", 422));
+      if (Strings.isNullOrEmpty(featureOption.getKey())) {
+        throw new ServiceException(
+            Problem.clientProblem("empty_key_value_for_string_option_feature",
+                "A string option's keys must be non-empty", 422));
       }
 
       optionKeys.add(featureOption.getKey());
     }
 
-    if(itemsList.size() != optionKeys.size()) {
-      throw new ServiceException(Problem.clientProblem("indistinct_key_value_for_string_option_feature",
-          "A string option's keys must be distinct", 422));
+    if (itemsList.size() != optionKeys.size()) {
+      throw new ServiceException(
+          Problem.clientProblem("indistinct_key_value_for_string_option_feature",
+              "A string option's keys must be distinct", 422));
     }
 
     final String control = options.getControl();
 
-    if(!Strings.isNullOrEmpty(control) && !optionKeys.contains(control)) {
+    if (!Strings.isNullOrEmpty(control) && !optionKeys.contains(control)) {
       throw new ServiceException(
           Problem.clientProblem("no_such_control_option",
               "the '" + control

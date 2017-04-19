@@ -287,7 +287,7 @@ public class DefaultGroupService implements GroupService, MetricsTimer {
     final Optional<Group> cached = timed(readCacheTimer,
         () -> groupCache.findInCache(groupCache.buildCacheKey(group)));
 
-    if(cached.isPresent()) {
+    if (cached.isPresent()) {
       loadCacheHitMeter.mark();
       return cached;
     }

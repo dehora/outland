@@ -204,7 +204,8 @@ public class FeatureResource {
       NamespaceFeature namespaceFeature
   ) throws AuthenticationException {
 
-    return postUpdate(principal, group, featureKey, f -> featureService.updateNamespaceFeature(f, namespaceFeature));
+    return postUpdate(principal, group, featureKey,
+        f -> featureService.updateNamespaceFeature(f, namespaceFeature));
   }
 
   @DELETE

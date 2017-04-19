@@ -14,5 +14,4 @@ public interface GroupCache {
   Void flushCache(String group);
 
   Void flushAll();
-
 }

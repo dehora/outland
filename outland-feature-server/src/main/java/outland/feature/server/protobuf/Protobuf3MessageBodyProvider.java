@@ -73,12 +73,12 @@ public class Protobuf3MessageBodyProvider
         return builder.build();
       }
       return builder.mergeFrom(entityStream).build();
-    } catch(MalformedJsonException | InvalidProtocolBufferException e) {
+    } catch (MalformedJsonException | InvalidProtocolBufferException e) {
       throw new ServiceException(Problem.clientProblem("request_entity_invalid",
-          "The submitted content was invalid: " +e.getMessage(), 422), e);
+          "The submitted content was invalid: " + e.getMessage(), 422), e);
     } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
       throw new ServiceException(Problem.clientProblem("request_entity_failure",
-          "A request handler could not be loaded: " +e.getMessage(), 500), e);
+          "A request handler could not be loaded: " + e.getMessage(), 500), e);
     }
   }
 
