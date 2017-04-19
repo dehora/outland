@@ -23,7 +23,6 @@ public class ServiceExceptionMapper implements ExceptionMapper<Throwable> {
 
     final long grepCode = grepCode();
     final String formattedGrepCode = String.format("%016x", grepCode);
-    logger.error(t.getMessage() + " trace_id=" + formattedGrepCode, t);
     if (logger.isDebugEnabled()) {
       logger.error(t.getMessage() + " trace_id=" + formattedGrepCode, t);
     } else {

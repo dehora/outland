@@ -1,5 +1,6 @@
 package outland.feature.server.protobuf;
 
+import com.google.gson.stream.MalformedJsonException;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.Message;
 import com.google.protobuf.util.JsonFormat;
@@ -71,14 +72,13 @@ public class Protobuf3MessageBodyProvider
         JsonFormat.parser().merge(br, builder);
         return builder.build();
       }
-
       return builder.mergeFrom(entityStream).build();
-    } catch (InvalidProtocolBufferException e) {
+    } catch(MalformedJsonException | InvalidProtocolBufferException e) {
       throw new ServiceException(Problem.clientProblem("request_entity_invalid",
-          "The submitted content was invalid.", 422));
+          "The submitted content was invalid: " +e.getMessage(), 422), e);
     } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
       throw new ServiceException(Problem.clientProblem("request_entity_failure",
-          "A request handler could not be loaded.", 500));
+          "A request handler could not be loaded: " +e.getMessage(), 500), e);
     }
   }
 
