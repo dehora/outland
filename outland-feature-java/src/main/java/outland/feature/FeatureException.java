@@ -59,6 +59,23 @@ public class FeatureException extends RuntimeException {
   }
 
   /**
+   * Throw a FeatureException if the argument is null or empty.
+   *
+   * @param arg the string to check
+   * @param message the exception message
+   * @param detail the exception detail
+   * @return the string if not null
+   * @throws IllegalArgumentException if {@code arg} is {@code null} or empty
+   */
+  static String throwIfNullOrEmpty(String arg, String message, String detail) {
+    if (Strings.isNullOrEmpty(arg)) {
+      IllegalArgumentException cause = new IllegalArgumentException(message);
+      throw new FeatureException(Problem.configProblem(cause.getMessage(), detail), cause);
+    }
+    return arg;
+  }
+
+  /**
    * Object representation of an RFC7807 Problem. Used in the client to provide error details.
    *
    * @return the problem detail

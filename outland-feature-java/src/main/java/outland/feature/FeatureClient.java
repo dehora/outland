@@ -11,8 +11,101 @@ import outland.feature.proto.OptionType;
 import outland.feature.proto.State;
 
 /**
+ * <p>
  * A client which can be used to check feature state and access the feature management APIs.
  * Clients must be created via a {@link FeatureClient.Builder}.
+ * </p>
+ *
+ * <h3>Features, Groups and Namespaces.</h3>
+ *
+ * <p>
+ * A Feature is identified by a key, and can be in an on or off state. A group holds a collection
+ * of features and is also identified by a key. A feature always belongs to one and only one
+ * group.</p>
+ *
+ * <h3>Flags and Options</h3>
+ *
+ * <p>
+ * Features have two forms - flags and options. Features which have a state of on are enabled
+ * and features which are off are considered disabled. What happens during
+ * evaluation depends on the kind of feature. The flag is the simplest kind of feature and
+ * probably the one you're most familiar with. When a flag's state is on it evaluates to true and
+ * you're good to go.
+ * </p>
+ *
+ * <h3>Flag State</h3>
+ *
+ * <p>The client can check the state of a feature using the "enabled" set of calls:</p>
+ * <ul>
+ * <li>{@link #enabled(String)}</li>
+ * <li>{@link #enabled(String, String)}</li>
+ * <li>{@link #enabledThrowing(String)}</li>
+ * <li>{@link #enabledThrowing(String, String)}</li>
+ * </ul>
+ *
+ * <p>
+ * A feature can have optionally have one or more namespaces that carry a custom variation
+ * of the feature's state. For example a feature can be disabled by default but enabled for
+ * a namespace called `staging`. Which namespace to use can be set via
+ * {@link ServerConfiguration#namespace(String)}. if the namespace is not set an implicit
+ * default namespace is assumed. If the namespace is configured but the feature being checked
+ * does not have that namespace the client will fall back to the feature's default state.
+ * </p>
+ *
+ * <h3>Option Selection</h3>
+ *
+ * <p>
+ * A feature option is more involved than a flag. As well as a state, it has one or more options
+ * which can be selected to return a result. Evaluating a feature option has two stages:
+ * </p>
+ *
+ * <ul>
+ * <li>First, the on or off state is examined to see if it's enabled, and if the state is
+ * off it's skipped just like a flag.</li>
+ * <li>Second, if the state `on`, the feature's available options are <i>evaluated</i> and one
+ * of them is selected. </li>
+ * </ul>
+ *
+ * <p>
+ * There are two supported option kinds - booleans and strings.
+ * </p>
+ *
+ * <ul>
+ * <li>A string feature can have multiple options, each of which can be
+ * given a weight.</li>
+ * <li>A boolean feature  option can only have true and false options, again each of which can
+ * be given a weight. A boolean option is a specialised kind of string option that the client
+ * understands.</li>
+ * </ul>
+ *
+ * <p>The client can select a feature option using the "select" set of calls:</p>
+ *
+ * <ul>
+ * <li>{@link #select(String)}</li>
+ * <li>{@link #select(String, String)}</li>
+ * <li>{@link #selectBoolean(String)}</li>
+ * <li>{@link #selectBoolean(String, String)}</li>
+ * <li>{@link #selectBooleanThrowing(String)}</li>
+ * <li>{@link #selectBooleanThrowing(String, String)}</li>
+ * <li>{@link #selectString(String)}</li>
+ * <li>{@link #selectString(String, String)}</li>
+ * <li>{@link #selectStringThrowing(String)}</li>
+ * <li>{@link #selectStringThrowing(String, String)}</li>
+ * </ul>
+ *
+ * <p>
+ * Each option in the feature has a weight and the probability of an option being selected
+ * is proportional to its weight. The client selection method based on
+ * <a href="https://en.wikipedia.org/wiki/Fitness_proportionate_selection">"roulette wheel
+ * selection"</a>.
+ * </p>
+ *
+ * <p>
+ * As with plain flags aa feature option can also have namespaced variants. Also, any feature
+ * option can have a control option indicating which option should be selected if the feature
+ * is in the off state. If the control is not declared the return value will default to an
+ * empty string in the client.
+ * </p>
  */
 public class FeatureClient {
 
@@ -74,7 +167,7 @@ public class FeatureClient {
   /**
    * Check and see if a feature is enabled.
    * <p>
-   * This is a convenience call for {@link #enabledFor(String, String)} where the group
+   * This is a convenience call for {@link #enabled(String, String)} where the group
    * argument is taken from  {@link #defaultGroup()}
    * </p>
    * <p>
@@ -117,7 +210,7 @@ public class FeatureClient {
   /**
    * Check and see if a feature is enabled.
    * <p>
-   * This is a convenience call for {@link #enabledForThrowing(String, String)}
+   * This is a convenience call for {@link #enabledThrowing(String, String)}
    * where the group argument is taken from  {@link #defaultGroup()}.
    * </p>
    * <p>
@@ -172,7 +265,7 @@ public class FeatureClient {
    * @throws FeatureException if the supplied featureKey is null, or, the default group has not been
    * configured.
    */
-  public boolean enabledFor(String group, String featureKey) {
+  public boolean enabled(String group, String featureKey) {
     FeatureException.throwIfNullOrEmpty(group, "Please supply a defaultGroup");
     FeatureException.throwIfNullOrEmpty(featureKey, "Please supply a featureKey");
 
@@ -182,7 +275,7 @@ public class FeatureClient {
   /**
    * Check and see if a feature is enabled.
    * <p>
-   * This is same as {@link #enabledForThrowing(String, String)} except it will throw a
+   * This is same as {@link #enabled(String, String)} except it will throw a
    * {@link FeatureException} if the feature does not exist or there is an internal exception.
    * </p>
    *
@@ -193,7 +286,7 @@ public class FeatureClient {
    * @throws FeatureException if the supplied featureKey is null, the default group has not been
    * configured, the feature does not exist or there was an internal error.
    */
-  public boolean enabledForThrowing(String group, String featureKey) {
+  public boolean enabledThrowing(String group, String featureKey) {
     FeatureException.throwIfNullOrEmpty(group, "Please supply a defaultGroup");
     FeatureException.throwIfNullOrEmpty(featureKey, "Please supply a featureKey");
 
@@ -232,7 +325,7 @@ public class FeatureClient {
    * <p>
    * <b>Warning:</b> passing a non-bool {@link OptionType} to this method will have the feature's
    * {@link State} selected, that is, the result of a non-bool type for this method
-   * is the same as {@link #enabledFor(String, String)}. Also, selecting a non-existent feature
+   * is the same as {@link #enabled(String, String)}. Also, selecting a non-existent feature
    * results in false. If you want to force an error in these cases, call
    * {@link #selectBooleanThrowing(String, String)}.
    * </p>

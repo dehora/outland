@@ -28,15 +28,15 @@ public class FeatureClientTest {
     expectIllegalArgument(() -> client.enabled(null));
     expectIllegalArgument(() -> client.enabled(""));
 
-    expectIllegalArgument(() -> client.enabledFor("grp", null));
-    expectIllegalArgument(() -> client.enabledFor("", "f"));
-    expectIllegalArgument(() -> client.enabledFor(null, "f"));
-    expectIllegalArgument(() -> client.enabledFor("g", ""));
+    expectIllegalArgument(() -> client.enabled("grp", null));
+    expectIllegalArgument(() -> client.enabled("", "f"));
+    expectIllegalArgument(() -> client.enabled(null, "f"));
+    expectIllegalArgument(() -> client.enabled("g", ""));
 
-    expectIllegalArgument(() -> client.enabledForThrowing("grp", null));
-    expectIllegalArgument(() -> client.enabledForThrowing("", "f"));
-    expectIllegalArgument(() -> client.enabledForThrowing(null, "f"));
-    expectIllegalArgument(() -> client.enabledForThrowing("g", ""));
+    expectIllegalArgument(() -> client.enabledThrowing("grp", null));
+    expectIllegalArgument(() -> client.enabledThrowing("", "f"));
+    expectIllegalArgument(() -> client.enabledThrowing(null, "f"));
+    expectIllegalArgument(() -> client.enabledThrowing("g", ""));
 
     expectIllegalArgument(() -> client.select(""));
     expectIllegalArgument(() -> client.select(null));
