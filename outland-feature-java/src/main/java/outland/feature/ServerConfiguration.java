@@ -1,6 +1,5 @@
 package outland.feature;
 
-import com.google.common.base.Strings;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.concurrent.TimeUnit;
@@ -10,9 +9,9 @@ import java.util.concurrent.TimeUnit;
  */
 public class ServerConfiguration {
 
-  static final long MAX_CACHE_SIZE = 2048L;
-  static final int INITIAL_CAPACITY = 50;
-  static final int REFRESH_AFTER_WRITE_S = 8;
+  public static final long MAX_CACHE_SIZE = 2048L;
+  public static final int INITIAL_CAPACITY = 50;
+  public static final int REFRESH_AFTER_WRITE_S = 8;
 
   @VisibleForTesting
   static final String DEFAULT_NAMESPACE = "*";
@@ -140,10 +139,8 @@ public class ServerConfiguration {
      fast fail because a null group is logically ok as it means we expect to be called always
       with the group/feature variants, but setting a null/empty is a bug.
       */
-    if (Strings.isNullOrEmpty(defaultGroup)) {
-      throw new FeatureException(Problem.configProblem("empty_group",
-          "Please configure a non-null and non-empty group."));
-    }
+    FeatureException.throwIfNullOrEmpty(defaultGroup,
+        "empty_group", "Please configure a non-null and non-empty group.");
 
     // todo: reject junk once we define the legal group regex on the api
 
@@ -160,8 +157,8 @@ public class ServerConfiguration {
    * <p>
    * Features can be configured with one or more namespaces that carry a custom variation of the
    * feature state. For example a bool feature might have default weights of
-   * <code>true: 5000<code/> and <code>false: 5000<code/> but for the "staging" namespace different
-   * weights  of <code>true: 9000<code/> and <code>false: 1000<code/>. As with the example,
+   * <code>true: 5000</code> and <code>false: 5000</code> but for the "staging" namespace different
+   * weights of <code>true: 9000</code> and <code>false: 1000</code>. As with the example,
    * a common use of namespaces is set feature states for environments.
    * </p>
    * <p>
@@ -208,7 +205,7 @@ public class ServerConfiguration {
   }
 
   /**
-   * Configure the maximum number of items to cache.
+   * Configure the maximum number of items to cache. The default is {@link MAX_CACHE_SIZE}.
    *
    * @param maxCacheSize the max size of the cache
    * @return this.
@@ -223,7 +220,7 @@ public class ServerConfiguration {
   }
 
   /**
-   * Configure the initial cache size before resizing.
+   * Configure the initial cache size before resizing. The default is {@link INITIAL_CAPACITY}.
    *
    * @param initialCacheSize the initial cache size.
    * @return this.
@@ -238,7 +235,7 @@ public class ServerConfiguration {
   }
 
   /**
-   * When to refresh the in-memory cache of a feature.
+   * When to refresh the in-memory cache of a feature. The default is {@link REFRESH_AFTER_WRITE_S}.
    *
    * @param refreshCacheAfterWrite when to refresh
    * @param unit the time unit

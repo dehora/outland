@@ -22,7 +22,7 @@ public class FeatureRecordTest {
         "json/feature-select-string-off-default-on-namespace-off-namespace.json"));
 
     assertEquals("an off feature returns its control option",
-        "green", stringRecord.select("*"));
+        "green", stringRecord.select(ServerConfiguration.DEFAULT_NAMESPACE));
   }
 
   @Test
