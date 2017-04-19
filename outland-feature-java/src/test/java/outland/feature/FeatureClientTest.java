@@ -28,31 +28,31 @@ public class FeatureClientTest {
     expectIllegalArgument(() -> client.enabled(null));
     expectIllegalArgument(() -> client.enabled(""));
 
-    expectIllegalArgument(() -> client.enabled("grp", null));
-    expectIllegalArgument(() -> client.enabled("", "f"));
-    expectIllegalArgument(() -> client.enabled(null, "f"));
-    expectIllegalArgument(() -> client.enabled("g", ""));
+    expectIllegalArgument(() -> client.enabled(null, "grp"));
+    expectIllegalArgument(() -> client.enabled("f", ""));
+    expectIllegalArgument(() -> client.enabled("f", null));
+    expectIllegalArgument(() -> client.enabled("", "g"));
 
-    expectIllegalArgument(() -> client.enabledThrowing("grp", null));
-    expectIllegalArgument(() -> client.enabledThrowing("", "f"));
-    expectIllegalArgument(() -> client.enabledThrowing(null, "f"));
-    expectIllegalArgument(() -> client.enabledThrowing("g", ""));
+    expectIllegalArgument(() -> client.enabledThrowing(null, "grp"));
+    expectIllegalArgument(() -> client.enabledThrowing("f", ""));
+    expectIllegalArgument(() -> client.enabledThrowing("f", null));
+    expectIllegalArgument(() -> client.enabledThrowing("", "g"));
 
     expectIllegalArgument(() -> client.select(""));
     expectIllegalArgument(() -> client.select(null));
 
-    expectIllegalArgument(() -> client.select("", "f"));
-    expectIllegalArgument(() -> client.select(null, "f"));
-    expectIllegalArgument(() -> client.select("g", ""));
-    expectIllegalArgument(() -> client.select("g", null));
+    expectIllegalArgument(() -> client.select("f", ""));
+    expectIllegalArgument(() -> client.select("f", null));
+    expectIllegalArgument(() -> client.select("", "g"));
+    expectIllegalArgument(() -> client.select(null, "g"));
 
     expectIllegalArgument(() -> client.selectThrowing("" ));
     expectIllegalArgument(() -> client.selectThrowing(null ));
 
-    expectIllegalArgument(() -> client.selectThrowing("", "f"));
-    expectIllegalArgument(() -> client.selectThrowing(null, "f"));
-    expectIllegalArgument(() -> client.selectThrowing("g", ""));
-    expectIllegalArgument(() -> client.selectThrowing("g", null));
+    expectIllegalArgument(() -> client.selectThrowing("f", ""));
+    expectIllegalArgument(() -> client.selectThrowing("f", null));
+    expectIllegalArgument(() -> client.selectThrowing("", "g"));
+    expectIllegalArgument(() -> client.selectThrowing(null, "g"));
 
     expectIllegalArgument(() -> client.selectBoolean(""));
     expectIllegalArgument(() -> client.selectBoolean(null));
@@ -60,26 +60,26 @@ public class FeatureClientTest {
     expectIllegalArgument(() -> client.selectBooleanThrowing(""));
     expectIllegalArgument(() -> client.selectBooleanThrowing(null));
 
-    expectIllegalArgument(() -> client.selectBooleanThrowing("", "f"));
-    expectIllegalArgument(() -> client.selectBooleanThrowing(null, "f"));
-    expectIllegalArgument(() -> client.selectBooleanThrowing("g", ""));
-    expectIllegalArgument(() -> client.selectBooleanThrowing("g", null));
+    expectIllegalArgument(() -> client.selectBooleanThrowing("f", ""));
+    expectIllegalArgument(() -> client.selectBooleanThrowing("f", null));
+    expectIllegalArgument(() -> client.selectBooleanThrowing("", "g"));
+    expectIllegalArgument(() -> client.selectBooleanThrowing(null, "g"));
 
     expectIllegalArgument(() -> client.selectString(""));
     expectIllegalArgument(() -> client.selectString(null));
 
-    expectIllegalArgument(() -> client.selectString("", "f"));
-    expectIllegalArgument(() -> client.selectString(null, "f"));
-    expectIllegalArgument(() -> client.selectString("g", ""));
-    expectIllegalArgument(() -> client.selectString("g", null));
+    expectIllegalArgument(() -> client.selectString("f", ""));
+    expectIllegalArgument(() -> client.selectString("f", null));
+    expectIllegalArgument(() -> client.selectString("", "g"));
+    expectIllegalArgument(() -> client.selectString(null, "g"));
 
     expectIllegalArgument(() -> client.selectStringThrowing(""));
     expectIllegalArgument(() -> client.selectStringThrowing(null));
 
-    expectIllegalArgument(() -> client.selectStringThrowing("", "f"));
-    expectIllegalArgument(() -> client.selectStringThrowing(null, "f"));
-    expectIllegalArgument(() -> client.selectStringThrowing("g", ""));
-    expectIllegalArgument(() -> client.selectStringThrowing("g", null));
+    expectIllegalArgument(() -> client.selectStringThrowing("f", ""));
+    expectIllegalArgument(() -> client.selectStringThrowing("f", null));
+    expectIllegalArgument(() -> client.selectStringThrowing("", "g"));
+    expectIllegalArgument(() -> client.selectStringThrowing(null, "g"));
   }
 
   private void expectIllegalArgument(Supplier supplier) {
