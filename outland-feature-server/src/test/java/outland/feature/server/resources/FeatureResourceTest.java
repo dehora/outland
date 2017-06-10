@@ -87,7 +87,6 @@ public class FeatureResourceTest {
     builder.addMembers(MemberAccess.newBuilder().setUsername(seedMemberOne).buildPartial());
 
     OwnerCollection.Builder oc = OwnerCollection.newBuilder()
-        .setType(Names.ownerCollectionType())
         .addItems(Owner.newBuilder().setUsername(seedOwnerOne));
 
     groupService.register(
@@ -104,7 +103,6 @@ public class FeatureResourceTest {
     builder.addMembers(MemberAccess.newBuilder().setUsername(seedMemberFoo).buildPartial());
 
     oc = OwnerCollection.newBuilder()
-        .setType(Names.ownerCollectionType())
         .addItems(Owner.newBuilder().setUsername(seedOwnerFoo));
 
     groupService.register(
@@ -121,7 +119,6 @@ public class FeatureResourceTest {
     builder.addMembers(MemberAccess.newBuilder().setUsername(seedMemberBar).buildPartial());
 
     oc = OwnerCollection.newBuilder()
-        .setType(Names.ownerCollectionType())
         .addItems(Owner.newBuilder().setUsername(seedOwnerBar));
 
     groupService.register(
@@ -153,7 +150,6 @@ public class FeatureResourceTest {
         Lists.newArrayList(ServiceAccess.newBuilder().setKey(service).buildPartial()));
 
     OwnerCollection.Builder oc = OwnerCollection.newBuilder()
-        .setType(Names.ownerCollectionType())
         .addItems(Owner.newBuilder().setName("Jayne").setUsername("jayne"));
 
     groupService.register(
@@ -397,7 +393,6 @@ public class FeatureResourceTest {
     accessBuilder.addAllServices(services);
 
     OwnerCollection.Builder oc = OwnerCollection.newBuilder()
-        .setType(Names.ownerCollectionType())
         .addItems(Owner.newBuilder().setName("Jayne").setUsername("jayne"));
 
     instance.register(
@@ -569,7 +564,6 @@ public class FeatureResourceTest {
     accessBuilder.addAllServices(services);
 
     OwnerCollection.Builder oc = OwnerCollection.newBuilder()
-        .setType(Names.ownerCollectionType())
         .addItems(Owner.newBuilder().setName("Jayne").setUsername("jayne"));
 
     instance.register(
@@ -621,7 +615,6 @@ public class FeatureResourceTest {
     accessBuilder.addAllServices(services);
 
     OwnerCollection.Builder oc = OwnerCollection.newBuilder()
-        .setType(Names.ownerCollectionType())
         .addItems(Owner.newBuilder().setName("Jayne").setUsername("jayne"));
 
     instance.register(

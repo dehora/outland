@@ -40,7 +40,6 @@ class FeatureRegisterProcessor {
     String created = TimeSupport.asString(now);
 
     Feature.Builder builder = registering.toBuilder();
-    builder.setType(Names.featureType());
     builder.setId(id);
     builder.setCreated(created);
     builder.setUpdated(builder.getCreated());
@@ -68,7 +67,6 @@ class FeatureRegisterProcessor {
 
     OptionCollection.Builder collectionBuilder = OptionCollection.newBuilder();
     collectionBuilder.setMaxweight(DEFAULT_MAXWEIGHT);
-    collectionBuilder.setType(Names.optionCollectionType());
     collectionBuilder.setOption(feature.getOptions().getOption());
     collectionBuilder.setControl(feature.getOptions().getControl());
 
@@ -107,7 +105,6 @@ class FeatureRegisterProcessor {
     } else {
 
       collectionBuilder.addItems(FeatureOption.newBuilder()
-          .setType(Names.optionType())
           .setId(Names.option())
           .setKey("false")
           .setValue("false")
@@ -115,7 +112,6 @@ class FeatureRegisterProcessor {
           .setWeight(5_000));
 
       collectionBuilder.addItems(FeatureOption.newBuilder()
-          .setType(Names.optionType())
           .setId(Names.option())
           .setKey("true")
           .setValue("true")
@@ -137,7 +133,6 @@ class FeatureRegisterProcessor {
   private void applyOwnerRegister(Feature registering, Feature.Builder builder) {
     final Owner owner = registering.getOwner();
     final Owner.Builder ownerBuilder = owner.toBuilder();
-    ownerBuilder.setType(Names.ownerType());
     ownerBuilder.setId(Names.owner());
     builder.setOwner(ownerBuilder.buildPartial());
   }
@@ -152,7 +147,6 @@ class FeatureRegisterProcessor {
 
     OptionCollection.Builder optionCollectionBuilder = OptionCollection.newBuilder();
     optionCollectionBuilder.setMaxweight(DEFAULT_MAXWEIGHT);
-    optionCollectionBuilder.setType(Names.optionCollectionType());
     optionCollectionBuilder.setOption(incoming.getFeature().getOptions().getOption());
     optionCollectionBuilder.setControl(incoming.getFeature().getOptions().getControl());
 
@@ -190,7 +184,6 @@ class FeatureRegisterProcessor {
 
       final FeatureData.Builder featureDataBuilder = FeatureData.newBuilder()
           .mergeFrom(incoming.getFeature())
-          .setType(Names.namespaceFeatureType())
           .setId(Names.namespaceFeature())
           .setVersion(versionSupport.nextFeatureVersion())
           .setKey(incoming.getFeature().getKey())
@@ -203,7 +196,6 @@ class FeatureRegisterProcessor {
       final NamespaceFeature.Builder namespaceFeatureBuilder = NamespaceFeature.newBuilder();
 
       namespaceFeatureBuilder.mergeFrom(incoming)
-          .setType(Names.namespaceFeatureType())
           .setNamespace(incoming.getNamespace())
           .setFeature(featureDataBuilder);
 
@@ -211,7 +203,6 @@ class FeatureRegisterProcessor {
     }
 
     NamespaceFeatureCollection.Builder nfcBuilder = NamespaceFeatureCollection.newBuilder()
-        .setType(Names.optionCollectionType())
         .addAllItems(registeringNamespaceFeatures);
 
     builder.setNamespaces(nfcBuilder);

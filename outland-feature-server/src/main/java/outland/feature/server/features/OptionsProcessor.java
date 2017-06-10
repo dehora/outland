@@ -26,7 +26,6 @@ class OptionsProcessor {
       OptionType optionType) {
     final FeatureOption.Builder optionBuilder = FeatureOption.newBuilder().mergeFrom(option);
     optionBuilder.setOption(optionType);
-    optionBuilder.setType(Names.optionType());
     optionBuilder.setId(Names.option());
     collectionBuilder.addItems(optionBuilder);
   }

@@ -94,15 +94,15 @@ class GroupUpdateProcessor {
   }
 
   MemberAccess prepareMember(MemberAccess member) {
-    return member.toBuilder().setType(Names.memberType()).setId(mintMemberId()).build();
+    return member.toBuilder().setId(mintMemberId()).build();
   }
 
   Owner prepareOwner(Owner owner) {
-    return owner.toBuilder().setType(Names.ownerType()).setId(mintOwnerId()).build();
+    return owner.toBuilder().setId(mintOwnerId()).build();
   }
 
   ServiceAccess prepareService(ServiceAccess service) {
-    return service.toBuilder().setType(Names.serviceType()).setId(mintServiceId()).build();
+    return service.toBuilder().setId(mintServiceId()).build();
   }
 
   private Owner mergeOwners(Owner existing, Owner incoming) {

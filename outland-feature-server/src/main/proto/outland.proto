@@ -8,7 +8,6 @@ option java_outer_classname = "FeatureMessage";
 package outland;
 
 message Owner {
-    string type = 1;
     string id = 2;
 
     string username = 10;
@@ -17,14 +16,10 @@ message Owner {
 }
 
 message OwnerCollection {
-    string type = 1;
-
     repeated Owner items = 10;
 }
 
 message FeatureVersion {
-    string type = 1;
-
     int64 timestamp = 10;
     int64 counter = 11;
 }
@@ -45,7 +40,6 @@ enum OptionType {
 }
 
 message FeatureOption {
-    string type = 1;
     string id = 2;
 
     OptionType option = 10;
@@ -55,8 +49,6 @@ message FeatureOption {
 }
 
 message OptionCollection {
-    string type = 1;
-
     OptionType option = 10;
     int32 maxweight = 11;
     repeated FeatureOption items = 12;
@@ -70,7 +62,6 @@ enum State {
 }
 
 message FeatureData {
-    string type = 1;
     string id = 2;
 
     string key = 10;
@@ -80,20 +71,15 @@ message FeatureData {
 }
 
 message NamespaceFeature {
-    string type = 1;
-
     string namespace = 10;
     FeatureData feature = 11;
 }
 
 message NamespaceFeatureCollection {
-    string type = 1;
-
     repeated NamespaceFeature items = 10;
 }
 
 message Feature {
-    string type = 1;
     string id = 2;
     string created = 3;
     string updated = 4;
@@ -110,14 +96,11 @@ message Feature {
 }
 
 message FeatureCollection {
-    string type = 1;
-
     string group = 10;
     repeated Feature items = 11;
 }
 
 message ServiceAccess {
-    string type = 1;
     string id = 2;
 
     string name = 10;
@@ -125,7 +108,6 @@ message ServiceAccess {
 }
 
 message MemberAccess {
-    string type = 1;
     string id = 2;
 
     string name = 10;
@@ -134,14 +116,11 @@ message MemberAccess {
 }
 
 message AccessCollection {
-    string type = 1;
-
     repeated ServiceAccess services = 10;
     repeated MemberAccess members = 11;
 }
 
 message Group {
-    string type = 1;
     string id = 2;
     string created = 3;
     string updated = 4;
