@@ -134,7 +134,6 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
     logger.info("{}", kvp("op", "loadFeatures", "group", group));
 
     final FeatureCollection.Builder builder = FeatureCollection.newBuilder();
-    builder.setType(Names.featureCollectionType());
     builder.setGroup(group);
 
     final Optional<Map<String, String>> cacheSet = timed(loadFeaturesCacheTimer,
@@ -180,7 +179,6 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
     return FeatureCollection.newBuilder()
         .addAllItems(sinceList)
         .setGroup(group)
-        .setType(Names.featureCollectionType())
         .build();
   }
 

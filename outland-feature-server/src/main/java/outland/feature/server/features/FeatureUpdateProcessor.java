@@ -40,7 +40,6 @@ class FeatureUpdateProcessor {
   Feature prepareUpdateNamespaceFeatureThrowing(Feature feature,
       List<NamespaceFeature> namespaceFeatures) {
     final NamespaceFeatureCollection.Builder nfcBuilder = NamespaceFeatureCollection.newBuilder()
-        .setType(Names.namespaceFeatureCollectionType())
         .addAllItems(namespaceFeatures);
     final Feature.Builder featureBuilder = feature.toBuilder()
         .clearNamespaces()
@@ -65,7 +64,6 @@ class FeatureUpdateProcessor {
         .setUpdated(now);
 
     // can't change some values in update
-    wipBuilder.setType(Names.featureType());
     wipBuilder.setCreated(existing.getCreated());
     wipBuilder.setId(existing.getId());
     wipBuilder.setGroup(existing.getGroup());
@@ -86,7 +84,6 @@ class FeatureUpdateProcessor {
 
       // can't change some values in update
       wipOptionsBuilder.setOption(existing.getOptions().getOption());
-      wipOptionsBuilder.setType(Names.optionCollectionType());
       wipOptionsBuilder.setMaxweight(DEFAULT_MAXWEIGHT);
 
       wipBuilder.setOptions(wipOptionsBuilder);
@@ -190,14 +187,12 @@ class FeatureUpdateProcessor {
             && !updateOwner.getUsername().equals(foundOwner.getEmail()))) {
       // treat as new owner
       final Owner.Builder replacementOwnerBuilder = updateOwner.toBuilder();
-      replacementOwnerBuilder.setType(Names.ownerType());
       replacementOwnerBuilder.setId(Names.owner());
       builder.setOwner(replacementOwnerBuilder.buildPartial());
     } else {
 
       final Owner.Builder wipOwnerBuilder = foundOwner.toBuilder().mergeFrom(updateOwner);
       // some fields can't be changed
-      wipOwnerBuilder.setType(Names.ownerType());
       wipOwnerBuilder.setId(foundOwner.getId());
 
       builder.setOwner(wipOwnerBuilder.buildPartial());
@@ -217,7 +212,6 @@ class FeatureUpdateProcessor {
     List<NamespaceFeature> merged = processor.buildMergedNamespaceFeatures(existing, incoming);
 
     final NamespaceFeatureCollection.Builder nfcBuilder = NamespaceFeatureCollection.newBuilder()
-        .setType(Names.namespaceFeatureCollectionType())
         .addAllItems(merged);
 
     wipBuilder.setNamespaces(nfcBuilder);
@@ -270,7 +264,6 @@ class FeatureUpdateProcessor {
 
     final FeatureData.Builder featureDataBuilder = incomingFeatureData.toBuilder()
         .setId(Names.namespaceFeature())
-        .setType(Names.namespaceFeatureType())
         .setVersion(versionSupport.nextFeatureVersion())
         .setKey(incomingFeatureData.getKey())
         // always off on create
@@ -278,7 +271,6 @@ class FeatureUpdateProcessor {
 
     if (incomingFeatureData.getOptions().getOption().equals(OptionType.flag)) {
       return incoming.toBuilder()
-          .setType(Names.namespaceFeatureType())
           .setFeature(featureDataBuilder)
           .build();
     }
@@ -287,7 +279,6 @@ class FeatureUpdateProcessor {
 
     OptionCollection.Builder optionCollectionBuilder = OptionCollection.newBuilder();
     optionCollectionBuilder.setMaxweight(DEFAULT_MAXWEIGHT);
-    optionCollectionBuilder.setType(Names.optionCollectionType());
     optionCollectionBuilder.setOption(incomingFeatureData.getOptions().getOption());
     optionCollectionBuilder.setControl(incomingFeatureData.getOptions().getControl());
 
@@ -309,7 +300,6 @@ class FeatureUpdateProcessor {
     }
 
     return incoming.toBuilder()
-        .setType(Names.namespaceFeatureType())
         .setFeature(featureDataBuilder)
         .build();
   }
@@ -322,8 +312,6 @@ class FeatureUpdateProcessor {
 
     final FeatureData.Builder featureDataBuilder =
         mergeFeatureData(existingFeatureData, incomingFeatureData);
-
-    featureDataBuilder.setType(Names.namespaceFeatureType());
 
     // process options if we received some
     if (isBoolOption(incomingFeatureData)
@@ -340,7 +328,6 @@ class FeatureUpdateProcessor {
 
       // can't change some values in update
       wipOptionsBuilder.setOption(existingFeatureData.getOptions().getOption());
-      wipOptionsBuilder.setType(Names.optionCollectionType());
       wipOptionsBuilder.setMaxweight(DEFAULT_MAXWEIGHT);
 
       featureDataBuilder.setOptions(wipOptionsBuilder);
@@ -357,14 +344,12 @@ class FeatureUpdateProcessor {
       wipOptionsBuilder.addAllItems(merged);
 
       wipOptionsBuilder.setOption(existingFeatureData.getOptions().getOption());
-      wipOptionsBuilder.setType(Names.optionCollectionType());
       wipOptionsBuilder.setMaxweight(DEFAULT_MAXWEIGHT);
 
       featureDataBuilder.setOptions(wipOptionsBuilder);
     }
 
     final NamespaceFeature.Builder namespaceFeaturebuilder = existing.toBuilder();
-    namespaceFeaturebuilder.setType(existing.getType());
     namespaceFeaturebuilder.setFeature(featureDataBuilder);
     return namespaceFeaturebuilder.build();
   }
@@ -381,7 +366,6 @@ class FeatureUpdateProcessor {
     return existing.toBuilder()
         .mergeFrom(incoming)
         .setId(existing.getId())
-        .setType(Names.namespaceFeatureType())
         .setVersion(versionSupport.nextFeatureVersion(existing.getVersion()));
   }
 

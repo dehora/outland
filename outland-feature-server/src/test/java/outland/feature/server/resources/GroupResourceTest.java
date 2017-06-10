@@ -75,7 +75,6 @@ public class GroupResourceTest {
     services.add(ServiceAccess.newBuilder().setKey(serviceKey).buildPartial());
     accessBuilder.addAllServices(services);
     OwnerCollection.Builder oc = OwnerCollection.newBuilder()
-        .setType(Names.ownerCollectionType())
         .addItems(Owner.newBuilder().setName("Jayne").setUsername("jayne"));
     final Group group = Group.newBuilder()
         .setKey(appKey)

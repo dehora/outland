@@ -255,7 +255,6 @@ public class DefaultGroupService implements GroupService, MetricsTimer {
     final Group.Builder builder = group.toBuilder();
     builder.clearOwners();
     OwnerCollection.Builder oc = OwnerCollection.newBuilder()
-        .setType(Names.ownerCollectionType())
         .addAllItems(wrapped);
     builder.setOwners(oc);
 
@@ -336,7 +335,6 @@ public class DefaultGroupService implements GroupService, MetricsTimer {
     List<Owner> ownersReady = Lists.newArrayList();
     group.getOwners().getItemsList().forEach(owner -> ownersReady.add(prepareOwner(owner)));
     OwnerCollection.Builder oc = OwnerCollection.newBuilder()
-        .setType(Names.ownerCollectionType())
         .addAllItems(ownersReady);
     builder.setOwners(oc);
 
@@ -367,11 +365,11 @@ public class DefaultGroupService implements GroupService, MetricsTimer {
   }
 
   private AccessCollection.Builder newGrantCollectionBuilder() {
-    return AccessCollection.newBuilder().setType(Names.accessCollectionType());
+    return AccessCollection.newBuilder();
   }
 
   private Group.Builder newNamespaceBuilder(Group group) {
-    return group.toBuilder().setType(DefaultGroupService.SUBJECT_TYPE);
+    return group.toBuilder();
   }
 
   private boolean hasOwnerRelation(String group, String relatedType, String relatedKey) {

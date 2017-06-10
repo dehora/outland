@@ -174,13 +174,11 @@ public class FeatureClientNamespaceTest {
 
     final FeatureOption.Builder foNamespaceTrueBuilder = FeatureOption.newBuilder()
         .setOption(OptionType.bool)
-        .setType("true")
         .setValue("true")
         .setWeight(10_000);
 
     final FeatureOption.Builder foNamespaceFalseBuilder = FeatureOption.newBuilder()
         .setOption(OptionType.bool)
-        .setType("false")
         .setValue("false")
         .setWeight(0);
 
@@ -204,13 +202,11 @@ public class FeatureClientNamespaceTest {
 
     final FeatureOption.Builder foDefaultTrueBuilder = FeatureOption.newBuilder()
         .setOption(OptionType.bool)
-        .setType("true")
         .setValue("true")
         .setWeight(10_000);
 
     final FeatureOption.Builder foDefaultFalseBuilder = FeatureOption.newBuilder()
         .setOption(OptionType.bool)
-        .setType("false")
         .setValue("false")
         .setWeight(0);
 

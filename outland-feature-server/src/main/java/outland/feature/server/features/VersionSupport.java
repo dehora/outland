@@ -34,7 +34,6 @@ class VersionSupport {
 
   private FeatureVersion.Builder buildVersionBuilder(VersionService.HybridLogicalTimestamp next) {
     return FeatureVersion.newBuilder()
-        .setType(Names.versionType())
         .setCounter(next.counter())
         .setTimestamp(next.logicalTime())
         ;

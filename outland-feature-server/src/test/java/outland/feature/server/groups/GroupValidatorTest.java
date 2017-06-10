@@ -16,7 +16,6 @@ public class GroupValidatorTest {
     Group.Builder builder = Group.newBuilder();
 
     OwnerCollection.Builder oc = OwnerCollection.newBuilder()
-        .setType(Names.ownerCollectionType())
         .addItems(Owner.newBuilder().setName("Bob").setUsername("bob"));
 
     builder.setOwners(oc)
@@ -45,7 +44,6 @@ public class GroupValidatorTest {
   public void validateRegistrationThrowingJunkOwner() {
     Group.Builder builder = Group.newBuilder();
     OwnerCollection.Builder oc = OwnerCollection.newBuilder()
-        .setType(Names.ownerCollectionType())
         .addItems(Owner.newBuilder().setName("Bob"));
     builder.setOwners(oc);
 
@@ -56,7 +54,6 @@ public class GroupValidatorTest {
   public void validateRegistrationThrowingNoKey() {
     Group.Builder builder = Group.newBuilder();
     OwnerCollection.Builder oc = OwnerCollection.newBuilder()
-        .setType(Names.ownerCollectionType())
         .addItems(Owner.newBuilder().setName("Bob").setUsername("bob"));
     builder.setOwners(oc);
 
@@ -67,7 +64,6 @@ public class GroupValidatorTest {
   public void validateRegistrationThrowingNoName() {
     Group.Builder builder = Group.newBuilder();
     OwnerCollection.Builder oc = OwnerCollection.newBuilder()
-        .setType(Names.ownerCollectionType())
         .addItems(Owner.newBuilder().setName("Bob").setUsername("bob"));
     builder.setOwners(oc)
         .setKey("key1");
