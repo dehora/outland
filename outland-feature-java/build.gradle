@@ -33,7 +33,6 @@ dependencies {
 }
 
 protobuf {
-  generatedFilesBaseDir = "$projectDir/gen"
   protoc {
     artifact = project.libs.protoc
   }

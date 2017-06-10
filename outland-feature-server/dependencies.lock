@@ -13,12 +13,12 @@
             "requested": "4.0"
         },
         "com.google.protobuf:protobuf-java": {
-            "locked": "3.2.0",
-            "requested": "3.2.+"
+            "locked": "3.3.1",
+            "requested": "3.3.1"
         },
         "com.google.protobuf:protobuf-java-util": {
-            "locked": "3.2.0",
-            "requested": "3.2.+"
+            "locked": "3.3.1",
+            "requested": "3.3.1"
         },
         "com.netflix.hystrix:hystrix-core": {
             "locked": "1.5.9",
@@ -29,7 +29,7 @@
             "requested": "1.0.6"
         },
         "com.squareup.okhttp3:okhttp": {
-            "locked": "3.6.0",
+            "locked": "3.8.0",
             "requested": "3.+"
         },
         "io.dropwizard.modules:dropwizard-java8": {
@@ -71,12 +71,12 @@
             "requested": "4.0"
         },
         "com.google.protobuf:protobuf-java": {
-            "locked": "3.2.0",
-            "requested": "3.2.+"
+            "locked": "3.3.1",
+            "requested": "3.3.1"
         },
         "com.google.protobuf:protobuf-java-util": {
-            "locked": "3.2.0",
-            "requested": "3.2.+"
+            "locked": "3.3.1",
+            "requested": "3.3.1"
         },
         "com.netflix.hystrix:hystrix-core": {
             "locked": "1.5.9",
@@ -87,7 +87,7 @@
             "requested": "1.0.6"
         },
         "com.squareup.okhttp3:okhttp": {
-            "locked": "3.6.0",
+            "locked": "3.8.0",
             "requested": "3.+"
         },
         "io.dropwizard.modules:dropwizard-java8": {
@@ -129,12 +129,12 @@
             "requested": "4.0"
         },
         "com.google.protobuf:protobuf-java": {
-            "locked": "3.2.0",
-            "requested": "3.2.+"
+            "locked": "3.3.1",
+            "requested": "3.3.1"
         },
         "com.google.protobuf:protobuf-java-util": {
-            "locked": "3.2.0",
-            "requested": "3.2.+"
+            "locked": "3.3.1",
+            "requested": "3.3.1"
         },
         "com.netflix.hystrix:hystrix-core": {
             "locked": "1.5.9",
@@ -145,7 +145,7 @@
             "requested": "1.0.6"
         },
         "com.squareup.okhttp3:okhttp": {
-            "locked": "3.6.0",
+            "locked": "3.8.0",
             "requested": "3.+"
         },
         "io.dropwizard.modules:dropwizard-java8": {
@@ -187,12 +187,12 @@
             "requested": "4.0"
         },
         "com.google.protobuf:protobuf-java": {
-            "locked": "3.2.0",
-            "requested": "3.2.+"
+            "locked": "3.3.1",
+            "requested": "3.3.1"
         },
         "com.google.protobuf:protobuf-java-util": {
-            "locked": "3.2.0",
-            "requested": "3.2.+"
+            "locked": "3.3.1",
+            "requested": "3.3.1"
         },
         "com.netflix.hystrix:hystrix-core": {
             "locked": "1.5.9",
@@ -203,7 +203,7 @@
             "requested": "1.0.6"
         },
         "com.squareup.okhttp3:okhttp": {
-            "locked": "3.6.0",
+            "locked": "3.8.0",
             "requested": "3.+"
         },
         "io.dropwizard.modules:dropwizard-java8": {
@@ -245,12 +245,12 @@
             "requested": "4.0"
         },
         "com.google.protobuf:protobuf-java": {
-            "locked": "3.2.0",
-            "requested": "3.2.+"
+            "locked": "3.3.1",
+            "requested": "3.3.1"
         },
         "com.google.protobuf:protobuf-java-util": {
-            "locked": "3.2.0",
-            "requested": "3.2.+"
+            "locked": "3.3.1",
+            "requested": "3.3.1"
         },
         "com.netflix.hystrix:hystrix-core": {
             "locked": "1.5.9",
@@ -261,7 +261,7 @@
             "requested": "1.0.6"
         },
         "com.squareup.okhttp3:okhttp": {
-            "locked": "3.6.0",
+            "locked": "3.8.0",
             "requested": "3.+"
         },
         "io.dropwizard.modules:dropwizard-java8": {
@@ -303,12 +303,12 @@
             "requested": "4.0"
         },
         "com.google.protobuf:protobuf-java": {
-            "locked": "3.2.0",
-            "requested": "3.2.+"
+            "locked": "3.3.1",
+            "requested": "3.3.1"
         },
         "com.google.protobuf:protobuf-java-util": {
-            "locked": "3.2.0",
-            "requested": "3.2.+"
+            "locked": "3.3.1",
+            "requested": "3.3.1"
         },
         "com.netflix.hystrix:hystrix-core": {
             "locked": "1.5.9",
@@ -319,7 +319,7 @@
             "requested": "1.0.6"
         },
         "com.squareup.okhttp3:okhttp": {
-            "locked": "3.6.0",
+            "locked": "3.8.0",
             "requested": "3.+"
         },
         "io.dropwizard.modules:dropwizard-java8": {
@@ -369,12 +369,12 @@
             "requested": "4.0"
         },
         "com.google.protobuf:protobuf-java": {
-            "locked": "3.2.0",
-            "requested": "3.2.+"
+            "locked": "3.3.1",
+            "requested": "3.3.1"
         },
         "com.google.protobuf:protobuf-java-util": {
-            "locked": "3.2.0",
-            "requested": "3.2.+"
+            "locked": "3.3.1",
+            "requested": "3.3.1"
         },
         "com.netflix.hystrix:hystrix-core": {
             "locked": "1.5.9",
@@ -385,7 +385,7 @@
             "requested": "1.0.6"
         },
         "com.squareup.okhttp3:okhttp": {
-            "locked": "3.6.0",
+            "locked": "3.8.0",
             "requested": "3.+"
         },
         "io.dropwizard.modules:dropwizard-java8": {
@@ -435,12 +435,12 @@
             "requested": "4.0"
         },
         "com.google.protobuf:protobuf-java": {
-            "locked": "3.2.0",
-            "requested": "3.2.+"
+            "locked": "3.3.1",
+            "requested": "3.3.1"
         },
         "com.google.protobuf:protobuf-java-util": {
-            "locked": "3.2.0",
-            "requested": "3.2.+"
+            "locked": "3.3.1",
+            "requested": "3.3.1"
         },
         "com.netflix.hystrix:hystrix-core": {
             "locked": "1.5.9",
@@ -451,7 +451,7 @@
             "requested": "1.0.6"
         },
         "com.squareup.okhttp3:okhttp": {
-            "locked": "3.6.0",
+            "locked": "3.8.0",
             "requested": "3.+"
         },
         "io.dropwizard.modules:dropwizard-java8": {
@@ -501,12 +501,12 @@
             "requested": "4.0"
         },
         "com.google.protobuf:protobuf-java": {
-            "locked": "3.2.0",
-            "requested": "3.2.+"
+            "locked": "3.3.1",
+            "requested": "3.3.1"
         },
         "com.google.protobuf:protobuf-java-util": {
-            "locked": "3.2.0",
-            "requested": "3.2.+"
+            "locked": "3.3.1",
+            "requested": "3.3.1"
         },
         "com.netflix.hystrix:hystrix-core": {
             "locked": "1.5.9",
@@ -517,7 +517,7 @@
             "requested": "1.0.6"
         },
         "com.squareup.okhttp3:okhttp": {
-            "locked": "3.6.0",
+            "locked": "3.8.0",
             "requested": "3.+"
         },
         "io.dropwizard.modules:dropwizard-java8": {
