@@ -1,16 +1,16 @@
 {
     "compile": {
         "io.grpc:grpc-netty": {
-            "locked": "1.1.2",
-            "requested": "1.1.2"
+            "locked": "1.4.0",
+            "requested": "1.4.0"
         },
         "io.grpc:grpc-protobuf": {
-            "locked": "1.1.2",
-            "requested": "1.1.2"
+            "locked": "1.4.0",
+            "requested": "1.4.0"
         },
         "io.grpc:grpc-stub": {
-            "locked": "1.1.2",
-            "requested": "1.1.2"
+            "locked": "1.4.0",
+            "requested": "1.4.0"
         },
         "org.slf4j:slf4j-api": {
             "locked": "1.7.23",
@@ -19,16 +19,16 @@
     },
     "compileClasspath": {
         "io.grpc:grpc-netty": {
-            "locked": "1.1.2",
-            "requested": "1.1.2"
+            "locked": "1.4.0",
+            "requested": "1.4.0"
         },
         "io.grpc:grpc-protobuf": {
-            "locked": "1.1.2",
-            "requested": "1.1.2"
+            "locked": "1.4.0",
+            "requested": "1.4.0"
         },
         "io.grpc:grpc-stub": {
-            "locked": "1.1.2",
-            "requested": "1.1.2"
+            "locked": "1.4.0",
+            "requested": "1.4.0"
         },
         "org.slf4j:slf4j-api": {
             "locked": "1.7.23",
@@ -37,16 +37,16 @@
     },
     "compileOnly": {
         "io.grpc:grpc-netty": {
-            "locked": "1.1.2",
-            "requested": "1.1.2"
+            "locked": "1.4.0",
+            "requested": "1.4.0"
         },
         "io.grpc:grpc-protobuf": {
-            "locked": "1.1.2",
-            "requested": "1.1.2"
+            "locked": "1.4.0",
+            "requested": "1.4.0"
         },
         "io.grpc:grpc-stub": {
-            "locked": "1.1.2",
-            "requested": "1.1.2"
+            "locked": "1.4.0",
+            "requested": "1.4.0"
         },
         "org.slf4j:slf4j-api": {
             "locked": "1.7.23",
@@ -55,16 +55,16 @@
     },
     "default": {
         "io.grpc:grpc-netty": {
-            "locked": "1.1.2",
-            "requested": "1.1.2"
+            "locked": "1.4.0",
+            "requested": "1.4.0"
         },
         "io.grpc:grpc-protobuf": {
-            "locked": "1.1.2",
-            "requested": "1.1.2"
+            "locked": "1.4.0",
+            "requested": "1.4.0"
         },
         "io.grpc:grpc-stub": {
-            "locked": "1.1.2",
-            "requested": "1.1.2"
+            "locked": "1.4.0",
+            "requested": "1.4.0"
         },
         "org.slf4j:slf4j-api": {
             "locked": "1.7.23",
@@ -73,22 +73,22 @@
     },
     "protobufToolsLocator_grpc": {
         "io.grpc:protoc-gen-grpc-java": {
-            "locked": "1.1.2",
-            "requested": "1.1.2"
+            "locked": "1.4.0",
+            "requested": "1.4.0"
         }
     },
     "runtime": {
         "io.grpc:grpc-netty": {
-            "locked": "1.1.2",
-            "requested": "1.1.2"
+            "locked": "1.4.0",
+            "requested": "1.4.0"
         },
         "io.grpc:grpc-protobuf": {
-            "locked": "1.1.2",
-            "requested": "1.1.2"
+            "locked": "1.4.0",
+            "requested": "1.4.0"
         },
         "io.grpc:grpc-stub": {
-            "locked": "1.1.2",
-            "requested": "1.1.2"
+            "locked": "1.4.0",
+            "requested": "1.4.0"
         },
         "org.slf4j:slf4j-api": {
             "locked": "1.7.23",
@@ -105,16 +105,16 @@
             "requested": "1.1.10"
         },
         "io.grpc:grpc-netty": {
-            "locked": "1.1.2",
-            "requested": "1.1.2"
+            "locked": "1.4.0",
+            "requested": "1.4.0"
         },
         "io.grpc:grpc-protobuf": {
-            "locked": "1.1.2",
-            "requested": "1.1.2"
+            "locked": "1.4.0",
+            "requested": "1.4.0"
         },
         "io.grpc:grpc-stub": {
-            "locked": "1.1.2",
-            "requested": "1.1.2"
+            "locked": "1.4.0",
+            "requested": "1.4.0"
         },
         "org.slf4j:slf4j-api": {
             "locked": "1.7.23",
@@ -131,16 +131,16 @@
             "requested": "1.1.10"
         },
         "io.grpc:grpc-netty": {
-            "locked": "1.1.2",
-            "requested": "1.1.2"
+            "locked": "1.4.0",
+            "requested": "1.4.0"
         },
         "io.grpc:grpc-protobuf": {
-            "locked": "1.1.2",
-            "requested": "1.1.2"
+            "locked": "1.4.0",
+            "requested": "1.4.0"
         },
         "io.grpc:grpc-stub": {
-            "locked": "1.1.2",
-            "requested": "1.1.2"
+            "locked": "1.4.0",
+            "requested": "1.4.0"
         },
         "org.slf4j:slf4j-api": {
             "locked": "1.7.23",
@@ -157,16 +157,16 @@
             "requested": "1.1.10"
         },
         "io.grpc:grpc-netty": {
-            "locked": "1.1.2",
-            "requested": "1.1.2"
+            "locked": "1.4.0",
+            "requested": "1.4.0"
         },
         "io.grpc:grpc-protobuf": {
-            "locked": "1.1.2",
-            "requested": "1.1.2"
+            "locked": "1.4.0",
+            "requested": "1.4.0"
         },
         "io.grpc:grpc-stub": {
-            "locked": "1.1.2",
-            "requested": "1.1.2"
+            "locked": "1.4.0",
+            "requested": "1.4.0"
         },
         "org.slf4j:slf4j-api": {
             "locked": "1.7.23",
@@ -183,16 +183,16 @@
             "requested": "1.1.10"
         },
         "io.grpc:grpc-netty": {
-            "locked": "1.1.2",
-            "requested": "1.1.2"
+            "locked": "1.4.0",
+            "requested": "1.4.0"
         },
         "io.grpc:grpc-protobuf": {
-            "locked": "1.1.2",
-            "requested": "1.1.2"
+            "locked": "1.4.0",
+            "requested": "1.4.0"
         },
         "io.grpc:grpc-stub": {
-            "locked": "1.1.2",
-            "requested": "1.1.2"
+            "locked": "1.4.0",
+            "requested": "1.4.0"
         },
         "org.slf4j:slf4j-api": {
             "locked": "1.7.23",

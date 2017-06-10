@@ -25,7 +25,6 @@ dependencies {
 sourceSets {
   main {
     java {
-      srcDir 'src/main/gen'
       srcDir 'src/main/resources'
     }
     proto {
@@ -41,13 +40,13 @@ sourceSets {
 }
 
 protobuf {
-  generatedFilesBaseDir = "$projectDir/src"
+//  generatedFilesBaseDir = "$projectDir/src"
   protoc {
     artifact = project.libs.protoc
   }
   plugins {
     grpc {
-      artifact = 'io.grpc:protoc-gen-grpc-java:1.1.2'
+      artifact = 'io.grpc:protoc-gen-grpc-java:1.4.0'
     }
   }
   generateProtoTasks {
@@ -56,5 +55,24 @@ protobuf {
         outputSubDir = 'java'
       }
     }
+  }
+}
+
+
+clean {
+  delete protobuf.generatedFilesBaseDir
+}
+
+idea {
+  module {
+    sourceDirs += file("${protobuf.generatedFilesBaseDir}/main/java");
+    sourceDirs += file("${protobuf.generatedFilesBaseDir}/main/proto");
+  }
+}
+
+idea {
+  module {
+    // no generatedSourceDirs: https://discuss.gradle.org/t/support-for-intellij-2016/15294/8
+    sourceDirs += file("${projectDir}/build/generated/source/proto/main/java");
   }
 }
