@@ -10,7 +10,7 @@ import outland.feature.proto.NamespaceFeature;
 import outland.feature.proto.NamespaceFeatureCollection;
 import outland.feature.proto.OptionCollection;
 import outland.feature.proto.OptionType;
-import outland.feature.proto.State;
+import outland.feature.proto.Status;
 
 import static junit.framework.TestCase.assertSame;
 
@@ -23,13 +23,13 @@ public class FeatureClientNamespaceTest {
     final String namespace = "the_ns";
     final FeatureStoreTest featureStore = new FeatureStoreTest();
     final ArrayList<TestState> testStates = Lists.newArrayList(
-        new TestState("the_feature_off_on", State.off, State.on, true,
+        new TestState("the_feature_off_on", Status.off, Status.on, true,
             "expected on when default off and namespace on"),
-        new TestState("the_feature_on_on", State.on, State.on, true,
+        new TestState("the_feature_on_on", Status.on, Status.on, true,
             "expected on when default is on and namespace is on"),
-        new TestState("the_feature_on_off", State.on, State.off, false,
+        new TestState("the_feature_on_off", Status.on, Status.off, false,
             "expected off when default is on and namespace is off"),
-        new TestState("the_feature_off_off", State.off, State.off, false,
+        new TestState("the_feature_off_off", Status.off, Status.off, false,
             "expected off when default is off and namespace is off")
     );
 
@@ -49,13 +49,13 @@ public class FeatureClientNamespaceTest {
     final String namespace = "the_ns";
     final FeatureStoreTest featureStore = new FeatureStoreTest();
     final ArrayList<TestState> testStates = Lists.newArrayList(
-        new TestState("the_feature_off_on", State.off, State.on, false,
+        new TestState("the_feature_off_on", Status.off, Status.on, false,
             "expected off when default is off and namespace is on"),
-        new TestState("the_feature_on_on", State.on, State.on, true,
+        new TestState("the_feature_on_on", Status.on, Status.on, true,
             "expected on when default is on and namespace is on"),
-        new TestState("the_feature_on_off", State.on, State.off, true,
+        new TestState("the_feature_on_off", Status.on, Status.off, true,
             "expected on when default is on and namespace is off"),
-        new TestState("the_feature_off_off", State.off, State.off, false,
+        new TestState("the_feature_off_off", Status.off, Status.off, false,
             "expected off when default is off and namespace is off")
     );
 
@@ -75,13 +75,13 @@ public class FeatureClientNamespaceTest {
     final String namespace = "the_ns";
     final FeatureStoreTest featureStore = new FeatureStoreTest();
     final ArrayList<TestState> testStates = Lists.newArrayList(
-        new TestState("the_feature_off_on", State.off, State.on, true,
+        new TestState("the_feature_off_on", Status.off, Status.on, true,
             "expected on when default is off and namespace is on"),
-        new TestState("the_feature_on_on", State.on, State.on, true,
+        new TestState("the_feature_on_on", Status.on, Status.on, true,
             "expected on when default is on and namespace is on"),
-        new TestState("the_feature_on_off", State.on, State.off, false,
+        new TestState("the_feature_on_off", Status.on, Status.off, false,
             "expected off when default is on and namespace is off"),
-        new TestState("the_feature_off_off", State.off, State.off, false,
+        new TestState("the_feature_off_off", Status.off, Status.off, false,
             "expected off when default is off and namespace is off")
     );
 
@@ -102,13 +102,13 @@ public class FeatureClientNamespaceTest {
     final String namespace = "the_ns";
     final FeatureStoreTest featureStore = new FeatureStoreTest();
     final ArrayList<TestState> testStates = Lists.newArrayList(
-        new TestState("the_feature_off_on", State.off, State.on, false,
+        new TestState("the_feature_off_on", Status.off, Status.on, false,
             "expected off when default is off and namespace is on"),
-        new TestState("the_feature_on_on", State.on, State.on, true,
+        new TestState("the_feature_on_on", Status.on, Status.on, true,
             "expected on when default is on and namespace is on"),
-        new TestState("the_feature_on_off", State.on, State.off, true,
+        new TestState("the_feature_on_off", Status.on, Status.off, true,
             "expected on when default is on and namespace is off"),
-        new TestState("the_feature_off_off", State.off, State.off, false,
+        new TestState("the_feature_off_off", Status.off, Status.off, false,
             "expected off when default is off and namespace is off")
     );
 
@@ -149,9 +149,9 @@ public class FeatureClientNamespaceTest {
   }
 
   private Feature prepareFeatureWithNamespace(String group, String namespace,
-      String featureKey, State defaultState, State namespaceState) {
+      String featureKey, Status defaultState, Status namespaceState) {
     final FeatureData.Builder fdBuilder =
-        FeatureData.newBuilder().setState(namespaceState).setKey(featureKey);
+        FeatureData.newBuilder().setStatus(namespaceState).setKey(featureKey);
 
     final NamespaceFeature.Builder nfBuilder = NamespaceFeature.newBuilder()
         .setNamespace(namespace)
@@ -164,13 +164,13 @@ public class FeatureClientNamespaceTest {
 
     return featureBuilder.setGroup(group)
         .setKey(featureKey)
-        .setState(defaultState)
+        .setStatus(defaultState)
         .setNamespaces(nfcBuilder)
         .build();
   }
 
   private Feature prepareFeatureOptionWithNamespace(String group, String namespace,
-      String featureKey, State defaultState, State namespaceState) {
+      String featureKey, Status defaultState, Status namespaceState) {
 
     final FeatureOption.Builder foNamespaceTrueBuilder = FeatureOption.newBuilder()
         .setOption(OptionType.bool)
@@ -189,7 +189,7 @@ public class FeatureClientNamespaceTest {
         .addItems(foNamespaceFalseBuilder.buildPartial());
 
     final FeatureData.Builder fdBuilder = FeatureData.newBuilder()
-        .setState(namespaceState)
+        .setStatus(namespaceState)
         .setKey(featureKey)
         .setOptions(ocNamespaceBuilder);
 
@@ -220,7 +220,7 @@ public class FeatureClientNamespaceTest {
 
     return featureBuilder.setGroup(group)
         .setKey(featureKey)
-        .setState(defaultState)
+        .setStatus(defaultState)
         .setOptions(ocDefaultBuilder)
         .setNamespaces(nfcBuilder)
         .build();
@@ -229,12 +229,12 @@ public class FeatureClientNamespaceTest {
   class TestState {
 
     final String key;
-    final State defaultState;
-    final State namespaceState;
+    final Status defaultState;
+    final Status namespaceState;
     final boolean expectedResult;
     final String msg;
 
-    TestState(String key, State defaultState, State namespaceState, boolean expectedResult,
+    TestState(String key, Status defaultState, Status namespaceState, boolean expectedResult,
         String msg) {
       this.key = key;
       this.defaultState = defaultState;

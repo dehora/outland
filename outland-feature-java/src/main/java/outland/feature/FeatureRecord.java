@@ -10,7 +10,7 @@ import outland.feature.proto.FeatureOption;
 import outland.feature.proto.NamespaceFeature;
 import outland.feature.proto.OptionCollection;
 import outland.feature.proto.OptionType;
-import outland.feature.proto.State;
+import outland.feature.proto.Status;
 
 class FeatureRecord {
 
@@ -56,7 +56,7 @@ class FeatureRecord {
   }
 
   boolean enabled() {
-    return feature().getState().equals(State.on);
+    return feature().getStatus().equals(Status.on);
   }
 
   boolean enabled(String namespace) {
@@ -70,7 +70,7 @@ class FeatureRecord {
       return enabled();
     }
 
-    return target.getFeature().getState().equals(State.on);
+    return target.getFeature().getStatus().equals(Status.on);
   }
 
   String select() {

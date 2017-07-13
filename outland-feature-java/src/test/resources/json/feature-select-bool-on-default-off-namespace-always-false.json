@@ -7,7 +7,7 @@
   },
   "key": "bool-off",
   "group": "group1",
-  "state": "on",
+  "status": "on",
   "description": "A test feature flag",
   "owner": {
     "type": "owner",
@@ -55,7 +55,7 @@
           "type": "nsfeature",
           "id": "nsfeat_01bdysctnfrtmh1qn1v9zs0tn7",
           "key": "bool-off",
-          "state": "off",
+          "status": "off",
           "options": {
             "type": "option.collection",
             "option": "bool",

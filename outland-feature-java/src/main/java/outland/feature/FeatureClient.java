@@ -8,7 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import outland.feature.proto.Feature;
 import outland.feature.proto.OptionType;
-import outland.feature.proto.State;
+import outland.feature.proto.Status;
 
 /**
  * <p>

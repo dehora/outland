@@ -6,7 +6,7 @@ import outland.feature.proto.Feature;
 import outland.feature.proto.FeatureOption;
 import outland.feature.proto.OptionCollection;
 import outland.feature.proto.OptionType;
-import outland.feature.proto.State;
+import outland.feature.proto.Status;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -19,22 +19,22 @@ public class OptionSelectorBoolTest {
     OptionSelectorBool oe = new OptionSelectorBool();
 
     final Feature feature = Feature.newBuilder()
-        .setState(State.off)
+        .setStatus(Status.off)
         .build();
 
     final OptionSelectorWeighted selector =
         new OptionSelectorWeighted(feature.getOptions().getItemsList());
 
-    assertFalse(oe.selectBooleanOptions(feature.getOptions(), feature.getState(), selector));
+    assertFalse(oe.selectBooleanOptions(feature.getOptions(), feature.getStatus(), selector));
 
     final Feature feature1 = Feature.newBuilder()
-        .setState(State.none)
+        .setStatus(Status.none)
         .build();
 
     final OptionSelectorWeighted selector1 =
         new OptionSelectorWeighted(feature.getOptions().getItemsList());
 
-    assertFalse(oe.selectBooleanOptions(feature1.getOptions(), feature.getState(), selector1));
+    assertFalse(oe.selectBooleanOptions(feature1.getOptions(), feature.getStatus(), selector1));
   }
 
   @Test
@@ -47,12 +47,12 @@ public class OptionSelectorBoolTest {
 
     final Feature feature1 = Feature.newBuilder()
         .setOptions(collection)
-        .setState(State.on)
+        .setStatus(Status.on)
         .build();
 
     assertFalse(oe.selectBooleanOptions(
         feature1.getOptions(),
-        feature1.getState(),
+        feature1.getStatus(),
         new OptionSelectorWeighted(feature1.getOptions().getItemsList())
     ));
   }
@@ -73,13 +73,13 @@ public class OptionSelectorBoolTest {
 
     final Feature feature1 = Feature.newBuilder()
         .setOptions(collection)
-        .setState(State.on)
+        .setStatus(Status.on)
         .build();
 
     OptionSelectorBool oe = new OptionSelectorBool();
     assertEquals(true, oe.selectBooleanOptions(
         feature1.getOptions(),
-        feature1.getState(),
+        feature1.getStatus(),
         new OptionSelectorWeighted(feature1.getOptions().getItemsList())
 
     ));
@@ -101,13 +101,13 @@ public class OptionSelectorBoolTest {
         .buildPartial();
 
     final Feature feature1 = Feature.newBuilder()
-        .setOptions(collection).setState(State.on)
+        .setOptions(collection).setStatus(Status.on)
         .build();
 
     OptionSelectorBool oe = new OptionSelectorBool();
     oe.selectBooleanOptions(
         feature1.getOptions(),
-        feature1.getState(),
+        feature1.getStatus(),
         new OptionSelectorWeighted(feature1.getOptions().getItemsList())
     );
 
@@ -121,7 +121,7 @@ public class OptionSelectorBoolTest {
           @SuppressWarnings("unused")
           int noop = oe.selectBooleanOptions(
               feature1.getOptions(),
-              feature1.getState(),
+              feature1.getStatus(),
               new OptionSelectorWeighted(feature1.getOptions().getItemsList())
           ) ? tCount[0]++ : fCount[0]++;
         }
@@ -155,14 +155,14 @@ public class OptionSelectorBoolTest {
         .buildPartial();
 
     final Feature feature1 = Feature.newBuilder()
-        .setOptions(collection).setState(State.on)
+        .setOptions(collection).setStatus(Status.on)
         .build();
 
     OptionSelectorBool oe = new OptionSelectorBool();
 
     IntStream.range(0, 10000).forEach(i -> assertFalse(oe.selectBooleanOptions(
         feature1.getOptions(),
-        feature1.getState(),
+        feature1.getStatus(),
         new OptionSelectorWeighted(feature1.getOptions().getItemsList())
     )));
   }
@@ -183,14 +183,14 @@ public class OptionSelectorBoolTest {
         .buildPartial();
 
     final Feature feature1 = Feature.newBuilder()
-        .setOptions(collection).setState(State.on)
+        .setOptions(collection).setStatus(Status.on)
         .build();
 
     OptionSelectorBool oe = new OptionSelectorBool();
 
     IntStream.range(0, 1000).forEach(i -> assertTrue(oe.selectBooleanOptions(
         feature1.getOptions(),
-        feature1.getState(),
+        feature1.getStatus(),
         new OptionSelectorWeighted(feature1.getOptions().getItemsList())
     )));
   }
@@ -247,13 +247,13 @@ public class OptionSelectorBoolTest {
 
     final Feature feature1 = Feature.newBuilder()
         .setOptions(collection)
-        .setState(State.on  )
+        .setStatus(Status.on  )
         .build();
 
     OptionSelectorBool oe = new OptionSelectorBool();
     oe.selectBooleanOptions(
         feature1.getOptions(),
-        feature1.getState(),
+        feature1.getStatus(),
         new OptionSelectorWeighted(feature1.getOptions().getItemsList())
     );
 
@@ -265,7 +265,7 @@ public class OptionSelectorBoolTest {
           @SuppressWarnings("unused")
           int noop = oe.selectBooleanOptions(
               feature1.getOptions(),
-              feature1.getState(),
+              feature1.getStatus(),
               new OptionSelectorWeighted(feature1.getOptions().getItemsList())
           ) ? tCount[0]++ : fCount[0]++;
         }

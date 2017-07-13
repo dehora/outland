@@ -7,7 +7,7 @@
   },
   "key": "flag1",
   "group": "g5",
-  "state": "on",
+  "status": "on",
   "description": "A test feature flag",
   "owner": {
     "type": "owner",
@@ -31,7 +31,7 @@
           "type": "nsfeature",
           "id": "nsfeat_01be0khdjyxwwn193hx0810kx5",
           "key": "flag1",
-          "state": "off",
+          "status": "off",
           "version": {
             "type": "version",
             "timestamp": "1492521629278000",

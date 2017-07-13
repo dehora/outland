@@ -218,7 +218,7 @@ public class DefaultFeatureStorage implements FeatureStorage {
         .withNumber("version_timestamp", feature.getVersion().getTimestamp())
         .withNumber("version_counter", feature.getVersion().getCounter())
         .withString("id", id)
-        .withString("state", feature.getState().name())
+        .withString("status", feature.getStatus().name())
         .withString("json", json)
         .withString("v", "1")
         .withString("created", feature.getCreated())
