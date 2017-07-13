@@ -39,7 +39,7 @@ echo "Group created, adding some feature flags"
 
 ikey_f1="idemkey_testgroup_f1"
 
-curl -i http://localhost:8180/features \
+curl -i http://localhost:8180/features/testgroup \
 -u ${service}:${api_key} \
 -H "Content-type: application/json" \
 -H "Idempotency-Key: ${ikey_f1}" \
@@ -57,7 +57,7 @@ curl -i http://localhost:8180/features \
 
 ikey_f2="idemkey_testgroup_f21"
 
-curl -i http://localhost:8180/features \
+curl -i http://localhost:8180/features/testgroup \
 -u ${service}:${api_key} \
 -H "Content-type: application/json" \
 -H "Idempotency-Key: ${ikey_f2}" \
@@ -87,7 +87,7 @@ curl -i http://localhost:8180/features \
 
 ikey_f3="idemkey_testgroup_f22"
 
-curl -i http://localhost:8180/features \
+curl -i http://localhost:8180/features/testgroup \
 -u ${service}:${api_key} \
 -H "Content-type: application/json" \
 -H "Idempotency-Key: ${ikey_f3}" \
