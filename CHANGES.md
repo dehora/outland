@@ -1,5 +1,23 @@
 ### Changes
 
+### 0.0.12
+
+- Upgrades gradle and nebula to 4.0.1.
+- Upgrades build to circleci 2.
+
+#### Server
+
+- Removes type fields from formats.
+- Cleans up protocol buffers and lib versions.
+- Maps malformed json to 422 responses.
+
+#### Client 
+
+- Removes outland-cluster-java. New home: [outland-message](https://github.com/dehora/outland-message)
+- Changes the order of arguments for client enabled and select calls.
+- Tidies client configuration.
+
+
 ### 0.0.11
 
 #### Server
