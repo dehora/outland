@@ -214,8 +214,8 @@ public class FeatureRecordTest {
     assertNotNull(stagingControlOptionRecord);
 
     FeatureOption stagingControlOptionData = null;
-    final String control = staging.getFeature().getOptions().getControl();
-    for (FeatureOption featureOption : staging.getFeature().getOptions().getItemsList()) {
+    final String control = staging.getData().getOptions().getControl();
+    for (FeatureOption featureOption : staging.getData().getOptions().getItemsList()) {
 
       if (featureOption.getKey().equals(control)) {
         stagingControlOptionData = featureOption;

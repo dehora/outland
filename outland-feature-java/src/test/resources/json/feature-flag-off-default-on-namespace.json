@@ -1,39 +1,33 @@
 {
-  "type": "feature",
   "id": "feat_01be0khdjgccbx02xq6xjj0kf4",
   "created": "2017-04-18T14:20:29.264+01:00",
   "updated": "2017-04-18T14:20:29.264+01:00",
   "properties": {
   },
+  "data": {
+    "status": "off",
+    "version": {
+      "timestamp": "1492521629276000",
+      "counter": "0"
+    }
+  },
   "key": "flag1",
   "group": "g5",
-  "status": "off",
   "description": "A test feature flag",
   "owner": {
-    "type": "owner",
     "id": "own_01be0khdjy83ca1x4wb6gm0nc3",
     "username": "testuser-1",
     "email": "",
     "name": "Test User One"
   },
-  "version": {
-    "type": "version",
-    "timestamp": "1492521629276000",
-    "counter": "0"
-  },
   "namespaces": {
-    "type": "option.collection",
     "items": [
       {
-        "type": "nsfeature",
         "namespace": "staging",
-        "feature": {
-          "type": "nsfeature",
-          "id": "nsfeat_01be0khdjyxwwn193hx0810kx5",
-          "key": "flag1",
+        "id": "nsfeat_01be0khdjyxwwn193hx0810kx5",
+        "data": {
           "status": "on",
           "version": {
-            "type": "version",
             "timestamp": "1492521629278000",
             "counter": "0"
           }

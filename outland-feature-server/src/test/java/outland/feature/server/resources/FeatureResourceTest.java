@@ -19,6 +19,7 @@ import org.junit.ClassRule;
 import org.junit.Test;
 import outland.feature.proto.AccessCollection;
 import outland.feature.proto.Feature;
+import outland.feature.proto.FeatureData;
 import outland.feature.proto.Group;
 import outland.feature.proto.MemberAccess;
 import outland.feature.proto.Owner;
@@ -424,9 +425,9 @@ public class FeatureResourceTest {
     assertEquals(key, featJson.getKey());
     assertTrue(featJson.getId().startsWith("feat_"));
 
-    assertTrue(featJson.getVersion() != null);
-    assertEquals(0L, featJson.getVersion().getCounter());
-    assertTrue(0L < featJson.getVersion().getTimestamp());
+    assertTrue(featJson.getData().getVersion() != null);
+    assertEquals(0L, featJson.getData().getVersion().getCounter());
+    assertTrue(0L < featJson.getData().getVersion().getTimestamp());
   }
 
   @Test
@@ -461,7 +462,7 @@ public class FeatureResourceTest {
     String id = builderRegister.getId();
     String created = builderRegister.getCreated();
     String updated = builderRegister.getUpdated();
-    Status state = builderRegister.getStatus();
+    Status state = builderRegister.getData().getStatus();
 
     // same id
     assertNotNull(id);
@@ -474,7 +475,11 @@ public class FeatureResourceTest {
 
     // turn on our feature and send an update
 
-    Feature update = builderRegister.build().toBuilder().setStatus(Status.on).build();
+
+    final FeatureData.Builder featureData = FeatureData.newBuilder()
+        .setStatus(Status.on);
+
+    Feature update = builderRegister.build().toBuilder().setData(featureData).build();
     String featureUpdateJson = Protobuf3Support.toJsonString(update);
     Response responseUpdate = client.target(url + "/" + featureKey)
         .request()
@@ -498,7 +503,7 @@ public class FeatureResourceTest {
     // same created
     assertEquals(created, builderUpdated.getCreated());
     // updated to enabled
-    assertEquals(Status.on, builderUpdated.getStatus());
+    assertEquals(Status.on, builderUpdated.getData().getStatus());
 
     // now read it back from the server and double check
 
@@ -524,7 +529,7 @@ public class FeatureResourceTest {
     // same created
     assertEquals(created, featResponseGet.getCreated());
     // still enabled
-    assertEquals(Status.on, featResponseGet.getStatus());
+    assertEquals(Status.on, featResponseGet.getData().getStatus());
   }
 
   @Test

@@ -95,7 +95,7 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
 
     final Feature existing = maybe.get();
     final Feature prepared = featureUpdateProcessor.prepareUpdateFeatureThrowing(existing, updates);
-    timed(updateFeatureTimer, () -> featureStorage.updateFeature(prepared, existing.getVersion()));
+    timed(updateFeatureTimer, () -> featureStorage.updateFeature(prepared, existing.getData().getVersion()));
     addToCache(prepared);
     return Optional.of(prepared);
   }
@@ -238,7 +238,7 @@ class DefaultFeatureService implements FeatureService, MetricsTimer {
   private Feature update(Feature feature, List<NamespaceFeature> namespaceFeatures) {
     final Feature updated =
         featureUpdateProcessor.prepareUpdateNamespaceFeatureThrowing(feature, namespaceFeatures);
-    timed(updateFeatureTimer, () -> featureStorage.updateFeature(updated, feature.getVersion()));
+    timed(updateFeatureTimer, () -> featureStorage.updateFeature(updated, feature.getData().getVersion()));
     addToCache(updated);
     return updated;
   }

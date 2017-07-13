@@ -28,14 +28,14 @@ class FeatureValidator {
 
     validateKeysThrowing(feature);
 
-    if (OptionType.flag != feature.getOptions().getOption()) {
+    if (OptionType.flag != feature.getData().getOptions().getOption()) {
       validateOptionsHaveIdsThrowing(feature);
     }
 
-    if (OptionType.flag != feature.getOptions().getOption()
-        && feature.getOptions().getItemsCount() != 0) {
+    if (OptionType.flag != feature.getData().getOptions().getOption()
+        && feature.getData().getOptions().getItemsCount() != 0) {
       // only validate options if they're sent and we're not a flag type
-      validateOptionsThrowing(feature.getOptions());
+      validateOptionsThrowing(feature.getData().getOptions());
 
       if (feature.hasNamespaces()) {
         validateNamespaceFeaturesThrowing(feature);
@@ -47,7 +47,7 @@ class FeatureValidator {
 
     validateOwnerThrowing(feature);
     validateKeysThrowing(feature);
-    validateOptionsThrowing(feature.getOptions());
+    validateOptionsThrowing(feature.getData().getOptions());
 
     if (feature.hasNamespaces()) {
       validateNamespaceFeaturesThrowing(feature);
@@ -64,18 +64,15 @@ class FeatureValidator {
 
   void validateFeatureDataMergeCandidates(FeatureData existing, FeatureData incoming) {
 
-    this.validateFeatureDataKeysMatch(existing, incoming);
     this.validateOptionsThrowing(incoming.getOptions());
     this.validateOptionIdsForUpdate(existing.getOptions(), incoming.getOptions());
   }
 
   void validateFeatureDataNewCandidateThrowing(Feature existingFeature, NamespaceFeature incoming) {
 
-    validateKeysMatch(existingFeature.getKey(), incoming.getFeature().getKey());
+    final OptionType existingOptionType = existingFeature.getData().getOptions().getOption();
 
-    final OptionType existingOptionType = existingFeature.getOptions().getOption();
-
-    final OptionCollection incomingOptions = incoming.getFeature().getOptions();
+    final OptionCollection incomingOptions = incoming.getData().getOptions();
     final OptionType incomingOptionType = incomingOptions.getOption();
 
     if (!existingOptionType.equals(incomingOptionType)) {
@@ -91,7 +88,7 @@ class FeatureValidator {
   void validateFeatureDataUpdateCandidateThrowing(
       Feature existingFeature, NamespaceFeature incoming) {
 
-    final FeatureData incomingFeature = incoming.getFeature();
+    final FeatureData incomingFeature = incoming.getData();
 
     boolean found = false;
     final List<String> namespaces = Lists.newArrayList();
@@ -116,10 +113,9 @@ class FeatureValidator {
 
     namespaces.clear();
 
-    validateKeysMatch(existingFeature.getKey(), incomingFeature.getKey());
 
-    if (incoming.getFeature().hasOptions()) {
-      final OptionType existingOptionType = existingFeature.getOptions().getOption();
+    if (incoming.getData().hasOptions()) {
+      final OptionType existingOptionType = existingFeature.getData().getOptions().getOption();
       final OptionCollection incomingFeatureOptions = incomingFeature.getOptions();
       final OptionType incomingOptionType = incomingFeatureOptions.getOption();
       if (!existingOptionType.equals(incomingOptionType)) {
@@ -131,10 +127,10 @@ class FeatureValidator {
 
       if (OptionType.flag != incomingFeatureOptions.getOption()) {
         validateOptionsHaveIdsThrowing(incomingFeatureOptions);
-        validateOptionIdsForUpdate(existingFeature.getOptions(), incomingFeatureOptions);
+        validateOptionIdsForUpdate(existingFeature.getData().getOptions(), incomingFeatureOptions);
       }
 
-      if (OptionType.flag != existingFeature.getOptions().getOption()
+      if (OptionType.flag != existingFeature.getData().getOptions().getOption()
           && incomingFeatureOptions.getItemsCount() != 0) {
         // only validate options if they're sent and we're not a flag type
         validateOptionsThrowing(incomingFeatureOptions);
@@ -214,14 +210,6 @@ class FeatureValidator {
               "the '" + control + "' option key was not found in the options list.",
               422));
     }
-  }
-
-  private void validateFeatureDataKeysMatch(FeatureData existing, FeatureData update) {
-
-    final String existingKey = existing.getKey();
-    final String updateKey = update.getKey();
-
-    validateKeysMatch(existingKey, updateKey);
   }
 
   private boolean isBoolOption(OptionCollection options) {
@@ -325,7 +313,7 @@ class FeatureValidator {
   }
 
   private void validateOptionsHaveIdsThrowing(Feature feature) {
-    final OptionCollection options = feature.getOptions();
+    final OptionCollection options = feature.getData().getOptions();
 
     validateOptionsHaveIdsThrowing(options);
   }

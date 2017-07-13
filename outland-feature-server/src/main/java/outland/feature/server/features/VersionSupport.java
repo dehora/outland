@@ -13,8 +13,8 @@ class VersionSupport {
   }
 
   FeatureVersion nextFeatureVersion(Feature feature) {
-    if (feature.hasVersion()) {
-      return nextFeatureVersion(feature.getVersion());
+    if (feature.getData().hasVersion()) {
+      return nextFeatureVersion(feature.getData().getVersion());
     } else {
       return nextFeatureVersion();
     }

@@ -3,6 +3,7 @@ package outland.feature.server.features;
 import java.util.function.Consumer;
 import org.junit.Test;
 import outland.feature.proto.Feature;
+import outland.feature.proto.FeatureData;
 import outland.feature.proto.FeatureOption;
 import outland.feature.proto.OptionCollection;
 import outland.feature.proto.OptionType;
@@ -39,10 +40,13 @@ public class FeatureValidatorTest {
         .addItems(FeatureOption.newBuilder().setValue("green").setKey("opt-green").setWeight(3000))
         .addItems(FeatureOption.newBuilder().setValue("blue").setKey("opt-blue").setWeight(2000));
 
+    final FeatureData.Builder featureData = FeatureData.newBuilder()
+        .setOptions(collectionBuilder);
+
     builder.setOwner(Owner.newBuilder().setName("Jayne").setUsername("jayne"))
         .setKey("key1")
         .setGroup("app1")
-        .setOptions(collectionBuilder);
+        .setData(featureData);
 
     try {
       new FeatureValidator().validateFeatureRegistrationThrowing(builder.build());
@@ -61,10 +65,13 @@ public class FeatureValidatorTest {
         .addItems(FeatureOption.newBuilder().setValue("green").setKey("opt-green").setWeight(3000).setId("g"))
         .addItems(FeatureOption.newBuilder().setValue("blue").setKey("opt-blue").setWeight(2000).setId("b"));
 
+    final FeatureData.Builder featureData = FeatureData.newBuilder()
+        .setOptions(collectionBuilder);
+
     builder.setOwner(Owner.newBuilder().setName("Jayne").setUsername("jayne"))
         .setKey("key1")
         .setGroup("app1")
-        .setOptions(collectionBuilder)
+        .setData(featureData)
     ;
 
     try {
@@ -81,10 +88,13 @@ public class FeatureValidatorTest {
     final OptionCollection.Builder collectionBuilder = OptionCollection.newBuilder()
         .setOption(OptionType.string);
 
+    final FeatureData.Builder featureData = FeatureData.newBuilder()
+        .setOptions(collectionBuilder);
+
     builder.setOwner(Owner.newBuilder().setName("Jayne").setUsername("jayne"))
         .setKey("key1")
         .setGroup("app1")
-        .setOptions(collectionBuilder);
+        .setData(featureData);
 
     callValidate(builder, "insufficient_count_for_string_option_feature", 422);
   }
@@ -99,10 +109,13 @@ public class FeatureValidatorTest {
         .addItems(FeatureOption.newBuilder().setValue("green").setKey("opt-green").setWeight(3000))
         .addItems(FeatureOption.newBuilder().setValue("blue").setKey("opt-blue").setWeight(2000));
 
+    final FeatureData.Builder featureData = FeatureData.newBuilder()
+        .setOptions(collectionBuilder);
+
     builder.setOwner(Owner.newBuilder().setName("Jayne").setUsername("jayne"))
         .setKey("key1")
         .setGroup("app1")
-        .setOptions(collectionBuilder);
+        .setData(featureData);
 
     callValidate(builder, "empty_key_value_for_string_option_feature", 422);
 
@@ -114,10 +127,13 @@ public class FeatureValidatorTest {
         .addItems(FeatureOption.newBuilder().setValue("green").setKey("opt-green").setWeight(3000))
         .addItems(FeatureOption.newBuilder().setValue("blue").setKey("opt-blue").setWeight(2000));
 
+    final FeatureData.Builder featureData1 = FeatureData.newBuilder()
+        .setOptions(collectionBuilder);
+
     builder1.setOwner(Owner.newBuilder().setName("Jayne").setUsername("jayne"))
         .setKey("key1")
         .setGroup("app1")
-        .setOptions(collectionBuilder1);
+        .setData(featureData1);
 
     callValidate(builder, "empty_key_value_for_string_option_feature", 422);
   }
@@ -132,10 +148,13 @@ public class FeatureValidatorTest {
         .addItems(FeatureOption.newBuilder().setValue("red").setKey("opt-red").setWeight(3000))
         .addItems(FeatureOption.newBuilder().setValue("blue").setKey("opt-blue").setWeight(2000));
 
+    final FeatureData.Builder featureData = FeatureData.newBuilder()
+        .setOptions(collectionBuilder);
+
     builder.setOwner(Owner.newBuilder().setName("Jayne").setUsername("jayne"))
         .setKey("key1")
         .setGroup("app1")
-        .setOptions(collectionBuilder);
+        .setData(featureData);
 
     callValidate(builder, "indistinct_key_value_for_string_option_feature", 422);
   }
@@ -149,10 +168,13 @@ public class FeatureValidatorTest {
         .addItems(FeatureOption.newBuilder().setValue("green").setKey("opt-green").setWeight(3000).setId("g"))
         .addItems(FeatureOption.newBuilder().setValue("blue").setKey("opt-blue").setWeight(2000).setId("b"));
 
+    final FeatureData.Builder featureData = FeatureData.newBuilder()
+        .setOptions(collectionBuilder);
+
     builder.setOwner(Owner.newBuilder().setName("Jayne").setUsername("jayne"))
         .setKey("key1")
         .setGroup("app1")
-        .setOptions(collectionBuilder)
+        .setData(featureData)
     ;
 
     callValidateUpdate(builder, "missing_id_for_option", 422);
@@ -168,10 +190,13 @@ public class FeatureValidatorTest {
         .addItems(FeatureOption.newBuilder().setValue("green").setKey("opt-green").setId("g"))
         .addItems(FeatureOption.newBuilder().setValue("blue").setKey("opt-blue").setId("b"));
 
+    final FeatureData.Builder featureData = FeatureData.newBuilder()
+        .setOptions(collectionBuilder);
+
     builder.setOwner(Owner.newBuilder().setName("Jayne").setUsername("jayne"))
         .setKey("key1")
         .setGroup("app1")
-        .setOptions(collectionBuilder)
+        .setData(featureData)
     ;
 
     // weights are 0,  and 0
@@ -189,10 +214,13 @@ public class FeatureValidatorTest {
         .addItems(FeatureOption.newBuilder().setValue("green").setKey("opt-green").setWeight(-1).setId("g"))
         .addItems(FeatureOption.newBuilder().setValue("blue").setKey("opt-blue").setWeight(0).setId("b"));
 
+    final FeatureData.Builder featureData = FeatureData.newBuilder()
+        .setOptions(collectionBuilder);
+
     builder.setOwner(Owner.newBuilder().setName("Jayne").setUsername("jayne"))
         .setKey("key1")
         .setGroup("app1")
-        .setOptions(collectionBuilder)
+        .setData(featureData)
     ;
 
     // weights are 0, 0 and -1
@@ -207,10 +235,13 @@ public class FeatureValidatorTest {
         .addItems(FeatureOption.newBuilder().setValue("green").setKey("opt-green").setWeight(10_001).setId("g"))
         .addItems(FeatureOption.newBuilder().setValue("blue").setKey("opt-blue").setWeight(0).setId("b"));
 
+    final FeatureData.Builder featureData1 = FeatureData.newBuilder()
+        .setOptions(collectionBuilder);
+
     builder.setOwner(Owner.newBuilder().setName("Jayne").setUsername("jayne"))
         .setKey("key1")
         .setGroup("app1")
-        .setOptions(collectionBuilder)
+        .setData(featureData1)
     ;
 
     // weights are 0, 0 and 10001
@@ -227,10 +258,13 @@ public class FeatureValidatorTest {
         .addItems(FeatureOption.newBuilder().setValue("green").setKey("opt-green").setWeight(2000).setId("g"))
         .addItems(FeatureOption.newBuilder().setValue("blue").setKey("opt-blue").setWeight(5001).setId("b"));
 
+    final FeatureData.Builder featureData = FeatureData.newBuilder()
+        .setOptions(collectionBuilder);
+
     builder.setOwner(Owner.newBuilder().setName("Jayne").setUsername("jayne"))
         .setKey("key1")
         .setGroup("app1")
-        .setOptions(collectionBuilder)
+        .setData(featureData)
     ;
 
     // weights are 3000, 2000 and 5001
@@ -355,10 +389,13 @@ public class FeatureValidatorTest {
         .addItems(FeatureOption.newBuilder().setValue("true").setKey("true").setWeight(5500))
         .addItems(FeatureOption.newBuilder().setValue("false").setKey("false").setWeight(4500));
 
+    final FeatureData.Builder featureData = FeatureData.newBuilder()
+        .setOptions(collectionBuilder);
+
     builder.setOwner(Owner.newBuilder().setName("Jayne").setUsername("jayne"))
         .setKey("key1")
         .setGroup("app1")
-        .setOptions(collectionBuilder)
+        .setData(featureData)
     ;
 
     try {
@@ -377,10 +414,13 @@ public class FeatureValidatorTest {
         .addItems(FeatureOption.newBuilder().setValue("true").setKey("true").setWeight(5500).setId("a"))
         .addItems(FeatureOption.newBuilder().setValue("false").setKey("false").setWeight(4500).setId("b"));
 
+    final FeatureData.Builder featureData = FeatureData.newBuilder()
+        .setOptions(collectionBuilder);
+
     builder.setOwner(Owner.newBuilder().setName("Jayne").setUsername("jayne"))
         .setKey("key1")
         .setGroup("app1")
-        .setOptions(collectionBuilder)
+        .setData(featureData)
     ;
 
     try {
@@ -431,10 +471,13 @@ public class FeatureValidatorTest {
         .addItems(FeatureOption.newBuilder().setValue("true").setKey("true"))
         ;
 
+    final FeatureData.Builder featureData = FeatureData.newBuilder()
+        .setOptions(collectionBuilder);
+
     builder.setOwner(Owner.newBuilder().setName("Jayne").setUsername("jayne"))
         .setKey("key1")
         .setGroup("app1")
-        .setOptions(collectionBuilder)
+        .setData(featureData)
         ;
 
     callValidate(builder, "wrong_options_for_bool_feature", 422);
@@ -450,10 +493,13 @@ public class FeatureValidatorTest {
         .addItems(FeatureOption.newBuilder().setValue("false").setKey("alse"))
         ;
 
+    final FeatureData.Builder featureData = FeatureData.newBuilder()
+        .setOptions(collectionBuilder);
+
     builder.setOwner(Owner.newBuilder().setName("Jayne").setUsername("jayne"))
         .setKey("key1")
         .setGroup("app1")
-        .setOptions(collectionBuilder)
+        .setData(featureData)
     ;
 
     callValidate(builder, "wrong_key_for_bool_feature", 422);
@@ -468,10 +514,13 @@ public class FeatureValidatorTest {
         .addItems(FeatureOption.newBuilder().setValue("rue").setKey("true"))
         .addItems(FeatureOption.newBuilder().setValue("false").setKey("false"));
 
+    final FeatureData.Builder featureData = FeatureData.newBuilder()
+        .setOptions(collectionBuilder);
+
     builder.setOwner(Owner.newBuilder().setName("Jayne").setUsername("jayne"))
         .setKey("key1")
         .setGroup("app1")
-        .setOptions(collectionBuilder)
+        .setData(featureData)
     ;
 
     callValidate(builder, "wrong_value_for_bool_feature", 422);
@@ -486,10 +535,13 @@ public class FeatureValidatorTest {
         .addItems(FeatureOption.newBuilder().setValue("true").setKey("false"))
         .addItems(FeatureOption.newBuilder().setValue("false").setKey("false"));
 
+    final FeatureData.Builder featureData = FeatureData.newBuilder()
+        .setOptions(collectionBuilder);
+
     builder.setOwner(Owner.newBuilder().setName("Jayne").setUsername("jayne"))
         .setKey("key1")
         .setGroup("app1")
-        .setOptions(collectionBuilder)
+        .setData(featureData)
     ;
 
     callValidate(builder, "mismatched_key_value_for_bool_feature", 422);
@@ -501,10 +553,13 @@ public class FeatureValidatorTest {
         .addItems(FeatureOption.newBuilder().setValue("true").setKey("true"))
         .addItems(FeatureOption.newBuilder().setValue("false").setKey("true"));
 
+    final FeatureData.Builder featureData1 = FeatureData.newBuilder()
+        .setOptions(collectionBuilder);
+
     builder.setOwner(Owner.newBuilder().setName("Jayne").setUsername("jayne"))
         .setKey("key1")
         .setGroup("app1")
-        .setOptions(collectionBuilder)
+        .setData(featureData1)
     ;
 
     callValidate(builder, "mismatched_key_value_for_bool_feature", 422);
@@ -519,10 +574,13 @@ public class FeatureValidatorTest {
         .addItems(FeatureOption.newBuilder().setValue("true").setKey("true"))
         .addItems(FeatureOption.newBuilder().setValue("false").setKey("false"));
 
+    final FeatureData.Builder featureData = FeatureData.newBuilder()
+        .setOptions(collectionBuilder);
+
     builder.setOwner(Owner.newBuilder().setName("Jayne").setUsername("jayne"))
         .setKey("key1")
         .setGroup("app1")
-        .setOptions(collectionBuilder)
+        .setData(featureData)
     ;
 
     // weights are 0 and 0
@@ -539,10 +597,13 @@ public class FeatureValidatorTest {
         .addItems(FeatureOption.newBuilder().setValue("true").setKey("true"))
         .addItems(FeatureOption.newBuilder().setValue("false").setKey("false").setWeight(-1));
 
+    final FeatureData.Builder featureData = FeatureData.newBuilder()
+        .setOptions(collectionBuilder);
+
     builder.setOwner(Owner.newBuilder().setName("Jayne").setUsername("jayne"))
         .setKey("key1")
         .setGroup("app1")
-        .setOptions(collectionBuilder)
+        .setData(featureData)
     ;
 
     // weights are 0 and -1
@@ -555,10 +616,14 @@ public class FeatureValidatorTest {
         .setOption(OptionType.bool)
         .addItems(FeatureOption.newBuilder().setValue("true").setKey("true"))
         .addItems(FeatureOption.newBuilder().setValue("false").setKey("false").setWeight(10_001));
+
+    final FeatureData.Builder featureData1 = FeatureData.newBuilder()
+        .setOptions(collectionBuilder);
+
     builder.setOwner(Owner.newBuilder().setName("Jayne").setUsername("jayne"))
         .setKey("key1")
         .setGroup("app1")
-        .setOptions(collectionBuilder)
+        .setData(featureData)
     ;
 
     // weights are 0 and 10001
@@ -574,10 +639,13 @@ public class FeatureValidatorTest {
         .addItems(FeatureOption.newBuilder().setValue("true").setKey("true").setWeight(5000))
         .addItems(FeatureOption.newBuilder().setValue("false").setKey("false").setWeight(5001));
 
+    final FeatureData.Builder featureData = FeatureData.newBuilder()
+        .setOptions(collectionBuilder);
+
     builder.setOwner(Owner.newBuilder().setName("Jayne").setUsername("jayne"))
         .setKey("key1")
         .setGroup("app1")
-        .setOptions(collectionBuilder)
+        .setData(featureData)
     ;
 
     // weights are 5000 and 5001
@@ -593,10 +661,13 @@ public class FeatureValidatorTest {
         .addItems(FeatureOption.newBuilder().setValue("true").setKey("true").setWeight(5500))  // no id here
         .addItems(FeatureOption.newBuilder().setValue("false").setKey("false").setWeight(5001).setId("b"));
 
+    final FeatureData.Builder featureData = FeatureData.newBuilder()
+        .setOptions(collectionBuilder);
+
     builder.setOwner(Owner.newBuilder().setName("Jayne").setUsername("jayne"))
         .setKey("key1")
         .setGroup("app1")
-        .setOptions(collectionBuilder)
+        .setData(featureData)
     ;
 
     callValidateUpdate(builder, "missing_id_for_option", 422);

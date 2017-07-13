@@ -44,7 +44,10 @@ class FeatureUpdateProcessor {
     final Feature.Builder featureBuilder = feature.toBuilder()
         .clearNamespaces()
         .setNamespaces(nfcBuilder);
-    featureBuilder.setVersion(versionSupport.nextFeatureVersion(feature));
+
+    final FeatureData.Builder featureDataBuilder = feature.getData().toBuilder();
+    featureDataBuilder.setVersion(versionSupport.nextFeatureVersion(feature));
+    featureBuilder.setData(featureDataBuilder);
     featureBuilder.setUpdated(timeNow());
     final Feature updated = featureBuilder.build();
     featureValidator.validateFeatureRegistrationThrowing(updated);
@@ -57,7 +60,8 @@ class FeatureUpdateProcessor {
 
     String now = TimeSupport.asString(OffsetDateTime.now());
 
-    featureValidator.validateOptionIdsForUpdate(existing.getOptions(), incoming.getOptions());
+    featureValidator.validateOptionIdsForUpdate(
+        existing.getData().getOptions(), incoming.getData().getOptions());
 
     Feature.Builder wipBuilder = existing.toBuilder()
         .mergeFrom(incoming)
@@ -69,24 +73,26 @@ class FeatureUpdateProcessor {
     wipBuilder.setGroup(existing.getGroup());
     wipBuilder.setKey(existing.getKey());
 
-    wipBuilder.setVersion(versionSupport.nextFeatureVersion(incoming));
+    final FeatureData.Builder featureDataBuilder = existing.getData().toBuilder();
+    featureDataBuilder.setVersion(versionSupport.nextFeatureVersion(incoming));
 
     // process options if we received some
-    if (incoming.getOptions().getOption().equals(OptionType.bool)
-        && incoming.getOptions().getItemsCount() != 0) {
+    if (incoming.getData().getOptions().getOption().equals(OptionType.bool)
+        && incoming.getData().getOptions().getItemsCount() != 0) {
 
       // clear out options, we can rebuild them
-      wipBuilder.clearOptions();
+      featureDataBuilder.clearOptions();
       final OptionCollection.Builder wipOptionsBuilder = OptionCollection.newBuilder();
 
       List<FeatureOption> options = buildFeaturesOptionsUpdate(existing, incoming);
       wipOptionsBuilder.addAllItems(options);
 
       // can't change some values in update
-      wipOptionsBuilder.setOption(existing.getOptions().getOption());
+      // todo:
+      //featureDataBuilder.setOption(existing.getData().getOptions().getOption());
       wipOptionsBuilder.setMaxweight(DEFAULT_MAXWEIGHT);
 
-      wipBuilder.setOptions(wipOptionsBuilder);
+      featureDataBuilder.setOptions(wipOptionsBuilder);
     }
 
     if (incoming.hasOwner()) {
@@ -96,8 +102,8 @@ class FeatureUpdateProcessor {
     }
 
     // a value other than none indicates the client sent something
-    if (!incoming.getStatus().equals(Status.none)) {
-      wipBuilder.setStatus(incoming.getStatus());
+    if (!incoming.getData().getStatus().equals(Status.none)) {
+      featureDataBuilder.setStatus(incoming.getData().getStatus());
     }
 
     // process namespaces if we received some
@@ -146,7 +152,7 @@ class FeatureUpdateProcessor {
   }
 
   private List<FeatureOption> buildFeaturesOptionsUpdate(Feature existing, Feature incoming) {
-    return buildOptionsUpdate(existing.getOptions(), incoming.getOptions());
+    return buildOptionsUpdate(existing.getData().getOptions(), incoming.getData().getOptions());
   }
 
   private List<FeatureOption> buildOptionsUpdate(
@@ -238,8 +244,8 @@ class FeatureUpdateProcessor {
       if (existingMap.containsKey(incoming.getNamespace())) {
         // merge
         final NamespaceFeature existing = existingMap.get(incoming.getNamespace());
-        final FeatureData existingFeatureData = existing.getFeature();
-        final FeatureData incomingFeatureData = incoming.getFeature();
+        final FeatureData existingFeatureData = existing.getData();
+        final FeatureData incomingFeatureData = incoming.getData();
         validator.validateFeatureDataMergeCandidates(existingFeatureData, incomingFeatureData);
         updateMap.put(incoming.getNamespace(), mergeNamespaceFeature(existing, incoming));
       } else {
@@ -260,18 +266,17 @@ class FeatureUpdateProcessor {
 
   private NamespaceFeature prepareNewNamespaceFeature(NamespaceFeature incoming) {
 
-    final FeatureData incomingFeatureData = incoming.getFeature();
+    final FeatureData incomingFeatureData = incoming.getData();
 
     final FeatureData.Builder featureDataBuilder = incomingFeatureData.toBuilder()
-        .setId(Names.namespaceFeature())
         .setVersion(versionSupport.nextFeatureVersion())
-        .setKey(incomingFeatureData.getKey())
         // always off on create
         .setStatus(Status.off);
 
     if (incomingFeatureData.getOptions().getOption().equals(OptionType.flag)) {
       return incoming.toBuilder()
-          .setFeature(featureDataBuilder)
+          .setId(Names.namespaceFeature())
+          .setData(featureDataBuilder)
           .build();
     }
 
@@ -300,15 +305,15 @@ class FeatureUpdateProcessor {
     }
 
     return incoming.toBuilder()
-        .setFeature(featureDataBuilder)
+        .setData(featureDataBuilder)
         .build();
   }
 
   private NamespaceFeature mergeNamespaceFeature(
       NamespaceFeature existing, NamespaceFeature incoming) {
 
-    final FeatureData existingFeatureData = existing.getFeature();
-    final FeatureData incomingFeatureData = incoming.getFeature();
+    final FeatureData existingFeatureData = existing.getData();
+    final FeatureData incomingFeatureData = incoming.getData();
 
     final FeatureData.Builder featureDataBuilder =
         mergeFeatureData(existingFeatureData, incomingFeatureData);
@@ -350,7 +355,7 @@ class FeatureUpdateProcessor {
     }
 
     final NamespaceFeature.Builder namespaceFeaturebuilder = existing.toBuilder();
-    namespaceFeaturebuilder.setFeature(featureDataBuilder);
+    namespaceFeaturebuilder.setData(featureDataBuilder);
     return namespaceFeaturebuilder.build();
   }
 
@@ -365,7 +370,6 @@ class FeatureUpdateProcessor {
   private FeatureData.Builder mergeFeatureData(FeatureData existing, FeatureData incoming) {
     return existing.toBuilder()
         .mergeFrom(incoming)
-        .setId(existing.getId())
         .setVersion(versionSupport.nextFeatureVersion(existing.getVersion()));
   }
 

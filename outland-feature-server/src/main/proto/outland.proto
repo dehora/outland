@@ -62,17 +62,17 @@ enum Status {
 }
 
 message FeatureData {
-    string id = 2;
-
-    string key = 10;
     Status status = 11;
     OptionCollection options = 12;
     FeatureVersion version = 13;
 }
 
 message NamespaceFeature {
-    string namespace = 10;
-    FeatureData feature = 11;
+    string id = 1;
+    string namespace = 2;
+    string created = 3;
+    string updated = 4;
+    FeatureData data = 11;
 }
 
 message NamespaceFeatureCollection {
@@ -80,19 +80,16 @@ message NamespaceFeatureCollection {
 }
 
 message Feature {
-    string id = 2;
+    string id = 1;
+    string key = 2;
     string created = 3;
     string updated = 4;
-    map<string, string> properties = 5;
-
-    string key = 10;
-    string group = 11;
-    Status status = 12;
-    string description = 13;
-    Owner owner = 14;
-    OptionCollection options = 15;
-    FeatureVersion version = 16;
-    NamespaceFeatureCollection namespaces = 17;
+    string group = 5;
+    string description = 6;
+    Owner owner = 7;
+    FeatureData data = 8;
+    NamespaceFeatureCollection namespaces = 9;
+    map<string, string> properties = 10;
 }
 
 message FeatureCollection {

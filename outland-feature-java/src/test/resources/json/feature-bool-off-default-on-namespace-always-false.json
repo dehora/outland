@@ -1,68 +1,58 @@
 {
-  "type": "feature",
   "id": "feat_01bdysctmzf4m81hm4cvb006w2",
   "created": "2017-04-17T21:24:21.407+01:00",
   "updated": "2017-04-17T21:24:21.407+01:00",
   "properties": {
   },
   "key": "bool-off",
+  "data": {
+    "status": "off",
+    "options": {
+      "option": "bool",
+      "maxweight": 10000,
+      "items": [
+        {
+          "id": "opt_01bdysctnfqmvn0b9k2h8d12y1",
+          "option": "bool",
+          "key": "true",
+          "value": "true",
+          "weight": 0
+        },
+        {
+          "id": "opt_01bdysctnfk0ak0am7np3p1trm",
+          "option": "bool",
+          "key": "false",
+          "value": "false",
+          "weight": 10000
+        }
+      ],
+      "control": "false"
+    },
+    "version": {
+      "timestamp": "1492460661421000",
+      "counter": "0"
+    }
+  },
   "group": "group1",
-  "status": "off",
   "description": "A test feature flag",
   "owner": {
-    "type": "owner",
     "id": "own_01bdysctnfnex80shpy0ya1tvx",
     "username": "testuser-1",
     "email": "",
     "name": "Test User One"
   },
-  "options": {
-    "type": "option.collection",
-    "option": "bool",
-    "maxweight": 10000,
-    "items": [
-      {
-        "type": "option",
-        "id": "opt_01bdysctnfqmvn0b9k2h8d12y1",
-        "option": "bool",
-        "key": "true",
-        "value": "true",
-        "weight": 0
-      },
-      {
-        "type": "option",
-        "id": "opt_01bdysctnfk0ak0am7np3p1trm",
-        "option": "bool",
-        "key": "false",
-        "value": "false",
-        "weight": 10000
-      }
-    ],
-    "control": "false"
-  },
-  "version": {
-    "type": "version",
-    "timestamp": "1492460661421000",
-    "counter": "0"
-  },
   "namespaces": {
-    "type": "option.collection",
     "items": [
       {
-        "type": "nsfeature",
         "namespace": "development",
-        "feature": {
-          "type": "nsfeature",
-          "id": "nsfeat_01bdysctnfrtmh1qn1v9zs0tn7",
-          "key": "bool-off",
+        "id": "nsfeat_01bdysctnfrtmh1qn1v9zs0tn7",
+        "data": {
           "status": "on",
           "options": {
-            "type": "option.collection",
             "option": "bool",
             "maxweight": 10000,
             "items": [
               {
-                "type": "option",
                 "id": "opt_01bdysctnfbsbx0kcax5900r7m",
                 "option": "bool",
                 "key": "true",
@@ -70,7 +60,6 @@
                 "weight": 0
               },
               {
-                "type": "option",
                 "id": "opt_01bdysctnfjef70jkbpbej0kye",
                 "option": "bool",
                 "key": "false",
@@ -81,7 +70,6 @@
             "control": "false"
           },
           "version": {
-            "type": "version",
             "timestamp": "1492460661423000",
             "counter": "0"
           }

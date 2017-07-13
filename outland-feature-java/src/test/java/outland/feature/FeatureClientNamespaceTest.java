@@ -151,20 +151,25 @@ public class FeatureClientNamespaceTest {
   private Feature prepareFeatureWithNamespace(String group, String namespace,
       String featureKey, Status defaultState, Status namespaceState) {
     final FeatureData.Builder fdBuilder =
-        FeatureData.newBuilder().setStatus(namespaceState).setKey(featureKey);
+        FeatureData.newBuilder()
+            .setStatus(namespaceState);
 
     final NamespaceFeature.Builder nfBuilder = NamespaceFeature.newBuilder()
         .setNamespace(namespace)
-        .setFeature(fdBuilder);
+        .setData(fdBuilder);
 
     final NamespaceFeatureCollection.Builder nfcBuilder = NamespaceFeatureCollection.newBuilder()
         .addItems(nfBuilder);
+
+    final FeatureData.Builder fdBuilder1 =
+        FeatureData.newBuilder()
+            .setStatus(defaultState);
 
     final Feature.Builder featureBuilder = Feature.newBuilder();
 
     return featureBuilder.setGroup(group)
         .setKey(featureKey)
-        .setStatus(defaultState)
+        .setData(fdBuilder1)
         .setNamespaces(nfcBuilder)
         .build();
   }
@@ -190,12 +195,11 @@ public class FeatureClientNamespaceTest {
 
     final FeatureData.Builder fdBuilder = FeatureData.newBuilder()
         .setStatus(namespaceState)
-        .setKey(featureKey)
         .setOptions(ocNamespaceBuilder);
 
     final NamespaceFeature.Builder nfBuilder = NamespaceFeature.newBuilder()
         .setNamespace(namespace)
-        .setFeature(fdBuilder);
+        .setData(fdBuilder);
 
     final NamespaceFeatureCollection.Builder nfcBuilder = NamespaceFeatureCollection.newBuilder()
         .addItems(nfBuilder);
@@ -218,10 +222,13 @@ public class FeatureClientNamespaceTest {
 
     final Feature.Builder featureBuilder = Feature.newBuilder();
 
+    final FeatureData.Builder fdBuilder1 = FeatureData.newBuilder()
+        .setStatus(defaultState)
+        .setOptions(ocDefaultBuilder);
+
     return featureBuilder.setGroup(group)
         .setKey(featureKey)
-        .setStatus(defaultState)
-        .setOptions(ocDefaultBuilder)
+        .setData(fdBuilder1)
         .setNamespaces(nfcBuilder)
         .build();
   }

@@ -39,15 +39,18 @@ class FeatureRegisterProcessor {
     String id = Names.feature(now);
     String created = TimeSupport.asString(now);
 
+    final FeatureData.Builder featureData = FeatureData.newBuilder()
+        .mergeFrom(registering.getData())
+        .setStatus(Status.off) // always disabled on registerFeature
+        .setVersion(versionSupport.nextFeatureVersion(registering));
+
     Feature.Builder builder = registering.toBuilder();
     builder.setId(id);
     builder.setCreated(created);
     builder.setUpdated(builder.getCreated());
-    builder.setStatus(Status.off); // always disabled on registerFeature
+    applyOptionsRegister(registering, featureData);
 
-    builder.setVersion(versionSupport.nextFeatureVersion(registering));
-    builder.clearOptions();
-    applyOptionsRegister(registering, builder);
+    builder.setData(featureData);
 
     builder.clearOwner();
     applyOwnerRegister(registering, builder);
@@ -58,50 +61,58 @@ class FeatureRegisterProcessor {
     return builder.build();
   }
 
-  private void applyOptionsRegister(Feature feature, Feature.Builder builder) {
+  private void applyOptionsRegister(Feature registering, FeatureData.Builder builder) {
 
-    if (feature.getOptions().getOption().equals(OptionType.flag)) {
+    if (registering.getData().getOptions().getOption().equals(OptionType.flag)) {
       // flags don't have weighted options
       return;
     }
 
     OptionCollection.Builder collectionBuilder = OptionCollection.newBuilder();
     collectionBuilder.setMaxweight(DEFAULT_MAXWEIGHT);
-    collectionBuilder.setOption(feature.getOptions().getOption());
-    collectionBuilder.setControl(feature.getOptions().getControl());
+    collectionBuilder.setOption(registering.getData().getOptions().getOption());
+    collectionBuilder.setControl(registering.getData().getOptions().getControl());
 
-    if (isBoolOption(feature)) {
-      applyBooleanOptions(feature, builder, collectionBuilder);
+    if (isBoolOption(registering)) {
+      applyBooleanOptions(registering, builder, collectionBuilder);
     }
 
-    if (isStringOption(feature)) {
-      applyStringOptions(feature, builder, collectionBuilder);
+    if (isStringOption(registering)) {
+      applyStringOptions(registering, builder, collectionBuilder);
     }
   }
 
   private boolean isStringOption(Feature feature) {
-    return feature.getOptions().getOption().equals(OptionType.string);
+    return feature.getData().getOptions().getOption().equals(OptionType.string);
   }
 
   private boolean isStringOption(NamespaceFeature incoming) {
-    return incoming.getFeature().getOptions().getOption().equals(OptionType.string);
+    return incoming.getData().getOptions().getOption().equals(OptionType.string);
   }
 
   private boolean isBoolOption(Feature feature) {
-    return feature.getOptions().getOption().equals(OptionType.bool);
+    return feature.getData().getOptions().getOption().equals(OptionType.bool);
   }
 
   private boolean isBoolOption(NamespaceFeature incoming) {
-    return incoming.getFeature().getOptions().getOption().equals(OptionType.bool);
+    return incoming.getData().getOptions().getOption().equals(OptionType.bool);
   }
 
   private void applyBooleanOptions(
-      Feature feature, Feature.Builder featureBuilder, OptionCollection.Builder collectionBuilder) {
-    if (feature.getOptions().getItemsCount() != 0) {
+      Feature feature, FeatureData.Builder featureDataBuilder, OptionCollection.Builder collectionBuilder) {
 
-      final List<FeatureOption> options = feature.getOptions().getItemsList();
+
+    final FeatureData.Builder featureData = FeatureData.newBuilder()
+        .mergeFrom(feature.getData())
+        .setVersion(versionSupport.nextFeatureVersion(feature));
+
+    if (feature.getData().getOptions().getItemsCount() != 0) {
+
+      final List<FeatureOption> options = feature.getData().getOptions().getItemsList();
       optionsProcessor.applyBooleanOptions(collectionBuilder, options);
-      featureBuilder.setOptions(collectionBuilder);
+
+
+      featureDataBuilder.setOptions(collectionBuilder);
     } else {
 
       collectionBuilder.addItems(FeatureOption.newBuilder()
@@ -118,16 +129,16 @@ class FeatureRegisterProcessor {
           .setOption(OptionType.bool)
           .setWeight(5_000));
 
-      featureBuilder.setOptions(collectionBuilder);
+      featureDataBuilder.setOptions(collectionBuilder);
     }
   }
 
   private void applyStringOptions(
-      Feature feature, Feature.Builder featureBuilder, OptionCollection.Builder collectionBuilder) {
+      Feature feature, FeatureData.Builder featureDataBuilder, OptionCollection.Builder collectionBuilder) {
 
-    final List<FeatureOption> options = feature.getOptions().getItemsList();
+    final List<FeatureOption> options = feature.getData().getOptions().getItemsList();
     optionsProcessor.applyStringOptions(collectionBuilder, options);
-    featureBuilder.setOptions(collectionBuilder);
+    featureDataBuilder.setOptions(collectionBuilder);
   }
 
   private void applyOwnerRegister(Feature registering, Feature.Builder builder) {
@@ -140,21 +151,21 @@ class FeatureRegisterProcessor {
   private void applyNamespaceFeatureOptionsRegister(
       NamespaceFeature incoming, FeatureData.Builder featureDataBuilder) {
 
-    if (incoming.getFeature().getOptions().getOption().equals(OptionType.flag)) {
+    if (incoming.getData().getOptions().getOption().equals(OptionType.flag)) {
       // flags don't have weighted options
       return;
     }
 
     OptionCollection.Builder optionCollectionBuilder = OptionCollection.newBuilder();
     optionCollectionBuilder.setMaxweight(DEFAULT_MAXWEIGHT);
-    optionCollectionBuilder.setOption(incoming.getFeature().getOptions().getOption());
-    optionCollectionBuilder.setControl(incoming.getFeature().getOptions().getControl());
+    optionCollectionBuilder.setOption(incoming.getData().getOptions().getOption());
+    optionCollectionBuilder.setControl(incoming.getData().getOptions().getControl());
 
     if (isBoolOption(incoming)) {
 
-      if (incoming.getFeature().getOptions().getItemsCount() != 0) {
+      if (incoming.getData().getOptions().getItemsCount() != 0) {
 
-        final List<FeatureOption> options = incoming.getFeature().getOptions().getItemsList();
+        final List<FeatureOption> options = incoming.getData().getOptions().getItemsList();
         optionsProcessor.applyBooleanOptions(optionCollectionBuilder, options);
         featureDataBuilder.setOptions(optionCollectionBuilder);
       }
@@ -162,7 +173,7 @@ class FeatureRegisterProcessor {
 
     if (isStringOption(incoming)) {
 
-      final List<FeatureOption> options = incoming.getFeature().getOptions().getItemsList();
+      final List<FeatureOption> options = incoming.getData().getOptions().getItemsList();
       optionsProcessor.applyStringOptions(optionCollectionBuilder, options);
       featureDataBuilder.setOptions(optionCollectionBuilder);
     }
@@ -183,10 +194,8 @@ class FeatureRegisterProcessor {
     for (NamespaceFeature incoming : incomingFeaturesList) {
 
       final FeatureData.Builder featureDataBuilder = FeatureData.newBuilder()
-          .mergeFrom(incoming.getFeature())
-          .setId(Names.namespaceFeature())
+          .mergeFrom(incoming.getData())
           .setVersion(versionSupport.nextFeatureVersion())
-          .setKey(incoming.getFeature().getKey())
           // always off on create
           .setStatus(Status.off);
 
@@ -197,7 +206,7 @@ class FeatureRegisterProcessor {
 
       namespaceFeatureBuilder.mergeFrom(incoming)
           .setNamespace(incoming.getNamespace())
-          .setFeature(featureDataBuilder);
+          .setData(featureDataBuilder);
 
       registeringNamespaceFeatures.add(namespaceFeatureBuilder.buildPartial());
     }

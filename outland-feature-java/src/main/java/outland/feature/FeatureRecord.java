@@ -56,7 +56,7 @@ class FeatureRecord {
   }
 
   boolean enabled() {
-    return feature().getStatus().equals(Status.on);
+    return feature().getData().getStatus().equals(Status.on);
   }
 
   boolean enabled(String namespace) {
@@ -70,7 +70,7 @@ class FeatureRecord {
       return enabled();
     }
 
-    return target.getFeature().getStatus().equals(Status.on);
+    return target.getData().getStatus().equals(Status.on);
   }
 
   String select() {
@@ -133,7 +133,7 @@ class FeatureRecord {
 
   private void prepareDefault() {
     if (isOptionalType()) {
-      final OptionCollection options = feature.getOptions();
+      final OptionCollection options = feature.getData().getOptions();
       final String control = options.getControl();
       for (FeatureOption featureOption : options.getItemsList()) {
         if (matchesControlOption(control, featureOption)) {
@@ -148,7 +148,7 @@ class FeatureRecord {
   private void prepareNamespaces() {
     for (NamespaceFeature namespaceFeature : feature.getNamespaces().getItemsList()) {
       namespaceFeatureMap.put(namespaceFeature.getNamespace(), namespaceFeature);
-      final OptionCollection options = namespaceFeature.getFeature().getOptions();
+      final OptionCollection options = namespaceFeature.getData().getOptions();
       if (isOptionalType(options)) {
         final String control = options.getControl();
         for (FeatureOption option : options.getItemsList()) {
@@ -168,7 +168,7 @@ class FeatureRecord {
   }
 
   private boolean isOptionalType() {
-    return isOptionalType(feature.getOptions());
+    return isOptionalType(feature.getData().getOptions());
   }
 
   private boolean isOptionalType(OptionCollection options) {

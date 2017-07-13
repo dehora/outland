@@ -674,9 +674,9 @@ public class FeatureClient {
       throwNotFound(group, featureKey);
     }
 
-    if (!record.feature().getOptions().getOption().equals(OptionType.bool)) {
+    if (!record.feature().getData().getOptions().getOption().equals(OptionType.bool)) {
       throwMismatchedOption(
-          group, featureKey, OptionType.bool, record.feature().getOptions().getOption());
+          group, featureKey, OptionType.bool, record.feature().getData().getOptions().getOption());
     }
 
     return record.selectBoolean(this.namespace);
@@ -699,9 +699,9 @@ public class FeatureClient {
       throwNotFound(group, featureKey);
     }
 
-    if (record.feature().getOptions().getOption().equals(OptionType.flag)) {
+    if (record.feature().getData().getOptions().getOption().equals(OptionType.flag)) {
       throwMismatchedOption(
-          group, featureKey, OptionType.string, record.feature().getOptions().getOption());
+          group, featureKey, OptionType.string, record.feature().getData().getOptions().getOption());
     }
 
     return record.select(this.namespace);
