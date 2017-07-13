@@ -76,8 +76,6 @@ public class DefaultGroupStorage implements GroupStorage {
       try {
         return table.putItem(putItemSpec);
       } catch (ConditionalCheckFailedException e) {
-        logger.error("err=conflict_group_already_exists ns_key={} {}", group.getKey(),
-            e.getMessage());
         throwConflictAlreadyExists(group);
         return null;
       }
