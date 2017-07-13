@@ -279,7 +279,7 @@ curl -v -XPOST  http://localhost:8180/features/testgroup-1/testfeature-1 \
 {
   "key": "testfeature-1"
   ,"group": "testgroup-1"
-  ,"state": "on"
+  ,"status": "on"
 }  
 '
 ```
@@ -363,11 +363,11 @@ You can manage features via the client via `FeatureResource`:
   Feature feature = Feature.newBuilder()
       .setGroup("testgroup-1")
       .setKey("testfeature-1")
-      .setState(Feature.State.on)
+      .setStatus(Feature.Status.on)
       .build();
 
   Feature updated = features.update(feature);
-  System.out.println("test-flag-1 state: " + updated.getState());
+  System.out.println("test-flag-1 state: " + updated.getStatus());
 ```
 
 
@@ -470,7 +470,7 @@ JSON fragment:
 {
   "key": "bool-weighted-all-true",
   "group": "group1",
-  "state": "on",
+  "status": "on",
   "description": "A test feature option",
   "options": {
     "option": "bool",
@@ -504,7 +504,7 @@ This JSON fragment shows what that would look like:
 {
   "key": "colors",
   "group": "group1",
-  "state": "on",
+  "status": "on",
   "description": "A test feature string",
   "options": {
     "option": "string",
@@ -618,7 +618,7 @@ curl -v http://localhost:8180/features/testgroup-1/testfeature-2/namespaces \
   "namespace": "staging",
   "feature": {
     "key": "testfeature-2",
-    "state": "off",
+    "status": "off",
     "options": {
       "option": "bool",
       "items": [

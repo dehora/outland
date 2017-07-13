@@ -7,7 +7,7 @@
   },
   "key": "strings-on",
   "group": "g5",
-  "state": "on",
+  "status": "on",
   "description": "A test feature flag",
   "owner": {
     "type": "owner",
@@ -63,7 +63,7 @@
           "type": "nsfeature",
           "id": "nsfeat_01bdysctnfrtmh1qn1v9zs0tn7",
           "key": "s11",
-          "state": "off",
+          "status": "off",
           "options": {
             "type": "option.collection",
             "option": "string",

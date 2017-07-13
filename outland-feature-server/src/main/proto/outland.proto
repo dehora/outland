@@ -55,7 +55,7 @@ message OptionCollection {
     string control = 13;
 }
 
-enum State {
+enum Status {
     none = 0;
     off = 1;
     on = 2;
@@ -65,7 +65,7 @@ message FeatureData {
     string id = 2;
 
     string key = 10;
-    State state = 11;
+    Status status = 11;
     OptionCollection options = 12;
     FeatureVersion version = 13;
 }
@@ -87,7 +87,7 @@ message Feature {
 
     string key = 10;
     string group = 11;
-    State state = 12;
+    Status status = 12;
     string description = 13;
     Owner owner = 14;
     OptionCollection options = 15;
