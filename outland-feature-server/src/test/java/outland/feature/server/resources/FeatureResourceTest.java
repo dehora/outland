@@ -25,7 +25,6 @@ import outland.feature.proto.Owner;
 import outland.feature.proto.OwnerCollection;
 import outland.feature.proto.ServiceAccess;
 import outland.feature.proto.State;
-import outland.feature.server.Names;
 import outland.feature.server.Problem;
 import outland.feature.server.ServerConfiguration;
 import outland.feature.server.ServerMain;
@@ -49,19 +48,10 @@ public class FeatureResourceTest {
   private Gson gson;
 
   private final String seedGroupOneKey = "appOne";
-  private final String seedOwnerOne = "ownerOne";
   private final String seedServiceOne = "serviceOne";
   private final String seedMemberOne = "memberOne";
-
-  private final String seedGroupFooKey = "appFoo";
-  private final String seedOwnerFoo = "ownerFoo";
-  private final String seedServiceFoo = "serviceFoo";
-  private final String seedMemberFoo = "memberFoo";
-
   private final String seedGroupBarKey = "appBar";
-  private final String seedOwnerBar = "ownerBar";
   private final String seedServiceBar = "serviceBar";
-  private final String seedMemberBar = "memberBar";
 
   private Injector injector;
   private GroupService groupService;
@@ -86,6 +76,7 @@ public class FeatureResourceTest {
     builder.addServices(ServiceAccess.newBuilder().setKey(seedServiceOne).buildPartial());
     builder.addMembers(MemberAccess.newBuilder().setUsername(seedMemberOne).buildPartial());
 
+    String seedOwnerOne = "ownerOne";
     OwnerCollection.Builder oc = OwnerCollection.newBuilder()
         .addItems(Owner.newBuilder().setUsername(seedOwnerOne));
 
@@ -99,12 +90,16 @@ public class FeatureResourceTest {
     );
 
     builder = AccessCollection.newBuilder();
+    String seedServiceFoo = "serviceFoo";
     builder.addServices(ServiceAccess.newBuilder().setKey(seedServiceFoo).buildPartial());
+    String seedMemberFoo = "memberFoo";
     builder.addMembers(MemberAccess.newBuilder().setUsername(seedMemberFoo).buildPartial());
 
+    String seedOwnerFoo = "ownerFoo";
     oc = OwnerCollection.newBuilder()
         .addItems(Owner.newBuilder().setUsername(seedOwnerFoo));
 
+    String seedGroupFooKey = "appFoo";
     groupService.register(
         Group.newBuilder()
             .setKey(seedGroupFooKey)
@@ -116,8 +111,10 @@ public class FeatureResourceTest {
 
     builder = AccessCollection.newBuilder();
     builder.addServices(ServiceAccess.newBuilder().setKey(seedServiceBar).buildPartial());
+    String seedMemberBar = "memberBar";
     builder.addMembers(MemberAccess.newBuilder().setUsername(seedMemberBar).buildPartial());
 
+    String seedOwnerBar = "ownerBar";
     oc = OwnerCollection.newBuilder()
         .addItems(Owner.newBuilder().setUsername(seedOwnerBar));
 
@@ -140,7 +137,7 @@ public class FeatureResourceTest {
     auth mechanism
      */
 
-    final String nsKey = "testAuthFailures";
+    final String groupKey = "testAuthFailures";
     final String user = "unknownuser";
     final String service = "knownservice";
 
@@ -166,7 +163,7 @@ public class FeatureResourceTest {
 
     // no auth header returns 401
 
-    Response response = clientNoAuth.target(url + "/" + nsKey)
+    Response response = clientNoAuth.target(url + "/" + groupKey)
         .request()
         .get();
     assertTrue(response.getStatus() == 401);
@@ -179,7 +176,7 @@ public class FeatureResourceTest {
         //    new LoggingFeature(Logger.getLogger(getClass().getName()), Level.INFO, null, null))
         .register(HttpAuthenticationFeature.universalBuilder().build());
 
-    Response response1 = clientWithAuth.target(url + "/" + nsKey)
+    Response response1 = clientWithAuth.target(url + "/" + groupKey)
         .request()
         .property(HTTP_AUTHENTICATION_BASIC_USERNAME, user + "/member")
         .property(HTTP_AUTHENTICATION_BASIC_PASSWORD, basicPassword)
@@ -189,7 +186,7 @@ public class FeatureResourceTest {
 
     // matching auth header and url works
 
-    Response response2 = clientWithAuth.target(url + "/" + nsKey)
+    Response response2 = clientWithAuth.target(url + "/" + groupKey)
         .request()
         .property(HTTP_AUTHENTICATION_BASIC_USERNAME, service + "/service")
         .property(HTTP_AUTHENTICATION_BASIC_PASSWORD, basicPassword)
@@ -205,10 +202,10 @@ public class FeatureResourceTest {
     JerseyClient client = createClient();
 
     final String featureKey = Ulid.random();
-    final String nsKey = seedGroupOneKey;
+    final String groupKey = seedGroupOneKey;
     final String serviceName = "unknownService";
 
-    Response response = client.target(url + "/" + nsKey + "/" + featureKey)
+    Response response = client.target(url + "/" + groupKey + "/" + featureKey)
         .request()
         .property(HTTP_AUTHENTICATION_BASIC_USERNAME, serviceName + "/service")
         .property(HTTP_AUTHENTICATION_BASIC_PASSWORD, basicPassword)
@@ -229,10 +226,10 @@ public class FeatureResourceTest {
     JerseyClient client = createClient();
 
     final String featureKey = Ulid.random();
-    final String nsKey = seedGroupOneKey;
+    final String groupKey = seedGroupOneKey;
     final String serviceName = "unknownMember";
 
-    Response response = client.target(url + "/" + nsKey + "/" + featureKey)
+    Response response = client.target(url + "/" + groupKey + "/" + featureKey)
         .request()
         .property(HTTP_AUTHENTICATION_BASIC_USERNAME, serviceName + "/member")
         .property(HTTP_AUTHENTICATION_BASIC_PASSWORD, basicPassword)
@@ -253,11 +250,11 @@ public class FeatureResourceTest {
     JerseyClient client = createClient();
 
     final String featureKey = Ulid.random();
-    final String nsKey = seedGroupOneKey;
+    final String groupKey = seedGroupOneKey;
     final String serviceName = "unknownMember";
     final String accessName = "unknownKind";
 
-    Response response = client.target(url + "/" + nsKey + "/" + featureKey)
+    Response response = client.target(url + "/" + groupKey + "/" + featureKey)
         .request()
         .property(HTTP_AUTHENTICATION_BASIC_USERNAME, serviceName + "/" + accessName)
         .property(HTTP_AUTHENTICATION_BASIC_PASSWORD, basicPassword)
@@ -307,7 +304,7 @@ public class FeatureResourceTest {
   @Test
   public void testUpdateNonMatchingFeatureUrlAndDataCauses422() throws Exception {
 
-    final String nsKey = seedGroupOneKey;
+    final String groupKey = seedGroupOneKey;
 
     String urlFeatureKey = Ulid.random();
     String dataFeatureKey = Ulid.random();
@@ -315,10 +312,10 @@ public class FeatureResourceTest {
     String url = createFeatureUrl();
     JerseyClient client = createClient();
 
-    Feature feature = buildTestFeature(nsKey, dataFeatureKey);
+    Feature feature = buildTestFeature(groupKey, dataFeatureKey);
     String jsonReq = Protobuf3Support.toJsonString(feature);
 
-    final String uri = url + "/" + nsKey + "/" + urlFeatureKey;
+    final String uri = url + "/" + groupKey + "/" + urlFeatureKey;
 
     Response response = client.target(uri)
         .request()
@@ -340,7 +337,7 @@ public class FeatureResourceTest {
   @Test
   public void testIdempotentPost() throws Exception {
 
-    String url = createFeatureUrl();
+    String url = createFeatureUrl() + "/" + seedGroupOneKey;
 
     JerseyClient client = createClient();
 
@@ -384,7 +381,7 @@ public class FeatureResourceTest {
 
     final GroupService instance = injector.getInstance(GroupService.class);
 
-    final String nsKey = "testPostGroupKey";
+    final String groupKey = "testPostGroupKey";
     final String serviceKey = "testPostService";
 
     AccessCollection.Builder accessBuilder = AccessCollection.newBuilder();
@@ -397,18 +394,18 @@ public class FeatureResourceTest {
 
     instance.register(
         Group.newBuilder()
-            .setKey(nsKey)
+            .setKey(groupKey)
             .setName("name")
             .setOwners(oc)
             .setGranted(accessBuilder.buildPartial())
             .build()
     );
 
-    String url = createFeatureUrl();
+    String url = createFeatureUrl() + "/"+ groupKey;
     JerseyClient client = createClient();
 
     String key = "testPostFeatureKey";
-    Feature feature = buildTestFeature(nsKey, key);
+    Feature feature = buildTestFeature(groupKey, key);
     String jsonReq = Protobuf3Support.toJsonString(feature);
 
     Response post = client.target(url)
@@ -435,12 +432,14 @@ public class FeatureResourceTest {
   @Test
   public void testUpdate() throws Exception {
 
-    String url = createFeatureUrl();
+
     JerseyClient client = createClient();
 
     String featureKey = "testUpdateFeatureKey";
     Feature feature = buildTestFeature(seedGroupOneKey, featureKey);
     String featureJson = Protobuf3Support.toJsonString(feature);
+
+    String url = createFeatureUrl() + "/" + seedGroupOneKey;
 
     // create a feature
 
@@ -477,7 +476,7 @@ public class FeatureResourceTest {
 
     Feature update = builderRegister.build().toBuilder().setState(State.on).build();
     String featureUpdateJson = Protobuf3Support.toJsonString(update);
-    Response responseUpdate = client.target(url + "/" + seedGroupOneKey + "/" + featureKey)
+    Response responseUpdate = client.target(url + "/" + featureKey)
         .request()
         // this time update using a member
         .property(HTTP_AUTHENTICATION_BASIC_USERNAME, seedMemberOne + "/member")
@@ -503,7 +502,7 @@ public class FeatureResourceTest {
 
     // now read it back from the server and double check
 
-    Response responseGet = client.target(url + "/" + seedGroupOneKey + "/" + featureKey)
+    Response responseGet = client.target(url + "/" + featureKey)
         .request()
         // ask using a service's grant
         .property(HTTP_AUTHENTICATION_BASIC_USERNAME, seedServiceOne + "/service")
@@ -535,10 +534,10 @@ public class FeatureResourceTest {
     JerseyClient client = createClient();
 
     String key = "testMissingGroupThrows404";
-    String nsKey = Ulid.random();
+    String groupKey = Ulid.random();
     String serviceCaller = seedServiceBar;
 
-    Feature feature = buildTestFeature(nsKey, key);
+    Feature feature = buildTestFeature(groupKey, key);
     String jsonReq = Protobuf3Support.toJsonString(feature);
 
     Response post = client.target(url)
@@ -554,7 +553,7 @@ public class FeatureResourceTest {
   public void testOwnerIncomplete422() throws Exception {
 
     final String whitelisted = "whitelisted";
-    final String nsKey = "testOwnerIncomplete422Group";
+    final String groupKey = "testOwnerIncomplete422Group";
 
     final GroupService instance = injector.getInstance(GroupService.class);
 
@@ -568,21 +567,21 @@ public class FeatureResourceTest {
 
     instance.register(
         Group.newBuilder()
-            .setKey(nsKey)
+            .setKey(groupKey)
             .setName("name")
             .setOwners(oc)
             .setGranted(accessBuilder.buildPartial())
             .build()
     );
 
-    String url = createFeatureUrl();
+    String url = createFeatureUrl() +"/" + groupKey;
     JerseyClient client = createClient();
 
     String key = "testOwnerIncomplete422Feature";
     Feature feature = Feature.newBuilder()
         .setKey(key)
         .setDescription("desc")
-        .setGroup(nsKey)
+        .setGroup(groupKey)
         .build();
     ;
     String jsonReq = Protobuf3Support.toJsonString(feature);
@@ -606,7 +605,7 @@ public class FeatureResourceTest {
   public void testDoubleCreatePostCauses409() throws Exception {
 
     final GroupService instance = injector.getInstance(GroupService.class);
-    final String nsKey = "testDoubleCreatePostCauses409GroupKey";
+    final String groupKey = "testDoubleCreatePostCauses409GroupKey";
     final String serviceKey = "testDoubleCreatePostCauses409Service";
 
     final AccessCollection.Builder accessBuilder = AccessCollection.newBuilder();
@@ -619,18 +618,18 @@ public class FeatureResourceTest {
 
     instance.register(
         Group.newBuilder()
-            .setKey(nsKey)
+            .setKey(groupKey)
             .setName("name")
             .setOwners(oc)
             .setGranted(accessBuilder.buildPartial())
             .build()
     );
 
-    final String url = createFeatureUrl();
+    final String url = createFeatureUrl() + "/" + groupKey;
     final JerseyClient client = createClient();
 
     final String key = "testDoubleCreatePostCauses409FeatureKey";
-    final Feature feature = buildTestFeature(nsKey, key);
+    final Feature feature = buildTestFeature(groupKey, key);
     final String jsonReq = Protobuf3Support.toJsonString(feature);
 
     final Response post = client.target(url)
@@ -659,13 +658,13 @@ public class FeatureResourceTest {
     return "http://localhost:" + APP.getLocalPort() + "/features";
   }
 
-  private Feature buildTestFeature(String nsKey, String key) {
+  private Feature buildTestFeature(String groupKey, String key) {
     final Owner owner =
         Owner.newBuilder().setEmail("wile.e@acme.com").setUsername("wile,e").build();
     return Feature.newBuilder()
         .setKey(key)
         .setDescription("desc")
-        .setGroup(nsKey)
+        .setGroup(groupKey)
         .setOwner(owner)
         .build();
   }

@@ -38,6 +38,7 @@ class FeatureResourceReal implements FeatureResource {
     try {
       String url = UriBuilder.builder(baseUri)
           .path(PATH_FEATURES)
+          .path(feature.getGroup())
           .buildString();
 
       Response response = postRequest(url, feature);

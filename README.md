@@ -212,7 +212,7 @@ Let's add a _feature_ to the group by posting the feature JSON to the server ass
 the group's `key`. This one is a simple on/off flag:
 
 ```bash
-curl -v http://localhost:8180/features \
+curl -v http://localhost:8180/features/testgroup-1 \
 -H "Content-type: application/json" \
 -u testconsole/service:letmein -d'
 {

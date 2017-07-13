@@ -37,6 +37,8 @@ import outland.feature.server.groups.GroupService;
 
 @Resource
 @Path("/features")
+@Consumes(MediaType.APPLICATION_JSON)
+@Produces(MediaType.APPLICATION_JSON)
 public class FeatureResource {
 
   private final FeatureService featureService;
@@ -66,8 +68,7 @@ public class FeatureResource {
   }
 
   @POST
-  @Consumes(MediaType.APPLICATION_JSON)
-  @Produces(MediaType.APPLICATION_JSON)
+  @Path("/{group}")
   @PermitAll
   @Timed(name = "registerFeature")
   public Response registerFeature(
@@ -98,8 +99,6 @@ public class FeatureResource {
 
   @POST
   @Path("/{group}/{feature_key}")
-  @Consumes(MediaType.APPLICATION_JSON)
-  @Produces(MediaType.APPLICATION_JSON)
   @PermitAll
   @Timed(name = "updateFeature")
   public Response updateFeature(
@@ -125,7 +124,6 @@ public class FeatureResource {
 
   @GET
   @Path("/{group}/{feature_key}")
-  @Produces(MediaType.APPLICATION_JSON)
   @PermitAll
   @Timed(name = "getFeatureByKey")
   public Response getFeatureByKey(
@@ -144,8 +142,6 @@ public class FeatureResource {
 
   @GET
   @Path("/{group}")
-  @Consumes(MediaType.APPLICATION_JSON)
-  @Produces(MediaType.APPLICATION_JSON)
   @PermitAll
   @Timed(name = "getFeatures")
   public Response getFeatures(
@@ -160,8 +156,6 @@ public class FeatureResource {
 
   @GET
   @Path("/{group}/feed")
-  @Consumes(MediaType.APPLICATION_JSON)
-  @Produces(MediaType.APPLICATION_JSON)
   @PermitAll
   @Timed(name = "getFeaturesSince")
   public Response getFeaturesSince(
@@ -178,7 +172,6 @@ public class FeatureResource {
 
   @POST
   @Path("/{group}/{feature_key}/namespaces")
-  @Produces(MediaType.APPLICATION_JSON)
   @PermitAll
   @Timed(name = "addNamespaceFeature")
   public Response addNamespaceFeature(
@@ -193,7 +186,6 @@ public class FeatureResource {
 
   @POST
   @Path("/{group}/{feature_key}/namespaces/{namespace}")
-  @Produces(MediaType.APPLICATION_JSON)
   @PermitAll
   @Timed(name = "updateNamespaceFeature")
   public Response updateNamespaceFeature(
@@ -210,7 +202,6 @@ public class FeatureResource {
 
   @DELETE
   @Path("/{group}/{feature_key}/namespaces/{namespace}")
-  @Produces(MediaType.APPLICATION_JSON)
   @PermitAll
   @Timed(name = "removeNamespaceFeature")
   public Response removeNamespaceFeature(
