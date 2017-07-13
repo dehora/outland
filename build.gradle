@@ -10,10 +10,11 @@ buildscript {
     classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.4'
     classpath 'org.apache.ant:ant:1.9.7' // resolve shadow and nebula deps
     classpath "com.netflix.nebula:nebula-publishing-plugin:4.9.1"
-    classpath "com.netflix.nebula:nebula-project-plugin:3.3.0"
-    classpath "com.netflix.nebula:nebula-release-plugin:4.1.1"
+    classpath "com.netflix.nebula:nebula-project-plugin:3.4.0"
+    classpath "com.netflix.nebula:nebula-release-plugin:6.0.0"
     classpath "com.netflix.nebula:nebula-bintray-plugin:3.5.2"
     classpath "com.netflix.nebula:gradle-git-scm-plugin:3.0.1"
+    classpath "com.netflix.nebula:gradle-dependency-lock-plugin:4.9.4"
   }
 }
 
@@ -29,7 +30,7 @@ apply plugin: "nebula.gradle-git-scm"
 //apply plugin: 'nebula.release'
 
 task wrapper(type: Wrapper) {
-  gradleVersion = '3.3'
+  gradleVersion = '4.0.1'
 }
 
 apply from: "$rootDir/gradle/lib.gradle"
