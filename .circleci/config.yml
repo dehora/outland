@@ -1,0 +1,53 @@
+version: 2
+
+jobs:
+
+  build:
+    working_directory: ~/outland
+
+    docker:
+      - image: circleci/openjdk:8-jdk-browsers
+      - image: redis
+
+    environment:
+      JVM_OPTS: -Xmx1G
+      TERM: dumb
+      DOCKERIZE_VERSION: v0.3.0
+
+    steps:
+      - checkout
+
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "build.gradle" }}
+          - v1-dependencies-
+
+      - run:
+          name: Wait for redis
+          command: dockerize -wait tcp://localhost:6379 -timeout 1m
+
+      - run: |
+          curl -OL https://github.com/google/protobuf/releases/download/v3.2.0/protoc-3.2.0-linux-x86_64.zip
+          unzip protoc-3.2.0-linux-x86_64.zip -d protoc3
+          echo `which protoc`
+          sudo mv protoc3/bin/protoc /usr/bin/protoc
+          echo `protoc --version`
+
+      - run: gradle dependencies
+
+      - save_cache:
+          paths:
+            - ~/.m2
+          key: v1-dependencies-{{ checksum "build.gradle" }}
+
+      - run: gradle clean test
+
+      - run: |
+          mkdir -p /tmp/junit/
+          find . -type f -regex ".*/build/test-results/.*xml" -exec cp {} /tmp/junit/ \;
+
+      - store_test_results:
+          path: /tmp/junit
+
+      - store_artifacts:
+          path: /tmp/junit
